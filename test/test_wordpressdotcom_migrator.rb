@@ -1,5 +1,5 @@
 require 'helper'
-require 'jekyll/migrators/wordpressdotcom'
+require 'jekyll/importers/wordpressdotcom'
 
 class TestWordpressDotComMigrator < Test::Unit::TestCase
   should "clean slashes from slugs" do

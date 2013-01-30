@@ -1,7 +1,7 @@
 $:.unshift File.expand_path("../lib", File.dirname(__FILE__)) # load from jekyll-import/lib
 
 require 'helper'
-require 'jekyll/migrators/wordpress'
+require 'jekyll/importers/wordpress'
 require 'htmlentities'
 
 class TestWordpressMigrator < Test::Unit::TestCase

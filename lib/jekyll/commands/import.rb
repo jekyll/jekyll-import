@@ -32,7 +32,7 @@ module Jekyll
             File.join(File.dirname(__FILE__), '..', '..', '..')
           )
 
-          require "jekyll/migrators/#{migrator}"
+          require "jekyll/importers/#{migrator}"
 
           if Jekyll.const_defiend?(IMPORTERS[migrator.to_sym])
             puts 'Importing...'

@@ -16,8 +16,9 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = %w[lib]
   
-  s.add_runtime_dependency('safe_yaml', "~> 0.4")
+  s.add_runtime_dependency('jekyll', "~> 1.0")
   
+  # development dependencies
   s.add_development_dependency('rake', "~> 10.0.3")
   
   # test dependencies:

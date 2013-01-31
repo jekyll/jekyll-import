@@ -28,11 +28,11 @@ module Jekyll
       db[SQL].each do |post|
         next unless post[:state] =~ /published/
 
-        if(post[:slug] == nil) then
+        if post[:slug] == nil
           post[:slug] = "no slug"
         end
 
-        if(post[:extended]) then
+        if post[:extended]
           post[:body] << "\n<!-- more -->\n"
           post[:body] << post[:extended]
         end

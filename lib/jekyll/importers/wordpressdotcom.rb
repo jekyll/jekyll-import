@@ -76,7 +76,7 @@ module Jekyll
     end
 
     def self.sluggify(title)
-      title.downcase.split.join('-').gsub('/','-')
+      title.gsub(/[^[:alnum:]]+/, '-').downcase
     end
   end
 end

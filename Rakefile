@@ -16,7 +16,7 @@ task :default => :test
 namespace :migrate do
   desc "Migrate from mephisto in the current directory"
   task :mephisto do
-    sh %q(ruby -r './lib/jekyll/migrators/mephisto' -e 'Jekyll::Mephisto.postgres(:database => "#{ENV["DB"]}")')
+    sh %q(ruby -r './lib/jekyll/migrators/mephisto' -e 'Jekyll::Mephisto.postgres(:database => "#{ENV["SERVER"]}", "#{ENV["DB"]}")')
   end
   desc "Migrate from Movable Type in the current directory"
   task :mt do

@@ -15,6 +15,7 @@ module Jekyll
            c.body body,
            c.published_at date,
            c.state state,
+           c.keywords keywords,
            COALESCE(tf.name, 'html') filter
       FROM contents c
            LEFT OUTER JOIN text_filters tf
@@ -25,7 +26,7 @@ module Jekyll
       FileUtils.mkdir_p '_posts'
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
       db[SQL].each do |post|
-        next unless post[:state] =~ /published/
+        next unless post[:state] =~ /published/i
 
         name = [ sprintf("%.04d", post[:date].year),
                  sprintf("%.02d", post[:date].month),
@@ -38,7 +39,8 @@ module Jekyll
 
         File.open("_posts/#{name}", 'w') do |f|
           f.puts({ 'layout'   => 'post',
-                   'title'    => post[:title].to_s,
+                   'title'    => (post[:title] and post[:title].to_s.force_encoding('UTF-8')),
+                   'tags'     => (post[:keywords] and post[:keywords].to_s.force_encoding('UTF-8')),
                    'typo_id'  => post[:id]
                  }.delete_if { |k, v| v.nil? || v == '' }.to_yaml)
           f.puts '---'

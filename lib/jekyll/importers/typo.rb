@@ -6,8 +6,7 @@ require 'safe_yaml'
 
 module Jekyll
   module Typo
-    # This SQL *should* work for both MySQL and PostgreSQL, but I haven't
-    # tested PostgreSQL yet (as of 2008-12-16).
+    # This SQL *should* work for both MySQL and PostgreSQL.
     SQL = <<-EOS
     SELECT c.id id,
            c.title title,
@@ -22,9 +21,16 @@ module Jekyll
                         ON c.text_filter_id = tf.id
     EOS
 
-    def self.process dbname, user, pass, host='localhost'
+    def self.process server, dbname, user, pass, host='localhost'
       FileUtils.mkdir_p '_posts'
-      db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+      case server.intern
+      when :postgres
+        db = Sequel.postgres(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+      when :mysql
+        db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+      else
+        raise "Unknown database server '#{server}'"
+      end
       db[SQL].each do |post|
         next unless post[:state] =~ /published/
 

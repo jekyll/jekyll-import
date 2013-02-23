@@ -83,8 +83,8 @@ module Jekyll
         when "conversation"
           title = post["conversation-title"]
           content = "<section><dialog>"
-          post["conversation"]["line"].each do |line|
-            content << "<dt>#{line['label']}</dt><dd>#{line}</dd>"
+          post["conversation"].each do |line|
+            content << "<dt>#{line['label']}</dt><dd>#{line['phrase']}</dd>"
           end
           content << "</section></dialog>"
         when "video"

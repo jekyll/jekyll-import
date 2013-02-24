@@ -35,24 +35,12 @@ module Jekyll
         if IMPORTERS.keys.include?(migrator.to_sym)
           migrator = migrator.downcase
 
-          p options
+          require File.join(File.dirname(__FILE__), "..", "jekyll-import", "#{migrator}.rb")
 
-          cmd_options = []
-          [ :file, :dbname, :user, :pass, :host, :site ].each do |p|
-            cmd_options << "\"#{options[p]}\"" unless options[p].nil?
-          end
-
-          app_root = File.expand_path(
-            File.join(File.dirname(__FILE__), '..', '..', '..')
-          )
-
-          require "jekyll/importers/#{migrator}"
-
-          if Jekyll.const_defiend?(IMPORTERS[migrator.to_sym])
+          if JekyllImport.const_defined?(IMPORTERS[migrator.to_sym])
             puts 'Importing...'
-            migrator_class = Jekyll.const_get(IMPORTERS[migrator.to_sym])
-            migrator_class.process(*cmd_options)
-            exit 0
+            klass = JekyllImport.const_get(IMPORTERS[migrator.to_sym])
+            klass.process(options.__hash__)
           end
         else
           abort_on_invalid_migator

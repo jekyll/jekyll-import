@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'jekyll-import'
   s.version           = '0.1.0'
-  s.date              = '2013-02-23'
+  s.date              = '2013-02-24'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."
@@ -48,22 +48,22 @@ Gem::Specification.new do |s|
     jekyll-import.gemspec
     lib/jekyll-import.rb
     lib/jekyll/commands/import.rb
-    lib/jekyll/importers/csv.rb
-    lib/jekyll/importers/drupal6.rb
-    lib/jekyll/importers/drupal7.rb
-    lib/jekyll/importers/enki.rb
-    lib/jekyll/importers/joomla.rb
-    lib/jekyll/importers/marley.rb
-    lib/jekyll/importers/mephisto.rb
-    lib/jekyll/importers/mt.rb
-    lib/jekyll/importers/posterous.rb
-    lib/jekyll/importers/rss.rb
-    lib/jekyll/importers/s9y_rss.rb
-    lib/jekyll/importers/textpattern.rb
-    lib/jekyll/importers/tumblr.rb
-    lib/jekyll/importers/typo.rb
-    lib/jekyll/importers/wordpress.rb
-    lib/jekyll/importers/wordpressdotcom.rb
+    lib/jekyll/jekyll-import/csv.rb
+    lib/jekyll/jekyll-import/drupal6.rb
+    lib/jekyll/jekyll-import/drupal7.rb
+    lib/jekyll/jekyll-import/enki.rb
+    lib/jekyll/jekyll-import/joomla.rb
+    lib/jekyll/jekyll-import/marley.rb
+    lib/jekyll/jekyll-import/mephisto.rb
+    lib/jekyll/jekyll-import/mt.rb
+    lib/jekyll/jekyll-import/posterous.rb
+    lib/jekyll/jekyll-import/rss.rb
+    lib/jekyll/jekyll-import/s9y.rb
+    lib/jekyll/jekyll-import/textpattern.rb
+    lib/jekyll/jekyll-import/tumblr.rb
+    lib/jekyll/jekyll-import/typo.rb
+    lib/jekyll/jekyll-import/wordpress.rb
+    lib/jekyll/jekyll-import/wordpressdotcom.rb
     test/helper.rb
     test/test_wordpress_migrator.rb
     test/test_wordpressdotcom_migrator.rb

@@ -4,7 +4,7 @@ require 'rubygems'
 require 'sequel'
 require 'safe_yaml'
 
-module Jekyll
+module JekyllImport
   module Typo
     # This SQL *should* work for both MySQL and PostgreSQL.
     SQL = <<-EOS

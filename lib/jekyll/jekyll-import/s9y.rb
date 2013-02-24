@@ -10,7 +10,7 @@ require 'rss'
 require 'fileutils'
 require 'yaml'
 
-module Jekyll
+module JekyllImport
   module S9Y
     def self.process(file_name)
       FileUtils.mkdir_p("_posts")

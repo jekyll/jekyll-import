@@ -13,7 +13,7 @@ require 'safe_yaml'
 # $ sudo gem install sequel
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
-module Jekyll
+module JekyllImport
   module MT
     # This query will pull blog posts from all entries across all blogs. If
     # you've got unpublished, deleted or otherwise hidden posts please sift

@@ -14,7 +14,7 @@ require File.join(File.dirname(__FILE__),"csv.rb")
 # $ sudo gem install sequel
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
-module Jekyll
+module JekyllImport
   module Mephisto
     #Accepts a hash with database config variables, exports mephisto posts into a csv
     #export PGPASSWORD if you must

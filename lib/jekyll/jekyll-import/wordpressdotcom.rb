@@ -6,7 +6,7 @@ require 'fileutils'
 require 'safe_yaml'
 require 'time'
 
-module Jekyll
+module JekyllImport
   # This importer takes a wordpress.xml file, which can be exported from your
   # wordpress.com blog (/wp-admin/export.php).
   module WordpressDotCom

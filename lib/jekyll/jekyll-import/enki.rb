@@ -5,7 +5,7 @@ require 'fileutils'
 require 'rubygems'
 require 'sequel'
 
-module Jekyll
+module JekyllImport
   module Enki
     SQL = <<-EOS
       SELECT p.id,

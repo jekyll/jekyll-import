@@ -1,4 +1,4 @@
-module Jekyll
+module JekyllImport
   module CSV
     # Reads a csv with title, permalink, body, published_at, and filter.
     # It creates a post file for each row in the csv

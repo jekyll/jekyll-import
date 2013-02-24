@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
   # = MANIFEST =
   s.files = %w[
     Gemfile
+    LICENSE
     README.md
     Rakefile
     jekyll-import.gemspec

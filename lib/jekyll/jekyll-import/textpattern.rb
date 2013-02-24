@@ -9,7 +9,7 @@ require 'safe_yaml'
 # $ sudo gem install sequel
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
-module Jekyll
+module JekyllImport
   module TextPattern
     # Reads a MySQL database via Sequel and creates a post file for each post.
     # The only posts selected are those with a status of 4 or 5, which means

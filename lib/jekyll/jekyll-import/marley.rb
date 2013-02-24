@@ -1,7 +1,7 @@
 require 'safe_yaml'
 require 'fileutils'
 
-module Jekyll
+module JekyllImport
   module Marley
     def self.regexp
       { :id    => /^\d{0,4}-{0,1}(.*)$/,

@@ -10,7 +10,7 @@ require 'safe_yaml'
 # $ sudo gem install sequel
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
-module Jekyll
+module JekyllImport
   module Joomla
     def self.process(dbname, user, pass, host = 'localhost', table_prefix = 'jos_', section = '1')
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')

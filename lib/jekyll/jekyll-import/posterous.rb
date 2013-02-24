@@ -7,7 +7,7 @@ require "json"
 
 # ruby -r './lib/jekyll/migrators/posterous.rb' -e 'Jekyll::Posterous.process(email, pass, api_key, blog)'
 
-module Jekyll
+module JekyllImport
   module Posterous
     def self.fetch(uri_str, limit = 10)
       # You should choose better exception.

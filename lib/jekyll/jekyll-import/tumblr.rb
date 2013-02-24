@@ -7,7 +7,7 @@ require 'json'
 require 'uri'
 require 'jekyll'
 
-module Jekyll
+module JekyllImport
   module Tumblr
     def self.process(url, format = "html", grab_images = false,
                      add_highlights = false, rewrite_urls = true)

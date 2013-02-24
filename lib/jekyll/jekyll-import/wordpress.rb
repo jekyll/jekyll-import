@@ -10,7 +10,7 @@ require 'safe_yaml'
 # $ sudo gem install sequel
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
-module Jekyll
+module JekyllImport
   module WordPress
 
     # Main migrator function. Call this to perform the migration.

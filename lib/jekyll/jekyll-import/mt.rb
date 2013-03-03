@@ -15,25 +15,17 @@ require 'safe_yaml'
 
 module JekyllImport
   module MT
-    # This query will pull blog posts from all entries across all blogs. If
+    # This migrator will include posts from all entries across all blogs. If
     # you've got unpublished, deleted or otherwise hidden posts please sift
     # through the created posts to make sure nothing is accidently published.
-    QUERY = "SELECT entry_id, \
-                    entry_basename, \
-                    entry_text, \
-                    entry_text_more, \
-                    entry_authored_on, \
-                    entry_title, \
-                    entry_convert_breaks \
-             FROM mt_entry"
-
     def self.process(dbname, user, pass, host = 'localhost', blog_id = nil)
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
       FileUtils.mkdir_p "_posts"
 
-      q = blog_id.nil? ? QUERY : "#{QUERY} WHERE entry_blog_id = #{blog_id}"
-      db[q].each do |post|
+      posts = db[:mt_entry]
+      posts = posts.filter(:entry_blog_id => blog_id) if blog_id
+      posts.each do |post|
         title = post[:entry_title]
         slug = post[:entry_basename].gsub(/_/, '-')
         date = post[:entry_authored_on]

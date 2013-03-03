@@ -54,7 +54,7 @@ module JekyllImport
           'layout' => 'post',
           'title' => title.to_s,
           'mt_id' => post[:entry_id],
-          'date' => date,
+          'date' => date.strftime("%Y-%m-%d %H:%M:%S %z"),
           'excerpt' => excerpt.to_s
         }
         data['published'] = false if status != STATUS_PUBLISHED

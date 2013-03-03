@@ -31,7 +31,7 @@ module JekyllImport
       posts = posts.filter(:entry_blog_id => blog_id) if blog_id
       posts.each do |post|
         title = post[:entry_title]
-        slug = post[:entry_basename].gsub(/_/, '-')
+        slug = post[:entry_basename]
         date = post[:entry_authored_on]
         status = post[:entry_status]
         content = post[:entry_text]

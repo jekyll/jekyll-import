@@ -15,6 +15,10 @@ require 'safe_yaml'
 
 module JekyllImport
   module MT
+
+    STATUS_DRAFT = 1
+    STATUS_PUBLISHED = 2
+
     # This migrator will include posts from all entries across all blogs. If
     # you've got unpublished, deleted or otherwise hidden posts please sift
     # through the created posts to make sure nothing is accidently published.
@@ -29,6 +33,7 @@ module JekyllImport
         title = post[:entry_title]
         slug = post[:entry_basename].gsub(/_/, '-')
         date = post[:entry_authored_on]
+        status = post[:entry_status]
         content = post[:entry_text]
         more_content = post[:entry_text_more]
         entry_convert_breaks = post[:entry_convert_breaks]
@@ -45,14 +50,17 @@ module JekyllImport
                self.suffix(entry_convert_breaks)
 
         data = {
-           'layout' => 'post',
-           'title' => title.to_s,
-           'mt_id' => post[:entry_id],
-           'date' => date
-         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+          'layout' => 'post',
+          'title' => title.to_s,
+          'mt_id' => post[:entry_id],
+          'date' => date
+        }
+        data['published'] = false if status != STATUS_PUBLISHED
+
+        yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
         File.open("_posts/#{name}", "w") do |f|
-          f.puts data
+          f.puts yaml_front_matter
           f.puts "---"
           f.puts content
         end

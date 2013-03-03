@@ -19,9 +19,8 @@ module JekyllImport
     STATUS_DRAFT = 1
     STATUS_PUBLISHED = 2
 
-    # This migrator will include posts from all entries across all blogs. If
-    # you've got unpublished, deleted or otherwise hidden posts please sift
-    # through the created posts to make sure nothing is accidently published.
+    # By default this migrator will include posts for all your MovableType blogs.
+    # Specify a single blog by providing blog_id.
     def self.process(dbname, user, pass, host = 'localhost', blog_id = nil)
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 

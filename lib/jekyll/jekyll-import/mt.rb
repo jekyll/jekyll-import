@@ -36,6 +36,7 @@ module JekyllImport
         status = post[:entry_status]
         content = post[:entry_text]
         more_content = post[:entry_text_more]
+        excerpt = post[:entry_excerpt]
         entry_convert_breaks = post[:entry_convert_breaks]
 
         # Be sure to include the body and extended body.
@@ -53,7 +54,8 @@ module JekyllImport
           'layout' => 'post',
           'title' => title.to_s,
           'mt_id' => post[:entry_id],
-          'date' => date
+          'date' => date,
+          'excerpt' => excerpt.to_s
         }
         data['published'] = false if status != STATUS_PUBLISHED
 

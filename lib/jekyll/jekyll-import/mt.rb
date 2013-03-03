@@ -46,8 +46,8 @@ module JekyllImport
         # Ideally, this script would determine the post format (markdown,
         # html, etc) and create files with proper extensions. At this point
         # it just assumes that markdown will be acceptable.
-        name = [date.year, date.month, date.day, slug].join('-') + '.' +
-               self.suffix(entry_convert_breaks)
+        name = [date.strftime("%Y-%m-%d"), slug].join('-') + '.' +
+          self.suffix(entry_convert_breaks)
 
         data = {
           'layout' => 'post',

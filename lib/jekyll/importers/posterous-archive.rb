@@ -33,7 +33,7 @@ module Jekyll
       # all html files in the 'archive/posts' directory 
       # are considered to be blog posts
       posts = []
-      Find.find(archivedir) do |file|
+      Find.find('%s/posts' % [archivedir]) do |file|
         if file =~ /^.*\.html$/
           posts << self.loadpost(file)
         end

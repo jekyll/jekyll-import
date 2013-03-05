@@ -5,7 +5,22 @@ require 'find'
 require 'nokogiri'
 require 'pathname'
 
-# ruby -r './lib/jekyll/migrators/posterous-archive.rb' -e 'Jekyll::Posterous.process(archivedir)'
+#
+# Convert posts contained within an unzipped posterous archive into jekyll
+# _posts/ files.
+#
+# Steps:
+#    1. Download your posterous blog before April 30th 2013.
+#    2. Unzip your posterous archive to e.g. '/home/blah/post-space/'.
+#    3. Change directory to your jekyll blog directory (or to an empty directory).
+#    4. Run posterous-archive.rb:
+#
+#        ruby -r './lib/jekyll/importers/posterous-archive.rb' -e 'Jekyll::Posterous.process("/home/blah/post-space")'
+#
+#    5. The importer will create a '_posts' directory, containing a markdown
+#       file for each post, and an 'img' directory, containing any images from
+#       each post.
+#
 
 module Jekyll
   module Posterous

@@ -35,8 +35,18 @@ module Jekyll
 
         post["title"]  = page.css("div.post_header h3").text
         post["date"]   = page.css("div.post_info span.post_time").text
-        post["body"]   = page.css("div.post_body").text
         post["images"] = page.css("div.post_body img").map{|i| Pathname.new(i["src"]).basename}
+
+        # image links are embedded in the post body, so if we want to preserve
+        # any HTML formatting in the post, we must remove the image links, otherwise
+        # they will be preserved as part of the content.
+        content = page.css("div.post_body")
+        content.search("div.p_image_embed").each do |n|
+          n.remove()
+        end
+
+        post["body"] = content.inner_html
+
       end
 
       post

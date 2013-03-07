@@ -4,7 +4,6 @@ require 'fileutils'
 require 'find'
 require 'nokogiri'
 require 'pathname'
-
 #
 # Convert posts contained within an unzipped posterous archive into jekyll
 # _posts/ files.
@@ -15,7 +14,7 @@ require 'pathname'
 #    3. Change directory to your jekyll blog directory (or to an empty directory).
 #    4. Run posterous-archive.rb:
 #
-#        ruby -r './lib/jekyll/importers/posterous-archive.rb' -e 'Jekyll::Posterous.process("/home/blah/post-space")'
+#        ruby -r './lib/jekyll/importers/posterous-archive.rb' -e 'Jekyll::PosterousArchive.process("/home/blah/post-space")'
 #
 #    5. The importer will create a '_posts' directory, containing a markdown
 #       file for each post, and an 'img' directory, containing any images from
@@ -23,8 +22,9 @@ require 'pathname'
 #
 
 module Jekyll
-  module Posterous
+  module PosterousArchive
 
+    # Load a posterous html post file, return its contents as a Hash.
     def self.loadpost(postfile)
 
       post = Hash.new
@@ -42,13 +42,29 @@ module Jekyll
       post
     end
 
+    # Convert a posterous post hash to a jekyll post hash.
+    def self.convertpost(post)
+
+      jpost = Hash.new
+
+      jpost["title"]   = post["title"]
+      jpost["slug"]    = jpost["title"].gsub(/[^[:alnum:]]+/, '-').downcase
+      jpost["date"]    = Date.parse(post["date"])
+      datestr          = "%02d-%02d-%02d" % [jpost["date"].year, jpost["date"].month, jpost["date"].day]
+      jpost["content"] = post["body"]
+      jpost["name"]    = '%s-%s' % [datestr, jpost["slug"]]
+      jpost["images"]  = post["images"]
+
+      jpost
+    end 
+
     def self.process(archivedir)
       FileUtils.mkdir_p "_posts"
 
       # all html files in the 'archive/posts' directory 
       # are considered to be blog posts
       posts = []
-      Find.find('%s/posts' % [archivedir]) do |file|
+      Find.find(File.join("%s" % archivedir, "posts")) do |file|
         if file =~ /^.*\.html$/
           posts << self.loadpost(file)
         end
@@ -56,41 +72,37 @@ module Jekyll
 
       posts.each do |post|
 
-        title   = post["title"]
-        slug    = title.gsub(/[^[:alnum:]]+/, '-').downcase
-        date    = Date.parse(post["date"])
-        content = post["body"]
-        name    = "%02d-%02d-%02d-%s" % [date.year, date.month, date.day, slug]
+        jpost = self.convertpost(post)
 
-        if post["images"].any?
+        if jpost["images"].any?
 
-          imgdir = "imgs/%s" % name
+          imgdir = File.join("imgs", "%s" % jpost["name"])
           FileUtils.mkdir_p imgdir
 
           img_urls = Array.new 
-          post["images"].each do |img|
+          jpost["images"].each do |img|
 
-            imgsrc = "%s/image/%04d/%02d/%s" % [archivedir, date.year, date.month, img]
+            imgsrc = File.join("%s" % archivedir, "image", "%04d" % jpost["date"].year, "%02d" % jpost["date"].month, img)
 
             FileUtils.copy(imgsrc, imgdir)
             img_urls.push('<li><img src="/%s/%s"></li>' % [imgdir, img])
           end
 
-          content = content + "<ol>" + img_urls.join("\n") + "</ol>\n"
+          jpost["content"] = jpost["content"] + "<ol>" + img_urls.join("\n") + "</ol>\n"
         end
 
         # Get the relevant fields as a hash, delete empty fields and convert
         # to YAML for the header
         data = {
           'layout' => 'post',
-          'title' => title.to_s
+          'title' => jpost["title"].to_s
         }.delete_if { |k,v| v.nil? || v == ''}.to_yaml
 
         # Write out the data and content to file
-        File.open("_posts/#{name}.html", "w") do |f|
+        File.open(File.join("_posts", "#{jpost['name']}.html"), "w") do |f|
           f.puts data
           f.puts "---"
-          f.puts content
+          f.puts jpost["content"]
         end
       end
     end

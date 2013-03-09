@@ -18,6 +18,7 @@ module JekyllImport
 
     STATUS_DRAFT = 1
     STATUS_PUBLISHED = 2
+    MORE_CONTENT_SEPARATOR = '<!--more-->'
 
     # By default this migrator will include posts for all your MovableType blogs.
     # Specify a single blog by providing blog_id.
@@ -39,8 +40,8 @@ module JekyllImport
         entry_convert_breaks = post[:entry_convert_breaks]
 
         # Be sure to include the body and extended body.
-        if more_content != nil
-          content = content + " \n" + more_content
+        unless more_content.strip.empty?
+          content += "\n\n#{MORE_CONTENT_SEPARATOR}\n\n" + more_content
         end
 
         # Ideally, this script would determine the post format (markdown,

@@ -84,11 +84,11 @@ module JekyllImport
     # Extracts metadata for YAML front matter from post
     def self.post_metadata(post, options = default_options)
       metadata = {
+        'layout' => 'post',
+        'title' => encode(post[:entry_title], options),
         'date' => post[:entry_authored_on].strftime("%Y-%m-%d %H:%M:%S %z"),
         'excerpt' => encode(post[:entry_excerpt], options),
-        'layout' => 'post',
-        'mt_id' => post[:entry_id],
-        'title' => encode(post[:entry_title], options)
+        'mt_id' => post[:entry_id]
       }
       metadata['published'] = false if post[:entry_status] != STATUS_PUBLISHED
       metadata

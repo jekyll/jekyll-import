@@ -84,7 +84,7 @@ module JekyllImport
             imgcontent = "<ol>\n" + img_urls.join("\n") + "</ol>\n"
 
             # filter out "posterous-content", replacing with imgs:
-            content = content.sub(/\<p\>\[\[posterous-content:[^\]]+\]\]\<\/\p\>/, imgcontent)
+            content = content.sub(/\<p\>\[\[posterous-content:[^\]]+\]\]\<\/p\>/, imgcontent)
           end
 
           # Get the relevant fields as a hash, delete empty fields and convert

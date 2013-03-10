@@ -22,7 +22,8 @@ module JekyllImport
 
     def self.default_options
       {
-        :blog_id => nil
+        :blog_id => nil,
+        :categories => true
       }
     end
 
@@ -41,10 +42,13 @@ module JekyllImport
     #
     # :blog_id::        Specify a single MovableType blog to export by providing blog_id.
     #                   Default: nil, importer will include posts for all blogs.
+    # :categories::     If true, save the post's categories in its
+    #                   YAML front matter. Default: true
     def self.process(dbname, user, pass, host = 'localhost', options = {})
       options = default_options.merge(options)
 
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+      post_categories = db[:mt_placement].join(:mt_category, :category_id => :placement_category_id)
 
       FileUtils.mkdir_p "_posts"
 
@@ -59,6 +63,9 @@ module JekyllImport
         more_content = post[:entry_text_more]
         excerpt = post[:entry_excerpt]
         entry_convert_breaks = post[:entry_convert_breaks]
+        categories = post_categories.filter(
+          :mt_placement__placement_entry_id => post[:entry_id]
+        ).map {|ea| ea[:category_basename] }
 
         # Be sure to include the body and extended body.
         unless more_content.strip.empty?
@@ -79,6 +86,7 @@ module JekyllImport
           'excerpt' => excerpt.to_s
         }
         data['published'] = false if status != STATUS_PUBLISHED
+        data['categories'] = categories if !categories.empty? && options[:categories]
 
         yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 

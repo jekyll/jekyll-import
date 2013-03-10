@@ -20,15 +20,36 @@ module JekyllImport
     STATUS_PUBLISHED = 2
     MORE_CONTENT_SEPARATOR = '<!--more-->'
 
+    def self.default_options
+      {
+        :blog_id => nil
+      }
+    end
+
     # By default this migrator will include posts for all your MovableType blogs.
     # Specify a single blog by providing blog_id.
-    def self.process(dbname, user, pass, host = 'localhost', blog_id = nil)
+
+    # Main migrator function. Call this to perform the migration.
+    #
+    # dbname::  The name of the database
+    # user::    The database user name
+    # pass::    The database user's password
+    # host::    The address of the MySQL database host. Default: 'localhost'
+    # options:: A hash of configuration options
+    #
+    # Supported options are:
+    #
+    # :blog_id::        Specify a single MovableType blog to export by providing blog_id.
+    #                   Default: nil, importer will include posts for all blogs.
+    def self.process(dbname, user, pass, host = 'localhost', options = {})
+      options = default_options.merge(options)
+
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
       FileUtils.mkdir_p "_posts"
 
       posts = db[:mt_entry]
-      posts = posts.filter(:entry_blog_id => blog_id) if blog_id
+      posts = posts.filter(:entry_blog_id => options[:blog_id]) if options[:blog_id]
       posts.each do |post|
         title = post[:entry_title]
         slug = post[:entry_basename]

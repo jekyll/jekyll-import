@@ -61,17 +61,11 @@ module JekyllImport
       posts = db[:mt_entry]
       posts = posts.filter(:entry_blog_id => options[:blog_id]) if options[:blog_id]
       posts.each do |post|
-        slug = post[:entry_basename]
-        date = post[:entry_authored_on]
         categories = post_categories.filter(
           :mt_placement__placement_entry_id => post[:entry_id]
         ).map {|ea| encode(ea[:category_basename], options) }
 
-        # Ideally, this script would determine the post format (markdown,
-        # html, etc) and create files with proper extensions. At this point
-        # it just assumes that markdown will be acceptable.
-        name = [date.strftime("%Y-%m-%d"), slug].join('-') + '.' +
-          self.suffix(post[:entry_convert_breaks])
+        file_name = post_file_name(post, options)
 
         data = post_metadata(post, options)
         data['categories'] = categories if !categories.empty? && options[:categories]
@@ -79,7 +73,7 @@ module JekyllImport
 
         content = post_content(post, options)
 
-        File.open("_posts/#{name}", "w") do |f|
+        File.open("_posts/#{file_name}", "w") do |f|
           f.puts yaml_front_matter
           f.puts "---"
           f.puts encode(content, options)
@@ -87,7 +81,7 @@ module JekyllImport
       end
     end
 
-    # Extracts metadata for YAML front matter from +post+
+    # Extracts metadata for YAML front matter from post
     def self.post_metadata(post, options = default_options)
       metadata = {
         'date' => post[:entry_authored_on].strftime("%Y-%m-%d %H:%M:%S %z"),
@@ -100,12 +94,21 @@ module JekyllImport
       metadata
     end
 
+    # Extracts text body from post
     def self.post_content(post, options = default_options)
       if post[:entry_text_more].strip.empty?
         post[:entry_text]
       else
         post[:entry_text] + "\n\n#{MORE_CONTENT_SEPARATOR}\n\n" + post[:entry_text_more]
       end
+    end
+
+    def self.post_file_name(post, options = default_options)
+      date = post[:entry_authored_on]
+      slug = post[:entry_basename]
+      file_ext = suffix(post[:entry_convert_breaks])
+
+      "#{date.strftime('%Y-%m-%d')}-#{slug}.#{file_ext}"
     end
 
     def self.encode(str, options = default_options)
@@ -116,6 +119,9 @@ module JekyllImport
       end
     end
 
+    # Ideally, this script would determine the post format (markdown,
+    # html, etc) and create files with proper extensions. At this point
+    # it just assumes that markdown will be acceptable.
     def self.suffix(entry_type)
       if entry_type.nil? || entry_type.include?("markdown") || entry_type.include?("__default__")
         # The markdown plugin I have saves this as

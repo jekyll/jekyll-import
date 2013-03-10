@@ -21,6 +21,9 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[README.md LICENSE]
 
   s.add_runtime_dependency('jekyll')
+  s.add_runtime_dependency('fastercsv')
+  s.add_runtime_dependency('nokogiri')
+  s.add_runtime_dependency('safe_yaml', '~> 0.7')
   
   # development dependencies
   s.add_development_dependency('rake', "~> 10.0.3")

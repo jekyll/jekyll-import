@@ -61,40 +61,23 @@ module JekyllImport
       posts = db[:mt_entry]
       posts = posts.filter(:entry_blog_id => options[:blog_id]) if options[:blog_id]
       posts.each do |post|
-        title = post[:entry_title]
         slug = post[:entry_basename]
         date = post[:entry_authored_on]
-        status = post[:entry_status]
-        content = post[:entry_text]
-        more_content = post[:entry_text_more]
-        excerpt = post[:entry_excerpt]
-        entry_convert_breaks = post[:entry_convert_breaks]
         categories = post_categories.filter(
           :mt_placement__placement_entry_id => post[:entry_id]
         ).map {|ea| encode(ea[:category_basename], options) }
-
-        # Be sure to include the body and extended body.
-        unless more_content.strip.empty?
-          content += "\n\n#{MORE_CONTENT_SEPARATOR}\n\n" + more_content
-        end
 
         # Ideally, this script would determine the post format (markdown,
         # html, etc) and create files with proper extensions. At this point
         # it just assumes that markdown will be acceptable.
         name = [date.strftime("%Y-%m-%d"), slug].join('-') + '.' +
-          self.suffix(entry_convert_breaks)
+          self.suffix(post[:entry_convert_breaks])
 
-        data = {
-          'layout' => 'post',
-          'title' => encode(title.to_s, options),
-          'mt_id' => post[:entry_id],
-          'date' => date.strftime("%Y-%m-%d %H:%M:%S %z"),
-          'excerpt' => encode(excerpt.to_s, options)
-        }
-        data['published'] = false if status != STATUS_PUBLISHED
+        data = post_metadata(post, options)
         data['categories'] = categories if !categories.empty? && options[:categories]
-
         yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+
+        content = post_content(post, options)
 
         File.open("_posts/#{name}", "w") do |f|
           f.puts yaml_front_matter
@@ -104,7 +87,28 @@ module JekyllImport
       end
     end
 
-    def self.encode(str, options)
+    # Extracts metadata for YAML front matter from +post+
+    def self.post_metadata(post, options = default_options)
+      metadata = {
+        'date' => post[:entry_authored_on].strftime("%Y-%m-%d %H:%M:%S %z"),
+        'excerpt' => encode(post[:entry_excerpt], options),
+        'layout' => 'post',
+        'mt_id' => post[:entry_id],
+        'title' => encode(post[:entry_title], options)
+      }
+      metadata['published'] = false if post[:entry_status] != STATUS_PUBLISHED
+      metadata
+    end
+
+    def self.post_content(post, options = default_options)
+      if post[:entry_text_more].strip.empty?
+        post[:entry_text]
+      else
+        post[:entry_text] + "\n\n#{MORE_CONTENT_SEPARATOR}\n\n" + post[:entry_text_more]
+      end
+    end
+
+    def self.encode(str, options = default_options)
       if str.respond_to?(:encoding)
         str.encode(options[:dest_encoding], options[:src_encoding])
       else

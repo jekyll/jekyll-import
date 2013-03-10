@@ -23,7 +23,9 @@ module JekyllImport
     def self.default_options
       {
         :blog_id => nil,
-        :categories => true
+        :categories => true,
+        :dest_encoding => 'utf-8',
+        :src_encoding => 'utf-8'
       }
     end
 
@@ -44,10 +46,14 @@ module JekyllImport
     #                   Default: nil, importer will include posts for all blogs.
     # :categories::     If true, save the post's categories in its
     #                   YAML front matter. Default: true
+    # :src_encoding::   Encoding of strings from the database. Default: UTF-8
+    #                   If your output contains mangled characters, set src_encoding to
+    #                   something appropriate for your database charset.
+    # :dest_encoding::  Encoding of output strings. Default: UTF-8
     def self.process(dbname, user, pass, host = 'localhost', options = {})
       options = default_options.merge(options)
 
-      db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+      db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host)
       post_categories = db[:mt_placement].join(:mt_category, :category_id => :placement_category_id)
 
       FileUtils.mkdir_p "_posts"
@@ -65,7 +71,7 @@ module JekyllImport
         entry_convert_breaks = post[:entry_convert_breaks]
         categories = post_categories.filter(
           :mt_placement__placement_entry_id => post[:entry_id]
-        ).map {|ea| ea[:category_basename] }
+        ).map {|ea| encode(ea[:category_basename], options) }
 
         # Be sure to include the body and extended body.
         unless more_content.strip.empty?
@@ -80,10 +86,10 @@ module JekyllImport
 
         data = {
           'layout' => 'post',
-          'title' => title.to_s,
+          'title' => encode(title.to_s, options),
           'mt_id' => post[:entry_id],
           'date' => date.strftime("%Y-%m-%d %H:%M:%S %z"),
-          'excerpt' => excerpt.to_s
+          'excerpt' => encode(excerpt.to_s, options)
         }
         data['published'] = false if status != STATUS_PUBLISHED
         data['categories'] = categories if !categories.empty? && options[:categories]
@@ -93,8 +99,16 @@ module JekyllImport
         File.open("_posts/#{name}", "w") do |f|
           f.puts yaml_front_matter
           f.puts "---"
-          f.puts content
+          f.puts encode(content, options)
         end
+      end
+    end
+
+    def self.encode(str, options)
+      if str.respond_to?(:encoding)
+        str.encode(options[:dest_encoding], options[:src_encoding])
+      else
+        str
       end
     end
 

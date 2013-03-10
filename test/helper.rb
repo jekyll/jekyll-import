@@ -9,6 +9,10 @@ require 'redgreen' if RUBY_VERSION < '1.9'
 require 'shoulda'
 require 'rr'
 
+Dir.glob(File.expand_path('../../lib/jekyll/jekyll-import/*', __FILE__)).each do |f|
+  require f
+end
+
 # Send STDERR into the void to suppress program output messages
 STDERR.reopen(test(?e, '/dev/null') ? '/dev/null' : 'NUL:')
 

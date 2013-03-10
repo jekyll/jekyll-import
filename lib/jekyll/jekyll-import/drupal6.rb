@@ -10,7 +10,7 @@ require 'safe_yaml'
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 module JekyllImport
-  module Drupal
+  module Drupal6
     # Reads a MySQL database via Sequel and creates a post file for each story
     # and blog node in table node.
     QUERY = "SELECT n.nid, \

@@ -10,7 +10,7 @@ require 'yaml'
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 module JekyllImport
-  module Drupal
+  module Drupal7
     # Reads a MySQL database via Sequel and creates a post file for each post
     # in wp_posts that has post_status = 'publish'. This restriction is made
     # because 'draft' posts are not guaranteed to have valid dates.

@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   
   # development dependencies
   s.add_development_dependency('rake', "~> 10.0.3")
+  s.add_development_dependency('rdoc', "~> 4.0.0")
   
   # test dependencies:
   s.add_development_dependency('redgreen', "~> 1.2")

@@ -15,60 +15,115 @@ require 'safe_yaml'
 
 module JekyllImport
   module MT
-    # This query will pull blog posts from all entries across all blogs. If
-    # you've got unpublished, deleted or otherwise hidden posts please sift
-    # through the created posts to make sure nothing is accidently published.
-    QUERY = "SELECT entry_id, \
-                    entry_basename, \
-                    entry_text, \
-                    entry_text_more, \
-                    entry_authored_on, \
-                    entry_title, \
-                    entry_convert_breaks \
-             FROM mt_entry"
 
-    def self.process(dbname, user, pass, host = 'localhost', blog_id = nil)
-      db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+    STATUS_DRAFT = 1
+    STATUS_PUBLISHED = 2
+    MORE_CONTENT_SEPARATOR = '<!--more-->'
+
+    def self.default_options
+      {
+        :blog_id => nil,
+        :categories => true,
+        :dest_encoding => 'utf-8',
+        :src_encoding => 'utf-8'
+      }
+    end
+
+    # By default this migrator will include posts for all your MovableType blogs.
+    # Specify a single blog by providing blog_id.
+
+    # Main migrator function. Call this to perform the migration.
+    #
+    # dbname::  The name of the database
+    # user::    The database user name
+    # pass::    The database user's password
+    # host::    The address of the MySQL database host. Default: 'localhost'
+    # options:: A hash of configuration options
+    #
+    # Supported options are:
+    #
+    # :blog_id::        Specify a single MovableType blog to export by providing blog_id.
+    #                   Default: nil, importer will include posts for all blogs.
+    # :categories::     If true, save the post's categories in its
+    #                   YAML front matter. Default: true
+    # :src_encoding::   Encoding of strings from the database. Default: UTF-8
+    #                   If your output contains mangled characters, set src_encoding to
+    #                   something appropriate for your database charset.
+    # :dest_encoding::  Encoding of output strings. Default: UTF-8
+    def self.process(dbname, user, pass, host = 'localhost', options = {})
+      options = default_options.merge(options)
+
+      db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host)
+      post_categories = db[:mt_placement].join(:mt_category, :category_id => :placement_category_id)
 
       FileUtils.mkdir_p "_posts"
 
-      q = blog_id.nil? ? QUERY : "#{QUERY} WHERE entry_blog_id = #{blog_id}"
-      db[q].each do |post|
-        title = post[:entry_title]
-        slug = post[:entry_basename].gsub(/_/, '-')
-        date = post[:entry_authored_on]
-        content = post[:entry_text]
-        more_content = post[:entry_text_more]
-        entry_convert_breaks = post[:entry_convert_breaks]
+      posts = db[:mt_entry]
+      posts = posts.filter(:entry_blog_id => options[:blog_id]) if options[:blog_id]
+      posts.each do |post|
+        categories = post_categories.filter(
+          :mt_placement__placement_entry_id => post[:entry_id]
+        ).map {|ea| encode(ea[:category_basename], options) }
 
-        # Be sure to include the body and extended body.
-        if more_content != nil
-          content = content + " \n" + more_content
-        end
+        file_name = post_file_name(post, options)
 
-        # Ideally, this script would determine the post format (markdown,
-        # html, etc) and create files with proper extensions. At this point
-        # it just assumes that markdown will be acceptable.
-        name = [date.year, date.month, date.day, slug].join('-') + '.' +
-               self.suffix(entry_convert_breaks)
+        data = post_metadata(post, options)
+        data['categories'] = categories if !categories.empty? && options[:categories]
+        yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
-        data = {
-           'layout' => 'post',
-           'title' => title.to_s,
-           'mt_id' => post[:entry_id],
-           'date' => date
-         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+        content = post_content(post, options)
 
-        File.open("_posts/#{name}", "w") do |f|
-          f.puts data
+        File.open("_posts/#{file_name}", "w") do |f|
+          f.puts yaml_front_matter
           f.puts "---"
-          f.puts content
+          f.puts encode(content, options)
         end
       end
     end
 
+    # Extracts metadata for YAML front matter from post
+    def self.post_metadata(post, options = default_options)
+      metadata = {
+        'layout' => 'post',
+        'title' => encode(post[:entry_title], options),
+        'date' => post[:entry_authored_on].strftime("%Y-%m-%d %H:%M:%S %z"),
+        'excerpt' => encode(post[:entry_excerpt], options),
+        'mt_id' => post[:entry_id]
+      }
+      metadata['published'] = false if post[:entry_status] != STATUS_PUBLISHED
+      metadata
+    end
+
+    # Extracts text body from post
+    def self.post_content(post, options = default_options)
+      if post[:entry_text_more].strip.empty?
+        post[:entry_text]
+      else
+        post[:entry_text] + "\n\n#{MORE_CONTENT_SEPARATOR}\n\n" + post[:entry_text_more]
+      end
+    end
+
+    def self.post_file_name(post, options = default_options)
+      date = post[:entry_authored_on]
+      slug = post[:entry_basename]
+      file_ext = suffix(post[:entry_convert_breaks])
+
+      "#{date.strftime('%Y-%m-%d')}-#{slug}.#{file_ext}"
+    end
+
+    def self.encode(str, options = default_options)
+      if str.respond_to?(:encoding)
+        str.encode(options[:dest_encoding], options[:src_encoding])
+      else
+        str
+      end
+    end
+
+    # Ideally, this script would determine the post format (markdown,
+    # html, etc) and create files with proper extensions. At this point
+    # it just assumes that markdown will be acceptable.
     def self.suffix(entry_type)
-      if entry_type.nil? || entry_type.include?("markdown")
+      if entry_type.nil? || entry_type.include?("markdown") || entry_type.include?("__default__")
         # The markdown plugin I have saves this as
         # "markdown_with_smarty_pants", so I just look for "markdown".
         "markdown"

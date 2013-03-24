@@ -23,7 +23,7 @@ module Jekyll
         :wordpressdotcom => 'WordpressDotCom'
       }
 
-      def self.abort_on_invalid_migator
+      def self.abort_on_invalid_migrator
         msg = "You must specify a valid migrator. Valid choices:\n"
         IMPORTERS.keys.each do |k, v|
           msg += "* #{k}\n"
@@ -43,7 +43,7 @@ module Jekyll
             klass.process(options.__hash__)
           end
         else
-          abort_on_invalid_migator
+          abort_on_invalid_migrator
         end
       end
     end

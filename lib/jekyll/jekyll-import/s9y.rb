@@ -12,11 +12,21 @@ require 'yaml'
 
 module JekyllImport
   module S9Y
-    def self.process(file_name)
+    def self.validate(options)
+      if !options[:source]
+        abort "Missing mandatory option --source, e.g. --source \"http://blog.example.com/rss.php?version=2.0&all=1\""
+      end
+    end
+
+    def self.process(options)
+      validate(options)
+
       FileUtils.mkdir_p("_posts")
 
+      source = options[:source]
+
       text = ''
-      open(file_name, 'r') { |line| text = line.read }
+      open(source) { |line| text = line.read }
       rss = RSS::Parser.parse(text)
 
       rss.items.each do |item|

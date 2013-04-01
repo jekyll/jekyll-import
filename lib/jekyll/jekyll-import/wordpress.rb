@@ -50,9 +50,13 @@ module JekyllImport
     #                   and :revision. If this is nil or an empty
     #                   array, all posts are migrated regardless of
     #                   status. Default: [:publish].
-    # 
-    def self.process(dbname, user, pass, host='localhost', options={})
+    #
+    def self.process(options={})
       options = {
+        :user           => '',
+        :pass           => '',
+        :host           => 'localhost',
+        :dbname         => '',
         :table_prefix   => 'wp_',
         :clean_entities => true,
         :comments       => true,
@@ -75,8 +79,8 @@ module JekyllImport
 
       FileUtils.mkdir_p("_posts")
 
-      db = Sequel.mysql(dbname, :user => user, :password => pass,
-                        :host => host, :encoding => 'utf8')
+      db = Sequel.mysql(options[:dbname], :user => options[:user], :password => options[:pass],
+                        :host => options[:host], :encoding => 'utf8')
 
       px = options[:table_prefix]
 

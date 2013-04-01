@@ -5,6 +5,7 @@
   * Minor Enhancements
     * S9Y Importer: specify data source using --source option (#18)
   * Bug Fixes
+    * Fix WordPress import initialize parameters due to new Jekyll setup (#19)
     * Fixed misspelling in method name (#17)
   * Site Enhancements
   * Development fixes

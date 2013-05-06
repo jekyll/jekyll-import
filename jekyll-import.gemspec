@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'jekyll-import'
-  s.version           = '0.1.0.beta1'
-  s.date              = '2013-03-19'
+  s.version           = '0.1.0'
+  s.date              = '2013-05-06'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_runtime_dependency('jekyll')
+  s.add_runtime_dependency('jekyll', "~> 1.0")
   s.add_runtime_dependency('fastercsv')
   s.add_runtime_dependency('nokogiri')
   s.add_runtime_dependency('safe_yaml', '~> 0.7.0')

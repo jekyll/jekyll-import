@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'sequel'
 require 'fileutils'
-require 'psych'
 require 'safe_yaml'
 
 # NOTE: This converter requires Sequel and the MySQL gems.

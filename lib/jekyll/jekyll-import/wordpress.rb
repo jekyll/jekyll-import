@@ -79,7 +79,7 @@ module JekyllImport
 
       FileUtils.mkdir_p("_posts")
 
-      db = Sequel.mysql(options[:dbname], :user => options[:user], :password => options[:pass],
+      db = Sequel.mysql2(options[:dbname], :user => options[:user], :password => options[:pass],
                         :host => options[:host], :encoding => 'utf8')
 
       px = options[:table_prefix]

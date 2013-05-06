@@ -93,7 +93,7 @@ class TestMTMigrator < Test::Unit::TestCase
   end
 
   should "include the entry_authored_on date in the file name" do
-    post = stub_entry_row(:entry_authored_on => Time.parse("2013-01-02 00:00:00").utc)
+    post = stub_entry_row(:entry_authored_on => Time.parse("2013-01-02 00:00:00 -00:00").utc)
     assert JekyllImport::MT.post_file_name(post).include?("2013-01-02")
   end
 

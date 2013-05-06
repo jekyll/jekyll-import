@@ -89,7 +89,7 @@ class TestMTMigrator < Test::Unit::TestCase
 
   should "not include a <!--MORE--> separator when there is no entry_text_more" do
     post = stub_entry_row(:entry_text_more => "")
-    assert !JekyllImport::MT.post_content(post).include?(JekyllImport::MT::MORE_CONTENT_SEPARATOR)
+    refute JekyllImport::MT.post_content(post).include?(JekyllImport::MT::MORE_CONTENT_SEPARATOR)
   end
 
   should "include the entry_authored_on date in the file name" do

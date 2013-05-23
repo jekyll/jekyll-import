@@ -59,14 +59,10 @@ module JekyllImport
           end
         when "photo"
           title = post["photo-caption"]
-          max_size = post.keys.map{ |k| k.gsub("photo-url-", "").to_i }.max
-          url = post["photo-url"] || post["photo-url-#{max_size}"]
-          ext = "." + post[post.keys.select { |k|
-            k =~ /^photo-url-/ && post[k].split("/").last =~ /\./
-          }.first].split(".").last
-          content = "<img src=\"#{save_file(url, ext)}\"/>"
-          unless post["photo-link-url"].nil?
-            content = "<a href=\"#{post["photo-link-url"]}\">#{content}</a>"
+          content = if post["photo-link-url"].nil?
+            "<a href=\"#{post["photo-link-url"]}\">#{content}</a>"
+          else
+            fetch_photo post
           end
         when "audio"
           if !post["id3-title"].nil?
@@ -111,6 +107,32 @@ module JekyllImport
         :url => post["url"],
         :slug => post["url-with-slug"],
       }
+    end
+
+    # Attempts to fetch the largest version of a photo available for a post.
+    # If that file fails, it tries the next smaller size until all available
+    # photo URLs are exhausted.  If they all fail, the import is aborted.
+    def self.fetch_photo(post)
+      sizes = post.keys.map {|k| k.gsub("photo-url-", "").to_i}
+      sizes.sort! {|a,b| b <=> a}
+
+      ext_key, ext_val = post.find do |k,v|
+        k =~ /^photo-url-/ && v.split("/").last =~ /\./
+      end
+      ext = "." + ext_val.split(".").last
+
+      sizes.each do |size|
+        url = post["photo-url"] || post["photo-url-#{size}"]
+        next if url.nil?
+        puts "Fetching photo #{url}"
+        begin
+          return "<img src=\"#{save_file(url, ext)}\"/>"
+        rescue OpenURI::HTTPError => err
+          puts "Failed to grab photo"
+        end
+      end
+
+      abort "Failed to fetch photo for post #{post['url']}"
     end
 
     # Create a Hash of old urls => new urls, for rewriting and

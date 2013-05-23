@@ -124,9 +124,8 @@ module JekyllImport
       sizes.each do |size|
         url = post["photo-url"] || post["photo-url-#{size}"]
         next if url.nil?
-        puts "Fetching photo #{url}"
         begin
-          return "<img src=\"#{save_file(url, ext)}\"/>"
+          return "<img src=\"#{save_photo(url, ext)}\"/>"
         rescue OpenURI::HTTPError => err
           puts "Failed to grab photo"
         end
@@ -205,12 +204,17 @@ module JekyllImport
       lines.join("\n")
     end
 
-    def self.save_file(url, ext)
+    def self.save_photo(url, ext)
       if @grab_images
         path = "tumblr_files/#{url.split('/').last}"
         path += ext unless path =~ /#{ext}$/
         FileUtils.mkdir_p "tumblr_files"
-        File.open(path, "w") { |f| f.write(open(url).read) }
+
+        # Don't fetch if we've already cached this file
+        unless File.exists? path
+          puts "Fetching photo #{url}"
+          File.open(path, "w") { |f| f.write(open(url).read) }
+        end
         url = "/" + path
       end
       url

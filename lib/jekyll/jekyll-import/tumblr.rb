@@ -26,23 +26,39 @@ module JekyllImport
         json = feed.readlines.join("\n")[21...-2]  # Strip Tumblr's JSONP chars.
         blog = JSON.parse(json)
         puts "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
-        posts += blog["posts"].map { |post| post_to_hash(post, format) }
+        batch = blog["posts"].map { |post| post_to_hash(post, format) }
+
+        # If we're rewriting, save the posts for later.  Otherwise, go ahead and
+        # dump these to disk now
+        if rewrite_urls
+          posts += batch
+        else
+          batch.each {|post| write_post(post, format == "md", add_highlights)}
+        end
+
       end until blog["posts"].size < per_page
-      # Rewrite URLs and create redirects.
-      posts = rewrite_urls_and_redirects posts if rewrite_urls
-      # Second pass for writing post files.
-      posts.each do |post|
-        if format == "md"
-          post[:content] = html_to_markdown post[:content]
-          post[:content] = add_syntax_highlights post[:content] if add_highlights
-        end
-        File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
-          f.puts post[:header].to_yaml + "---\n" + post[:content]
-        end
+
+      # Rewrite URLs, create redirects and write out out posts if necessary
+      if rewrite_urls
+        posts = rewrite_urls_and_redirects posts
+        posts.each {|post| write_post(post, format == "md", add_highlights)}
       end
     end
 
     private
+
+    # Writes a post out to disk
+    def self.write_post(post, use_markdown, add_highlights)
+      content = post[:content]
+      if use_markdown
+        content = html_to_markdown content
+        content = add_syntax_highlights content if add_highlights
+      end
+
+      File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
+        f.puts post[:header].to_yaml + "---\n" + content
+      end
+    end
 
     # Converts each type of Tumblr post to a hash with all required
     # data for Jekyll.

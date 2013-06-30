@@ -12,4 +12,5 @@
     * Fix WordPress import initialize parameters due to new Jekyll setup (#19)
     * Fixed misspelling in method name (#17)
   * Site Enhancements
-  * Development fixes
+  * Development Fixes
+    * Update usage docs in RSS importer (#35)

@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = %w[lib]
 
   s.rdoc_options = ["--charset=UTF-8"]
-  s.extra_rdoc_files = %w[README.md LICENSE]
+  s.extra_rdoc_files = %w[README.markdown LICENSE]
 
   s.add_runtime_dependency('jekyll', '~> 1.0')
   s.add_runtime_dependency('fastercsv')

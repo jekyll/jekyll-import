@@ -8,6 +8,7 @@
   * Various Tumblr Enhancements (#27)
   * Adding tags to Typo and forcing their encoding to UTF-8 (#11)
   * S9Y Importer: specify data source using --source option (#18)
+  * Add taxonomy (`tags`) to Drupal6 migration (#15)
 ### Bug Fixes
   * Remove usage of `Hash#at` in Tumblr importer (#14)
   * Force encoding of Drupal 6.x titles to UTF-8 (#22)

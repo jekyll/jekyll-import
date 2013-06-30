@@ -9,6 +9,11 @@ require 'redgreen' if RUBY_VERSION < '1.9'
 require 'shoulda'
 require 'rr'
 
+unless defined?(Test::Unit::AssertionFailedError)
+  class Test::Unit::AssertionFailedError < ActiveSupport::TestCase::Assertion
+  end
+end
+
 Dir.glob(File.expand_path('../../lib/jekyll/jekyll-import/*', __FILE__)).each do |f|
   require f
 end

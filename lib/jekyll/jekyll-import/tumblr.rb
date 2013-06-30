@@ -20,27 +20,45 @@ module JekyllImport
       # First pass builds up an array of each post as a hash.
       begin
         current_page = (current_page || -1) + 1
-        feed = open(url + "?num=#{per_page}&start=#{current_page * per_page}")
+        feed_url = url + "?num=#{per_page}&start=#{current_page * per_page}"
+        puts "Fetching #{feed_url}"
+        feed = open(feed_url)
         json = feed.readlines.join("\n")[21...-2]  # Strip Tumblr's JSONP chars.
         blog = JSON.parse(json)
         puts "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
-        posts += blog["posts"].map { |post| post_to_hash(post, format) }
+        batch = blog["posts"].map { |post| post_to_hash(post, format) }
+
+        # If we're rewriting, save the posts for later.  Otherwise, go ahead and
+        # dump these to disk now
+        if rewrite_urls
+          posts += batch
+        else
+          batch.each {|post| write_post(post, format == "md", add_highlights)}
+        end
+
       end until blog["posts"].size < per_page
-      # Rewrite URLs and create redirects.
-      posts = rewrite_urls_and_redirects posts if rewrite_urls
-      # Second pass for writing post files.
-      posts.each do |post|
-        if format == "md"
-          post[:content] = html_to_markdown post[:content]
-          post[:content] = add_syntax_highlights post[:content] if add_highlights
-        end
-        File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
-          f.puts post[:header].to_yaml + "---\n" + post[:content]
-        end
+
+      # Rewrite URLs, create redirects and write out out posts if necessary
+      if rewrite_urls
+        posts = rewrite_urls_and_redirects posts
+        posts.each {|post| write_post(post, format == "md", add_highlights)}
       end
     end
 
     private
+
+    # Writes a post out to disk
+    def self.write_post(post, use_markdown, add_highlights)
+      content = post[:content]
+      if use_markdown
+        content = html_to_markdown content
+        content = add_syntax_highlights content if add_highlights
+      end
+
+      File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
+        f.puts post[:header].to_yaml + "---\n" + content
+      end
+    end
 
     # Converts each type of Tumblr post to a hash with all required
     # data for Jekyll.
@@ -57,14 +75,10 @@ module JekyllImport
           end
         when "photo"
           title = post["photo-caption"]
-          max_size = post.keys.map{ |k| k.gsub("photo-url-", "").to_i }.max
-          url = post["photo-url"] || post["photo-url-#{max_size}"]
-          ext = "." + post[post.keys.select { |k|
-            k =~ /^photo-url-/ && post[k].split("/").last =~ /\./
-          }.first].split(".").last
-          content = "<img src=\"#{save_file(url, ext)}\"/>"
-          unless post["photo-link-url"].nil?
-            content = "<a href=\"#{post["photo-link-url"]}\">#{content}</a>"
+          content = if post["photo-link-url"].nil?
+            "<a href=\"#{post["photo-link-url"]}\">#{content}</a>"
+          else
+            fetch_photo post
           end
         when "audio"
           if !post["id3-title"].nil?
@@ -109,6 +123,31 @@ module JekyllImport
         :url => post["url"],
         :slug => post["url-with-slug"],
       }
+    end
+
+    # Attempts to fetch the largest version of a photo available for a post.
+    # If that file fails, it tries the next smaller size until all available
+    # photo URLs are exhausted.  If they all fail, the import is aborted.
+    def self.fetch_photo(post)
+      sizes = post.keys.map {|k| k.gsub("photo-url-", "").to_i}
+      sizes.sort! {|a,b| b <=> a}
+
+      ext_key, ext_val = post.find do |k,v|
+        k =~ /^photo-url-/ && v.split("/").last =~ /\./
+      end
+      ext = "." + ext_val.split(".").last
+
+      sizes.each do |size|
+        url = post["photo-url"] || post["photo-url-#{size}"]
+        next if url.nil?
+        begin
+          return "<img src=\"#{save_photo(url, ext)}\"/>"
+        rescue OpenURI::HTTPError => err
+          puts "Failed to grab photo"
+        end
+      end
+
+      abort "Failed to fetch photo for post #{post['url']}"
     end
 
     # Create a Hash of old urls => new urls, for rewriting and
@@ -181,12 +220,17 @@ module JekyllImport
       lines.join("\n")
     end
 
-    def self.save_file(url, ext)
+    def self.save_photo(url, ext)
       if @grab_images
         path = "tumblr_files/#{url.split('/').last}"
         path += ext unless path =~ /#{ext}$/
         FileUtils.mkdir_p "tumblr_files"
-        File.open(path, "w") { |f| f.write(open(url).read) }
+
+        # Don't fetch if we've already cached this file
+        unless File.exists? path
+          puts "Fetching photo #{url}"
+          File.open(path, "w") { |f| f.write(open(url).read) }
+        end
         url = "/" + path
       end
       url

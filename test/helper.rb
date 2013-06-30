@@ -10,6 +10,7 @@ require 'shoulda'
 require 'rr'
 
 unless defined?(Test::Unit::AssertionFailedError)
+  require 'activesupport'
   class Test::Unit::AssertionFailedError < ActiveSupport::TestCase::Assertion
   end
 end

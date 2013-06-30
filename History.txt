@@ -8,6 +8,7 @@
     * Adding tags to Typo and forcing their encoding to UTF-8 (#11)
     * S9Y Importer: specify data source using --source option (#18)
   * Bug Fixes
+    * Remove usage of `Hash#at` in Tumblr importer (#14)
     * Force encoding of Drupal 6.x titles to UTF-8 (#22)
     * Update wordpressdotcom.rb to use its method parameter correctly (#24)
     * Use MySQL2 adapter for WordPress importer to fix broken front-matter (#20)

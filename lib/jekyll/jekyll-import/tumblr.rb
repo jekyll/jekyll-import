@@ -83,10 +83,10 @@ module JekyllImport
         when "audio"
           if !post["id3-title"].nil?
             title = post["id3-title"]
-            content = post.at["audio-player"] + "<br/>" + post["audio-caption"]
+            content = post["audio-player"] + "<br/>" + post["audio-caption"]
           else
             title = post["audio-caption"]
-            content = post.at["audio-player"]
+            content = post["audio-player"]
           end
         when "quote"
           title = post["quote-text"]

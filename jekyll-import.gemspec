@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_runtime_dependency('jekyll')
+  s.add_runtime_dependency('jekyll', '~> 1.0')
   s.add_runtime_dependency('fastercsv')
   s.add_runtime_dependency('nokogiri')
   s.add_runtime_dependency('safe_yaml', '~> 0.7.0')
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   # development dependencies
   s.add_development_dependency('rake', "~> 10.0.3")
   s.add_development_dependency('rdoc', "~> 4.0.0")
+  s.add_development_dependency('activesupport', '~> 3.2')
   
   # test dependencies:
   s.add_development_dependency('redgreen', "~> 1.2")

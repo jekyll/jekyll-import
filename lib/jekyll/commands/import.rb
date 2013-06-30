@@ -38,8 +38,9 @@ module Jekyll
           require File.join(File.dirname(__FILE__), "..", "jekyll-import", "#{migrator}.rb")
 
           if JekyllImport.const_defined?(IMPORTERS[migrator.to_sym])
-            puts 'Importing...'
             klass = JekyllImport.const_get(IMPORTERS[migrator.to_sym])
+            klass.validate(options.__hash__) if klass.respond_to?(:validate)
+            puts 'Importing...'
             klass.process(options.__hash__)
           end
         else

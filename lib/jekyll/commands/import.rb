@@ -32,8 +32,8 @@ module Jekyll
       end
 
       def self.process(migrator, options)
-        if IMPORTERS.keys.include?(migrator.to_sym)
-          migrator = migrator.downcase
+        if IMPORTERS.keys.include?(migrator.to_s.to_sym)
+          migrator = migrator.to_s.downcase
 
           require File.join(File.dirname(__FILE__), "..", "jekyll-import", "#{migrator}.rb")
 

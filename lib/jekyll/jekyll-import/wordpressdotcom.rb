@@ -32,7 +32,8 @@ module JekyllImport
         end
 
         type = item.at('wp:post_type').inner_text
-        tags = (item/:category).map{|c| c.inner_text}.reject{|c| c == 'Uncategorized'}.uniq
+        categories = item.search('category[@domain="category"]').map{|c| c.inner_text}.reject{|c| c == 'Uncategorized'}.uniq
+        tags = item.search('category[@domain="post_tag"]').map{|t| t.inner_text}.uniq
 
         metas = Hash.new
         item.search("wp:postmeta").each do |meta|
@@ -45,6 +46,7 @@ module JekyllImport
         header = {
           'layout' => type,
           'title'  => title,
+          'categories' => categories,
           'tags'   => tags,
           'status'   => status,
           'type'   => type,

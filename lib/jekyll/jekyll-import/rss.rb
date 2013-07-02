@@ -3,10 +3,10 @@
 #
 # Usage:
 #   (URL)
-#   ruby -r '_import/rss.rb' -e "Jekyll::MigrateRSS.process('http://yourdomain.com/your-favorite-feed.xml')"
+#   ruby -r 'jekyll/jekyll-import/rss' -e "JekyllImport::RSS.process(:source => 'http://yourdomain.com/your-favorite-feed.xml')"
 #
 #   (Local file)
-#   ruby -r '_import/rss.rb' -e "Jekyll::MigrateRSS.process('./somefile/on/your/computer.xml')"
+#   ruby -r 'jekyll/jekyll-import/rss' -e "JekyllImport::RSS.process(:source => './somefile/on/your/computer.xml')"
 
 require 'rss/1.0'
 require 'rss/2.0'

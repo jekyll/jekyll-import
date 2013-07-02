@@ -2,10 +2,11 @@ Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.rubygems_version = '1.3.5'
+  s.required_ruby_version = '>= 1.9.2'
 
   s.name              = 'jekyll-import'
-  s.version           = '0.1.0.beta1'
-  s.date              = '2013-03-19'
+  s.version           = '0.1.0.beta2'
+  s.date              = '2013-07-01'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."
@@ -18,9 +19,9 @@ Gem::Specification.new do |s|
   s.require_paths = %w[lib]
 
   s.rdoc_options = ["--charset=UTF-8"]
-  s.extra_rdoc_files = %w[README.md LICENSE]
+  s.extra_rdoc_files = %w[README.markdown LICENSE]
 
-  s.add_runtime_dependency('jekyll')
+  s.add_runtime_dependency('jekyll', '~> 1.0')
   s.add_runtime_dependency('fastercsv')
   s.add_runtime_dependency('nokogiri')
   s.add_runtime_dependency('safe_yaml', '~> 0.7.0')
@@ -28,6 +29,7 @@ Gem::Specification.new do |s|
   # development dependencies
   s.add_development_dependency('rake', "~> 10.0.3")
   s.add_development_dependency('rdoc', "~> 4.0.0")
+  s.add_development_dependency('activesupport', '~> 3.2')
   
   # test dependencies:
   s.add_development_dependency('redgreen', "~> 1.2")
@@ -46,9 +48,9 @@ Gem::Specification.new do |s|
   # = MANIFEST =
   s.files = %w[
     Gemfile
-    History.txt
+    History.markdown
     LICENSE
-    README.md
+    README.markdown
     Rakefile
     jekyll-import.gemspec
     lib/jekyll-import.rb

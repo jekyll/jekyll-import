@@ -10,6 +10,7 @@ module Jekyll
         :drupal7 => 'Drupal7',
         :enki => 'Enki',
         :joomla => 'Joomla',
+        :google_reader => 'GoogleReader',
         :marley => 'Marley',
         :mephisto => 'Mephisto',
         :mt => 'MT',
@@ -23,8 +24,8 @@ module Jekyll
         :wordpressdotcom => 'WordpressDotCom'
       }
 
-      def self.abort_on_invalid_migrator
-        msg = "You must specify a valid migrator. Valid choices:\n"
+      def self.abort_on_invalid_migrator(migrator)
+        msg = "Sorry, '#{migrator}' isn't a valid migrator. Valid choices:\n"
         IMPORTERS.keys.each do |k, v|
           msg += "* #{k}\n"
         end
@@ -32,18 +33,19 @@ module Jekyll
       end
 
       def self.process(migrator, options)
-        if IMPORTERS.keys.include?(migrator.to_sym)
-          migrator = migrator.downcase
+        if IMPORTERS.keys.include?(migrator.to_s.to_sym)
+          migrator = migrator.to_s.downcase
 
           require File.join(File.dirname(__FILE__), "..", "jekyll-import", "#{migrator}.rb")
 
           if JekyllImport.const_defined?(IMPORTERS[migrator.to_sym])
-            puts 'Importing...'
             klass = JekyllImport.const_get(IMPORTERS[migrator.to_sym])
+            klass.validate(options.__hash__) if klass.respond_to?(:validate)
+            puts 'Importing...'
             klass.process(options.__hash__)
           end
         else
-          abort_on_invalid_migrator
+          abort_on_invalid_migrator(migrator)
         end
       end
     end

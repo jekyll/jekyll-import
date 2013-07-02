@@ -5,6 +5,7 @@
   * Posterous archive (unzipped directory) importer added (#12)
   * Improve MovableType importer (#13)
   * Add an importer for Google Reader blog exports (#36)
+  * Remove dependency on html2text in the tumblr importer (#32)
 
 ### Minor Enhancements
   * Various Tumblr Enhancements (#27)

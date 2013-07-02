@@ -185,7 +185,7 @@ module JekyllImport
         content.gsub!(/<#{tag}/i, "$$" + tag)
         content.gsub!(/<\/#{tag}/i, "||" + tag)
       end
-      content = %x[echo '#{content.gsub("'", "''")}' | html2text]
+      content = Nokogiri::HTML(content.gsub("'", "''")).text
       preserve.each do |tag|
         content.gsub!("$$" + tag, "<" + tag)
         content.gsub!("||" + tag, "</" + tag)

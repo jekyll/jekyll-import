@@ -177,8 +177,7 @@ module JekyllImport
       }
     end
 
-    # Uses Python's html2text to convert a post's content to
-    # markdown. Preserve HTML tables as per the markdown docs.
+    # Convert preserving HTML tables as per the markdown docs.
     def self.html_to_markdown(content)
       preserve = ["table", "tr", "th", "td"]
       preserve.each do |tag|

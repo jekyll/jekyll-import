@@ -15,6 +15,7 @@
   * Differentiate between categories and tags in the WordpressDotCom
     importer (#31)
   * Use tumblr slug for post is available, use that instead (#39, #40)
+  * Drupal 7 importer should use latest revision of a post (#38)
 
 ### Bug Fixes
   * Remove usage of `Hash#at` in Tumblr importer (#14)
@@ -23,6 +24,8 @@
   * Use MySQL2 adapter for WordPress importer to fix broken front-matter (#20)
   * Fix WordPress import initialize parameters due to new Jekyll setup (#19)
   * Fixed misspelling in method name (#17)
+  * Fix Drupal 7 importer so it compares node ID's properly between `node` and
+    `field_data_body` tables (#38)
 
 ### Site Enhancements
 

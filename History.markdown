@@ -14,6 +14,7 @@
   * Add taxonomy (`tags`) to Drupal6 migration (#15)
   * Differentiate between categories and tags in the WordpressDotCom
     importer (#31)
+  * Use tumblr slug for post is available, use that instead (#39, #40)
 
 ### Bug Fixes
   * Remove usage of `Hash#at` in Tumblr importer (#14)

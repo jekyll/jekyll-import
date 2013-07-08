@@ -22,7 +22,8 @@ module JekyllImport
              FROM node AS n, \
                   field_data_body AS fdb \
              WHERE (n.type = 'blog' OR n.type = 'story') \
-             AND n.vid = fdb.entity_id"
+             AND n.nid = fdb.entity_id \
+             AND n.vid = fdb.revision_id"
 
     def self.process(dbname, user, pass, host = 'localhost', prefix = '')
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')

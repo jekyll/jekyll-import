@@ -110,7 +110,12 @@ module JekyllImport
       end
       date = Date.parse(post['date']).to_s
       title = Nokogiri::HTML(title).text
-      slug = post["slug"]
+      slug = if post["slug"] && post["slug"].strip != ""
+        post["slug"]
+      else
+        slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+        slug.length > 200 ? slug.slice(0..200) : slug
+      end
       {
         :name => "#{date}-#{slug}.#{format}",
         :header => {

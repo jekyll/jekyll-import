@@ -26,6 +26,7 @@
   * Fixed misspelling in method name (#17)
   * Fix Drupal 7 importer so it compares node ID's properly between `node` and
     `field_data_body` tables (#38)
+  * Fix prefix replacement for Drupal6 (#41)
 
 ### Site Enhancements
 

@@ -33,6 +33,8 @@ module JekyllImport
       if prefix != ''
         QUERY[" node "] = " " + prefix + "node "
         QUERY[" node_revisions "] = " " + prefix + "node_revisions "
+        QUERY[" term_node "] = " " + prefix + "term_node "
+        QUERY[" term_data "] = " " + prefix + "term_data "
       end
 
       FileUtils.mkdir_p "_posts"

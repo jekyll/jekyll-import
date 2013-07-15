@@ -59,8 +59,8 @@ EOF
         node_id = post[:nid]
         title = post[:title]
         content = post[:body]
-        tags = post[:tags]
-        tags = tags == nil ? '' : tags.downcase.strip
+        tags = ''
+        tags = post[:tags].downcase.strip unless post[:tags].nil?
         created = post[:created]
         time = Time.at(created)
         is_published = post[:status] == 1

@@ -18,11 +18,11 @@ module JekyllImport
                     nr.body, \
                     n.created, \
                     n.status, \
-                    GROUP_CONCAT( td.name SEPARATOR ' ' ) AS 'tags' \
+                    GROUP_CONCAT( td.name SEPARATOR '|' ) AS 'tags' \
                FROM node_revisions AS nr, \
                     node AS n \
-               JOIN term_node AS tn ON tn.nid = n.nid \
-               JOIN term_data AS td ON tn.tid = td.tid \
+               LEFT OUTER JOIN term_node AS tn ON tn.nid = n.nid \
+               LEFT OUTER JOIN term_data AS td ON tn.tid = td.tid \
               WHERE (n.type = 'blog' OR n.type = 'story') \
                 AND n.vid = nr.vid \
            GROUP BY n.nid"
@@ -59,7 +59,7 @@ EOF
         node_id = post[:nid]
         title = post[:title]
         content = post[:body]
-        tags = post[:tags].downcase.strip
+        tags = post.fetch(:tags, '').downcase.strip
         created = post[:created]
         time = Time.at(created)
         is_published = post[:status] == 1
@@ -73,7 +73,7 @@ EOF
            'layout' => 'post',
            'title' => title.to_s,
            'created' => created,
-           'categories' => tags
+           'categories' => tags.split('|')
          }.delete_if { |k,v| v.nil? || v == ''}.each_pair {
             |k,v| ((v.is_a? String) ? v.force_encoding("UTF-8") : v)
          }.to_yaml

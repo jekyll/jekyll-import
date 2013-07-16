@@ -16,6 +16,8 @@
     importer (#31)
   * Use tumblr slug for post is available, use that instead (#39, #40)
   * Drupal 7 importer should use latest revision of a post (#38)
+  * Improve the handling of tags in the Drupal 6 importer. Tags with
+    spaces are handled now and the importer doesn't eat tags anymore. (#42)
 
 ### Bug Fixes
   * Remove usage of `Hash#at` in Tumblr importer (#14)

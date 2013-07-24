@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('safe_yaml', '~> 0.7.0')
   
   # development dependencies
-  s.add_development_dependency('rake', "~> 10.0.3")
+  s.add_development_dependency('rake', "~> 10.1.0")
   s.add_development_dependency('rdoc', "~> 4.0.0")
   s.add_development_dependency('activesupport', '~> 3.2')
   
@@ -76,6 +76,7 @@ Gem::Specification.new do |s|
     test/test_mt_importer.rb
     test/test_wordpress_importer.rb
     test/test_wordpressdotcom_importer.rb
+    test/test_tumblr_importer.rb
   ]
   # = MANIFEST =
 

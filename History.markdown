@@ -34,3 +34,4 @@
 
 ### Development Fixes
   * Update usage docs in RSS importer (#35)
+  * Added initial version of a test case for Tumblr (#43)

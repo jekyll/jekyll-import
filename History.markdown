@@ -29,6 +29,8 @@
   * Fix Drupal 7 importer so it compares node ID's properly between `node` and
     `field_data_body` tables (#38)
   * Fix prefix replacement for Drupal6 (#41)
+  * Fix an exception when a Movable Type blog did not have additional
+    entry text (#45)
 
 ### Site Enhancements
 

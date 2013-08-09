@@ -95,8 +95,12 @@ module JekyllImport
     end
 
     # Extracts text body from post
+    def self.extra_entry_text_empty?(post)
+      post[:entry_text_more].nil? || post[:entry_text_more].strip.empty?
+    end
+
     def self.post_content(post, options = default_options)
-      if post[:entry_text_more].strip.empty?
+      if extra_entry_text_empty?(post)
         post[:entry_text]
       else
         post[:entry_text] + "\n\n#{MORE_CONTENT_SEPARATOR}\n\n" + post[:entry_text_more]

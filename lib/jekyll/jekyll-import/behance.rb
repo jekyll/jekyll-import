@@ -1,5 +1,6 @@
 # Usage:
-#   ruby -r 'jekyll/jekyll-import/behance' -e "JekyllImport::BehanceImport.process(user: "USERNAME", api_token: "API_KEY")'
+#   ruby -r '../jekyll-import/lib/jekyll/jekyll-import/behance.rb' -e 'JekyllImport::BehanceImport.process(user: "USERNAME", api_token: "API_TOKEN")'
+
 
 require 'fileutils'
 require 'safe_yaml'
@@ -21,7 +22,8 @@ module JekyllImport
 
     # Process the import.
     #
-    # source - a URL or a local file String.
+    # user - the behance user to retrieve projects (ID or username)
+    # api_token - your developer API Token
     #
     # Returns nothing.
     def self.process(options)

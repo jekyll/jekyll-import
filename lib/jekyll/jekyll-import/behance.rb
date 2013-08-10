@@ -41,8 +41,8 @@ module JekyllImport
         title   = project['name'].to_s
         formatted_date = Time.at(project['published_on']).to_datetime.to_s
 
-        post_name = title.split(%r{ |!|/|:|&|-|$|,}).map do |i|
-          i.downcase if i != ''
+        post_name = title.split(%r{ |!|/|:|&|-|$|,}).map do |character|
+          character.downcase unless character.empty?
         end.compact.join('-')
 
         name = "#{formatted_date}-#{post_name}"

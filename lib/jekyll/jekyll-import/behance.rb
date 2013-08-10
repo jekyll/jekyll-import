@@ -55,10 +55,11 @@ module JekyllImport
 
         FileUtils.mkdir_p("_posts")
 
-        File.open("_posts/#{name}.html", "w") do |f|
+        File.open("_posts/#{name}.md", "w") do |f|
           f.puts header.to_yaml
           f.puts "---\n\n"
-          # Need to include Behance modules as content
+          puts details['description']
+          f.puts details['description']
         end
       end
     end

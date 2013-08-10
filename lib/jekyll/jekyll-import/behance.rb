@@ -41,11 +41,13 @@ module JekyllImport
       client    = Behance::Client.new(access_token: token)
       projects  = client.user_projects(user)
 
+      puts "#{projects.length} project(s) found. Importing now..."
+
       projects.each do |project|
 
         details = client.project(project['id'])
         title   = project['name'].to_s
-        formatted_date = Time.at(project['published_on']).to_date.to_s
+        formatted_date = Time.at(project['published_on'].to_i).to_date.to_s
 
         post_name = title.split(%r{ |!|/|:|&|-|$|,}).map do |character|
           character.downcase unless character.empty?
@@ -64,10 +66,11 @@ module JekyllImport
         File.open("_posts/#{name}.md", "w") do |f|
           f.puts header.to_yaml
           f.puts "---\n\n"
-          puts details['description']
           f.puts details['description']
         end
       end
+
+      puts "Finished importing."
     end
   end
 end

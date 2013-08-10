@@ -7,7 +7,13 @@ require 'safe_yaml'
 
 require 'date'
 require 'time'
-require 'behance'
+
+begin 
+  require 'behance'
+rescue LoadError => e
+  raise unless e.message =~ /behance/
+  puts 'Please install behance before using the importer!'
+end
 
 module JekyllImport
   module BehanceImport

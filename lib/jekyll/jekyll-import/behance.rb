@@ -39,7 +39,7 @@ module JekyllImport
 
         details = client.project(project['id'])
         title   = project['name'].to_s
-        formatted_date = Time.at(project['published_on']).to_datetime.to_s
+        formatted_date = Time.at(project['published_on']).to_date.to_s
 
         post_name = title.split(%r{ |!|/|:|&|-|$|,}).map do |character|
           character.downcase unless character.empty?

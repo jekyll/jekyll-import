@@ -35,6 +35,7 @@ module JekyllImport
 
       FileUtils.mkdir_p "_posts"
       FileUtils.mkdir_p "_drafts"
+      FileUtils.mkdir_p "_layouts"
 
       db[QUERY].each do |post|
         # Get required fields and construct Jekyll compatible name

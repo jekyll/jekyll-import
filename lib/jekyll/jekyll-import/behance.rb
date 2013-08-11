@@ -12,18 +12,14 @@ begin
   require 'behance'
 rescue LoadError => e
   raise unless e.message =~ /behance/
-  puts 'Please install behance before using the importer!'
+  puts "Please install behance before using the importer!"
 end
 
 module JekyllImport
   module BehanceImport
     def self.validate(options)
-      if !options[:user]
-        abort "Missing mandatory option --user."
-      end
-      if !options[:api_token]
-        abort "Missing mandatory option --api_token."
-      end
+      abort "Missing mandatory option --user." unless options[:user]
+      abort "Missing mandatory option --api_token." unless options[:api_token]
     end
 
     # Process the import.
@@ -56,9 +52,9 @@ module JekyllImport
         name = "#{formatted_date}-#{post_name}"
 
         header = {
-          'layout' => 'post',
-          'title' => title,
-          'project' => details
+          "layout" => "post",
+          "title" => title,
+          "project" => details
         }
 
         FileUtils.mkdir_p("_posts")

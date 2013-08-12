@@ -31,6 +31,7 @@
   * Fix prefix replacement for Drupal6 (#41)
   * Fix an exception when a Movable Type blog did not have additional
     entry text (#45)
+  * Create `_layouts/` before writing refresh.html in Drupal migrators (#48)
 
 ### Site Enhancements
 

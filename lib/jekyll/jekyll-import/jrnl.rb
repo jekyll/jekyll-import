@@ -20,31 +20,31 @@ module JekyllImport
 
       date_length = Time.now().strftime(time_format).length
 
-      if File.exists?file
-        input = File.read(file)
-        entries = input.split("\n\n");
+      abort "'#{file}' not found." unless File.file?(file)
 
-        entries.each do |entry|
-          content = entry.split("\n")
-          dateline = content[0]
-          body = content[1]
-          date = Time.parse(content[0, date_length-1].to_s)
-          title = dateline[date_length+1, dateline.length]
-          slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+      input = File.read(file)
+      entries = input.split("\n\n");
 
-          data = {
-            'layout'        => layout.to_s,
-            'title'         => title.to_s,
-            'date'          => date.to_s
-          }.to_yaml
+      entries.each do |entry|
+        content = entry.split("\n")
+        dateline = content[0]
+        body = content[1]
+        date = Time.parse(content[0, date_length-1].to_s)
+        title = dateline[date_length+1, dateline.length]
+        slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
 
-          filename = date.strftime("%Y-%m-%d").to_s + "-#{slug}.#{extension}"
+        data = {
+          'layout'        => layout.to_s,
+          'title'         => title.to_s,
+          'date'          => date.strftime(time_format).to_s
+        }.to_yaml
 
-          File.open("_posts/#{filename}", "w") do |f|
-            f.puts data
-            f.puts "---"
-            f.puts body
-          end
+        filename = date.strftime("%Y-%m-%d").to_s + "-#{slug}.#{extension}"
+
+        File.open("_posts/#{filename}", "w") do |f|
+          f.puts data
+          f.puts "---"
+          f.puts body
         end
       end
     end

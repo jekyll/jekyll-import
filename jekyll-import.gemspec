@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'jekyll-import'
   s.version           = '0.1.0.beta3'
-  s.date              = '2013-07-14'
+  s.date              = '2013-08-12'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."
@@ -61,6 +61,7 @@ Gem::Specification.new do |s|
     lib/jekyll/jekyll-import/enki.rb
     lib/jekyll/jekyll-import/google_reader.rb
     lib/jekyll/jekyll-import/joomla.rb
+    lib/jekyll/jekyll-import/jrnl.rb
     lib/jekyll/jekyll-import/marley.rb
     lib/jekyll/jekyll-import/mephisto.rb
     lib/jekyll/jekyll-import/mt.rb
@@ -74,9 +75,9 @@ Gem::Specification.new do |s|
     lib/jekyll/jekyll-import/wordpressdotcom.rb
     test/helper.rb
     test/test_mt_importer.rb
+    test/test_tumblr_importer.rb
     test/test_wordpress_importer.rb
     test/test_wordpressdotcom_importer.rb
-    test/test_tumblr_importer.rb
   ]
   # = MANIFEST =
 

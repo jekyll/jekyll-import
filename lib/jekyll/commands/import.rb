@@ -10,7 +10,7 @@ module Jekyll
         :drupal7 => 'Drupal7',
         :enki => 'Enki',
         :joomla => 'Joomla',
-        :jrnl => 'jrnl',
+        :jrnl => 'Jrnl',
         :google_reader => 'GoogleReader',
         :marley => 'Marley',
         :mephisto => 'Mephisto',

@@ -39,6 +39,7 @@ module JekyllImport
 
       FileUtils.mkdir_p "_posts"
       FileUtils.mkdir_p "_drafts"
+      FileUtils.mkdir_p "_layouts"
 
       # Create the refresh layout
       # Change the refresh url if you customized your permalink config

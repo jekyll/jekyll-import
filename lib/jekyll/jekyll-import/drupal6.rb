@@ -12,7 +12,7 @@ require 'safe_yaml'
 module JekyllImport
   module Drupal6
     # Reads a MySQL database via Sequel and creates a post file for each story
-    # and blog node in table node.
+    # and blog node.
     QUERY = "SELECT n.nid, \
                     n.title, \
                     nr.body, \
@@ -105,8 +105,6 @@ EOF
 
       # TODO: Make dirs & files for nodes of type 'page'
         # Make refresh pages for these as well
-
-      # TODO: Make refresh dirs & files according to entries in url_alias table
     end
   end
 end

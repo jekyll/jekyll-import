@@ -20,7 +20,7 @@ module JekyllImport
 
       date_length = Time.now().strftime(time_format).length
 
-      abort "'#{file}' not found." unless File.file?(file)
+      abort "The jrnl file was not found. Please make sure '#{file}' exists." unless File.file?(file)
 
       input = File.read(file)
       entries = input.split("\n\n");

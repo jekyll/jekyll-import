@@ -56,6 +56,7 @@ module JekyllImport
       end
 
       File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
+        content ||= ""
         f.puts post[:header].to_yaml + "---\n" + content
       end
     end
@@ -75,11 +76,17 @@ module JekyllImport
           end
         when "photo"
           title = post["photo-caption"]
-          content = if post["photo-link-url"].nil?
-            "<a href=\"#{post["photo-link-url"]}\">#{content}</a>"
+          if post["photos"]
+            content = ""
+            post["photos"].each do |p|
+              photo =  fetch_photo p
+              content << photo + "</br>"
+              content << p["caption"]
+            end
           else
-            fetch_photo post
+            content = fetch_photo post
           end
+          content << "</br>" + post["photo-caption"]
         when "audio"
           if !post["id3-title"].nil?
             title = post["id3-title"]
@@ -109,7 +116,7 @@ module JekyllImport
           end
       end
       date = Date.parse(post['date']).to_s
-      title = Nokogiri::HTML(title).text
+      title = Nokogiri::HTML(title).text || "untitled"
       slug = if post["slug"] && post["slug"].strip != ""
         post["slug"]
       else

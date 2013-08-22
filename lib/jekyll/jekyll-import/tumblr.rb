@@ -76,7 +76,7 @@ module JekyllImport
           end
         when "photo"
           title = post["photo-caption"]
-          if post["photos"]
+          if post["photos"].length > 1
             content = ""
             post["photos"].each do |p|
               photo =  fetch_photo p

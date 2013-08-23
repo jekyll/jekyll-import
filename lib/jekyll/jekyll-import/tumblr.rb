@@ -75,7 +75,7 @@ module JekyllImport
             content << "<br/>" + post["link-description"]
           end
         when "photo"
-          title = post["photo-caption"]
+          title = post["slug"].gsub("-"," ")
           if post["photos"].length > 1
             content = ""
             post["photos"].each do |p|

@@ -56,7 +56,6 @@ module JekyllImport
       end
 
       File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
-        content ||= ""
         f.puts post[:header].to_yaml + "---\n" + content
       end
     end
@@ -116,7 +115,7 @@ module JekyllImport
           end
       end
       date = Date.parse(post['date']).to_s
-      title = Nokogiri::HTML(title).text || "untitled"
+      title = Nokogiri::HTML(title).text
       slug = if post["slug"] && post["slug"].strip != ""
         post["slug"]
       else

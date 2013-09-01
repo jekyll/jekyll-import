@@ -20,6 +20,9 @@ module JekyllImport
 
       date_length = Time.now().strftime(time_format).length
 
+      # convert relative to absolute if needed
+      file = File.expand_path(file)
+
       abort "The jrnl file was not found. Please make sure '#{file}' exists." unless File.file?(file)
 
       input = File.read(file)

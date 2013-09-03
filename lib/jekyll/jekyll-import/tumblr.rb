@@ -121,7 +121,9 @@ module JekyllImport
         :header => {
           "layout" => "post",
           "title" => title,
+          "date" => DateTime.parse(post['date']).strftime('%Y-%m-%d %H:%M:%S'),
           "tags" => post["tags"],
+          "tumblr_url" => post["url-with-slug"]
         },
         :content => content,
         :url => post["url"],
@@ -168,8 +170,9 @@ module JekyllImport
         redirect_dir = tumblr_url.sub(/\//, "") + "/"
         FileUtils.mkdir_p redirect_dir
         File.open(redirect_dir + "index.html", "w") do |f|
-          f.puts "<html><head><meta http-equiv='Refresh' content='0; " +
-                 "url=#{jekyll_url}'></head><body></body></html>"
+          f.puts "<html><head><link rel=\"canonical\" href=\"" +
+                 "#{jekyll_url}\"><meta http-equiv=\"refresh\" content=\"0; " +
+                 "url=#{jekyll_url}\"></head><body></body></html>"
         end
         [tumblr_url, jekyll_url]
       }]
@@ -217,6 +220,7 @@ module JekyllImport
             lines[start] = "{% highlight #{lang} %}"
             lines[i - 1] = "{% endhighlight %}"
           end
+          FileUtils.cp(redirect_dir + "index.html", redirect_dir + "../" + "index.html")
           lines[i] = lines[i].sub(indent, "")
         end
       end

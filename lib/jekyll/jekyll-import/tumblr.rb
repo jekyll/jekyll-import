@@ -123,6 +123,7 @@ module JekyllImport
           "title" => title,
           "date" => DateTime.parse(post['date']).strftime('%Y-%m-%d %H:%M:%S'),
           "tags" => post["tags"],
+          "tumblr_url" => post["url-with-slug"]
         },
         :content => content,
         :url => post["url"],

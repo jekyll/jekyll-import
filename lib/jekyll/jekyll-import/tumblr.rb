@@ -221,6 +221,7 @@ module JekyllImport
             lines[start] = "{% highlight #{lang} %}"
             lines[i - 1] = "{% endhighlight %}"
           end
+          FileUtils.cp(redirect_dir + "index.html", redirect_dir + "../" + "index.html")
           lines[i] = lines[i].sub(indent, "")
         end
       end

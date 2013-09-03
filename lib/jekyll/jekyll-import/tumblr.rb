@@ -171,8 +171,8 @@ module JekyllImport
         FileUtils.mkdir_p redirect_dir
         File.open(redirect_dir + "index.html", "w") do |f|
           f.puts "<html><head><link rel=\"canonical\" href=\"" +
-                 "#{jekyll_url}\"><meta http-equiv='Refresh' content='0; " +
-                 "url=#{jekyll_url}'><meta name=\"robots\" content=\"" +
+                 "#{jekyll_url}\"><meta http-equiv=\"refresh\" content=\"0; " +
+                 "url=#{jekyll_url}\"><meta name=\"robots\" content=\"" +
                  "noindex,follow\" /></head><body></body></html>"
         end
         [tumblr_url, jekyll_url]

@@ -8,6 +8,9 @@ require 'safe_yaml'
 # installed, running the following commands should work:
 # $ sudo gem install sequel
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
+#
+# If you are running MacPorts, it the mysql2 gem can be installed like this:
+# $ gem install mysql2 -- --with-mysql-lib=/opt/local/lib/mysql56/mysql/ --with-mysql-include=/opt/local/include/mysql56/mysql
 
 module JekyllImport
   module WordPress

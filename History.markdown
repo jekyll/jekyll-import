@@ -8,6 +8,7 @@
   * Remove dependency on html2text in the tumblr importer (#33)
 
 ### Minor Enhancements
+  * Add date and redirection pages for blogs imported from Tumblr (#54)
   * Various Tumblr Enhancements (#27)
   * Adding tags to Typo and forcing their encoding to UTF-8 (#11)
   * S9Y Importer: specify data source using --source option (#18)

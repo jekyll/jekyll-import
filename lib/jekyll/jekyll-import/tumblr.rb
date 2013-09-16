@@ -5,6 +5,7 @@ require 'nokogiri'
 require 'date'
 require 'json'
 require 'uri'
+require 'time'
 require 'jekyll'
 
 module JekyllImport
@@ -121,7 +122,7 @@ module JekyllImport
         :header => {
           "layout" => "post",
           "title" => title,
-          "date" => DateTime.parse(post['date']).strftime('%Y-%m-%d %H:%M:%S'),
+          "date" => Time.parse(post['date']).xmlschema,
           "tags" => post["tags"],
           "tumblr_url" => post["url-with-slug"]
         },

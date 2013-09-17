@@ -41,3 +41,5 @@
   * Added initial version of a test case for Tumblr (#43)
   * Remove some outdated comments in the Drupal migrators (#50)
   * Update the README to be more informative (#52)
+  * Add comment to Wordpress importer on how to install mysql with
+    MacPorts (#56)

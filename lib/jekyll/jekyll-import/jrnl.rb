@@ -1,4 +1,4 @@
-# Author: Aniket Pant <me@aniketpant.com
+# Author: Aniket Pant <me@aniketpant.com>
 
 require 'time'
 require 'rubygems'
@@ -84,7 +84,7 @@ module JekyllImport
     #
     # Examples
     #
-    #   write_file("2013-01-01-entry-1.md", "---\nlayout: post\ntitle: Entry 1\ndate: 2013-01-01 13:00\n", "This is the first entry for my new journl")
+    #   write_file("2013-01-01-entry-1.md", "---\nlayout: post\ntitle: Entry 1\ndate: 2013-01-01 13:00\n", "This is the first entry for my new journal")
     #
     # Writes file to _posts/filename
     def self.write_file(filename, meta, body)

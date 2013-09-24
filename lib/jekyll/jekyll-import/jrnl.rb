@@ -39,16 +39,16 @@ module JekyllImport
         body = content[1]
 
         # strip timestamp from the dateline
-        date = Time.parse(content[0, date_length-1].to_s)
+        date = Time.parse(content[0, date_length - 1].to_s)
 
         # strip title from the dateline
-        title = dateline[date_length+1, dateline.length]
+        title = dateline[date_length + 1, dateline.length]
 
         # generate slug
         slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
 
         # generate filename
-        filename = date.strftime("%Y-%m-%d").to_s + "-#{slug}.#{extension}"
+        filename = "#{date.strftime("%Y-%m-%d")}-#{slug}.#{extension}"
 
         meta = prepare_data(layout, title, date) # prepare YAML meta data
         write_file(filename, meta, body) # write to file

@@ -71,7 +71,7 @@ module JekyllImport
       data = {
         'layout'        => layout.to_s,
         'title'         => title.to_s,
-        'date'          => date.strftime("%Y-%m-%d %H:%M").to_s
+        'date'          => date.strftime("%Y-%m-%d %H:%M %z").to_s
       }.to_yaml
       return data;
     end

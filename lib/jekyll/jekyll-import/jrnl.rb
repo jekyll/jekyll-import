@@ -23,7 +23,7 @@ module JekyllImport
       # convert relative to absolute if needed
       file = File.expand_path(file)
 
-      abort "The jrnl file was not found. Please make sure '#{file}' exists." unless File.file?(file)
+      abort "The jrnl file was not found. Please make sure '#{file}' exists. You can specify a different file using the --file switch." unless File.file?(file)
 
       input = File.read(file)
       entries = input.split("\n\n");

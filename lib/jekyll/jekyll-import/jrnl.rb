@@ -90,7 +90,7 @@ module JekyllImport
     def self.write_file(filename, meta, body)
       File.open("_posts/#{filename}", "w") do |f|
         f.puts meta
-        f.puts "---"
+        f.puts "---\n\n"
         f.puts body
       end
     end

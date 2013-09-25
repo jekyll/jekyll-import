@@ -30,29 +30,44 @@ module JekyllImport
 
       entries.each do |entry|
         # split dateline and body
+        # content[0] has the date and title
+        # content[1] has the post body
         content = entry.split("\n")
 
-        # strip dateline from jrnl entry
-        dateline = content[0]
+        body = get_post_content(content)
+        date = get_date(content[0], date_length)
+        title = get_title(content[0], date_length)
+        slug = create_slug(title)
+        filename = create_filename(date, slug, extension)
+        meta = create_meta(layout, title, date) # prepare YAML meta data
 
-        # strip body from jrnl entry
-        body = content[1]
-
-        # strip timestamp from the dateline
-        date = Time.parse(content[0, date_length - 1].to_s)
-
-        # strip title from the dateline
-        title = dateline[date_length + 1, dateline.length]
-
-        # generate slug
-        slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
-
-        # generate filename
-        filename = "#{date.strftime("%Y-%m-%d")}-#{slug}.#{extension}"
-
-        meta = prepare_data(layout, title, date) # prepare YAML meta data
         write_file(filename, meta, body) # write to file
       end
+    end
+
+    # strip body from jrnl entry
+    def self.get_post_content(content)
+      return content[1]
+    end
+
+    # strip timestamp from the dateline
+    def self.get_date(content, offset)
+      return Time.parse(content[0, offset])
+    end
+
+    # strip title from the dateline
+    def self.get_title(content, offset)
+      return content[offset + 1, content.length]
+    end
+
+    # generate slug
+    def self.create_slug(title)
+      return title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+    end
+
+    # generate filename
+    def self.create_filename(date, slug, extension)
+      return "#{date.strftime("%Y-%m-%d")}-#{slug}.#{extension}"
     end
 
     # Prepare YAML meta data
@@ -63,11 +78,11 @@ module JekyllImport
     #
     # Examples
     #
-    #   prepare_data("post", "Entry 1", "2013-01-01 13:00")
+    #   create_meta("post", "Entry 1", "2013-01-01 13:00")
     #   # => "---\nlayout: post\ntitle: Entry 1\ndate: 2013-01-01 13:00\n"
     #
     # Returns array converted to YAML
-    def self.prepare_data(layout, title, date)
+    def self.create_meta(layout, title, date)
       data = {
         'layout'        => layout.to_s,
         'title'         => title.to_s,

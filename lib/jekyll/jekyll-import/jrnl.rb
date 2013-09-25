@@ -84,9 +84,9 @@ module JekyllImport
     # Returns array converted to YAML
     def self.create_meta(layout, title, date)
       data = {
-        'layout'        => layout.to_s,
-        'title'         => title.to_s,
-        'date'          => date.strftime("%Y-%m-%d %H:%M %z").to_s
+        'layout'        => layout,
+        'title'         => title,
+        'date'          => date.strftime("%Y-%m-%d %H:%M %z")
       }.to_yaml
       return data;
     end

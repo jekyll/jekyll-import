@@ -52,7 +52,7 @@ module JekyllImport
 
     # strip timestamp from the dateline
     def self.get_date(content, offset)
-      return Time.parse(content[0, offset])
+      return content[0, offset]
     end
 
     # strip title from the dateline
@@ -67,7 +67,7 @@ module JekyllImport
 
     # generate filename
     def self.create_filename(date, slug, extension)
-      return "#{date.strftime("%Y-%m-%d")}-#{slug}.#{extension}"
+      return "#{Time.parse(date).strftime("%Y-%m-%d")}-#{slug}.#{extension}"
     end
 
     # Prepare YAML meta data
@@ -86,7 +86,7 @@ module JekyllImport
       data = {
         'layout'        => layout,
         'title'         => title,
-        'date'          => date.strftime("%Y-%m-%d %H:%M %z")
+        'date'          => Time.parse(date).strftime("%Y-%m-%d %H:%M %z")
       }.to_yaml
       return data;
     end

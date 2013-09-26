@@ -20,7 +20,7 @@ class TestJrnlMigrator < Test::Unit::TestCase
     end
 
     should "have date" do
-      assert_equal(Time.parse("2013-09-24 11:36:00 +0530"), JekyllImport::Jrnl.get_date(@entry[0], @date_length))
+      assert_equal("2013-09-24 11:36", JekyllImport::Jrnl.get_date(@entry[0], @date_length))
     end
 
     should "have title" do

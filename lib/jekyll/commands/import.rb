@@ -21,7 +21,8 @@ module Jekyll
         :tumblr => 'Tumblr',
         :typo => 'Typo',
         :wordpress => 'WordPress',
-        :wordpressdotcom => 'WordpressDotCom'
+        :wordpressdotcom => 'WordpressDotCom',
+        :behance => 'Behance'
       }
 
       def self.abort_on_invalid_migrator(migrator)

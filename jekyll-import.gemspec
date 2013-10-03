@@ -25,12 +25,12 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('fastercsv')
   s.add_runtime_dependency('nokogiri')
   s.add_runtime_dependency('safe_yaml', '~> 0.7.0')
-  
+
   # development dependencies
   s.add_development_dependency('rake', "~> 10.1.0")
   s.add_development_dependency('rdoc', "~> 4.0.0")
   s.add_development_dependency('activesupport', '~> 3.2')
-  
+
   # test dependencies:
   s.add_development_dependency('redgreen', "~> 1.2")
   s.add_development_dependency('shoulda', "~> 3.3.2")
@@ -61,6 +61,7 @@ Gem::Specification.new do |s|
     lib/jekyll/jekyll-import/enki.rb
     lib/jekyll/jekyll-import/google_reader.rb
     lib/jekyll/jekyll-import/joomla.rb
+    lib/jekyll/jekyll-import/jrnl.rb
     lib/jekyll/jekyll-import/marley.rb
     lib/jekyll/jekyll-import/mephisto.rb
     lib/jekyll/jekyll-import/mt.rb
@@ -74,9 +75,9 @@ Gem::Specification.new do |s|
     lib/jekyll/jekyll-import/wordpressdotcom.rb
     test/helper.rb
     test/test_mt_importer.rb
+    test/test_tumblr_importer.rb
     test/test_wordpress_importer.rb
     test/test_wordpressdotcom_importer.rb
-    test/test_tumblr_importer.rb
   ]
   # = MANIFEST =
 

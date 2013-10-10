@@ -7,6 +7,7 @@
   * Add an importer for Google Reader blog exports (#36)
   * Remove dependency on html2text in the tumblr importer (#33)
   * Add the ability to import .jrnl files (#51)
+  * Handle missing gems a bit more gracefully (#59)
 
 ### Minor Enhancements
   * Add date and redirection pages for blogs imported from Tumblr (#54)

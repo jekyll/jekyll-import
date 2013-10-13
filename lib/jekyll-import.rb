@@ -2,6 +2,7 @@ $:.unshift File.dirname(__FILE__) # For use/testing when no gem is installed
 require 'rubygems'
 require 'jekyll/commands/import'
 require 'jekyll/stevenson'
+require 'colorator'
 
 module JekyllImport
   VERSION = '0.1.0.beta3'
@@ -11,7 +12,7 @@ module JekyllImport
   end
 
   def self.require_with_fallback(gems)
-    Array.wrap(gems).flatten.each do |gem|
+    Array.[](gems).flatten.each do |gem|
       begin
         require gem
       rescue LoadError

@@ -1,18 +1,21 @@
 # coding: utf-8
 
-require 'rubygems'
-require 'hpricot'
-require 'fileutils'
-require 'safe_yaml'
-require 'time'
+require File.join(File.dirname(__FILE__), "..", "..", "jekyll-import.rb")
+
+required_gems = %w[rubygems hpricot fileutils safe_yaml time]
+JekyllImport.require_with_fallback(required_gems)
 
 module JekyllImport
   # This importer takes a wordpress.xml file, which can be exported from your
   # wordpress.com blog (/wp-admin/export.php).
   module WordpressDotCom
-    def self.process(filename = {:source => "wordpress.xml"})
+    def self.process(options={})
+      options = {
+        :source => ''
+      }.merge(options)
+
       import_count = Hash.new(0)
-      doc = Hpricot::XML(File.read(filename[:source]))
+      doc = Hpricot::XML(File.read(options[:source]))
 
       (doc/:channel/:item).each do |item|
         title = item.at(:title).inner_text.strip
@@ -25,7 +28,7 @@ module JekyllImport
         date = Time.parse(item.at('wp:post_date').inner_text)
         status = item.at('wp:status').inner_text
 
-        if status == "publish" 
+        if status == "publish"
           published = true
         else
           published = false

@@ -86,12 +86,17 @@ module JekyllImport
       metadata = {
         'layout' => 'post',
         'title' => encode(post[:entry_title], options),
-        'date' => post[:entry_authored_on].strftime("%Y-%m-%d %H:%M:%S %z"),
+        'date' => post_date(post).strftime("%Y-%m-%d %H:%M:%S %z"),
         'excerpt' => encode(post[:entry_excerpt], options),
         'mt_id' => post[:entry_id]
       }
       metadata['published'] = false if post[:entry_status] != STATUS_PUBLISHED
       metadata
+    end
+
+    # Different versions of MT used different column names
+    def self.post_date(post)
+      post[:entry_authored_on] || post[:entry_created_on]
     end
 
     # Extracts text body from post
@@ -108,7 +113,7 @@ module JekyllImport
     end
 
     def self.post_file_name(post, options = default_options)
-      date = post[:entry_authored_on]
+      date = post_date(post)
       slug = post[:entry_basename]
       file_ext = suffix(post[:entry_convert_breaks])
 

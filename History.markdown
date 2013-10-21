@@ -35,6 +35,8 @@
   * Fix an exception when a Movable Type blog did not have additional
     entry text (#45)
   * Create `_layouts/` before writing refresh.html in Drupal migrators (#48)
+  * Fix bug where post date in `MT` importer was not imported for older versions
+    of MT sites (#62)
 
 ### Site Enhancements
 

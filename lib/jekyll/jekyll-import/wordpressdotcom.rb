@@ -1,16 +1,20 @@
 # coding: utf-8
 
-require File.join(File.dirname(__FILE__), "..", "..", "jekyll-import.rb")
+require File.expand_path("../../../jekyll-import", __FILE__)
 
-required_gems = %w[rubygems hpricot fileutils safe_yaml time]
-JekyllImport.require_with_fallback(required_gems)
+JekyllImport.require_with_fallback(%w[
+  rubygems
+  hpricot
+  fileutils
+  safe_yaml
+  time
+])
 
 module JekyllImport
   # This importer takes a wordpress.xml file, which can be exported from your
   # wordpress.com blog (/wp-admin/export.php).
   module WordpressDotCom
     def self.process(filename = {:source => "wordpress.xml"})
-
       import_count = Hash.new(0)
       doc = Hpricot::XML(File.read(filename[:source]))
 

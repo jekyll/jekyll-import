@@ -1,7 +1,12 @@
-require File.join(File.dirname(__FILE__), "..", "..", "jekyll-import.rb")
+require File.expand_path("../../../jekyll-import", __FILE__)
 
-required_gems = %w[rubygems sequel mysql2 fileutils safe_yaml]
-JekyllImport.require_with_fallback(required_gems)
+JekyllImport.require_with_fallback(%w[
+  rubygems
+  sequel
+  mysql2
+  fileutils
+  safe_yaml
+])
 
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL

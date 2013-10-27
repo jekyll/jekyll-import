@@ -47,3 +47,4 @@
   * Update the README to be more informative (#52)
   * Add comment to Wordpress importer on how to install mysql with
     MacPorts (#56)
+  * Correcting the homepage URL so links from rubygems.org will work (#63)

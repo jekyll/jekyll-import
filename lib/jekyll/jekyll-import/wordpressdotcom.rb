@@ -1,10 +1,14 @@
 # coding: utf-8
 
-require 'rubygems'
-require 'hpricot'
-require 'fileutils'
-require 'safe_yaml'
-require 'time'
+require File.expand_path("../../../jekyll-import", __FILE__)
+
+JekyllImport.require_with_fallback(%w[
+  rubygems
+  hpricot
+  fileutils
+  safe_yaml
+  time
+])
 
 module JekyllImport
   # This importer takes a wordpress.xml file, which can be exported from your
@@ -25,7 +29,7 @@ module JekyllImport
         date = Time.parse(item.at('wp:post_date').inner_text)
         status = item.at('wp:status').inner_text
 
-        if status == "publish" 
+        if status == "publish"
           published = true
         else
           published = false

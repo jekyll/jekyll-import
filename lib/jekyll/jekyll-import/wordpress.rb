@@ -1,7 +1,12 @@
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
+require File.expand_path("../../../jekyll-import", __FILE__)
+
+JekyllImport.require_with_fallback(%w[
+  rubygems
+  sequel
+  mysql2
+  fileutils
+  safe_yaml
+])
 
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
@@ -16,15 +21,15 @@ module JekyllImport
   module WordPress
 
     # Main migrator function. Call this to perform the migration.
-    # 
+    #
     # dbname::  The name of the database
     # user::    The database user name
     # pass::    The database user's password
     # host::    The address of the MySQL database host. Default: 'localhost'
     # options:: A hash table of configuration options.
-    # 
+    #
     # Supported options are:
-    # 
+    #
     # :table_prefix::   Prefix of database tables used by WordPress.
     #                   Default: 'wp_'
     # :clean_entities:: If true, convert non-ASCII characters to HTML
@@ -155,7 +160,7 @@ module JekyllImport
         if options[:more_anchor]
           more_link = "more"
           content.sub!(/<!-- *more *-->/,
-                       "<a id=\"more\"></a>" + 
+                       "<a id=\"more\"></a>" +
                        "<a id=\"more-#{post[:id]}\"></a>")
         end
       end

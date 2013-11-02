@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('jekyll', '~> 1.0')
   s.add_runtime_dependency('fastercsv')
   s.add_runtime_dependency('nokogiri')
-  s.add_runtime_dependency('safe_yaml', '~> 0.7.0')
+  s.add_runtime_dependency('safe_yaml', '~> 0.9.7')
 
   # development dependencies
   s.add_development_dependency('rake', "~> 10.1.0")

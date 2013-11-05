@@ -21,6 +21,7 @@
   * Drupal 7 importer should use latest revision of a post (#38)
   * Improve the handling of tags in the Drupal 6 importer. Tags with
     spaces are handled now and the importer doesn't eat tags anymore. (#42)
+  * Upgrade to `jekyll ~> 1.3` and `safe_yaml ~> 0.9.7` 
 
 ### Bug Fixes
   * Remove usage of `Hash#at` in Tumblr importer (#14)

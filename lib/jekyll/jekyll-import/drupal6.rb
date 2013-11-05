@@ -27,7 +27,13 @@ module JekyllImport
                 AND n.vid = nr.vid \
            GROUP BY n.nid"
 
-    def self.process(dbname, user, pass, host = 'localhost', prefix = '')
+    def self.process(options)
+      dbname = options.fetch(:dbname)
+      user   = options.fetch(:user)
+      pass   = options.fetch(:pass)
+      host   = options.fetch(:host, "localhost")
+      prefix = options.fetch(:prefix, "")
+
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
       if prefix != ''

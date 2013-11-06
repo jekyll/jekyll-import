@@ -13,7 +13,7 @@ require 'date'
 module JekyllImport
   module GoogleReader
     def self.validate(options)
-      if !options[:source]
+      if options[:source].nil?
         abort "Missing mandatory option --source."
       end
     end
@@ -39,7 +39,7 @@ module JekyllImport
           post_name = title.split(%r{ |!|/|:|&|-|$|,}).map do |i|
             i.downcase if i != ''
           end.compact.join('-')
-          name = "#{formatted_date}-#{post_name}" 
+          name = "#{formatted_date}-#{post_name}"
 
           header = {
             'layout' => 'post',

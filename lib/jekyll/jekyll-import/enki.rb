@@ -17,9 +17,22 @@ module JekyllImport
       FROM posts p
     EOS
 
+    def self.validate(options)
+      %w[dbname user pass].each do |option|
+        if options[option.to_sym].nil?
+          abort "Missing mandatory option --#{option}."
+        end
+      end
+    end
+
     # Just working with postgres, but can be easily adapted
     # to work with both mysql and postgres.
-    def self.process(dbname, user, pass, host = 'localhost')
+    def self.process(options)
+      dbname = options.fetch(:dbname)
+      user   = options.fetch(:user)
+      pass   = options.fetch(:pass)
+      host   = options.fetch(:host, "localhost")
+
       FileUtils.mkdir_p('_posts')
       db = Sequel.postgres(:database => dbname,
                            :user => user,

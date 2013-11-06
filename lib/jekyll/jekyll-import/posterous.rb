@@ -62,7 +62,11 @@ module JekyllImport
       return urls
     end
 
-    def self.process(email, pass, api_token, opts={})
+    def self.process(options)
+      email     = options.fetch(:email)
+      pass      = options.fetch(:pass)
+      api_token = options.fetch(:api_token)
+
       @email, @pass, @api_token = email, pass, api_token
       defaults = { :include_imgs => false, :blog => 'primary', :base_path => '/' }
       opts = defaults.merge(opts)

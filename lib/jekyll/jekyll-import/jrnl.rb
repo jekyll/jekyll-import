@@ -13,10 +13,10 @@ module JekyllImport
     # :extension    the extension format of the output files
     # :layout       explicitly set the layout of the output
     def self.process(options)
-      file = options[:file] || "~/journal.txt"
-      time_format = options[:time_format] || "%Y-%m-%d %H:%M"
-      extension = options[:extension] || "md"
-      layout = options[:layout] || "post"
+      file        = options.fetch(:file, "~/journal.txt")
+      time_format = options.fetch(:time_format, "%Y-%m-%d %H:%M")
+      extension   = options.fetch(:extension, "md")
+      layout      = options.fetch(:layout, "post")
 
       date_length = Time.now().strftime(time_format).length
 

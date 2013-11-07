@@ -12,7 +12,7 @@ require 'safe_yaml'
 
 module JekyllImport
   module Joomla
-    def self.process(dbname, user, pass, host = 'localhost', table_prefix = 'jos_', section = '1')
+    def self.process(dbname, user, pass, host = 'localhost', prefix = 'jos_', section = '1')
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
       FileUtils.mkdir_p("_posts")

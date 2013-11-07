@@ -16,15 +16,15 @@ module JekyllImport
   module WordPress
 
     # Main migrator function. Call this to perform the migration.
-    # 
+    #
     # dbname::  The name of the database
     # user::    The database user name
     # pass::    The database user's password
     # host::    The address of the MySQL database host. Default: 'localhost'
     # options:: A hash table of configuration options.
-    # 
+    #
     # Supported options are:
-    # 
+    #
     # :table_prefix::   Prefix of database tables used by WordPress.
     #                   Default: 'wp_'
     # :clean_entities:: If true, convert non-ASCII characters to HTML
@@ -59,7 +59,7 @@ module JekyllImport
         :pass           => '',
         :host           => 'localhost',
         :dbname         => '',
-        :table_prefix   => 'wp_',
+        :prefix         => 'wp_',
         :clean_entities => true,
         :comments       => true,
         :categories     => true,
@@ -155,7 +155,7 @@ module JekyllImport
         if options[:more_anchor]
           more_link = "more"
           content.sub!(/<!-- *more *-->/,
-                       "<a id=\"more\"></a>" + 
+                       "<a id=\"more\"></a>" +
                        "<a id=\"more-#{post[:id]}\"></a>")
         end
       end

@@ -75,12 +75,18 @@ module JekyllImport
             content << "<br/>" + post["link-description"]
           end
         when "photo"
-          title = post["photo-caption"]
-          content = if post["photo-link-url"].nil?
-            "<a href=\"#{post["photo-link-url"]}\">#{content}</a>"
+          title = post["slug"].gsub("-"," ")
+          if post["photos"].length > 1
+            content = ""
+            post["photos"].each do |p|
+              photo =  fetch_photo p
+              content << photo + "</br>"
+              content << p["caption"]
+            end
           else
-            fetch_photo post
+            content = fetch_photo post
           end
+          content << "</br>" + post["photo-caption"]
         when "audio"
           if !post["id3-title"].nil?
             title = post["id3-title"]

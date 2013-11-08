@@ -50,7 +50,12 @@ module JekyllImport
     #                   If your output contains mangled characters, set src_encoding to
     #                   something appropriate for your database charset.
     # :dest_encoding::  Encoding of output strings. Default: UTF-8
-    def self.process(dbname, user, pass, host = 'localhost', options = {})
+    def self.process(options)
+      dbname = options.fetch(:dbname)
+      user   = options.fetch(:user)
+      pass   = options.fetch(:pass)
+      host   = options.fetch(:host, "localhost")
+
       options = default_options.merge(options)
 
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host)

@@ -10,8 +10,13 @@ require 'jekyll'
 
 module JekyllImport
   module Tumblr
-    def self.process(url, format = "html", grab_images = false,
-                     add_highlights = false, rewrite_urls = true)
+    def self.process(options)
+      url = options.fetch(:url)
+      format = options.fetch(:format, "html")
+      grab_images = options.fetch(:grab_images, false)
+      add_highlights = options.fetch(:add_highlights, false)
+      rewrite_urls = options.fetch(:rewrite_urls, false)
+
       @grab_images = grab_images
       FileUtils.mkdir_p "_posts/tumblr"
       url += "/api/read/json/"

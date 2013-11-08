@@ -12,7 +12,22 @@ require 'safe_yaml'
 
 module JekyllImport
   module Joomla
-    def self.process(dbname, user, pass, host = 'localhost', table_prefix = 'jos_', section = '1')
+    def self.validate(options)
+      %w[dbname user pass].each do |option|
+        if options[option.to_sym].nil?
+          abort "Missing mandatory option --#{option}."
+        end
+      end
+    end
+
+    def self.process(options)
+      dbname  = options.fetch(:dbname)
+      user    = options.fetch(:user)
+      pass    = options.fetch(:pass)
+      host    = options.fetch(:host, "localhost")
+      section = options.fetch(:section, '1')
+      table_prefix = options.fetch(:prefix, "jos_")
+
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
       FileUtils.mkdir_p("_posts")

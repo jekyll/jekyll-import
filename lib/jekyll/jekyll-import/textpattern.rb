@@ -24,7 +24,12 @@ module JekyllImport
              WHERE Status = '4' OR \
                    Status = '5'"
 
-    def self.process(dbname, user, pass, host = 'localhost')
+    def self.process(options)
+      dbname = options.fetch(:dbname)
+      user   = options.fetch(:user)
+      pass   = options.fetch(:pass)
+      host   = options.fetch(:host, "localhost")
+
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
       FileUtils.mkdir_p "_posts"

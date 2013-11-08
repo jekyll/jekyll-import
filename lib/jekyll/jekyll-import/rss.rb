@@ -17,7 +17,7 @@ require 'safe_yaml'
 module JekyllImport
   module RSS
     def self.validate(options)
-      if !options[:source]
+      if options[:source].nil?
         abort "Missing mandatory option --source."
       end
     end
@@ -28,9 +28,7 @@ module JekyllImport
     #
     # Returns nothing.
     def self.process(options)
-      validate(options)
-
-      source = options[:source]
+      source = options.fetch(:source)
 
       content = ""
       open(source) { |s| content = s.read }
@@ -43,7 +41,7 @@ module JekyllImport
         post_name = item.title.split(%r{ |!|/|:|&|-|$|,}).map do |i|
           i.downcase if i != ''
         end.compact.join('-')
-        name = "#{formatted_date}-#{post_name}" 
+        name = "#{formatted_date}-#{post_name}"
 
         header = {
           'layout' => 'post',

@@ -47,7 +47,12 @@ module JekyllImport
                    published_at IS NOT NULL \
              ORDER BY published_at"
 
-    def self.process(dbname, user, pass, host = 'localhost')
+    def self.process(options)
+      dbname = options.fetch(:dbname)
+      user   = options.fetch(:user)
+      pass   = options.fetch(:pass)
+      host   = options.fetch(:host, "localhost")
+
       db = Sequel.mysql(dbname, :user => user,
                                 :password => pass,
                                 :host => host,

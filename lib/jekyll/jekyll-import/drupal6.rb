@@ -27,7 +27,21 @@ module JekyllImport
                 AND n.vid = nr.vid \
            GROUP BY n.nid"
 
-    def self.process(dbname, user, pass, host = 'localhost', prefix = '')
+    def self.validate(options)
+      %w[dbname user pass].each do |option|
+        if options[option.to_sym].nil?
+          abort "Missing mandatory option --#{option}."
+        end
+      end
+    end
+
+    def self.process(options)
+      dbname = options.fetch(:dbname)
+      user   = options.fetch(:user)
+      pass   = options.fetch(:pass)
+      host   = options.fetch(:host, "localhost")
+      prefix = options.fetch(:prefix, "")
+
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
       if prefix != ''

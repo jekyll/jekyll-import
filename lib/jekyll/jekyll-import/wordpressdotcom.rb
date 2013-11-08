@@ -10,9 +10,11 @@ module JekyllImport
   # This importer takes a wordpress.xml file, which can be exported from your
   # wordpress.com blog (/wp-admin/export.php).
   module WordpressDotCom
-    def self.process(filename = {:source => "wordpress.xml"})
+    def self.process(options = {:source => "wordpress.xml"})
+      source = options.fetch(:source, "wordpress.xml")
+
       import_count = Hash.new(0)
-      doc = Hpricot::XML(File.read(filename[:source]))
+      doc = Hpricot::XML(File.read(source))
 
       (doc/:channel/:item).each do |item|
         title = item.at(:title).inner_text.strip
@@ -25,7 +27,7 @@ module JekyllImport
         date = Time.parse(item.at('wp:post_date').inner_text)
         status = item.at('wp:status').inner_text
 
-        if status == "publish" 
+        if status == "publish"
           published = true
         else
           published = false

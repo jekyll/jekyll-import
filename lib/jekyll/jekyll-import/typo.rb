@@ -22,7 +22,13 @@ module JekyllImport
                         ON c.text_filter_id = tf.id
     EOS
 
-    def self.process server, dbname, user, pass, host='localhost'
+    def self.process(options)
+      server = options.fetch(:server)
+      dbname = options.fetch(:dbname)
+      user   = options.fetch(:user)
+      pass   = options.fetch(:pass)
+      host   = options.fetch(:host, "localhost")
+
       FileUtils.mkdir_p '_posts'
       case server.intern
       when :postgres

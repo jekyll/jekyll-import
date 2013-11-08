@@ -3,11 +3,27 @@ require 'rubygems'
 require 'jekyll/commands/import'
 require 'jekyll/stevenson'
 
+require 'jekyll-import/importer'
+require 'jekyll-import/importers'
+
 module JekyllImport
   VERSION = '0.1.0.beta4'
 
   def self.logger
     @logger ||= Jekyll::Stevenson.new
+  end
+
+  def self.add_importer_commands(cmd)
+    JekyllImport::Importer.subclasses.each do |importer|
+      name = importer.to_s.downcase
+      cmd.command(name.to_sym) do |c|
+        c.syntax "jekyll import #{name} [options]"
+        importer.specify_options(c)
+        c.action do |args, options|
+          importer.process(options)
+        end
+      end
+    end
   end
 
   def self.require_with_fallback(gems)

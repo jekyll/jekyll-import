@@ -1,12 +1,17 @@
 # Author: Aniket Pant <me@aniketpant.com>
 
-require 'time'
-require 'rubygems'
-require 'safe_yaml'
-
 module JekyllImport
   module Importers
     class Jrnl < Importer
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          time
+          rubygems
+          safe_yaml
+        ])
+      end
+
       # Reads a jrnl file and creates a new post for each entry
       # The following overrides are available:
       # :file         path to input file

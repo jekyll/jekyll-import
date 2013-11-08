@@ -3,7 +3,6 @@ module JekyllImport
     def self.inherited(base)
       p base
       subclasses << base
-      subclasses.sort!
     end
 
     def self.subclasses

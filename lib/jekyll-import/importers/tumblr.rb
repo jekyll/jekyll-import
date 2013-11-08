@@ -1,16 +1,19 @@
-require 'rubygems'
-require 'open-uri'
-require 'fileutils'
-require 'nokogiri'
-require 'date'
-require 'json'
-require 'uri'
-require 'time'
-require 'jekyll'
-
 module JekyllImport
   module Importers
     class Tumblr < Importer
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          fileutils
+          open-uri
+          nokogiri
+          json
+          uri
+          time
+          jekyll
+        ])
+      end
+
       def self.process(options)
         url = options.fetch(:url)
         format = options.fetch(:format, "html")

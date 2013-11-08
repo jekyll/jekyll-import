@@ -1,8 +1,3 @@
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
-
 # NOTE: This migrator is made for Joomla 1.5 databases.
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
@@ -19,6 +14,15 @@ module JekyllImport
             abort "Missing mandatory option --#{option}."
           end
         end
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
       end
 
       def self.process(options)

@@ -1,6 +1,3 @@
-require 'safe_yaml'
-require 'fileutils'
-
 module JekyllImport
   module Importers
     class Marley < Importer
@@ -12,6 +9,13 @@ module JekyllImport
           :perex => /^([^\#\n]+\n)$/,
           :meta  => /^\{\{\n(.*)\}\}\n$/mi # Multiline Regexp
         }
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          fileutils
+          safe_yaml
+        ])
       end
 
       def self.process(options)

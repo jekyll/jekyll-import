@@ -2,14 +2,6 @@
 #   (Local file)
 #   ruby -r 'jekyll/jekyll-import/rss' -e "JekyllImport::GoogleReader.process(:source => './somefile/on/your/computer.xml')"
 
-require 'rss'
-require 'open-uri'
-require 'fileutils'
-require 'safe_yaml'
-
-require 'rexml/document'
-require 'date'
-
 module JekyllImport
   module Importers
     class GoogleReader < Importer
@@ -17,6 +9,18 @@ module JekyllImport
         if options[:source].nil?
           abort "Missing mandatory option --source."
         end
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          rss
+          fileutils
+          safe_yaml
+          open-url
+          rexml/document
+          date
+        ])
       end
 
       # Process the import.

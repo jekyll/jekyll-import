@@ -2,11 +2,6 @@
 # MIT license. Use this module at your own risk.
 # I'm an Erlang/Perl/C++ guy so please forgive my dirty ruby.
 
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
-
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
 # installed, running the following commands should work:
@@ -28,6 +23,15 @@ module JekyllImport
           :dest_encoding => 'utf-8',
           :src_encoding => 'utf-8'
         }
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
       end
 
       # By default this migrator will include posts for all your MovableType blogs.

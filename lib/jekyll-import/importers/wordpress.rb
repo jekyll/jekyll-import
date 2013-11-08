@@ -1,8 +1,3 @@
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
-
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
 # installed, running the following commands should work:
@@ -15,6 +10,15 @@ require 'safe_yaml'
 module JekyllImport
   module Importers
     class WordPress < Importer
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
+      end
 
       # Main migrator function. Call this to perform the migration.
       #

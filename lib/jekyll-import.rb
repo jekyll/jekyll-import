@@ -30,6 +30,7 @@ module JekyllImport
         c.syntax "jekyll import #{name} [options]"
         importer.specify_options(c)
         c.action do |args, options|
+          importer.require_deps
           importer.process(options)
         end
       end

@@ -1,8 +1,3 @@
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
-
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
 # installed, running the following commands should work:
@@ -24,6 +19,15 @@ module JekyllImport
                FROM textpattern \
                WHERE Status = '4' OR \
                      Status = '5'"
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
+      end
 
       def self.process(options)
         dbname = options.fetch(:dbname)

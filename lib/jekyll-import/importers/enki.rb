@@ -1,10 +1,6 @@
 # Adapted by Rodrigo Pinto <rodrigopqn@gmail.com>
 # Based on typo.rb by Toby DiPasquale
 
-require 'fileutils'
-require 'rubygems'
-require 'sequel'
-
 module JekyllImport
     module Importers
     class Enki < Importer
@@ -24,6 +20,14 @@ module JekyllImport
             abort "Missing mandatory option --#{option}."
           end
         end
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+        ])
       end
 
       # Just working with postgres, but can be easily adapted

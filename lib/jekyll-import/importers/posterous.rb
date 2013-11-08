@@ -1,10 +1,3 @@
-require 'rubygems'
-require 'jekyll'
-require 'fileutils'
-require 'net/http'
-require 'uri'
-require "json"
-
 # ruby -r './lib/jekyll/migrators/posterous.rb' -e 'Jekyll::Posterous.process(email, pass, api_key)'
 # Other arguments are optional; the default values are:
 # * :include_imgs => false         # should images be downloaded as well?
@@ -15,8 +8,20 @@ require "json"
 # ....process(email, pass, api_key, :include_imgs => true)
 
 module JekyllImport
-  module Importer
+  module Importers
     class Posterous < Importer
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          jekyll
+          fileutils
+          uri
+          json
+          net/http
+        ])
+      end
+
       def self.fetch(uri_str, limit = 10)
         # You should choose better exception.
         raise ArgumentError, 'Stuck in a redirect loop. Please double check your email and password' if limit == 0

@@ -1,9 +1,4 @@
 # Author: Toby DiPasquale <toby@cbcg.net>
-require 'fileutils'
-require 'rubygems'
-require 'sequel'
-require 'safe_yaml'
-
 module JekyllImport
   module Importers
     class Typo < Importer
@@ -22,6 +17,15 @@ module JekyllImport
              LEFT OUTER JOIN text_filters tf
                           ON c.text_filter_id = tf.id
       EOS
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
+      end
 
       def self.process(options)
         server = options.fetch(:server)

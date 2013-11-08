@@ -2,12 +2,6 @@
 # Based on mt.rb by Nick Gerakines, open source and publically
 # available under the MIT license. Use this module at your own risk.
 
-require 'rubygems'
-require 'sequel'
-require 'fastercsv'
-require 'fileutils'
-require File.join(File.dirname(__FILE__),"csv.rb")
-
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
 # installed, running the following commands should work:
@@ -32,6 +26,15 @@ module JekyllImport
         puts command
         `#{command}`
         CSV.process
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fastercsv
+          fileutils
+        ])
       end
 
       # This query will pull blog posts from all entries across all blogs. If

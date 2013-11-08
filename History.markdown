@@ -38,6 +38,7 @@
   * Create `_layouts/` before writing refresh.html in Drupal migrators (#48)
   * Fix bug where post date in `MT` importer was not imported for older versions
     of MT sites (#62)
+  * Fix interface of importers' `#process` method (#69)
 
 ### Site Enhancements
 

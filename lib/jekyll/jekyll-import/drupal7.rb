@@ -20,7 +20,7 @@ module JekyllImport
                     n.status \
              FROM node AS n, \
                   field_data_body AS fdb \
-             WHERE (n.type = 'blog' OR n.type = 'article') \
+             WHERE (n.type = 'blog' OR n.type = 'story' OR n.type = 'article') \
              AND n.nid = fdb.entity_id \
              AND n.vid = fdb.revision_id"
 

@@ -42,7 +42,7 @@ module JekyllImport
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
-        if prefix != ''
+        unless prefix.empty?
           QUERY[" node "] = " " + prefix + "node "
           QUERY[" field_data_body "] = " " + prefix + "field_data_body "
         end

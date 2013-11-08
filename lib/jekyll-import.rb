@@ -3,8 +3,15 @@ require 'rubygems'
 require 'jekyll/commands/import'
 require 'jekyll/stevenson'
 
+def require_all(dir)
+  Dir[File.expand_path(File.join(dir, '*.rb'), File.dirname(__FILE__))].each do |f|
+    require f
+  end
+end
+
 require 'jekyll-import/importer'
 require 'jekyll-import/importers'
+#require_all 'jekyll-import/importers'
 
 module JekyllImport
   VERSION = '0.1.0.beta4'
@@ -14,8 +21,11 @@ module JekyllImport
   end
 
   def self.add_importer_commands(cmd)
+    p Importer.subclasses
+    p Importers.constants
     JekyllImport::Importer.subclasses.each do |importer|
       name = importer.to_s.downcase
+      p name
       cmd.command(name.to_sym) do |c|
         c.syntax "jekyll import #{name} [options]"
         importer.specify_options(c)

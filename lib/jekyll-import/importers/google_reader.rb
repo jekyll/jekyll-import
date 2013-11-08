@@ -12,7 +12,7 @@ require 'date'
 
 module JekyllImport
   module Importers
-    class GoogleReader < Import
+    class GoogleReader < Importer
       def self.validate(options)
         if options[:source].nil?
           abort "Missing mandatory option --source."

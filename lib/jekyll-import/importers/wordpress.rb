@@ -1,7 +1,10 @@
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
+JekyllImport.require_with_fallback(%w[
+  rubygems
+  sequel
+  fileutils
+  safe_yaml
+  unidecode
+])
 
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL

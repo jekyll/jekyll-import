@@ -10,79 +10,81 @@ require 'yaml'
 # $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 module JekyllImport
-  module Drupal7
-    # Reads a MySQL database via Sequel and creates a post file for each story
-    # and blog node.
-    QUERY = "SELECT n.nid, \
-                    n.title, \
-                    fdb.body_value, \
-                    n.created, \
-                    n.status \
-             FROM node AS n, \
-                  field_data_body AS fdb \
-             WHERE (n.type = 'blog' OR n.type = 'story') \
-             AND n.nid = fdb.entity_id \
-             AND n.vid = fdb.revision_id"
+  module Importers
+    class Drupal7 < Importer
+      # Reads a MySQL database via Sequel and creates a post file for each story
+      # and blog node.
+      QUERY = "SELECT n.nid, \
+                      n.title, \
+                      fdb.body_value, \
+                      n.created, \
+                      n.status \
+               FROM node AS n, \
+                    field_data_body AS fdb \
+               WHERE (n.type = 'blog' OR n.type = 'story') \
+               AND n.nid = fdb.entity_id \
+               AND n.vid = fdb.revision_id"
 
-    def self.validate(options)
-      %w[dbname user pass].each do |option|
-        if options[option.to_sym].nil?
-          abort "Missing mandatory option --#{option}."
+      def self.validate(options)
+        %w[dbname user pass].each do |option|
+          if options[option.to_sym].nil?
+            abort "Missing mandatory option --#{option}."
+          end
         end
       end
-    end
 
-    def self.process(options)
-      dbname = options.fetch(:dbname)
-      user   = options.fetch(:user)
-      pass   = options.fetch(:pass)
-      host   = options.fetch(:host, "localhost")
-      prefix = options.fetch(:prefix, "")
+      def self.process(options)
+        dbname = options.fetch(:dbname)
+        user   = options.fetch(:user)
+        pass   = options.fetch(:pass)
+        host   = options.fetch(:host, "localhost")
+        prefix = options.fetch(:prefix, "")
 
-      db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+        db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
-      if prefix != ''
-        QUERY[" node "] = " " + prefix + "node "
-        QUERY[" field_data_body "] = " " + prefix + "field_data_body "
-      end
-
-      FileUtils.mkdir_p "_posts"
-      FileUtils.mkdir_p "_drafts"
-      FileUtils.mkdir_p "_layouts"
-
-      db[QUERY].each do |post|
-        # Get required fields and construct Jekyll compatible name
-        node_id = post[:nid]
-        title = post[:title]
-        content = post[:body_value]
-        created = post[:created]
-        time = Time.at(created)
-        is_published = post[:status] == 1
-        dir = is_published ? "_posts" : "_drafts"
-        slug = title.strip.downcase.gsub(/(&|&amp;)/, ' and ').gsub(/[\s\.\/\\]/, '-').gsub(/[^\w-]/, '').gsub(/[-_]{2,}/, '-').gsub(/^[-_]/, '').gsub(/[-_]$/, '')
-        name = time.strftime("%Y-%m-%d-") + slug + '.md'
-
-        # Get the relevant fields as a hash, delete empty fields and convert
-        # to YAML for the header
-        data = {
-           'layout' => 'default',
-           'title' => title.to_s,
-           'created' => created,
-         }.delete_if { |k,v| v.nil? || v == ''}.to_yaml
-
-        # Write out the data and content to file
-        File.open("#{dir}/#{name}", "w") do |f|
-          f.puts data
-          f.puts "---"
-          f.puts content
+        if prefix != ''
+          QUERY[" node "] = " " + prefix + "node "
+          QUERY[" field_data_body "] = " " + prefix + "field_data_body "
         end
 
+        FileUtils.mkdir_p "_posts"
+        FileUtils.mkdir_p "_drafts"
+        FileUtils.mkdir_p "_layouts"
+
+        db[QUERY].each do |post|
+          # Get required fields and construct Jekyll compatible name
+          node_id = post[:nid]
+          title = post[:title]
+          content = post[:body_value]
+          created = post[:created]
+          time = Time.at(created)
+          is_published = post[:status] == 1
+          dir = is_published ? "_posts" : "_drafts"
+          slug = title.strip.downcase.gsub(/(&|&amp;)/, ' and ').gsub(/[\s\.\/\\]/, '-').gsub(/[^\w-]/, '').gsub(/[-_]{2,}/, '-').gsub(/^[-_]/, '').gsub(/[-_]$/, '')
+          name = time.strftime("%Y-%m-%d-") + slug + '.md'
+
+          # Get the relevant fields as a hash, delete empty fields and convert
+          # to YAML for the header
+          data = {
+             'layout' => 'default',
+             'title' => title.to_s,
+             'created' => created,
+           }.delete_if { |k,v| v.nil? || v == ''}.to_yaml
+
+          # Write out the data and content to file
+          File.open("#{dir}/#{name}", "w") do |f|
+            f.puts data
+            f.puts "---"
+            f.puts content
+          end
+
+        end
+
+        # TODO: Make dirs & files for nodes of type 'page'
+          # Make refresh pages for these as well
+
+        # TODO: Make refresh dirs & files according to entries in url_alias table
       end
-
-      # TODO: Make dirs & files for nodes of type 'page'
-        # Make refresh pages for these as well
-
-      # TODO: Make refresh dirs & files according to entries in url_alias table
     end
   end
 end

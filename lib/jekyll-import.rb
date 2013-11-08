@@ -3,6 +3,9 @@ require 'rubygems'
 require 'jekyll/commands/import'
 require 'jekyll/stevenson'
 
+require 'jekyll-import/importer'
+require 'jekyll-import/importers'
+
 module JekyllImport
   VERSION = '0.1.0.beta4'
 

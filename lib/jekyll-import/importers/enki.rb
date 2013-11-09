@@ -12,7 +12,7 @@ module JekyllImport
                p.published_at as date,
                p.cached_tag_list as tags
         FROM posts p
-      EOS
+EOS
 
       def self.validate(options)
         %w[dbname user].each do |option|

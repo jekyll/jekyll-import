@@ -11,8 +11,12 @@
 module JekyllImport
   module Importers
     class RSS < Importer
+      def self.specify_options(c)
+        c.option 'file', '--file NAME', 'The RSS file to import'
+      end
+
       def self.validate(options)
-        if options[:source].nil?
+        if options['source'].nil?
           abort "Missing mandatory option --source."
         end
       end
@@ -33,7 +37,7 @@ module JekyllImport
       #
       # Returns nothing.
       def self.process(options)
-        source = options.fetch(:source)
+        source = options.fetch('file')
 
         content = ""
         open(source) { |s| content = s.read }

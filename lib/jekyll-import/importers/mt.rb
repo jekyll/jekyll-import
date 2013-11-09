@@ -34,6 +34,13 @@ module JekyllImport
         ])
       end
 
+      def self.specify_options(c)
+        c.option 'dbname', '--dbname DB', 'Database name'
+        c.option 'user', '--user USER', 'Database user name'
+        c.option 'password', '--password PW', "Database user's password"
+        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
+      end
+
       # By default this migrator will include posts for all your MovableType blogs.
       # Specify a single blog by providing blog_id.
 
@@ -56,10 +63,10 @@ module JekyllImport
       #                   something appropriate for your database charset.
       # :dest_encoding::  Encoding of output strings. Default: UTF-8
       def self.process(options)
-        dbname = options.fetch(:dbname)
-        user   = options.fetch(:user)
-        pass   = options.fetch(:pass)
-        host   = options.fetch(:host, "localhost")
+        dbname = options.fetch('dbname')
+        user   = options.fetch('user')
+        pass   = options.fetch('pass')
+        host   = options.fetch('host', "localhost")
 
         options = default_options.merge(options)
 

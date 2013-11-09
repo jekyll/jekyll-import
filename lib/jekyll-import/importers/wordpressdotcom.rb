@@ -16,8 +16,12 @@ module JekyllImport
         ])
       end
 
-      def self.process(options = {:source => "wordpress.xml"})
-        source = options.fetch(:source, "wordpress.xml")
+      def self.specify_options(c)
+        c.option 'source', '--source FILE', 'WordPress export XML file (default: "wordpress.xml")'
+      end
+
+      def self.process(options)
+        source = options.fetch('source', "wordpress.xml")
 
         import_count = Hash.new(0)
         doc = Hpricot::XML(File.read(source))

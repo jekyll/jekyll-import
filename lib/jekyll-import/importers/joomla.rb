@@ -10,10 +10,19 @@ module JekyllImport
     class Joomla < Importer
       def self.validate(options)
         %w[dbname user pass].each do |option|
-          if options[option.to_sym].nil?
+          if options[option].nil?
             abort "Missing mandatory option --#{option}."
           end
         end
+      end
+
+      def self.specify_options(c)
+        c.option 'dbname', '--dbname', 'Database name'
+        c.option 'user', '--user', 'Database user name'
+        c.option 'password', '--password', "Database user's password"
+        c.option 'host', '--host', 'Database host name'
+        c.option 'section', '--section', 'Table prefix name'
+        c.option 'prefix', '--prefix', 'Table prefix name'
       end
 
       def self.require_deps
@@ -26,12 +35,12 @@ module JekyllImport
       end
 
       def self.process(options)
-        dbname  = options.fetch(:dbname)
-        user    = options.fetch(:user)
-        pass    = options.fetch(:pass)
-        host    = options.fetch(:host, "localhost")
-        section = options.fetch(:section, '1')
-        table_prefix = options.fetch(:prefix, "jos_")
+        dbname  = options.fetch('dbname')
+        user    = options.fetch('user')
+        pass    = options.fetch('pass')
+        host    = options.fetch('host', "localhost")
+        section = options.fetch('section', '1')
+        table_prefix = options.fetch('prefix', "jos_")
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 

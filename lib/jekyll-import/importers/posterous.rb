@@ -11,6 +11,12 @@ module JekyllImport
   module Importers
     class Posterous < Importer
 
+      def self.specify_options(c)
+        c.option 'email', '--email EMAIL', 'Posterous email address'
+        c.option 'password', '--password PW', 'Posterous password'
+        c.option 'api_token', '--token TOKEN', 'Posterous API Token'
+      end
+
       def self.require_deps
         JekyllImport.require_with_fallback(%w[
           rubygems
@@ -69,9 +75,9 @@ module JekyllImport
       end
 
       def self.process(options)
-        email     = options.fetch(:email)
-        pass      = options.fetch(:pass)
-        api_token = options.fetch(:api_token)
+        email     = options.fetch('email')
+        pass      = options.fetch('pass')
+        api_token = options.fetch('api_token')
 
         @email, @pass, @api_token = email, pass, api_token
         defaults = { :include_imgs => false, :blog => 'primary', :base_path => '/' }

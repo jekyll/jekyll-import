@@ -8,8 +8,12 @@
 module JekyllImport
   module Importers
     class S9Y < Importer
+      def self.specify_options(c)
+        c.option 'source', '--source SOURCE', 'The URL of the S9Y RSS feed'
+      end
+
       def self.validate(options)
-        if options[:source].nil?
+        if options['source'].nil?
           abort "Missing mandatory option --source, e.g. --source \"http://blog.example.com/rss.php?version=2.0&all=1\""
         end
       end

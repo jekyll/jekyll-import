@@ -27,12 +27,20 @@ module JekyllImport
         ])
       end
 
+      def self.specify_options(c)
+        c.option 'server', '--server TYPE', 'Server type ("mysql" or "postgres")'
+        c.option 'dbname', '--dbname DB', 'Database name'
+        c.option 'user', '--user USER', 'Database user name'
+        c.option 'password', '--password PW', "Database user's password"
+        c.option 'host', '--host HOST', 'Database host name'
+      end
+
       def self.process(options)
-        server = options.fetch(:server)
-        dbname = options.fetch(:dbname)
-        user   = options.fetch(:user)
-        pass   = options.fetch(:pass)
-        host   = options.fetch(:host, "localhost")
+        server = options.fetch('server')
+        dbname = options.fetch('dbname')
+        user   = options.fetch('user')
+        pass   = options.fetch('pass')
+        host   = options.fetch('host', "localhost")
 
         FileUtils.mkdir_p '_posts'
         case server.intern

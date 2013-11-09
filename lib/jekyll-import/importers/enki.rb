@@ -22,6 +22,13 @@ module JekyllImport
         end
       end
 
+      def self.specify_options(c)
+        c.option 'dbname', '--dbname', 'Database name'
+        c.option 'user', '--user', 'Database name'
+        c.option 'password', '--password', 'Database name'
+        c.option 'host', '--host', 'Database name'
+      end
+
       def self.require_deps
         JekyllImport.require_with_fallback(%w[
           rubygems
@@ -33,10 +40,10 @@ module JekyllImport
       # Just working with postgres, but can be easily adapted
       # to work with both mysql and postgres.
       def self.process(options)
-        dbname = options.fetch(:dbname)
-        user   = options.fetch(:user)
-        pass   = options.fetch(:pass)
-        host   = options.fetch(:host, "localhost")
+        dbname = options.fetch('dbname')
+        user   = options.fetch('user')
+        pass   = options.fetch('pass')
+        host   = options.fetch('host', "localhost")
 
         FileUtils.mkdir_p('_posts')
         db = Sequel.postgres(:database => dbname,

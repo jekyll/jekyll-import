@@ -28,6 +28,14 @@ module JekyllImport
         end
       end
 
+      def self.specify_options(c)
+        c.option 'dbname', '--dbname DB', 'Database name'
+        c.option 'user', '--user USER', 'Database user name'
+        c.option 'password', '--password PW', "Database user's password"
+        c.option 'host', '--host HOST', 'Database host name'
+        c.option 'prefix', '--prefix PREFIX', 'Table prefix name'
+      end
+
       def self.require_deps
         JekyllImport.require_with_fallback(%w[
           rubygems
@@ -38,11 +46,11 @@ module JekyllImport
       end
 
       def self.process(options)
-        dbname = options.fetch(:dbname)
-        user   = options.fetch(:user)
-        pass   = options.fetch(:pass)
-        host   = options.fetch(:host, "localhost")
-        prefix = options.fetch(:prefix, "")
+        dbname = options.fetch('dbname')
+        user   = options.fetch('user')
+        pass   = options.fetch('password')
+        host   = options.fetch('host', "localhost")
+        prefix = options.fetch('prefix', "")
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 

@@ -6,9 +6,13 @@ module JekyllImport
   module Importers
     class GoogleReader < Importer
       def self.validate(options)
-        if options[:source].nil?
+        if options['source'].nil?
           abort "Missing mandatory option --source."
         end
+      end
+
+      def self.specify_options(c)
+        c.option 'source', '--source', 'Source XML file of Google Reader export'
       end
 
       def self.require_deps
@@ -29,9 +33,7 @@ module JekyllImport
       #
       # Returns nothing.
       def self.process(options)
-        validate(options)
-
-        source = options[:source]
+        source = options.fetch('source')
 
         open(source) do |content|
           feed = RSS::Parser.parse(content)

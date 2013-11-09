@@ -19,7 +19,7 @@ module JekyllImport
                       node AS n \
                  LEFT OUTER JOIN term_node AS tn ON tn.nid = n.nid \
                  LEFT OUTER JOIN term_data AS td ON tn.tid = td.tid \
-                WHERE (n.type = 'blog' OR n.type = 'story') \
+                WHERE (n.type = 'blog' OR n.type = 'story' OR n.type = 'article') \
                   AND n.vid = nr.vid \
              GROUP BY n.nid"
 

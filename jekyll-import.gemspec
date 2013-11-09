@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'jekyll-import'
   s.version           = '0.1.0.beta4'
-  s.date              = '2013-11-04'
+  s.date              = '2013-11-09'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."

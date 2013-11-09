@@ -1,6 +1,16 @@
 module JekyllImport
   module Importers
     class Marley < Importer
+      def self.validate(options)
+        if options['marley_data_dir'].nil?
+          Jekyll.logger.abort_with "Missing mandatory option --marley_data_dir."
+        else
+          unless File.directory?(options['marley_data_dir'])
+            raise ArgumentError, "marley dir '#{options['marley_data_dir']}' not found"
+          end
+        end
+      end
+
       def self.regexp
         { :id    => /^\d{0,4}-{0,1}(.*)$/,
           :title => /^#\s*(.*)\s+$/,
@@ -24,7 +34,6 @@ module JekyllImport
 
       def self.process(options)
         marley_data_dir = options.fetch('marley_data_dir')
-        raise ArgumentError, "marley dir #{marley_data_dir} not found" unless File.directory?(marley_data_dir)
 
         FileUtils.mkdir_p "_posts"
 

@@ -8,7 +8,7 @@ class TestMTMigrator < Test::Unit::TestCase
     {
       :entry_id => 1,
       :entry_blog_id => 1,
-      :entry_status => JekyllImport::MT::STATUS_PUBLISHED,
+      :entry_status => Importers::MT::STATUS_PUBLISHED,
       :entry_author_id => 1,
       :entry_allow_comments => 0,
       :entry_allow_pings => 0,
@@ -38,67 +38,67 @@ class TestMTMigrator < Test::Unit::TestCase
   end
 
   should "set layout to post" do
-    assert_equal("post", JekyllImport::MT.post_metadata(stub_entry_row)["layout"])
+    assert_equal("post", Importers::MT.post_metadata(stub_entry_row)["layout"])
   end
 
   should "extract authored_on as date, formatted as 'YYYY-MM-DD HH:MM:SS Z'" do
     post = stub_entry_row
     expected_date = post[:entry_authored_on].strftime('%Y-%m-%d %H:%M:%S %z')
-    assert_equal(expected_date, JekyllImport::MT.post_metadata(post)["date"])
+    assert_equal(expected_date, Importers::MT.post_metadata(post)["date"])
   end
 
   should "extract entry_excerpt as excerpt" do
     post = stub_entry_row
-    assert_equal(post[:entry_excerpt], JekyllImport::MT.post_metadata(post)["excerpt"])
+    assert_equal(post[:entry_excerpt], Importers::MT.post_metadata(post)["excerpt"])
   end
 
   should "extract entry_id as mt_id" do
     post = stub_entry_row(:entry_id => 123)
-    assert_equal(123, JekyllImport::MT.post_metadata(post)["mt_id"])
+    assert_equal(123, Importers::MT.post_metadata(post)["mt_id"])
   end
 
   should "extract entry_title as title" do
     post = stub_entry_row
-    assert_equal(post[:entry_title], JekyllImport::MT.post_metadata(post)["title"])
+    assert_equal(post[:entry_title], Importers::MT.post_metadata(post)["title"])
   end
 
   should "set published to false if entry_status is not published" do
-    post = stub_entry_row(:entry_status => JekyllImport::MT::STATUS_DRAFT)
-    assert_equal(false, JekyllImport::MT.post_metadata(post)["published"])
+    post = stub_entry_row(:entry_status => Importers::MT::STATUS_DRAFT)
+    assert_equal(false, Importers::MT.post_metadata(post)["published"])
   end
 
   should "not set published if entry_status is published" do
-    post = stub_entry_row(:entry_status => JekyllImport::MT::STATUS_PUBLISHED)
-    assert_equal(nil, JekyllImport::MT.post_metadata(post)["published"])
+    post = stub_entry_row(:entry_status => Importers::MT::STATUS_PUBLISHED)
+    assert_equal(nil, Importers::MT.post_metadata(post)["published"])
   end
 
   should "include entry_text" do
     post = stub_entry_row
-    assert JekyllImport::MT.post_content(post).include?(post[:entry_text])
+    assert Importers::MT.post_content(post).include?(post[:entry_text])
   end
 
   should "include entry_text_more" do
     post = stub_entry_row
-    assert JekyllImport::MT.post_content(post).include?(post[:entry_text_more])
+    assert Importers::MT.post_content(post).include?(post[:entry_text_more])
   end
 
   should "include a <!--MORE--> separator when there is entry_text_more" do
     post = stub_entry_row(:entry_text_more => "Some more entry")
-    assert JekyllImport::MT.post_content(post).include?(JekyllImport::MT::MORE_CONTENT_SEPARATOR)
+    assert Importers::MT.post_content(post).include?(Importers::MT::MORE_CONTENT_SEPARATOR)
   end
 
   should "not include a <!--MORE--> separator when there is no entry_text_more" do
     post = stub_entry_row(:entry_text_more => "")
-    assert !JekyllImport::MT.post_content(post).include?(JekyllImport::MT::MORE_CONTENT_SEPARATOR)
+    assert !Importers::MT.post_content(post).include?(Importers::MT::MORE_CONTENT_SEPARATOR)
   end
 
   should "include the entry_authored_on date in the file name" do
     post = stub_entry_row(:entry_authored_on => Time.parse("2013-01-02 00:00:00 -00:00").utc)
-    assert JekyllImport::MT.post_file_name(post).include?("2013-01-02")
+    assert Importers::MT.post_file_name(post).include?("2013-01-02")
   end
 
   should "include entry_basename in the file name" do
     post = stub_entry_row(:entry_basename => "my_blog-entry")
-    assert JekyllImport::MT.post_file_name(post).include?("my_blog-entry")
+    assert Importers::MT.post_file_name(post).include?("my_blog-entry")
   end
 end

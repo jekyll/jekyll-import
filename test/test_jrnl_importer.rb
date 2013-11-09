@@ -16,23 +16,23 @@ class TestJrnlMigrator < Test::Unit::TestCase
     end
 
     should "have content" do
-      assert_equal("This is a test case for jekyll-import.", JekyllImport::Jrnl.get_post_content(@entry))
+      assert_equal("This is a test case for jekyll-import.", Importers::Jrnl.get_post_content(@entry))
     end
 
     should "have date" do
-      assert_equal("2013-09-24 11:36", JekyllImport::Jrnl.get_date(@entry[0], @date_length))
+      assert_equal("2013-09-24 11:36", Importers::Jrnl.get_date(@entry[0], @date_length))
     end
 
     should "have title" do
-      assert_equal("jrnl test case 1.", JekyllImport::Jrnl.get_title(@entry[0], @date_length))
+      assert_equal("jrnl test case 1.", Importers::Jrnl.get_title(@entry[0], @date_length))
     end
 
     should "have slug" do
-      assert_equal("jrnl-test-case-1", JekyllImport::Jrnl.create_slug(JekyllImport::Jrnl.get_title(@entry[0], @date_length)))
+      assert_equal("jrnl-test-case-1", Importers::Jrnl.create_slug(Importers::Jrnl.get_title(@entry[0], @date_length)))
     end
 
     should "have filename" do
-      assert_equal("2013-09-24-jrnl-test-case-1.md", JekyllImport::Jrnl.create_filename(JekyllImport::Jrnl.get_date(@entry[0], @date_length), JekyllImport::Jrnl.create_slug(JekyllImport::Jrnl.get_title(@entry[0], @date_length)), 'md'))
+      assert_equal("2013-09-24-jrnl-test-case-1.md", Importers::Jrnl.create_filename(Importers::Jrnl.get_date(@entry[0], @date_length), Importers::Jrnl.create_slug(Importers::Jrnl.get_title(@entry[0], @date_length)), 'md'))
     end
 
   end

@@ -15,8 +15,8 @@ module JekyllImport
       EOS
 
       def self.validate(options)
-        %w[dbname user pass].each do |option|
-          if options[option.to_sym].nil?
+        %w[dbname user].each do |option|
+          if options[option].nil?
             abort "Missing mandatory option --#{option}."
           end
         end
@@ -25,7 +25,7 @@ module JekyllImport
       def self.specify_options(c)
         c.option 'dbname', '--dbname', 'Database name'
         c.option 'user', '--user', 'Database name'
-        c.option 'password', '--password', 'Database name'
+        c.option 'password', '--password', 'Database name (default: "")'
         c.option 'host', '--host', 'Database name'
       end
 
@@ -34,6 +34,7 @@ module JekyllImport
           rubygems
           sequel
           fileutils
+          pg
         ])
       end
 
@@ -42,7 +43,7 @@ module JekyllImport
       def self.process(options)
         dbname = options.fetch('dbname')
         user   = options.fetch('user')
-        pass   = options.fetch('pass')
+        pass   = options.fetch('pass', "")
         host   = options.fetch('host', "localhost")
 
         FileUtils.mkdir_p('_posts')

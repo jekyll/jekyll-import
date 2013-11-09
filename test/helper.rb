@@ -15,9 +15,11 @@ unless defined?(Test::Unit::AssertionFailedError)
   end
 end
 
-Dir.glob(File.expand_path('../../lib/jekyll/jekyll-import/*', __FILE__)).each do |f|
+Dir.glob(File.expand_path('../../lib/*.rb', __FILE__)).each do |f|
   require f
 end
+
+include JekyllImport
 
 # Send STDERR into the void to suppress program output messages
 STDERR.reopen(test(?e, '/dev/null') ? '/dev/null' : 'NUL:')

@@ -2,6 +2,7 @@ $:.unshift File.dirname(__FILE__) # For use/testing when no gem is installed
 require 'rubygems'
 require 'jekyll/commands/import'
 require 'jekyll/stevenson'
+require 'colorator'
 
 def require_all(dir)
   Dir[File.expand_path(File.join(dir, '*.rb'), File.dirname(__FILE__))].each do |f|

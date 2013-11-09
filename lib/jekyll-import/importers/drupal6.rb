@@ -25,7 +25,7 @@ module JekyllImport
 
       def self.validate(options)
         %w[dbname user].each do |option|
-          if options[option.to_sym].nil?
+          if options[option].nil?
             abort "Missing mandatory option --#{option}."
           end
         end

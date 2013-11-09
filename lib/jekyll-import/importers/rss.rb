@@ -8,19 +8,27 @@
 #   (Local file)
 #   ruby -r 'jekyll/jekyll-import/rss' -e "JekyllImport::RSS.process(:source => './somefile/on/your/computer.xml')"
 
-require 'rss/1.0'
-require 'rss/2.0'
-require 'open-uri'
-require 'fileutils'
-require 'safe_yaml'
-
 module JekyllImport
   module Importers
     class RSS < Importer
+      def self.specify_options(c)
+        c.option 'file', '--file NAME', 'The RSS file to import'
+      end
+
       def self.validate(options)
-        if options[:source].nil?
+        if options['source'].nil?
           abort "Missing mandatory option --source."
         end
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rss/1.0
+          rss/2.0
+          open-uri
+          fileutils
+          safe_yaml
+        ])
       end
 
       # Process the import.
@@ -29,7 +37,7 @@ module JekyllImport
       #
       # Returns nothing.
       def self.process(options)
-        source = options.fetch(:source)
+        source = options.fetch('file')
 
         content = ""
         open(source) { |s| content = s.read }

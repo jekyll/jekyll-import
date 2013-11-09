@@ -1,11 +1,3 @@
-JekyllImport.require_with_fallback(%w[
-  rubygems
-  sequel
-  fileutils
-  safe_yaml
-  unidecode
-])
-
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
 # installed, running the following commands should work:
@@ -18,6 +10,30 @@ JekyllImport.require_with_fallback(%w[
 module JekyllImport
   module Importers
     class WordPress < Importer
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
+      end
+
+      def self.specify_options(c)
+        c.option 'dbname', '--dbname DB', 'Database name (default: "")'
+        c.option 'user', '--user USER', 'Database user name (default: "")'
+        c.option 'password', '--password PW', "Database user's password (default: "")"
+        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
+        c.option 'table_prefix', '--prefix PREFIX', 'Table prefix name (default: "wp_")'
+        c.option 'clean_entities', '--clean_entities', 'Whether to clean entities (default: true)'
+        c.option 'comments', '--comments', 'Whether to import comments (default: true)'
+        c.option 'categories', '--categories', 'Whether to import categories (default: true)'
+        c.option 'tags', '--tags', 'Whether to import tags (default: true)'
+        c.option 'more_excerpt', '--more_excerpt', 'Whether to use more excerpt (default: true)'
+        c.option 'more_anchor', '--more_anchor', 'Whether to use more anchor (default: true)'
+        c.option 'status', '--status STATUS,STATUS2', Array, 'Array of allowed statuses (default: ["publish"], other options: "draft", "private", "revision")'
+      end
 
       # Main migrator function. Call this to perform the migration.
       #
@@ -57,21 +73,21 @@ module JekyllImport
       #                   array, all posts are migrated regardless of
       #                   status. Default: [:publish].
       #
-      def self.process(options={})
+      def self.process(opts)
         options = {
-          :user           => '',
-          :pass           => '',
-          :host           => 'localhost',
-          :dbname         => '',
-          :table_prefix   => 'wp_',
-          :clean_entities => true,
-          :comments       => true,
-          :categories     => true,
-          :tags           => true,
-          :more_excerpt   => true,
-          :more_anchor    => true,
-          :status         => [:publish] # :draft, :private, :revision
-        }.merge(options)
+          :user           => opts.fetch('user', ''),
+          :pass           => options.fetch('password', ''),
+          :host           => options.fetch('host', 'localhost'),
+          :dbname         => options.fetch('dbname', ''),
+          :table_prefix   => options.fetch('prefix', 'wp_'),
+          :clean_entities => options.fetch('clean_entities', true),
+          :comments       => options.fetch('comments', true),
+          :categories     => options.fetch('categories', true),
+          :tags           => options.fetch('tags', true),
+          :more_excerpt   => options.fetch('more_excerpt', true),
+          :more_anchor    => options.fetch('more_anchor', true),
+          :status         => options.fetch('status', ["publish"]).map(&:to_sym) # :draft, :private, :revision
+        }
 
         if options[:clean_entities]
           begin

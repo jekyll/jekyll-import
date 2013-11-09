@@ -1,8 +1,3 @@
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
-
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
 # installed, running the following commands should work:
@@ -25,11 +20,27 @@ module JekyllImport
                WHERE Status = '4' OR \
                      Status = '5'"
 
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
+      end
+
+      def self.specify_options(c)
+        c.option 'dbname', '--dbname DB', 'Database name'
+        c.option 'user', '--user USER', 'Database user name'
+        c.option 'password', '--password PW', "Database user's password"
+        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
+      end
+
       def self.process(options)
-        dbname = options.fetch(:dbname)
-        user   = options.fetch(:user)
-        pass   = options.fetch(:pass)
-        host   = options.fetch(:host, "localhost")
+        dbname = options.fetch('dbname')
+        user   = options.fetch('user')
+        pass   = options.fetch('password')
+        host   = options.fetch('host', "localhost")
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 

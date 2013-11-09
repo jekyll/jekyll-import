@@ -1,20 +1,27 @@
 # coding: utf-8
-#
-JekyllImport.require_with_fallback(%w[
-  rubygems
-  hpricot
-  fileutils
-  safe_yaml
-  time
-])
+# This importer takes a wordpress.xml file, which can be exported from your
+# wordpress.com blog (/wp-admin/export.php).
 
 module JekyllImport
   module Importers
-    # This importer takes a wordpress.xml file, which can be exported from your
-    # wordpress.com blog (/wp-admin/export.php).
     class WordpressDotCom < Importer
-      def self.process(options = {:source => "wordpress.xml"})
-        source = options.fetch(:source, "wordpress.xml")
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+          hpricot
+          time
+        ])
+      end
+
+      def self.specify_options(c)
+        c.option 'source', '--source FILE', 'WordPress export XML file (default: "wordpress.xml")'
+      end
+
+      def self.process(options)
+        source = options.fetch('source', "wordpress.xml")
 
         import_count = Hash.new(0)
         doc = Hpricot::XML(File.read(source))

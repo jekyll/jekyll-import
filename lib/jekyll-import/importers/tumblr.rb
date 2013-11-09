@@ -1,22 +1,33 @@
-require 'rubygems'
-require 'open-uri'
-require 'fileutils'
-require 'nokogiri'
-require 'date'
-require 'json'
-require 'uri'
-require 'time'
-require 'jekyll'
-
 module JekyllImport
   module Importers
     class Tumblr < Importer
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          fileutils
+          open-uri
+          nokogiri
+          json
+          uri
+          time
+          jekyll
+        ])
+      end
+
+      def self.specify_options(c)
+        c.option 'url', '--url URL', 'Tumblr URL'
+        c.option 'format', '--format FORMAT', 'Output format (default: "html")'
+        c.option 'grab_images', '--grab_images', 'Whether to grab images (default: false)'
+        c.option 'add_highlights', '--add_highlights', 'Whether to add highlights (default: false)'
+        c.option 'rewrite_urls', '--rewrite_urls', 'Whether to rewrite URLs (default: false)'
+      end
+
       def self.process(options)
-        url = options.fetch(:url)
-        format = options.fetch(:format, "html")
-        grab_images = options.fetch(:grab_images, false)
-        add_highlights = options.fetch(:add_highlights, false)
-        rewrite_urls = options.fetch(:rewrite_urls, false)
+        url            = options.fetch('url')
+        format         = options.fetch('format', "html")
+        grab_images    = options.fetch('grab_images', false)
+        add_highlights = options.fetch('add_highlights', false)
+        rewrite_urls   = options.fetch('rewrite_urls', false)
 
         @grab_images = grab_images
         FileUtils.mkdir_p "_posts/tumblr"

@@ -2,11 +2,6 @@
 # MIT license. Use this module at your own risk.
 # I'm an Erlang/Perl/C++ guy so please forgive my dirty ruby.
 
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
-
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
 # installed, running the following commands should work:
@@ -28,6 +23,22 @@ module JekyllImport
           :dest_encoding => 'utf-8',
           :src_encoding => 'utf-8'
         }
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
+      end
+
+      def self.specify_options(c)
+        c.option 'dbname', '--dbname DB', 'Database name'
+        c.option 'user', '--user USER', 'Database user name'
+        c.option 'password', '--password PW', "Database user's password"
+        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
       end
 
       # By default this migrator will include posts for all your MovableType blogs.
@@ -52,10 +63,10 @@ module JekyllImport
       #                   something appropriate for your database charset.
       # :dest_encoding::  Encoding of output strings. Default: UTF-8
       def self.process(options)
-        dbname = options.fetch(:dbname)
-        user   = options.fetch(:user)
-        pass   = options.fetch(:pass)
-        host   = options.fetch(:host, "localhost")
+        dbname = options.fetch('dbname')
+        user   = options.fetch('user')
+        pass   = options.fetch('pass')
+        host   = options.fetch('host', "localhost")
 
         options = default_options.merge(options)
 

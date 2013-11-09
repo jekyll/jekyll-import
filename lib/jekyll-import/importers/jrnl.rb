@@ -1,12 +1,24 @@
 # Author: Aniket Pant <me@aniketpant.com>
 
-require 'time'
-require 'rubygems'
-require 'safe_yaml'
-
 module JekyllImport
   module Importers
     class Jrnl < Importer
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          time
+          rubygems
+          safe_yaml
+        ])
+      end
+
+      def self.specify_options(c)
+        c.option 'file', '--file FILENAME', 'Journal file (default: "~/journal.txt")'
+        c.option 'time_format', '--time_format FORMAT', 'Time format of your journal (default: "%Y-%m-%d %H:%M")'
+        c.option 'extension', '--extension EXT', 'Output extension (default: "md")'
+        c.option 'layout', '--layout NAME', 'Output post layout (default: "post")'
+      end
+
       # Reads a jrnl file and creates a new post for each entry
       # The following overrides are available:
       # :file         path to input file
@@ -14,12 +26,12 @@ module JekyllImport
       # :extension    the extension format of the output files
       # :layout       explicitly set the layout of the output
       def self.process(options)
-        file        = options.fetch(:file, "~/journal.txt")
-        time_format = options.fetch(:time_format, "%Y-%m-%d %H:%M")
-        extension   = options.fetch(:extension, "md")
-        layout      = options.fetch(:layout, "post")
+        file        = options.fetch('file', "~/journal.txt")
+        time_format = options.fetch('time_format', "%Y-%m-%d %H:%M")
+        extension   = options.fetch('extension', "md")
+        layout      = options.fetch('layout', "post")
 
-        date_length = Time.now().strftime(time_format).length
+        date_length = Time.now.strftime(time_format).length
 
         # convert relative to absolute if needed
         file = File.expand_path(file)

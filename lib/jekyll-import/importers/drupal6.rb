@@ -1,8 +1,3 @@
-require 'rubygems'
-require 'sequel'
-require 'fileutils'
-require 'safe_yaml'
-
 # NOTE: This converter requires Sequel and the MySQL gems.
 # The MySQL gem can be difficult to install on OS X. Once you have MySQL
 # installed, running the following commands should work:
@@ -11,7 +6,7 @@ require 'safe_yaml'
 
 module JekyllImport
   module Importers
-    class Drupal6 < JekyllImport::Importer
+    class Drupal6 < Importer
       # Reads a MySQL database via Sequel and creates a post file for each story
       # and blog node.
       QUERY = "SELECT n.nid, \
@@ -36,12 +31,29 @@ module JekyllImport
         end
       end
 
+      def self.specify_options(c)
+        c.option 'dbname', '--dbname DB', 'Database name'
+        c.option 'user', '--user USER', 'Database user name'
+        c.option 'password', '--password PW', "Database user's password"
+        c.option 'host', '--host HOST', 'Database host name'
+        c.option 'prefix', '--prefix PREFIX', 'Table prefix name'
+      end
+
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
+      end
+
       def self.process(options)
-        dbname = options.fetch(:dbname)
-        user   = options.fetch(:user)
-        pass   = options.fetch(:pass)
-        host   = options.fetch(:host, "localhost")
-        prefix = options.fetch(:prefix, "")
+        dbname = options.fetch('dbname')
+        user   = options.fetch('user')
+        pass   = options.fetch('password')
+        host   = options.fetch('host', "localhost")
+        prefix = options.fetch('prefix', "")
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
@@ -60,14 +72,14 @@ module JekyllImport
         # Change the refresh url if you customized your permalink config
         File.open("_layouts/refresh.html", "w") do |f|
           f.puts <<EOF
-  <!DOCTYPE html>
-  <html>
-  <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
-  </head>
-  </html>
-  EOF
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
+</head>
+</html>
+EOF
         end
 
         db[QUERY].each do |post|

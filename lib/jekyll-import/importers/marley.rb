@@ -1,6 +1,3 @@
-require 'safe_yaml'
-require 'fileutils'
-
 module JekyllImport
   module Importers
     class Marley < Importer
@@ -14,8 +11,19 @@ module JekyllImport
         }
       end
 
+      def self.require_deps
+        JekyllImport.require_with_fallback(%w[
+          fileutils
+          safe_yaml
+        ])
+      end
+
+      def self.specify_options(c)
+        c.option 'marley_data_dir', '--marley_data_dir DIR', 'The dir containing your marley data'
+      end
+
       def self.process(options)
-        marley_data_dir = options.fetch(:marley_data_dir)
+        marley_data_dir = options.fetch('marley_data_dir')
         raise ArgumentError, "marley dir #{marley_data_dir} not found" unless File.directory?(marley_data_dir)
 
         FileUtils.mkdir_p "_posts"

@@ -55,25 +55,27 @@ Gem::Specification.new do |s|
     Rakefile
     jekyll-import.gemspec
     lib/jekyll-import.rb
+    lib/jekyll-import/importer.rb
+    lib/jekyll-import/importers.rb
+    lib/jekyll-import/importers/csv.rb
+    lib/jekyll-import/importers/drupal6.rb
+    lib/jekyll-import/importers/drupal7.rb
+    lib/jekyll-import/importers/enki.rb
+    lib/jekyll-import/importers/google_reader.rb
+    lib/jekyll-import/importers/joomla.rb
+    lib/jekyll-import/importers/jrnl.rb
+    lib/jekyll-import/importers/marley.rb
+    lib/jekyll-import/importers/mephisto.rb
+    lib/jekyll-import/importers/mt.rb
+    lib/jekyll-import/importers/posterous.rb
+    lib/jekyll-import/importers/rss.rb
+    lib/jekyll-import/importers/s9y.rb
+    lib/jekyll-import/importers/textpattern.rb
+    lib/jekyll-import/importers/tumblr.rb
+    lib/jekyll-import/importers/typo.rb
+    lib/jekyll-import/importers/wordpress.rb
+    lib/jekyll-import/importers/wordpressdotcom.rb
     lib/jekyll/commands/import.rb
-    lib/jekyll/jekyll-import/csv.rb
-    lib/jekyll/jekyll-import/drupal6.rb
-    lib/jekyll/jekyll-import/drupal7.rb
-    lib/jekyll/jekyll-import/enki.rb
-    lib/jekyll/jekyll-import/google_reader.rb
-    lib/jekyll/jekyll-import/joomla.rb
-    lib/jekyll/jekyll-import/jrnl.rb
-    lib/jekyll/jekyll-import/marley.rb
-    lib/jekyll/jekyll-import/mephisto.rb
-    lib/jekyll/jekyll-import/mt.rb
-    lib/jekyll/jekyll-import/posterous.rb
-    lib/jekyll/jekyll-import/rss.rb
-    lib/jekyll/jekyll-import/s9y.rb
-    lib/jekyll/jekyll-import/textpattern.rb
-    lib/jekyll/jekyll-import/tumblr.rb
-    lib/jekyll/jekyll-import/typo.rb
-    lib/jekyll/jekyll-import/wordpress.rb
-    lib/jekyll/jekyll-import/wordpressdotcom.rb
     test/helper.rb
     test/test_jrnl_importer.rb
     test/test_mt_importer.rb

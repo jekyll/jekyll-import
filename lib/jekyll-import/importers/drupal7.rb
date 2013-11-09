@@ -16,13 +16,13 @@ module JekyllImport
                       n.status \
                FROM node AS n, \
                     field_data_body AS fdb \
-               WHERE (n.type = 'blog' OR n.type = 'story') \
+               WHERE (n.type = 'blog' OR n.type = 'story' OR n.type = 'article') \
                AND n.nid = fdb.entity_id \
                AND n.vid = fdb.revision_id"
 
       def self.validate(options)
-        %w[dbname user pass].each do |option|
-          if options[option.to_sym].nil?
+        %w[dbname user].each do |option|
+          if options[option].nil?
             abort "Missing mandatory option --#{option}."
           end
         end
@@ -31,8 +31,8 @@ module JekyllImport
       def self.specify_options(c)
         c.option 'dbname', '--dbname DB', 'Database name'
         c.option 'user', '--user USER', 'Database user name'
-        c.option 'password', '--password PW', "Database user's password"
-        c.option 'host', '--host HOST', 'Database host name'
+        c.option 'password', '--password PW', 'Database user\'s password (default: "")'
+        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
         c.option 'prefix', '--prefix PREFIX', 'Table prefix name'
       end
 
@@ -48,7 +48,7 @@ module JekyllImport
       def self.process(options)
         dbname = options.fetch('dbname')
         user   = options.fetch('user')
-        pass   = options.fetch('password')
+        pass   = options.fetch('password', "")
         host   = options.fetch('host', "localhost")
         prefix = options.fetch('prefix', "")
 

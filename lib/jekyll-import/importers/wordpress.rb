@@ -76,17 +76,17 @@ module JekyllImport
       def self.process(opts)
         options = {
           :user           => opts.fetch('user', ''),
-          :pass           => options.fetch('password', ''),
-          :host           => options.fetch('host', 'localhost'),
-          :dbname         => options.fetch('dbname', ''),
-          :table_prefix   => options.fetch('prefix', 'wp_'),
-          :clean_entities => options.fetch('clean_entities', true),
-          :comments       => options.fetch('comments', true),
-          :categories     => options.fetch('categories', true),
-          :tags           => options.fetch('tags', true),
-          :more_excerpt   => options.fetch('more_excerpt', true),
-          :more_anchor    => options.fetch('more_anchor', true),
-          :status         => options.fetch('status', ["publish"]).map(&:to_sym) # :draft, :private, :revision
+          :pass           => opts.fetch('password', ''),
+          :host           => opts.fetch('host', 'localhost'),
+          :dbname         => opts.fetch('dbname', ''),
+          :table_prefix   => opts.fetch('prefix', 'wp_'),
+          :clean_entities => opts.fetch('clean_entities', true),
+          :comments       => opts.fetch('comments', true),
+          :categories     => opts.fetch('categories', true),
+          :tags           => opts.fetch('tags', true),
+          :more_excerpt   => opts.fetch('more_excerpt', true),
+          :more_anchor    => opts.fetch('more_anchor', true),
+          :status         => opts.fetch('status', ["publish"]).map(&:to_sym) # :draft, :private, :revision
         }
 
         if options[:clean_entities]

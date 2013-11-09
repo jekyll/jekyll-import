@@ -9,7 +9,7 @@ module JekyllImport
   module Importers
     class Joomla < Importer
       def self.validate(options)
-        %w[dbname user pass].each do |option|
+        %w[dbname user].each do |option|
           if options[option].nil?
             abort "Missing mandatory option --#{option}."
           end
@@ -19,7 +19,7 @@ module JekyllImport
       def self.specify_options(c)
         c.option 'dbname', '--dbname', 'Database name'
         c.option 'user', '--user', 'Database user name'
-        c.option 'password', '--password', "Database user's password"
+        c.option 'password', '--password', "Database user's password (default: '')"
         c.option 'host', '--host', 'Database host name'
         c.option 'section', '--section', 'Table prefix name'
         c.option 'prefix', '--prefix', 'Table prefix name'
@@ -37,7 +37,7 @@ module JekyllImport
       def self.process(options)
         dbname  = options.fetch('dbname')
         user    = options.fetch('user')
-        pass    = options.fetch('pass')
+        pass    = options.fetch('password', '')
         host    = options.fetch('host', "localhost")
         section = options.fetch('section', '1')
         table_prefix = options.fetch('prefix', "jos_")

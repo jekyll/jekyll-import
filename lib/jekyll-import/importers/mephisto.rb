@@ -28,6 +28,14 @@ module JekyllImport
         CSV.process
       end
 
+      def self.validate(options)
+        %w[dbname user].each do |option|
+          if options[option].nil?
+            abort "Missing mandatory option --#{option}."
+          end
+        end
+      end
+
       def self.require_deps
         JekyllImport.require_with_fallback(%w[
           rubygems
@@ -40,7 +48,7 @@ module JekyllImport
       def self.specify_options(c)
         c.option 'dbname', '--dbname DB', 'Database name'
         c.option 'user', '--user USER', 'Database user name'
-        c.option 'password', '--password PW', "Database user's password"
+        c.option 'password', '--password PW', "Database user's password (default: '')"
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
       end
 
@@ -59,10 +67,10 @@ module JekyllImport
                ORDER BY published_at"
 
       def self.process(options)
-        dbname = options.fetch(:dbname)
-        user   = options.fetch(:user)
-        pass   = options.fetch(:pass)
-        host   = options.fetch(:host, "localhost")
+        dbname = options.fetch('dbname')
+        user   = options.fetch('user')
+        pass   = options.fetch('password', '')
+        host   = options.fetch('host', "localhost")
 
         db = Sequel.mysql(dbname, :user => user,
                                   :password => pass,

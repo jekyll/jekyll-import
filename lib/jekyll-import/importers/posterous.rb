@@ -76,7 +76,7 @@ module JekyllImport
 
       def self.process(options)
         email     = options.fetch('email')
-        pass      = options.fetch('pass')
+        pass      = options.fetch('password')
         api_token = options.fetch('api_token')
 
         @email, @pass, @api_token = email, pass, api_token

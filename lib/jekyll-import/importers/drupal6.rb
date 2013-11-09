@@ -19,13 +19,13 @@ module JekyllImport
                       node AS n \
                  LEFT OUTER JOIN term_node AS tn ON tn.nid = n.nid \
                  LEFT OUTER JOIN term_data AS td ON tn.tid = td.tid \
-                WHERE (n.type = 'blog' OR n.type = 'story') \
+                WHERE (n.type = 'blog' OR n.type = 'story' OR n.type = 'article') \
                   AND n.vid = nr.vid \
              GROUP BY n.nid"
 
       def self.validate(options)
-        %w[dbname user pass].each do |option|
-          if options[option.to_sym].nil?
+        %w[dbname user].each do |option|
+          if options[option].nil?
             abort "Missing mandatory option --#{option}."
           end
         end
@@ -34,8 +34,8 @@ module JekyllImport
       def self.specify_options(c)
         c.option 'dbname', '--dbname DB', 'Database name'
         c.option 'user', '--user USER', 'Database user name'
-        c.option 'password', '--password PW', "Database user's password"
-        c.option 'host', '--host HOST', 'Database host name'
+        c.option 'password', '--password PW', "Database user's password (default: '')"
+        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
         c.option 'prefix', '--prefix PREFIX', 'Table prefix name'
       end
 
@@ -51,7 +51,7 @@ module JekyllImport
       def self.process(options)
         dbname = options.fetch('dbname')
         user   = options.fetch('user')
-        pass   = options.fetch('password')
+        pass   = options.fetch('password', "")
         host   = options.fetch('host', "localhost")
         prefix = options.fetch('prefix', "")
 
@@ -132,7 +132,7 @@ EOF
         end
 
         # TODO: Make dirs & files for nodes of type 'page'
-          # Make refresh pages for these as well
+        # Make refresh pages for these as well
       end
     end
   end

@@ -12,7 +12,7 @@ module JekyllImport
                p.published_at as date,
                p.cached_tag_list as tags
         FROM posts p
-      EOS
+EOS
 
       def self.validate(options)
         %w[dbname user].each do |option|
@@ -43,7 +43,7 @@ module JekyllImport
       def self.process(options)
         dbname = options.fetch('dbname')
         user   = options.fetch('user')
-        pass   = options.fetch('pass', "")
+        pass   = options.fetch('password', "")
         host   = options.fetch('host', "localhost")
 
         FileUtils.mkdir_p('_posts')

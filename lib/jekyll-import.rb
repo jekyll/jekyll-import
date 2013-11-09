@@ -30,7 +30,6 @@ module JekyllImport
     JekyllImport::Importer.subclasses.each do |importer|
       name = importer.to_s.split("::").last.downcase
       commands << name
-      p name
       cmd.command(name.to_sym) do |c|
         c.syntax "jekyll import #{name} [options]"
         importer.specify_options(c)
@@ -45,7 +44,7 @@ module JekyllImport
   end
 
   def self.require_with_fallback(gems)
-    Array.wrap(gems).flatten.each do |gem|
+    Array[gems].flatten.each do |gem|
       begin
         require gem
       rescue LoadError

@@ -4,15 +4,8 @@ require 'jekyll/commands/import'
 require 'jekyll/stevenson'
 require 'colorator'
 
-def require_all(dir)
-  Dir[File.expand_path(File.join(dir, '*.rb'), File.dirname(__FILE__))].each do |f|
-    require f
-  end
-end
-
 require 'jekyll-import/importer'
 require 'jekyll-import/importers'
-#require_all 'jekyll-import/importers'
 
 module JekyllImport
   VERSION = '0.1.0.beta4'
@@ -49,7 +42,14 @@ module JekyllImport
       begin
         require gem
       rescue LoadError
-        logger.abort_with "Whoops! Looks like you need to install '#{gem}' before you can use this migrator."
+        logger.error "Whoops! Looks like you need to install '#{gem}' before you can use this importer."
+        logger.error ""
+        logger.error "If you're using bundler:"
+        logger.error "  1. Add 'gem \"#{gem}\"' to your Gemfile"
+        logger.error "  2. Run 'bundle install'"
+        logger.error ""
+        logger.error "If you're not using bundler:"
+        logger.abort_with "  1. Run 'gem install #{gem}'."
       end
     end
   end

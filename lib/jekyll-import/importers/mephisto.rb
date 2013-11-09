@@ -28,6 +28,14 @@ module JekyllImport
         CSV.process
       end
 
+      def self.validate(options)
+        %w[dbname user].each do |option|
+          if options[option].nil?
+            abort "Missing mandatory option --#{option}."
+          end
+        end
+      end
+
       def self.require_deps
         JekyllImport.require_with_fallback(%w[
           rubygems

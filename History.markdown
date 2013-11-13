@@ -39,6 +39,7 @@
   * Fix bug where post date in `MT` importer was not imported for older versions
     of MT sites (#62)
   * Fix interface of importers' `#process` method (#69)
+  * RSS importer should specify `--source` option (#81)
 
 ### Site Enhancements
 

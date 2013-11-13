@@ -12,7 +12,7 @@ module JekyllImport
   module Importers
     class RSS < Importer
       def self.specify_options(c)
-        c.option 'file', '--file NAME', 'The RSS file to import'
+        c.option 'source', '--source NAME', 'The RSS file or URL to import'
       end
 
       def self.validate(options)

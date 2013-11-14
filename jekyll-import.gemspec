@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.authors  = ["Tom Preston-Werner"]
   s.email    = 'tom@mojombo.com'
   s.homepage = 'http://github.com/jekyll/jekyll-import'
+  s.license  = 'MIT'
 
   s.require_paths = %w[lib]
 

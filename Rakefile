@@ -9,7 +9,9 @@
 
 require 'rubygems'
 require 'rake'
+require 'rdoc'
 require 'date'
+require 'yaml'
 
 #############################################################################
 #
@@ -46,6 +48,39 @@ def replace_header(head, header_name)
   head.sub!(/(\.#{header_name}\s*= ').*'/) { "#{$1}#{send(header_name)}'"}
 end
 
+def normalize_bullets(markdown)
+  markdown.gsub(/\s{2}\*{1}/, "-")
+end
+
+def linkify_prs(markdown)
+  markdown.gsub(/#(\d+)/) do |word|
+    "[#{word}]({{ site.repository }}/issues/#{word.delete("#")})"
+  end
+end
+
+def linkify_users(markdown)
+  markdown.gsub(/(@\w+)/) do |username|
+    "[#{username}](https://github.com/#{username.delete("@")})"
+  end
+end
+
+def linkify(markdown)
+  linkify_users(linkify_prs(markdown))
+end
+
+def liquid_escape(markdown)
+  markdown.gsub(/(`{[{%].+[}%]}`)/, "{% raw %}\\1{% endraw %}")
+end
+
+def remove_head_from_history(markdown)
+  index = markdown =~ /^##\s+\d+\.\d+\.\d+/
+  markdown[index..-1]
+end
+
+def converted_history(markdown)
+  remove_head_from_history(liquid_escape(linkify(normalize_bullets(markdown))))
+end
+
 #############################################################################
 #
 # Standard tasks
@@ -76,22 +111,88 @@ end
 
 #############################################################################
 #
-# Custom tasks (add your own tasks here)
+# Site tasks - http://import.jekyllrb.com
 #
 #############################################################################
 
-namespace :migrate do
-  desc "Migrate from mephisto in the current directory"
-  task :mephisto do
-    sh %q(ruby -r './lib/jekyll/migrators/mephisto' -e 'Jekyll::Mephisto.postgres(:database => "#{ENV["SERVER"]}", "#{ENV["DB"]}")')
+namespace :site do
+  desc "Generate and view the site locally"
+  task :preview do
+    require "launchy"
+
+    # Yep, it's a hack! Wait a few seconds for the Jekyll site to generate and
+    # then open it in a browser. Someday we can do better than this, I hope.
+    Thread.new do
+      sleep 4
+      puts "Opening in browser..."
+      Launchy.open("http://localhost:4000")
+    end
+
+    # Generate the site in server mode.
+    puts "Running Jekyll..."
+    Dir.chdir("site") do
+      sh "jekyll serve --watch"
+    end
   end
-  desc "Migrate from Movable Type in the current directory"
-  task :mt do
-    sh %q(ruby -r './lib/jekyll/migrators/mt' -e 'Jekyll::MT.process("#{ENV["DB"]}", "#{ENV["USER"]}", "#{ENV["PASS"]}")')
+
+  desc "Update normalize.css library to the latest version and minify"
+  task :update_normalize_css do
+    Dir.chdir("site/css") do
+      sh 'curl "http://necolas.github.io/normalize.css/latest/normalize.css" -o "normalize.scss"'
+      sh 'sass "normalize.scss":"normalize.css" --style compressed'
+      sh 'rm "normalize.scss"'
+    end
   end
-  desc "Migrate from Typo in the current directory"
-  task :typo do
-    sh %q(ruby -r './lib/jekyll/migrators/typo' -e 'Jekyll::Typo.process("#{ENV["DB"]}", "#{ENV["USER"]}", "#{ENV["PASS"]}")')
+
+  desc "Commit the local site to the gh-pages branch and publish to GitHub Pages"
+  task :publish => [:history] do
+    sh "git subtree push --prefix site origin gh-pages"
+  end
+
+  desc "Create a nicely formatted history page for the jekyll site based on the repo history."
+  task :history do
+    if File.exist?("History.markdown")
+      history_file = File.read("History.markdown")
+      front_matter = {
+        "layout" => "docs",
+        "title" => "History",
+        "permalink" => "/docs/history/",
+        "prev_section" => "contributing"
+      }
+      Dir.chdir('site/docs/') do
+        File.open("history.md", "w") do |file|
+          file.write("#{front_matter.to_yaml}---\n\n")
+          file.write(converted_history(history_file))
+        end
+      end
+    else
+      abort "You seem to have misplaced your History.markdown file. I can haz?"
+    end
+  end
+
+  namespace :releases do
+    desc "Create new release post"
+    task :new, :version do |t, args|
+      raise "Specify a version: rake site:releases:new['1.2.3']" unless args.version
+      today = Time.new.strftime('%Y-%m-%d')
+      release = args.version.to_s
+      filename = "site/_posts/#{today}-jekyll-import-#{release.split('.').join('-')}-released.markdown"
+
+      File.open(filename, "wb") do |post|
+        post.puts("---")
+        post.puts("layout: news_item")
+        post.puts("title: 'jekyll-import #{release} Released'")
+        post.puts("date: #{Time.new.strftime('%Y-%m-%d %H:%M:%S %z')}")
+        post.puts("author: ")
+        post.puts("version: #{version}")
+        post.puts("categories: [release]")
+        post.puts("---")
+        post.puts
+        post.puts
+      end
+
+      puts "Created #{filename}"
+    end
   end
 end
 

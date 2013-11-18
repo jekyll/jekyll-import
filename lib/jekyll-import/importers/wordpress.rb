@@ -75,18 +75,18 @@ module JekyllImport
       #
       def self.process(opts)
         options = {
-          :user           => opts.fetch('user', ''),
-          :pass           => opts.fetch('password', ''),
-          :host           => opts.fetch('host', 'localhost'),
-          :dbname         => opts.fetch('dbname', ''),
-          :table_prefix   => opts.fetch('prefix', 'wp_'),
-          :clean_entities => opts.fetch('clean_entities', true),
-          :comments       => opts.fetch('comments', true),
-          :categories     => opts.fetch('categories', true),
-          :tags           => opts.fetch('tags', true),
-          :more_excerpt   => opts.fetch('more_excerpt', true),
-          :more_anchor    => opts.fetch('more_anchor', true),
-          :status         => opts.fetch('status', ["publish"]).map(&:to_sym) # :draft, :private, :revision
+          :user           => opts.fetch(:user, ''),
+          :pass           => opts.fetch(:pass, ''),
+          :host           => opts.fetch(:host, 'localhost'),
+          :dbname         => opts.fetch(:dbname, ''),
+          :table_prefix   => opts.fetch(:prefix, 'wp_'),
+          :clean_entities => opts.fetch(:clean_entities, true),
+          :comments       => opts.fetch(:comments, true),
+          :categories     => opts.fetch(:categories, true),
+          :tags           => opts.fetch(:tags, true),
+          :more_excerpt   => opts.fetch(:more_excerpt, true),
+          :more_anchor    => opts.fetch(:more_anchor, true),
+          :status         => opts.fetch(:status, ["publish"]).map(&:to_sym) # :draft, :private, :revision
         }
 
         if options[:clean_entities]
@@ -98,7 +98,6 @@ module JekyllImport
             options[:clean_entities] = false
           end
         end
-
         FileUtils.mkdir_p("_posts")
 
         db = Sequel.mysql2(options[:dbname], :user => options[:user], :password => options[:pass],

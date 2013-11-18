@@ -2,6 +2,7 @@
 layout: docs
 title: Drupal 6
 prev_section: csv
+link_source: drupal6
 next_section: drupal7
 permalink: /docs/drupal6/
 ---

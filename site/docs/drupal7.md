@@ -2,6 +2,7 @@
 layout: docs
 title: Drupal 7
 prev_section: drupal6
+link_source: drupal7
 next_section: enki
 permalink: /docs/drupal7/
 ---

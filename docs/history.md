@@ -1,8 +1,7 @@
 ---
 layout: docs
 title: History
-prev_section: contributing
 permalink: /docs/history/
+prev_section: contributing
 ---
 
-There is currently no history.

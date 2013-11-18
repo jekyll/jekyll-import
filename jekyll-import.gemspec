@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.2'
 
   s.name              = 'jekyll-import'
-  s.version           = '0.1.0.beta4'
-  s.date              = '2013-11-09'
+  s.version           = '0.1.0.rc1'
+  s.date              = '2013-11-18'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."
@@ -77,6 +77,69 @@ Gem::Specification.new do |s|
     lib/jekyll-import/importers/wordpress.rb
     lib/jekyll-import/importers/wordpressdotcom.rb
     lib/jekyll/commands/import.rb
+    site/.gitignore
+    site/CNAME
+    site/README
+    site/_config.yml
+    site/_includes/analytics.html
+    site/_includes/docs_contents.html
+    site/_includes/docs_contents_mobile.html
+    site/_includes/docs_option.html
+    site/_includes/docs_ul.html
+    site/_includes/footer.html
+    site/_includes/header.html
+    site/_includes/news_contents.html
+    site/_includes/news_contents_mobile.html
+    site/_includes/news_item.html
+    site/_includes/primary-nav-items.html
+    site/_includes/section_nav.html
+    site/_includes/top.html
+    site/_layouts/default.html
+    site/_layouts/docs.html
+    site/_layouts/news.html
+    site/_layouts/news_item.html
+    site/_posts/2013-11-09-jekyll-import-0-1-0-beta4-release.markdown
+    site/css/gridism.css
+    site/css/normalize.css
+    site/css/pygments.css
+    site/css/style.css
+    site/docs/contributing.md
+    site/docs/csv.md
+    site/docs/drupal6.md
+    site/docs/drupal7.md
+    site/docs/enki.md
+    site/docs/google_reader.md
+    site/docs/history.md
+    site/docs/index.md
+    site/docs/installation.md
+    site/docs/joomla.md
+    site/docs/jrnl.md
+    site/docs/marley.md
+    site/docs/mephisto.md
+    site/docs/mt.md
+    site/docs/posterous.md
+    site/docs/rss.md
+    site/docs/s9y.md
+    site/docs/textpattern.md
+    site/docs/third-party.md
+    site/docs/tumblr.md
+    site/docs/typo.md
+    site/docs/usage.md
+    site/docs/wordpress.md
+    site/docs/wordpressdotcom.md
+    site/favicon.png
+    site/feed.xml
+    site/img/article-footer.png
+    site/img/footer-arrow.png
+    site/img/footer-logo.png
+    site/img/logo-2x.png
+    site/img/octojekyll.png
+    site/img/tube.png
+    site/img/tube1x.png
+    site/index.html
+    site/js/modernizr-2.5.3.min.js
+    site/news/index.html
+    site/news/releases/index.html
     test/helper.rb
     test/test_jrnl_importer.rb
     test/test_mt_importer.rb

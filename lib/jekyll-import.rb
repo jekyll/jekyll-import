@@ -8,7 +8,7 @@ require 'jekyll-import/importer'
 require 'jekyll-import/importers'
 
 module JekyllImport
-  VERSION = '0.1.0.beta4'
+  VERSION = '0.1.0.rc1'
 
   def self.logger
     @logger ||= Jekyll::Stevenson.new

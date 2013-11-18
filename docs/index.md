@@ -53,85 +53,6 @@ Where IMPORTER is the name of the specific importer.
   </p>
 </div>
 
-<!-- TODO all these need to be fixed -->
-
-## WordPress
-
-### WordPress export files
-
-If hpricot is not already installed, you will need to run `gem install hpricot`.
-Next, export your blog using the WordPress export utility. Assuming that the
-exported file is saved as `wordpress.xml`, here is the command you need to run:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::WordpressDotCom.process({ "source" => "wordpress.xml" })'
-{% endhighlight %}
-
-<div class="note">
-  <h5>ProTip™: WordPress.com Export Tool</h5>
-  <p markdown="1">If you are migrating from a WordPress.com account, you can
-  access the export tool at the following URL:
-  `https://YOUR-USER-NAME.wordpress.com/wp-admin/export.php`.</p>
-</div>
-
-### Using WordPress MySQL server connection
-
-If you want to import using a direct connection to the WordPress MySQL server,
-here's how:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::WordPress.process({"dbname" => "database", "user" => "user", "password" => "pass"})'
-{% endhighlight %}
-
-If you are using Webfaction and have to set up an [SSH
-tunnel](http://docs.webfaction.com/user-guide/databases.html?highlight=mysql#starting-an-ssh-tunnel-with-ssh),
-be sure to make the hostname (`127.0.0.1`) explicit, otherwise MySQL may block
-your access based on `localhost` and `127.0.0.1` not being equivalent in its
-authentication system:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::WordPress.process({:host => "127.0.0.1", :dbname => "database", :user => "user", :pass => "pass"})'
-{% endhighlight %}
-
-### Further WordPress migration alternatives
-
-While the above methods work, they do not import much of the metadata that is
-usually stored in WordPress posts and pages. If you need to export things like
-pages, tags, custom fields, image attachments and so on, the following resources
-might be useful to you:
-
-- [Exitwp](https://github.com/thomasf/exitwp) is a configurable tool written in
-  Python for migrating one or more WordPress blogs into Jekyll (Markdown) format
-  while keeping as much metadata as possible. Exitwp also downloads attachments
-  and pages.
-- [A great
-  article](http://vitobotta.com/how-to-migrate-from-wordpress-to-jekyll/) with a
-  step-by-step guide for migrating a WordPress blog to Jekyll while keeping most
-  of the structure and metadata.
-- [wpXml2Jekyll](https://github.com/theaob/wpXml2Jekyll) is an executable
-  windows application for creating Markdown posts from your WordPress XML file.
-
-
-
-## TextPattern
-
-To import posts from TextPattern:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/textpattern";
-    JekyllImport::TextPattern.process("database_name", "username", "password", "hostname")'
-{% endhighlight %}
-
-You will need to run the above from the parent directory of your `_import`
-folder. For example, if `_import` is located in `/path/source/_import`, you will
-need to run this code from `/path/source`. The hostname defaults to `localhost`,
-all other variables are required. You may need to adjust the code used to filter
-entries. Left alone, it will attempt to pull all entries that are live or
-sticky.
-
 ## Blogger (Blogspot)
 
 To import posts from Blogger, see [this post about migrating from Blogger to
@@ -150,44 +71,6 @@ alternatives:
   [Octopress](http://octopress.org). It is like [@ngauthier’s
   version](https://gist.github.com/1506614) but separates drafts from posts, as
   well as importing tags and permalinks.
-
-## Posterous
-
-To import posts from your primary Posterous blog:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/posterous";
-    JekyllImport::Posterous.process("my_email", "my_pass")'
-{% endhighlight %}
-
-For any other Posterous blog on your account, you will need to specify the
-`blog_id` for the blog:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/posterous";
-    JekyllImport::Posterous.process("my_email", "my_pass", "blog_id")'
-{% endhighlight %}
-
-There is also an [alternative Posterous
-migrator](https://github.com/pepijndevos/jekyll/blob/patch-1/lib/jekyll/migrators/posterous.rb)
-that maintains permalinks and attempts to import images too.
-
-## Tumblr
-
-To import posts from Tumblr:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/tumblr";
-    JekyllImport::Tumblr.process(url, format, grab_images, add_highlights, rewrite_urls)'
-# url    - String: your blog's URL
-# format - String: the output file extension. Use "md" to have your content
-#          converted from HTML to Markdown. Defaults to "html".
-# grab_images    - Boolean: whether to download images as well. Defaults to false.
-# add_highlights - Boolean: whether to wrap code blocks (indented 4 spaces) in a Liquid
-                   "highlight" tag. Defaults to false.
-# rewrite_urls   - Boolean: whether to write pages that redirect from the old Tumblr paths
-                   to the new Jekyll paths. Defaults to false.
-{% endhighlight %}
 
 ## Other Systems
 

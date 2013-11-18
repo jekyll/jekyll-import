@@ -11,7 +11,7 @@ To import your posts from Typo (now [Publify](http://publify.co)), run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Typo.process({
+    JekyllImport::Importers::Typo.run({
       "server"   => "mysql",
       "dbname"   => "name",
       "user"     => "myuser",

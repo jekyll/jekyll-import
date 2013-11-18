@@ -11,7 +11,7 @@ To import your posts from a CSV file, run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::CSV.process({
+    JekyllImport::Importers::CSV.run({
       "file" => "my_posts.csv"
     })'
 {% endhighlight %}

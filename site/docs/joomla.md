@@ -11,7 +11,7 @@ To import your posts from a [Joomla](http://joomla.org) installation, run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Joomla.process({
+    JekyllImport::Importers::Joomla.run({
       "dbname"   => "name",
       "user"     => "myuser",
       "password" => "mypassword",

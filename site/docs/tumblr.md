@@ -11,7 +11,7 @@ To import your posts from [Tumblr](http://tumblr.com), run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Tumblr.process({
+    JekyllImport::Importers::Tumblr.run({
       "url"            => "http://myblog.tumblr.com",
       "user"           => "html", # or "md"
       "password"       => false,  # whether to download images as well.

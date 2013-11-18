@@ -2,6 +2,7 @@
 layout: docs
 title: CSV
 prev_section: quickstart
+link_source: csv
 next_section: drupal6
 permalink: /docs/csv/
 ---

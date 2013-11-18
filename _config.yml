@@ -1,5 +1,7 @@
+title: "jekyll-import • Import your old &amp; busted site to Jekyll"
 pygments: true
 relative_permalinks: false
 permalink: /news/:year/:month/:day/:title/
 excerpt_separator: ""
 repository: https://github.com/jekyll/jekyll-import
+latest_release: 0.1.0.beta4

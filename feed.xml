@@ -13,7 +13,7 @@ permalink: /feed.xml
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   >
 <channel>
-    <title xml:lang="en">jekyll-import • Import your old &amp; busted site to Jekyll</title>
+    <title xml:lang="en">{{ site.title }}</title>
     <atom:link type="application/atom+xml" href="http://import.jekyllrb.com/feed.xml" rel="self"/>
     <link>http://import.jekyllrb.com</link>
     <pubDate>{{ site.time | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>

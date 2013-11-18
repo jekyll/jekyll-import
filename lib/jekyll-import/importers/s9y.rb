@@ -28,7 +28,7 @@ module JekyllImport
       end
 
       def self.process(options)
-        source = options.fetch(:source)
+        source = options.fetch('source')
 
         FileUtils.mkdir_p("_posts")
 

@@ -11,7 +11,7 @@ To import your posts from a [Google Reader](http://reader.google.com) XML dump f
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::GoogleReader.process({
+    JekyllImport::Importers::GoogleReader.run({
       "source" => "my_file.xml"
     })'
 {% endhighlight %}

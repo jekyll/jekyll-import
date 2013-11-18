@@ -12,7 +12,7 @@ installation, run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::WordPress.process({
+    JekyllImport::Importers::WordPress.run({
       "dbname"   => "",
       "user"     => "",
       "password" => "",

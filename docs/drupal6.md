@@ -11,7 +11,7 @@ To import your posts from a [Drupal 6](http://drupal.org) installation, run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Drupal6.process({
+    JekyllImport::Importers::Drupal6.run({
       "dbname"   => "name",
       "user"     => "myuser",
       "password" => "mypassword",

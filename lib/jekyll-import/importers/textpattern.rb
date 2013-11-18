@@ -39,7 +39,7 @@ module JekyllImport
       def self.process(options)
         dbname = options.fetch('dbname')
         user   = options.fetch('user')
-        pass   = options.fetch('password')
+        pass   = options.fetch('password', "")
         host   = options.fetch('host', "localhost")
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')

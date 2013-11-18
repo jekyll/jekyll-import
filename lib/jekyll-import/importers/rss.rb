@@ -37,7 +37,7 @@ module JekyllImport
       #
       # Returns nothing.
       def self.process(options)
-        source = options.fetch('file')
+        source = options.fetch('source')
 
         content = ""
         open(source) { |s| content = s.read }

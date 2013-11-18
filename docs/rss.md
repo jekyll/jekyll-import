@@ -11,7 +11,7 @@ To import your posts from an RSS feed (local or remote), run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::RSS.process({
+    JekyllImport::Importers::RSS.run({
       "source" => "my_file.xml"
     })'
 {% endhighlight %}

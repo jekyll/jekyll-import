@@ -11,7 +11,7 @@ To import your posts from [Jrnl](http://maebert.github.io/jrnl/), run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Jrnl.process({
+    JekyllImport::Importers::Jrnl.run({
       "file"        => "~/journal.txt",
       "time_format" => "%Y-%m-%d %H:%M",
       "extension"   => "md",

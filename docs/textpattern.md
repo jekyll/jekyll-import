@@ -11,7 +11,7 @@ To import your posts from [Textpattern](http://textpattern.com), run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::TextPattern.process({
+    JekyllImport::Importers::TextPattern.run({
       "dbname"   => "name",
       "user"     => "myuser",
       "password" => "mypassword",

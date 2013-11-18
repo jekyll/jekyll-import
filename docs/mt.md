@@ -11,7 +11,7 @@ To import your posts from [Movable Type](http://movabletype.org), run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::MT.process({
+    JekyllImport::Importers::MT.run({
       "dbname"   => "name",
       "user"     => "myuser",
       "password" => "mypassword",

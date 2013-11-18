@@ -43,6 +43,7 @@
   * RSS importer should specify `--source` option (#81)
 
 ### Site Enhancements
+  * Add the site (#87)
 
 ### Development Fixes
   * Update usage docs in RSS importer (#35)

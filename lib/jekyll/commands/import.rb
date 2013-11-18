@@ -1,5 +1,6 @@
 $:.unshift File.expand_path("../../", File.dirname(__FILE__)) # load from jekyll-import/lib
 require 'jekyll/command'
+require 'jekyll-import'
 
 module Jekyll
   module Commands
@@ -37,13 +38,9 @@ module Jekyll
         if IMPORTERS.keys.include?(migrator.to_s.to_sym)
           migrator = migrator.to_s.downcase
 
-          require File.join(File.dirname(__FILE__), "..", "jekyll-import", "#{migrator}.rb")
-
-          if JekyllImport.const_defined?(IMPORTERS[migrator.to_sym])
-            klass = JekyllImport.const_get(IMPORTERS[migrator.to_sym])
-            klass.validate(options.__hash__) if klass.respond_to?(:validate)
-            puts 'Importing...'
-            klass.process(options.__hash__)
+          if JekyllImport::Importers.const_defined?(IMPORTERS[migrator.to_sym])
+            klass = JekyllImport::Importers.const_get(IMPORTERS[migrator.to_sym])
+            klass.run(options.__hash__)
           end
         else
           abort_on_invalid_migrator(migrator)

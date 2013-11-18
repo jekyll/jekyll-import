@@ -37,10 +37,11 @@ module Jekyll
         if IMPORTERS.keys.include?(migrator.to_s.to_sym)
           migrator = migrator.to_s.downcase
 
-          require File.join(File.dirname(__FILE__), "..", "jekyll-import", "#{migrator}.rb")
+          require File.join(File.dirname(__FILE__), "..", "..", "jekyll-import", "importers", "#{migrator}.rb")
 
-          if JekyllImport.const_defined?(IMPORTERS[migrator.to_sym])
-            klass = JekyllImport.const_get(IMPORTERS[migrator.to_sym])
+          if JekyllImport::Importers.const_defined?(IMPORTERS[migrator.to_sym])
+            klass = JekyllImport::Importers.const_get(IMPORTERS[migrator.to_sym])
+            klass.require_deps
             klass.validate(options.__hash__) if klass.respond_to?(:validate)
             puts 'Importing...'
             klass.process(options.__hash__)

@@ -2,7 +2,7 @@
 layout: docs
 title: Blog migrations
 next_section: usage
-permalink: /docs/
+permalink: /docs/home/
 ---
 
 If you’re switching to Jekyll from another blogging system, Jekyll’s importers
@@ -114,52 +114,7 @@ might be useful to you:
 - [wpXml2Jekyll](https://github.com/theaob/wpXml2Jekyll) is an executable
   windows application for creating Markdown posts from your WordPress XML file.
 
-## Drupal
 
-If you’re migrating from [Drupal](http://drupal.org), there are two migrators
-for you, depending upon your Drupal version:
-- [Drupal 6](https://github.com/jekyll/jekyll-import/blob/v0.1.0.beta1/lib/jekyll/jekyll-import/drupal6.rb)
-- [Drupal 7](https://github.com/jekyll/jekyll-import/blob/v0.1.0.beta1/lib/jekyll/jekyll-import/drupal7.rb)
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/drupal6";
-    JekyllImport::Drupal6.process("dbname", "user", "pass")'
-# ... or ...
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/drupal7";
-    JekyllImport::Drupal7.process("dbname", "user", "pass")'
-{% endhighlight %}
-
-If you are connecting to a different host or need to specify a table prefix for
-your database, you may optionally add those two parameters to the end of either
-Drupal migrator execution:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/drupal6";
-    JekyllImport::Drupal6.process("dbname", "user", "pass", "host", "table_prefix")'
-# ... or ...
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/drupal7";
-    JekyllImport::Drupal7.process("dbname", "user", "pass", "host", "table_prefix")'
-{% endhighlight %}
-
-## Movable Type
-
-To import posts from Movable Type:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/mt";
-    JekyllImport::MT.process("database", "user", "pass")'
-{% endhighlight %}
-
-## Typo
-
-To import posts from Typo:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/typo";
-    JekyllImport::Typo.process("database", "user", "pass")'
-{% endhighlight %}
-
-This code has only been tested with Typo version 4+.
 
 ## TextPattern
 
@@ -176,22 +131,6 @@ need to run this code from `/path/source`. The hostname defaults to `localhost`,
 all other variables are required. You may need to adjust the code used to filter
 entries. Left alone, it will attempt to pull all entries that are live or
 sticky.
-
-## Mephisto
-
-To import posts from Mephisto:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/mephisto";
-    JekyllImport::Mephisto.process("database", "user", "password")'
-{% endhighlight %}
-
-If your data is in Postgres, you should do this instead:
-
-{% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll/jekyll-import/mephisto";
-    JekyllImport::Mephisto.postgres({:database => "database", :username=>"username", :password =>"password"})'
-{% endhighlight %}
 
 ## Blogger (Blogspot)
 

@@ -2,6 +2,7 @@
 layout: docs
 title: Enki
 prev_section: drupal7
+link_source:  enki
 next_section: google_reader
 permalink: /docs/enki/
 ---

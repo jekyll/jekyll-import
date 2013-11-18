@@ -27,10 +27,8 @@ module JekyllImport
       cmd.command(name.to_sym) do |c|
         c.syntax "jekyll import #{name} [options]"
         importer.specify_options(c)
-        c.action do |args, options|
-          importer.require_deps
-          importer.validate(options) if importer.respond_to?(:validate)
-          importer.process(options)
+        c.action do |_, options|
+          importer.run(options)
         end
       end
     end

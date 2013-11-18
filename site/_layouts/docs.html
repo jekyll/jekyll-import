@@ -1,0 +1,29 @@
+---
+layout: default
+---
+
+  <section class="docs">
+    <div class="grid">
+
+      {% include docs_contents_mobile.html %}
+
+      <div class="unit four-fifths">
+        <article>
+          <h1>{{ page.title }}</h1>
+          {{ content }}
+          {% if page.link_source %}
+            <div class="button">
+              {% capture link_to_source %}{{ site.repository }}/blob/v{{ site.latest_release }}/lib/jekyll-import/importers/{{ page.link_source }}.rb{% endcapture %}
+              <a href="{{ link_to_source }}">View Source &rarr;</a>
+            </div>
+          {% endif %}
+          {% include section_nav.html %}
+        </article>
+      </div>
+
+      {% include docs_contents.html %}
+
+      <div class="clear"></div>
+
+    </div>
+  </section>

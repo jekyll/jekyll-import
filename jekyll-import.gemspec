@@ -99,6 +99,7 @@ Gem::Specification.new do |s|
     site/_layouts/news.html
     site/_layouts/news_item.html
     site/_posts/2013-11-09-jekyll-import-0-1-0-beta4-release.markdown
+    site/_posts/2013-11-18-jekyll-import-0-1-0-rc1-released.markdown
     site/css/gridism.css
     site/css/normalize.css
     site/css/pygments.css

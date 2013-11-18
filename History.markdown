@@ -41,6 +41,7 @@
     of MT sites (#62)
   * Fix interface of importers' `#process` method (#69)
   * RSS importer should specify `--source` option (#81)
+  * Fix fetching of parameters from options hash (#86)
 
 ### Site Enhancements
   * Add the site (#87)

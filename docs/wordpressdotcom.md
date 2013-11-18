@@ -2,7 +2,8 @@
 layout: docs
 title: WordPress.com
 prev_section: wordpress
-link_source: wordpressdotcom
+link_source:  wordpressdotcom
+next_section: third-party
 permalink: /docs/wordpressdotcom/
 ---
 

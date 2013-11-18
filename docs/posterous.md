@@ -11,7 +11,7 @@ To import your posts from [Posterous](http://movabletype.org), run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::MT.process({
+    JekyllImport::Importers::Posterous.process({
       "email"     => "myemail",
       "password"  => "mypassword",
       "api_token" => "mytoken"

@@ -95,6 +95,9 @@ EOF
           slug = title.strip.downcase.gsub(/(&|&amp;)/, ' and ').gsub(/[\s\.\/\\]/, '-').gsub(/[^\w-]/, '').gsub(/[-_]{2,}/, '-').gsub(/^[-_]/, '').gsub(/[-_]$/, '')
           name = time.strftime("%Y-%m-%d-") + slug + '.md'
 
+          # In 1.9.3, the default yamler won't handle 8-bit ASCII properly
+          YAML::ENGINE.yamler = 'syck'
+
           # Get the relevant fields as a hash, delete empty fields and convert
           # to YAML for the header
           data = {

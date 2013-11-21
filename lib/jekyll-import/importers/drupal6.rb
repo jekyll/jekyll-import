@@ -108,7 +108,7 @@ EOF
 
           # Write out the data and content to file
           File.open("#{dir}/#{name}", "w") do |f|
-            f.puts data
+            f.puts YAML.dump(data)
             f.puts "---"
             f.puts content
           end

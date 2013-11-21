@@ -87,7 +87,7 @@ EOF
           node_id = post[:nid]
           title = post[:title]
           content = post[:body]
-          tags = post.fetch(:tags, '').downcase.strip
+          tags = (post[:tags] || '').downcase.strip
           created = post[:created]
           time = Time.at(created)
           is_published = post[:status] == 1

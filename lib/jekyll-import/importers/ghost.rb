@@ -24,7 +24,7 @@ module JekyllImport
       end
 
       def self.process(options)
-        dbfile = options.fetch('dbfile')
+        dbfile = options.fetch('dbfile', 'ghost.db')
         db = Sequel.sqlite(dbfile)
         db.test_connection
 

@@ -30,9 +30,7 @@ module JekyllImport
 
         FileUtils.mkdir_p("_posts")
 
-        # Reads a MySQL database via Sequel and creates a post file for each
-        # post in wp_posts that has post_status = 'publish'. This restriction is
-        # made because 'draft' posts are not guaranteed to have valid dates.
+        # Reads a SQLite database via Sequel and creates a post file for each post
         query = "SELECT `title`, `slug`, `markdown`, `created_at`, `uuid` FROM posts WHERE status = 'draft' OR status = 'published'"
 
         db[query].each do |post|

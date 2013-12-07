@@ -34,7 +34,7 @@ module JekyllImport
 
         text = ''
         open(source) { |line| text = line.read }
-        rss = RSS::Parser.parse(text)
+        rss = ::RSS::Parser.parse(text)
 
         rss.items.each do |item|
           post_url = item.link.match('.*(/archives/.*)')[1]

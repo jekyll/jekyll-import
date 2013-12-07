@@ -44,6 +44,7 @@
   * RSS importer should specify `--source` option (#81)
   * Fix fetching of parameters from options hash (#86)
   * Drupal6: Fix NoMethodError on untagged post (#93)
+  * S9Y: Use RSS parser from `rss` package, not the RSS importer (#102)
 
 ### Site Enhancements
   * Add the site (#87)

@@ -2,11 +2,6 @@
 module JekyllImport
   module Importers
     class Ghost < Importer
-      def self.validate(options)
-        if options['dbfile'].nil?
-          abort "Missing mandatory option --dbfile."
-        end
-      end
 
       def self.specify_options(c)
         c.option 'dbfile', '--dbfile', 'Database file (default: ghost.db)'

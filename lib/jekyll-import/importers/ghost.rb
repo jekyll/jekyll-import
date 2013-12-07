@@ -51,7 +51,7 @@ module JekyllImport
         directory = draft ? "_drafts" : "_posts"
 
         # the filename under which the post is stored
-        filename = "%s/%02d-%02d-%02d-%s.markdown" % [directory, date.year, date.month, date.day, post[:slug]]
+        filename = File.join(directory, "#{date.strftime('%Y-%m-%d')}-#{post[:slug]}.markdown")
 
         # the YAML FrontMatter
         frontmatter = { 'layout' => 'post', 'title' => post[:title] }

@@ -46,6 +46,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('mysql', "~> 2.8")
   s.add_development_dependency('pg', "~> 0.12")
   s.add_development_dependency('mysql2', "~> 0.3")
+  s.add_development_dependency('behance', "~> 0.3.0")
 
   # = MANIFEST =
   s.files = %w[

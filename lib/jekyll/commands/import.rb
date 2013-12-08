@@ -35,9 +35,9 @@ module Jekyll
       end
 
       def self.process(migrator, options)
-        if IMPORTERS.keys.include?(migrator.to_s.to_sym)
-          migrator = migrator.to_s.downcase
+        migrator = migrator.to_s.downcase
 
+        if IMPORTERS.keys.include?(migrator.to_sym)
           if JekyllImport::Importers.const_defined?(IMPORTERS[migrator.to_sym])
             klass = JekyllImport::Importers.const_get(IMPORTERS[migrator.to_sym])
             klass.run(options.__hash__)

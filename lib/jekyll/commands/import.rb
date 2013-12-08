@@ -12,6 +12,7 @@ module Jekyll
         :enki => 'Enki',
         :joomla => 'Joomla',
         :jrnl => 'Jrnl',
+        :ghost => 'Ghost',
         :google_reader => 'GoogleReader',
         :marley => 'Marley',
         :mephisto => 'Mephisto',
@@ -23,7 +24,7 @@ module Jekyll
         :tumblr => 'Tumblr',
         :typo => 'Typo',
         :wordpress => 'WordPress',
-        :wordpressdotcom => 'WordpressDotCom'
+        :wordpressdotcom => 'WordpressDotCom',
       }
 
       def self.abort_on_invalid_migrator(migrator)

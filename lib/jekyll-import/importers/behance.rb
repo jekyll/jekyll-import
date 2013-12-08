@@ -31,13 +31,10 @@ module JekyllImport
       #
       # Returns nothing.
       def self.process(options)
-        validate(options)
+        user  = options.fetch('user')
+        token = options.fetch('api_token')
 
-        user  = options[:user]
-        token = options[:api_token]
-
-        client    = Behance::Client.new(access_token: token)
-        projects  = client.user_projects(user)
+        projects = fetch_projects(token, user)
 
         puts "#{projects.length} project(s) found. Importing now..."
 
@@ -69,6 +66,12 @@ module JekyllImport
         end
 
         puts "Finished importing."
+      end
+
+      private
+
+      def self.fetch_projects(token, user)
+        Behance::Client.new(access_token: token).user_projects(user)
       end
     end
   end

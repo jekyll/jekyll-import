@@ -8,7 +8,7 @@ module JekyllImport
       @subclasses ||= []
     end
 
-    def stringify_keys(hash)
+    def self.stringify_keys(hash)
       the_hash = hash.clone
       the_hash.keys.each do |key|
         the_hash[(key.to_s rescue key) || key] =  the_hash.delete(key)

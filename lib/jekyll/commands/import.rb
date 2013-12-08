@@ -6,6 +6,7 @@ module Jekyll
   module Commands
     class Import < Command
       IMPORTERS = {
+        :behance => 'Behance',
         :csv => 'CSV',
         :drupal6 => 'Drupal6',
         :drupal7 => 'Drupal7',
@@ -24,8 +25,7 @@ module Jekyll
         :tumblr => 'Tumblr',
         :typo => 'Typo',
         :wordpress => 'WordPress',
-        :wordpressdotcom => 'WordpressDotCom',
-        :behance => 'Behance'
+        :wordpressdotcom => 'WordpressDotCom'
       }
 
       def self.abort_on_invalid_migrator(migrator)

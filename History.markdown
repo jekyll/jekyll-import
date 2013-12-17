@@ -2,6 +2,7 @@
 
 ### Major Enhancements
   * Add 'Ghost' importer (#100)
+  * Add 'Behance' importer (#46, #104)
   * Add the optional ability to include images in a posterous migration (#5)
   * Posterous archive (unzipped directory) importer added (#12)
   * Improve MovableType importer (#13)

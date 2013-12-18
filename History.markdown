@@ -1,6 +1,18 @@
 ## HEAD
 
 ### Major Enhancements
+
+### Minor Enhancements
+
+### Bug Fixes
+
+### Site Enhancements
+
+### Development Fixes
+
+## 0.1.0 / 2013-12-18
+
+### Major Enhancements
   * Add 'Ghost' importer (#100)
   * Add 'Behance' importer (#46, #104)
   * Add the optional ability to include images in a posterous migration (#5)

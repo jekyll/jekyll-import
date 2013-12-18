@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.2'
 
   s.name              = 'jekyll-import'
-  s.version           = '0.1.0.rc1'
-  s.date              = '2013-11-18'
+  s.version           = '0.1.0'
+  s.date              = '2013-12-18'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."
@@ -59,10 +59,12 @@ Gem::Specification.new do |s|
     lib/jekyll-import.rb
     lib/jekyll-import/importer.rb
     lib/jekyll-import/importers.rb
+    lib/jekyll-import/importers/behance.rb
     lib/jekyll-import/importers/csv.rb
     lib/jekyll-import/importers/drupal6.rb
     lib/jekyll-import/importers/drupal7.rb
     lib/jekyll-import/importers/enki.rb
+    lib/jekyll-import/importers/ghost.rb
     lib/jekyll-import/importers/google_reader.rb
     lib/jekyll-import/importers/joomla.rb
     lib/jekyll-import/importers/jrnl.rb
@@ -101,15 +103,18 @@ Gem::Specification.new do |s|
     site/_layouts/news_item.html
     site/_posts/2013-11-09-jekyll-import-0-1-0-beta4-release.markdown
     site/_posts/2013-11-18-jekyll-import-0-1-0-rc1-released.markdown
+    site/_posts/2013-12-17-jekyll-import-0-1-0-released.markdown
     site/css/gridism.css
     site/css/normalize.css
     site/css/pygments.css
     site/css/style.css
+    site/docs/behance.md
     site/docs/contributing.md
     site/docs/csv.md
     site/docs/drupal6.md
     site/docs/drupal7.md
     site/docs/enki.md
+    site/docs/ghost.md
     site/docs/google_reader.md
     site/docs/history.md
     site/docs/index.md

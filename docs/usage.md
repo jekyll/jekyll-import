@@ -6,12 +6,13 @@ next_section: csv
 permalink: /docs/usage/
 ---
 
-You should now be all set to run the importers below. If you ever get stuck, you
-can see help for each importer:
+You should now be all set to run the importers with the following incantation:
 
 {% highlight bash %}
-$ jekyll help import           # => See list of importers
-$ jekyll help import IMPORTER  # => See importer specific help
+$ ruby -rubygems -e 'require "jekyll-import";
+    JekyllImport::Importers::MyImporter.run({
+      # options for this importer
+    })'
 {% endhighlight %}
 
 Where IMPORTER is the name of the specific importer.

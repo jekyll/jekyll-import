@@ -13,7 +13,7 @@ you need to do is install the gem, and they will become available as part of
 Jekyll's standard command line interface.
 
 {% highlight bash %}
-$ gem install jekyll-import --pre
+$ gem install jekyll-import
 {% endhighlight %}
 
 <div class="note warning">

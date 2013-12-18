@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'jekyll-import'
   s.version           = '0.1.0'
-  s.date              = '2013-12-17'
+  s.date              = '2013-12-18'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."
@@ -59,6 +59,7 @@ Gem::Specification.new do |s|
     lib/jekyll-import.rb
     lib/jekyll-import/importer.rb
     lib/jekyll-import/importers.rb
+    lib/jekyll-import/importers/behance.rb
     lib/jekyll-import/importers/csv.rb
     lib/jekyll-import/importers/drupal6.rb
     lib/jekyll-import/importers/drupal7.rb
@@ -107,6 +108,7 @@ Gem::Specification.new do |s|
     site/css/normalize.css
     site/css/pygments.css
     site/css/style.css
+    site/docs/behance.md
     site/docs/contributing.md
     site/docs/csv.md
     site/docs/drupal6.md

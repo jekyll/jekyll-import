@@ -5,6 +5,7 @@
 ### Minor Enhancements
 
 ### Bug Fixes
+  * Require YAML library in Enki importer (#112)
 
 ### Site Enhancements
 

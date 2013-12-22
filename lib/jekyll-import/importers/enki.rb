@@ -35,6 +35,7 @@ EOS
           sequel
           fileutils
           pg
+          yaml
         ])
       end
 

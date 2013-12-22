@@ -18,11 +18,11 @@ module JekyllImport
 
       def self.default_options
         {
-          :blog_id => nil,
-          :categories => true,
-          :dest_encoding => 'utf-8',
-          :src_encoding => 'utf-8',
-          :comments => false
+          'blog_id' => nil,
+          'categories' => true,
+          'dest_encoding' => 'utf-8',
+          'src_encoding' => 'utf-8',
+          'comments' => false
         }
       end
 
@@ -55,15 +55,15 @@ module JekyllImport
       #
       # Supported options are:
       #
-      # :blog_id::        Specify a single MovableType blog to export by providing blog_id.
+      # blog_id::         Specify a single MovableType blog to export by providing blog_id.
       #                   Default: nil, importer will include posts for all blogs.
-      # :categories::     If true, save the post's categories in its
+      # categories::      If true, save the post's categories in its
       #                   YAML front matter. Default: true
-      # :src_encoding::   Encoding of strings from the database. Default: UTF-8
+      # src_encoding::    Encoding of strings from the database. Default: UTF-8
       #                   If your output contains mangled characters, set src_encoding to
       #                   something appropriate for your database charset.
-      # :dest_encoding::  Encoding of output strings. Default: UTF-8
-      # :comments::       If true, output comments in _comments directory, like the one
+      # dest_encoding::   Encoding of output strings. Default: UTF-8
+      # comments::        If true, output comments in _comments directory, like the one
       #                   mentioned at https://github.com/mpalmer/jekyll-static-comments/
       def self.process(options)
         options  = default_options.merge(options)
@@ -82,7 +82,7 @@ module JekyllImport
         FileUtils.mkdir_p "_posts"
 
         posts = db[:mt_entry]
-        posts = posts.filter(:entry_blog_id => options[:blog_id]) if options[:blog_id]
+        posts = posts.filter(:entry_blog_id => options['blog_id']) if options['blog_id']
         posts.each do |post|
           categories = post_categories.filter(
             :mt_placement__placement_entry_id => post[:entry_id]
@@ -91,7 +91,7 @@ module JekyllImport
           file_name = post_file_name(post, options)
 
           data = post_metadata(post, options)
-          data['categories'] = categories if !categories.empty? && options[:categories]
+          data['categories'] = categories if !categories.empty? && options['categories']
           yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
           # save post path for comment processing
@@ -208,7 +208,7 @@ module JekyllImport
 
       def self.encode(str, options = default_options)
         if str.respond_to?(:encoding)
-          str.encode(options[:dest_encoding], options[:src_encoding])
+          str.encode(options['dest_encoding'], options['src_encoding'])
         else
           str
         end

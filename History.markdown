@@ -6,6 +6,7 @@
 
 ### Bug Fixes
   * Require YAML library in Enki importer (#112)
+  * Fix !ruby/string:Sequel::SQL::Blob error in MT excerpts (#113)
 
 ### Site Enhancements
 

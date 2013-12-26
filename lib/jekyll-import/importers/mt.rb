@@ -104,7 +104,7 @@ module JekyllImport
           'layout' => 'post',
           'title' => encode(post[:entry_title], options),
           'date' => post_date(post).strftime("%Y-%m-%d %H:%M:%S %z"),
-          'excerpt' => encode(post[:entry_excerpt], options),
+          'excerpt' => encode(post[:entry_excerpt].to_s, options),
           'mt_id' => post[:entry_id]
         }
         metadata['published'] = false if post[:entry_status] != STATUS_PUBLISHED

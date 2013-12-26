@@ -18,10 +18,11 @@ module JekyllImport
 
       def self.default_options
         {
-          :blog_id => nil,
-          :categories => true,
-          :dest_encoding => 'utf-8',
-          :src_encoding => 'utf-8'
+          'blog_id' => nil,
+          'categories' => true,
+          'dest_encoding' => 'utf-8',
+          'src_encoding' => 'utf-8',
+          'comments' => false
         }
       end
 
@@ -54,21 +55,26 @@ module JekyllImport
       #
       # Supported options are:
       #
-      # :blog_id::        Specify a single MovableType blog to export by providing blog_id.
+      # blog_id::         Specify a single MovableType blog to export by providing blog_id.
       #                   Default: nil, importer will include posts for all blogs.
-      # :categories::     If true, save the post's categories in its
+      # categories::      If true, save the post's categories in its
       #                   YAML front matter. Default: true
-      # :src_encoding::   Encoding of strings from the database. Default: UTF-8
+      # src_encoding::    Encoding of strings from the database. Default: UTF-8
       #                   If your output contains mangled characters, set src_encoding to
       #                   something appropriate for your database charset.
-      # :dest_encoding::  Encoding of output strings. Default: UTF-8
+      # dest_encoding::   Encoding of output strings. Default: UTF-8
+      # comments::        If true, output comments in _comments directory, like the one
+      #                   mentioned at https://github.com/mpalmer/jekyll-static-comments/
       def self.process(options)
-        dbname = options.fetch('dbname')
-        user   = options.fetch('user')
-        pass   = options.fetch('password', "")
-        host   = options.fetch('host', "localhost")
+        options  = default_options.merge(options)
 
-        options = default_options.merge(options)
+        dbname   = options.fetch('dbname')
+        user     = options.fetch('user')
+        pass     = options.fetch('password', "")
+        host     = options.fetch('host', "localhost")
+        comments = options.fetch('comments')
+
+        posts_name_by_id = { } if comments
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host)
         post_categories = db[:mt_placement].join(:mt_category, :category_id => :placement_category_id)
@@ -76,7 +82,7 @@ module JekyllImport
         FileUtils.mkdir_p "_posts"
 
         posts = db[:mt_entry]
-        posts = posts.filter(:entry_blog_id => options[:blog_id]) if options[:blog_id]
+        posts = posts.filter(:entry_blog_id => options['blog_id']) if options['blog_id']
         posts.each do |post|
           categories = post_categories.filter(
             :mt_placement__placement_entry_id => post[:entry_id]
@@ -85,8 +91,11 @@ module JekyllImport
           file_name = post_file_name(post, options)
 
           data = post_metadata(post, options)
-          data['categories'] = categories if !categories.empty? && options[:categories]
+          data['categories'] = categories if !categories.empty? && options['categories']
           yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+
+          # save post path for comment processing
+          posts_name_by_id[data['post_id']] = file_name if comments
 
           content = post_content(post, options)
 
@@ -96,6 +105,30 @@ module JekyllImport
             f.puts encode(content, options)
           end
         end
+
+        # process comment output, if enabled
+        if comments
+          FileUtils.mkdir_p "_comments"
+
+          comments = db[:mt_comment]
+          comments.each do |comment|
+            if posts_name_by_id.has_key?(comment[:comment_entry_id]) # if the entry exists
+              dir_name, base_name = comment_file_dir_and_base_name(posts_name_by_id, comment, options)
+              FileUtils.mkdir_p "_comments/#{dir_name}"
+
+              data = comment_metadata(comment, options)
+              content = comment_content(comment, options)
+              yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+
+              File.open("_comments/#{dir_name}/#{base_name}", "w") do |f|
+                f.puts yaml_front_matter
+                f.puts "---"
+                f.puts encode(content, options)
+              end
+            end
+          end
+        end
+
       end
 
       # Extracts metadata for YAML front matter from post
@@ -105,7 +138,10 @@ module JekyllImport
           'title' => encode(post[:entry_title], options),
           'date' => post_date(post).strftime("%Y-%m-%d %H:%M:%S %z"),
           'excerpt' => encode(post[:entry_excerpt].to_s, options),
-          'mt_id' => post[:entry_id]
+          'mt_id' => post[:entry_id],
+          'blog_id' => post[:entry_blog_id],
+          'post_id' => post[:entry_id], # for link with comments
+          'basename' => post[:entry_basename]
         }
         metadata['published'] = false if post[:entry_status] != STATUS_PUBLISHED
         metadata
@@ -137,9 +173,42 @@ module JekyllImport
         "#{date.strftime('%Y-%m-%d')}-#{slug}.#{file_ext}"
       end
 
+      # Extracts metadata for YAML front matter from comment
+      def self.comment_metadata(comment, options = default_options)
+        metadata = {
+          'layout' => 'comment',
+          'comment_id' => comment[:comment_id],
+          'post_id' => comment[:comment_entry_id],
+          'author' => encode(comment[:comment_author], options),
+          'email' => comment[:comment_email],
+          'commenter_id' => comment[:comment_commenter_id],
+          'date' => comment_date(comment).strftime("%Y-%m-%d %H:%M:%S %z"),
+          'visible' => comment[:comment_visible] == 1,
+          'ip' => comment[:comment_ip],
+          'url' => comment[:comment_url]
+        }
+        metadata
+      end
+
+      # Different versions of MT used different column names
+      def self.comment_date(comment)
+        comment[:comment_modified_on] || comment[:comment_created_on]
+      end
+
+      def self.comment_content(comment, options = default_options)
+        comment[:comment_text]
+      end
+
+      def self.comment_file_dir_and_base_name(posts_name_by_id, comment, options = default_options)
+        post_basename = posts_name_by_id[comment[:comment_entry_id]].sub(/\.\w+$/, '')
+        comment_id = comment[:comment_id]
+
+        [post_basename, "#{comment_id}.markdown"]
+      end
+
       def self.encode(str, options = default_options)
         if str.respond_to?(:encoding)
-          str.encode(options[:dest_encoding], options[:src_encoding])
+          str.encode(options['dest_encoding'], options['src_encoding'])
         else
           str
         end

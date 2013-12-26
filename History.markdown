@@ -1,6 +1,7 @@
 ## HEAD
 
 ### Major Enhancements
+  * Add comments to MovableType importer (#66)
 
 ### Minor Enhancements
 

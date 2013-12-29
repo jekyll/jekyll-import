@@ -8,6 +8,7 @@
 ### Bug Fixes
   * Require YAML library in Enki importer (#112)
   * Fix !ruby/string:Sequel::SQL::Blob error in MT excerpts (#113)
+  * Drupal6: Ensure post "tags" is "", never nil (#117)
 
 ### Site Enhancements
 

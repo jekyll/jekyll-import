@@ -128,6 +128,9 @@ module JekyllImport
             unless post["video-caption"].nil?
               content << "<br/>" + post["video-caption"]
             end
+          when "answer"
+            title = post["question"]
+            content = post["answer"]
         end
         date = Date.parse(post['date']).to_s
         title = Nokogiri::HTML(title).text
@@ -143,7 +146,7 @@ module JekyllImport
             "layout" => "post",
             "title" => title,
             "date" => Time.parse(post['date']).xmlschema,
-            "tags" => post["tags"],
+            "tags" => (post["tags"] or []),
             "tumblr_url" => post["url-with-slug"]
           },
           :content => content,

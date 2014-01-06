@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'jekyll-import'
   s.version           = '0.1.0'
-  s.date              = '2014-01-01'
+  s.date              = '2013-12-18'
   s.rubyforge_project = 'jekyll-import'
 
   s.summary     = "Import command for Jekyll (static site generator)."
@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
 
   # test dependencies:
   s.add_development_dependency('redgreen', "~> 1.2")
-  s.add_development_dependency('shoulda', "~> 3.5.0")
+  s.add_development_dependency('shoulda', "~> 3.3.2")
   s.add_development_dependency('rr', "~> 1.0")
   s.add_development_dependency('simplecov', "~> 0.7")
   s.add_development_dependency('simplecov-gem-adapter', "~> 1.0.1")

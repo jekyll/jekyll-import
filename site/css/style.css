@@ -226,11 +226,10 @@ body > footer a:hover img {
 @media (min-width: 768px){
   .quickstart .code {
     font-size: 18px;
-    margin: -30px 0;
-    float: right;
+    margin: 10px 0 30px;
   }
   .quickstart h4 {
-    margin: 50px 0 0;
+    margin: 20px 0 0;
     text-align: center;
   }
 }

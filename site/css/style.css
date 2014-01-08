@@ -220,7 +220,7 @@ body > footer a:hover img {
 .quickstart .code {
   font-size: 12px;
   display: block;
-  margin: 0 0 -30px;
+  margin: 10px 0 20px;
 }
 
 @media (min-width: 768px){

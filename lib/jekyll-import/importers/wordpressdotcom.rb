@@ -54,7 +54,7 @@ module JekyllImport
             metas[key] = value;
           end
 
-          name = "#{date.strftime('%Y-%m-%d')}-#{permalink_title}.html"
+          name = "#{date.strftime('%Y-%m-%d')}-#{permalink_title}.md"
           header = {
             'layout' => type,
             'title'  => title,

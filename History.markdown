@@ -11,6 +11,7 @@
   * Drupal6: Ensure post "tags" is "", never nil (#117)
 
 ### Site Enhancements
+  * Fixed error in quickstart code, added required design changes/reflow (#120)
 
 ### Development Fixes
 

@@ -9,6 +9,8 @@
   * Require YAML library in Enki importer (#112)
   * Fix !ruby/string:Sequel::SQL::Blob error in MT excerpts (#113)
   * Drupal6: Ensure post "tags" is "", never nil (#117)
+  * Fixes a bug where the Tumblr importer would write posts with `nil`
+    content (#118)
 
 ### Site Enhancements
   * Fixed error in quickstart code, added required design changes/reflow (#120)

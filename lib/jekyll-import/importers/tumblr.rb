@@ -68,13 +68,16 @@ module JekyllImport
       # Writes a post out to disk
       def self.write_post(post, use_markdown, add_highlights)
         content = post[:content]
-        if use_markdown
-          content = html_to_markdown content
-          content = add_syntax_highlights content if add_highlights
-        end
 
-        File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
-          f.puts post[:header].to_yaml + "---\n" + content
+        if content
+          if use_markdown
+            content = html_to_markdown content
+            content = add_syntax_highlights content if add_highlights
+          end
+  
+          File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
+            f.puts post[:header].to_yaml + "---\n" + content
+          end
         end
       end
 
@@ -125,6 +128,9 @@ module JekyllImport
             unless post["video-caption"].nil?
               content << "<br/>" + post["video-caption"]
             end
+          when "answer"
+            title = post["question"]
+            content = post["answer"]
         end
         date = Date.parse(post['date']).to_s
         title = Nokogiri::HTML(title).text
@@ -140,7 +146,7 @@ module JekyllImport
             "layout" => "post",
             "title" => title,
             "date" => Time.parse(post['date']).xmlschema,
-            "tags" => post["tags"],
+            "tags" => (post["tags"] or []),
             "tumblr_url" => post["url-with-slug"]
           },
           :content => content,

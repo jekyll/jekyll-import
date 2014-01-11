@@ -14,6 +14,7 @@
 
 ### Site Enhancements
   * Fixed error in quickstart code, added required design changes/reflow (#120)
+  * Fix example parameter names for Tumblr importer (#122)
 
 ### Development Fixes
 

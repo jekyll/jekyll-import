@@ -165,8 +165,12 @@ namespace :site do
           file.write(converted_history(history_file))
         end
       end
-      sh "git add site/docs/history.md"
-      sh "git commit -m 'Updated generated history.md file in the site.'"
+      unless `git diff site/docs/history.md`.strip.empty?
+        sh "git add site/docs/history.md"
+        sh "git commit -m 'Updated generated history.md file in the site.'"
+      else
+        puts "No updates to commit at this time. Skipping..."
+      end
     else
       abort "You seem to have misplaced your History.markdown file. I can haz?"
     end

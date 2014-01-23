@@ -6,6 +6,7 @@ require 'colorator'
 
 require 'jekyll-import/importer'
 require 'jekyll-import/importers'
+require 'jekyll-import/util'
 
 module JekyllImport
   VERSION = '0.1.0'

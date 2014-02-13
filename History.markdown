@@ -15,6 +15,8 @@
 ### Site Enhancements
   * Fixed error in quickstart code, added required design changes/reflow (#120)
   * Fix example parameter names for Tumblr importer (#122)
+  * Add note to WordPress installer docs page that indicates what the importer
+    does and doesn't do. (#127)
 
 ### Development Fixes
 

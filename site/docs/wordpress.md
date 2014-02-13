@@ -7,8 +7,6 @@ next_section: wordpressdotcom
 permalink: /docs/wordpress/
 ---
 
-This importer only converts your posts and creates YAML front-matter. It does not import any layouts, styling, or external files (images, CSS, etc.).
-
 To import your posts from a self-hosted [WordPress](http://wordpress.org)
 installation, run:
 
@@ -31,3 +29,12 @@ $ ruby -rubygems -e 'require "jekyll-import";
 {% endhighlight %}
 
 None of the fields are required. Their defaults are as you see above.
+
+<div class="note info">
+  <h5>This only imports post &amp; page data &amp; content</h5>
+  <p>
+    This importer only converts your posts and creates YAML front-matter.
+    It does not import any layouts, styling, or external files
+    (images, CSS, etc.).
+  </p>
+</div>

@@ -7,6 +7,8 @@ next_section: wordpressdotcom
 permalink: /docs/wordpress/
 ---
 
+This importer only converts your posts and creates YAML front-matter. It does not import any layouts, styling, or external files (images, CSS, etc.).
+
 To import your posts from a self-hosted [WordPress](http://wordpress.org)
 installation, run:
 

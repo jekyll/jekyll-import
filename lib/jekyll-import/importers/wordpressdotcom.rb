@@ -71,7 +71,7 @@ module JekyllImport
             File.open("_#{type}s/#{name}", "w") do |f|
               f.puts header.to_yaml
               f.puts '---'
-              f.puts item.at('content:encoded').inner_text
+              f.puts Util.wpautop(item.at('content:encoded').inner_text)
             end
           rescue => e
             puts "Couldn't import post!"

@@ -286,7 +286,7 @@ module JekyllImport
         File.open("_posts/#{name}", "w") do |f|
           f.puts data
           f.puts "---"
-          f.puts content
+          f.puts Util.wpautop(content)
         end
       end
 

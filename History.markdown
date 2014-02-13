@@ -2,6 +2,7 @@
 
 ### Major Enhancements
   * Add comments to MovableType importer (#66)
+  * Support auto-paragraph Wordpress convention (#125)
 
 ### Minor Enhancements
 

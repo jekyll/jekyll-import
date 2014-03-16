@@ -5,6 +5,7 @@
   * Support auto-paragraph Wordpress convention (#125)
 
 ### Minor Enhancements
+  * Extract author info from wordpress XML files (#131)
 
 ### Bug Fixes
   * Require YAML library in Enki importer (#112)

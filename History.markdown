@@ -1,6 +1,18 @@
 ## HEAD
 
 ### Major Enhancements
+
+### Minor Enhancements
+
+### Bug Fixes
+
+### Site Enhancements
+
+### Development Fixes
+
+## 0.2.0 / 2014-03-16
+
+### Major Enhancements
   * Add comments to MovableType importer (#66)
   * Support auto-paragraph Wordpress convention (#125)
 

@@ -1,9 +1,36 @@
 ---
 layout: docs
 title: History
-permalink: /docs/history/
+permalink: "/docs/history/"
 prev_section: contributing
 ---
+
+## 0.2.0 / 2014-03-16
+
+### Major Enhancements
+- Add comments to MovableType importer ([#66]({{ site.repository }}/issues/66))
+- Support auto-paragraph Wordpress convention ([#125]({{ site.repository }}/issues/125))
+
+### Minor Enhancements
+- Extract author info from wordpress XML files ([#131]({{ site.repository }}/issues/131))
+
+### Bug Fixes
+- Require YAML library in Enki importer ([#112]({{ site.repository }}/issues/112))
+- Fix !ruby/string:Sequel::SQL::Blob error in MT excerpts ([#113]({{ site.repository }}/issues/113))
+- Drupal6: Ensure post "tags" is "", never nil ([#117]({{ site.repository }}/issues/117))
+- Fixes a bug where the Tumblr importer would write posts with `nil`
+    content ([#118]({{ site.repository }}/issues/118))
+- Change Drupal7 layout to `post` rather than `default` ([#124]({{ site.repository }}/issues/124))
+- WordPress: Use explicit `#to_s` when outputting post dates ([#129]({{ site.repository }}/issues/129))
+
+### Site Enhancements
+- Fixed error in quickstart code, added required design changes/reflow ([#120]({{ site.repository }}/issues/120))
+- Fix example parameter names for Tumblr importer ([#122]({{ site.repository }}/issues/122))
+- Add note to WordPress installer docs page that indicates what the importer
+    does and doesn't do. ([#127]({{ site.repository }}/issues/127))
+
+### Development Fixes
+- Bring gemspec into the 2010's ([#130]({{ site.repository }}/issues/130))
 
 ## 0.1.0 / 2013-12-18
 

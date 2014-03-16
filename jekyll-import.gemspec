@@ -29,10 +29,9 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[README.markdown LICENSE]
 
   # runtime dependencies
-  s.add_runtime_dependency('jekyll', '~> 1.3')
+  s.add_runtime_dependency('jekyll', '~> 1.4')
   s.add_runtime_dependency('fastercsv')
   s.add_runtime_dependency('nokogiri')
-  s.add_runtime_dependency('safe_yaml', '~> 0.9.7')
 
   # development dependencies
   s.add_development_dependency('rake', "~> 10.1.0")
@@ -53,7 +52,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('mysql', "~> 2.8")
   s.add_development_dependency('pg', "~> 0.12")
   s.add_development_dependency('mysql2', "~> 0.3")
-  s.add_development_dependency('behance', "~> 0.3.0")
+  s.add_development_dependency('behance', "~> 0.3")
 
   # site dependencies:
   s.add_development_dependency('launchy', '~> 2.4')

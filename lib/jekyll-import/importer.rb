@@ -17,10 +17,10 @@ module JekyllImport
     end
 
     def self.run(options = {})
-      options = stringify_keys(options)
+      opts = stringify_keys(options)
       self.require_deps
-      self.validate(options) if self.respond_to?(:validate)
-      self.process(options)
+      self.validate(opts) if self.respond_to?(:validate)
+      self.process(opts)
     end
   end
 end

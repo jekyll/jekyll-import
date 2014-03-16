@@ -14,6 +14,7 @@
   * Fixes a bug where the Tumblr importer would write posts with `nil`
     content (#118)
   * Change Drupal7 layout to `post` rather than `default` (#124)
+  * WordPress: Use explicit `#to_s` when outputting post dates (#129)
 
 ### Site Enhancements
   * Fixed error in quickstart code, added required design changes/reflow (#120)

@@ -26,6 +26,19 @@ module JekyllImport
         import_count = Hash.new(0)
         doc = Hpricot::XML(File.read(source))
 
+        # Fetch authors data from header
+        authors = Hash[
+          (doc/:channel/'wp:author').map do |author|
+          [author.at("wp:author_login").inner_text.strip, {
+            "login" => author.at("wp:author_login").inner_text.strip,
+            "email" => author.at("wp:author_email").inner_text,
+            "display_name" => author.at("wp:author_display_name").inner_text,
+            "first_name" => author.at("wp:author_first_name").inner_text,
+            "last_name" => author.at("wp:author_last_name").inner_text
+          }]
+          end
+        ] rescue {}
+
         (doc/:channel/:item).each do |item|
           title = item.at(:title).inner_text.strip
           permalink_title = item.at('wp:post_name').inner_text
@@ -51,8 +64,10 @@ module JekyllImport
           item.search("wp:postmeta").each do |meta|
             key = meta.at('wp:meta_key').inner_text
             value = meta.at('wp:meta_value').inner_text
-            metas[key] = value;
+            metas[key] = value
           end
+
+          author_login = item.at('dc:creator').inner_text.strip
 
           name = "#{date.strftime('%Y-%m-%d')}-#{permalink_title}.html"
           header = {
@@ -63,7 +78,8 @@ module JekyllImport
             'status'   => status,
             'type'   => type,
             'published' => published,
-            'meta'   => metas
+            'meta'   => metas,
+            'author' => authors[author_login]
           }
 
           begin

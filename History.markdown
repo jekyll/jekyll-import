@@ -20,6 +20,7 @@
     does and doesn't do. (#127)
 
 ### Development Fixes
+  * Bring gemspec into the 2010's (#130)
 
 ## 0.1.0 / 2013-12-18
 

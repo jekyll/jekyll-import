@@ -9,8 +9,6 @@ require 'jekyll-import/importers'
 require 'jekyll-import/util'
 
 module JekyllImport
-  VERSION = '0.1.0'
-
   def self.logger
     @logger ||= Jekyll::Stevenson.new
   end
@@ -26,7 +24,7 @@ module JekyllImport
       name = importer.to_s.split("::").last.downcase
       commands << name
       cmd.command(name.to_sym) do |c|
-        c.syntax "jekyll import #{name} [options]"
+        c.syntax "#{name} [options]"
         importer.specify_options(c)
         c.action do |_, options|
           importer.run(options)

@@ -27,7 +27,7 @@ module JekyllImport
 
           unless start
             pee += pee_part
-            continue
+            next
           end
 
           name = "<pre wp-pre-tag-#{i}></pre>"

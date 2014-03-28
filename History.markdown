@@ -6,6 +6,8 @@
 
 ### Bug Fixes
 
+  * Replace errant `continue` expression with the valid `next` expression (#133)
+
 ### Site Enhancements
 
 ### Development Fixes

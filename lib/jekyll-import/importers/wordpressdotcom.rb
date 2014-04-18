@@ -13,19 +13,25 @@ module JekyllImport
           safe_yaml
           hpricot
           time
+          open-uri
         ])
       end
 
       def self.specify_options(c)
         c.option 'source', '--source FILE', 'WordPress export XML file (default: "wordpress.xml")'
+        c.option 'no_fetch_images', '--no-fetch-images', 'Do not fetch the images referenced in the posts'
+        c.option 'assets_folder', '--assets_folder FOLDER', 'Folder where assets such as images will be downloaded to (default: assets)'
       end
 
       def self.process(options)
-        source = options.fetch('source', "wordpress.xml")
+        source        = options.fetch('source', "wordpress.xml")
+        no_fetch      = options.fetch('no_fetch_images', false)
+        assets_folder = options.fetch('assets_folder', 'assets')
+        FileUtils.mkdir_p(assets_folder)
 
         import_count = Hash.new(0)
         doc = Hpricot::XML(File.read(source))
-
+        puts (doc/"channel>link").inner_text
         # Fetch authors data from header
         authors = Hash[
           (doc/:channel/'wp:author').map do |author|
@@ -83,11 +89,36 @@ module JekyllImport
           }
 
           begin
+            content = Hpricot(item.at('content:encoded').inner_text)
+            images = (content/"img")
+            if images.length > 0
+              puts "Images in " + title
+            end
+            images.each do |i|
+              uri = i["src"]
+
+              i["src"] = assets_folder + "/" + File.basename(uri)
+              dst = File.join(assets_folder, File.basename(uri))
+              if File.exist?(dst)
+                puts dst + " already in cache"
+                next
+              end
+              puts "Downloading " + uri
+              open(uri) {|f|
+                File.open(dst, "wb") do |out|
+                  out.puts f.read
+                end
+              }
+            end
+
+            (content/"pre").each do |pre|
+              pre["class"] = 'prettyprint'
+            end
             FileUtils.mkdir_p "_#{type}s"
             File.open("_#{type}s/#{name}", "w") do |f|
               f.puts header.to_yaml
               f.puts '---'
-              f.puts Util.wpautop(item.at('content:encoded').inner_text)
+              f.puts Util.wpautop(content.to_html)
             end
           rescue => e
             puts "Couldn't import post!"

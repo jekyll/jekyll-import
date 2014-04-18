@@ -23,6 +23,36 @@ module JekyllImport
         c.option 'assets_folder', '--assets_folder FOLDER', 'Folder where assets such as images will be downloaded to (default: assets)'
       end
 
+      # Will modify post DOM tree
+      def self.download_images(title, post_hpricot, assets_folder)
+        images = (post_hpricot/"img")
+        if images.length == 0
+          return
+        end
+        puts "Downloading images for " + title
+        images.each do |i|
+          uri = i["src"]
+
+          i["src"] = assets_folder + "/" + File.basename(uri)
+          dst = File.join(assets_folder, File.basename(uri))
+          puts "  " + uri
+          if File.exist?(dst)
+            puts "    Already in cache. Clean assets folder if you want a redownload."
+            next
+          end
+          begin
+            open(uri) {|f|
+              File.open(dst, "wb") do |out|
+                out.puts f.read
+              end
+            }
+            puts "    OK!"
+          rescue => e
+            puts "    Errorr: #{e.message}"
+          end
+        end
+      end
+
       def self.process(options)
         source        = options.fetch('source', "wordpress.xml")
         no_fetch      = options.fetch('no_fetch_images', false)
@@ -31,7 +61,6 @@ module JekyllImport
 
         import_count = Hash.new(0)
         doc = Hpricot::XML(File.read(source))
-        puts (doc/"channel>link").inner_text
         # Fetch authors data from header
         authors = Hash[
           (doc/:channel/'wp:author').map do |author|
@@ -90,25 +119,9 @@ module JekyllImport
 
           begin
             content = Hpricot(item.at('content:encoded').inner_text)
-            images = (content/"img")
-            if images.length > 0
-              puts "Images in " + title
-            end
-            images.each do |i|
-              uri = i["src"]
 
-              i["src"] = assets_folder + "/" + File.basename(uri)
-              dst = File.join(assets_folder, File.basename(uri))
-              if File.exist?(dst)
-                puts dst + " already in cache"
-                next
-              end
-              puts "Downloading " + uri
-              open(uri) {|f|
-                File.open(dst, "wb") do |out|
-                  out.puts f.read
-                end
-              }
+            if !no_fetch
+              download_images(title, content, assets_folder)
             end
 
             (content/"pre").each do |pre|

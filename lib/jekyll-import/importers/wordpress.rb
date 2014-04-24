@@ -106,9 +106,9 @@ module JekyllImport
 
         px = options[:table_prefix]
 
-        page_title_list = {}
+        page_name_list = {}
 
-        page_title_query = "
+        page_name_query = "
            SELECT
              posts.ID            AS `id`,
              posts.post_title    AS `title`,
@@ -117,11 +117,11 @@ module JekyllImport
            FROM #{px}posts AS `posts`
            WHERE posts.post_type = 'page'"
 
-        db[page_title_query].each do |page|
+        db[page_name_query].each do |page|
           if !page[:slug] or page[:slug].empty?
             page[:slug] = sluggify(page[:title])
           end
-          page_title_list[ page[:id] ] = {
+          page_name_list[ page[:id] ] = {
             :slug   => page[:slug],
             :parent => page[:parent]
           }
@@ -160,12 +160,12 @@ module JekyllImport
         end
 
         db[posts_query].each do |post|
-          process_post(post, db, options, page_title_list)
+          process_post(post, db, options, page_name_list)
         end
       end
 
 
-      def self.process_post(post, db, options, page_title_list)
+      def self.process_post(post, db, options, page_name_list)
         px = options[:table_prefix]
 
         title = post[:title]
@@ -307,7 +307,7 @@ module JekyllImport
         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
         if post[:type] == 'page'
-          filename = parent_path(post[:id], page_title_list) << 'index.markdown'
+          filename = parent_path(post[:id], page_name_list) << 'index.markdown'
           FileUtils.mkdir_p(File.dirname(filename))
         else
           filename = "_posts/#{name}"
@@ -349,10 +349,10 @@ module JekyllImport
         title.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
       end
 
-      def self.parent_path( page_id, page_title_list )
+      def self.parent_path( page_id, page_name_list )
         path = ''
-        if page_title_list.key?(page_id)
-          path = parent_path(page_title_list[page_id][:parent],page_title_list) << page_title_list[page_id][:slug] << '/'
+        if page_name_list.key?(page_id)
+          path = parent_path(page_name_list[page_id][:parent],page_name_list) << page_name_list[page_id][:slug] << '/'
         end
         return path
       end

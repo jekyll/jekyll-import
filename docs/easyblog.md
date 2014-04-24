@@ -22,4 +22,4 @@ $ ruby -rubygems -e 'require "jekyll-import";
 
 The only required fields are `dbname` and `user`. `password` defaults to `""`,
 `host` defaults to `"localhost"`
-defaults to `"jos_"`. This will export all articles (in any state). Category and tags will be included in export.
+`prefix` defaults to `"jos_"`. This will export all articles (in any state). Category and tags will be included in export.

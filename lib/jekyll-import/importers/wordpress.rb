@@ -134,7 +134,6 @@ module JekyllImport
              posts.post_type     AS `type`,
              posts.post_status   AS `status`,
              posts.post_title    AS `title`,
-             posts.post_parent   AS `parent`,
              posts.post_name     AS `slug`,
              posts.post_date     AS `date`,
              posts.post_date_gmt AS `date_gmt`,
@@ -307,7 +306,7 @@ module JekyllImport
         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
         if post[:type] == 'page'
-          filename = parent_path(post[:id], page_name_list) << 'index.markdown'
+          filename = page_path(post[:id], page_name_list) << 'index.markdown'
           FileUtils.mkdir_p(File.dirname(filename))
         else
           filename = "_posts/#{name}"
@@ -349,10 +348,10 @@ module JekyllImport
         title.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
       end
 
-      def self.parent_path( page_id, page_name_list )
+      def self.page_path( page_id, page_name_list )
         path = ''
         if page_name_list.key?(page_id)
-          path = parent_path(page_name_list[page_id][:parent],page_name_list) << page_name_list[page_id][:slug] << '/'
+          path = page_path(page_name_list[page_id][:parent],page_name_list) << page_name_list[page_id][:slug] << '/'
         end
         return path
       end

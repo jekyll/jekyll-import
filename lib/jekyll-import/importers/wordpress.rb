@@ -106,6 +106,27 @@ module JekyllImport
 
         px = options[:table_prefix]
 
+        page_title_list = {}
+
+        page_title_query = "
+           SELECT
+             posts.ID            AS `id`,
+             posts.post_title    AS `title`,
+             posts.post_name     AS `slug`,
+             posts.post_parent   AS `parent`
+           FROM #{px}posts AS `posts`
+           WHERE posts.post_type = 'page'"
+
+        db[page_title_query].each do |page|
+          if !page[:slug] or page[:slug].empty?
+            page[:slug] = sluggify(page[:title])
+          end
+          page_title_list[ page[:id] ] = {
+            :slug   => page[:slug],
+            :parent => page[:parent]
+          }
+        end
+
         posts_query = "
            SELECT
              posts.ID            AS `id`,
@@ -113,6 +134,7 @@ module JekyllImport
              posts.post_type     AS `type`,
              posts.post_status   AS `status`,
              posts.post_title    AS `title`,
+             posts.post_parent   AS `parent`,
              posts.post_name     AS `slug`,
              posts.post_date     AS `date`,
              posts.post_date_gmt AS `date_gmt`,
@@ -138,12 +160,12 @@ module JekyllImport
         end
 
         db[posts_query].each do |post|
-          process_post(post, db, options)
+          process_post(post, db, options, page_title_list)
         end
       end
 
 
-      def self.process_post(post, db, options)
+      def self.process_post(post, db, options, page_title_list)
         px = options[:table_prefix]
 
         title = post[:title]
@@ -284,8 +306,15 @@ module JekyllImport
           'comments'      => options[:comments] ? comments : nil,
         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
+        if post[:type] == 'page'
+          filename = parent_path(post[:id], page_title_list) << 'index.markdown'
+          FileUtils.mkdir_p(File.dirname(filename))
+        else
+          filename = "_posts/#{name}"
+        end
+
         # Write out the data and content to file
-        File.open("_posts/#{name}", "w") do |f|
+        File.open(filename, "w") do |f|
           f.puts data
           f.puts "---"
           f.puts Util.wpautop(content)
@@ -318,6 +347,14 @@ module JekyllImport
           STDERR.puts "Could not require 'unidecode'. If your post titles have non-ASCII characters, you could get nicer permalinks by installing unidecode."
         end
         title.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
+      end
+
+      def self.parent_path( page_id, page_title_list )
+        path = ''
+        if page_title_list.key?(page_id)
+          path = parent_path(page_title_list[page_id][:parent],page_title_list) << page_title_list[page_id][:slug] << '/'
+        end
+        return path
       end
 
     end

@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Enki
-prev_section: drupal7
+prev_section: easyblog
 link_source:  enki
 next_section: ghost
 permalink: /docs/enki/

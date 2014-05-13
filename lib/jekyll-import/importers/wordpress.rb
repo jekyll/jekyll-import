@@ -269,7 +269,12 @@ module JekyllImport
           'status'        => post[:status].to_s,
           'published'     => (post[:status].to_s == "publish"),
           'title'         => title.to_s,
-          'author'        => post[:author].to_s,
+          'author'        => {
+            'display_name'=> post[:author].to_s,
+            'login'       => post[:author_login].to_s,
+            'email'       => post[:author_email].to_s,
+            'url'  => post[:author_url].to_s,
+          },
           'author_login'  => post[:author_login].to_s,
           'author_email'  => post[:author_email].to_s,
           'author_url'    => post[:author_url].to_s,

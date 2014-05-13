@@ -4,6 +4,8 @@
 
 ### Minor Enhancements
 
+  * Import WordPress.org `author` data as hash (#139)
+
 ### Bug Fixes
 
   * Replace errant `continue` expression with the valid `next` expression (#133)

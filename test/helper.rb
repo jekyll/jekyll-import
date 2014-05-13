@@ -1,11 +1,10 @@
-if RUBY_VERSION > '1.9' && ENV["COVERAGE"] == "true"
+if ENV["COVERAGE"] == "true"
   require 'simplecov'
   require 'simplecov-gem-adapter'
   SimpleCov.start('gem')
 end
 
 require 'test/unit'
-require 'redgreen' if RUBY_VERSION < '1.9'
 require 'shoulda'
 require 'rr'
 
@@ -15,14 +14,14 @@ unless defined?(Test::Unit::AssertionFailedError)
   end
 end
 
-Dir.glob(File.expand_path('../../lib/*.rb', __FILE__)).each do |f|
-  require f
-end
+require File.expand_path('../../lib/jekyll-import.rb', __FILE__)
 
 include JekyllImport
 
+JekyllImport::Importer.subclasses.each(&:require_deps)
+
 # Send STDERR into the void to suppress program output messages
-STDERR.reopen(test(?e, '/dev/null') ? '/dev/null' : 'NUL:')
+#STDERR.reopen(test(?e, '/dev/null') ? '/dev/null' : 'NUL:')
 
 class Test::Unit::TestCase
   include RR::Adapters::TestUnit

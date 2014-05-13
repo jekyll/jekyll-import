@@ -17,6 +17,7 @@ module JekyllImport
           sequel
           fileutils
           safe_yaml
+          unidecode
         ])
       end
 
@@ -316,13 +317,7 @@ module JekyllImport
 
 
       def self.sluggify( title )
-        begin
-          require 'unidecode'
-          title = title.to_ascii
-        rescue LoadError
-          STDERR.puts "Could not require 'unidecode'. If your post titles have non-ASCII characters, you could get nicer permalinks by installing unidecode."
-        end
-        title.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
+        title = title.to_ascii.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
       end
 
     end

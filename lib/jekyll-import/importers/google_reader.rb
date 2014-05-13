@@ -1,7 +1,3 @@
-# Usage:
-#   (Local file)
-#   ruby -r 'jekyll/jekyll-import/rss' -e "JekyllImport::GoogleReader.process(:source => './somefile/on/your/computer.xml')"
-
 module JekyllImport
   module Importers
     class GoogleReader < Importer
@@ -21,7 +17,7 @@ module JekyllImport
           rss
           fileutils
           safe_yaml
-          open-url
+          open-uri
           rexml/document
           date
         ])

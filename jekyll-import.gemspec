@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
 
   # test dependencies:
   s.add_development_dependency('redgreen', "~> 1.2")
-  s.add_development_dependency('shoulda', "~> 3.3.2")
+  s.add_development_dependency('shoulda', "~> 3.5")
   s.add_development_dependency('rr', "~> 1.0")
   s.add_development_dependency('simplecov', "~> 0.7")
   s.add_development_dependency('simplecov-gem-adapter', "~> 1.0.1")
@@ -53,6 +53,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('pg', "~> 0.12")
   s.add_development_dependency('mysql2', "~> 0.3")
   s.add_development_dependency('behance', "~> 0.3")
+  s.add_development_dependency('unidecode')
 
   # site dependencies:
   s.add_development_dependency('launchy', '~> 2.4')

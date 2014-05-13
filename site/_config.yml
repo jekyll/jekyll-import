@@ -4,4 +4,4 @@ relative_permalinks: false
 permalink: /news/:year/:month/:day/:title/
 excerpt_separator: ""
 repository: https://github.com/jekyll/jekyll-import
-latest_release: 0.1.0.beta4
+latest_release: 0.2.0

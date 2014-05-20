@@ -5,6 +5,7 @@
 ### Minor Enhancements
 
   * Import WordPress.org `author` data as hash (#139)
+  * Add `socket` option to the WordPress importer (#140)
 
 ### Bug Fixes
 

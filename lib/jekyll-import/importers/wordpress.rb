@@ -23,6 +23,7 @@ module JekyllImport
 
       def self.specify_options(c)
         c.option 'dbname', '--dbname DB', 'Database name (default: "")'
+        c.option 'socket', '--socket SOCKET', 'Database socket (default: "")'
         c.option 'user', '--user USER', 'Database user name (default: "")'
         c.option 'password', '--password PW', "Database user's password (default: "")"
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
@@ -42,6 +43,7 @@ module JekyllImport
       # user::    The database user name
       # pass::    The database user's password
       # host::    The address of the MySQL database host. Default: 'localhost'
+      # socket::  The database socket's path
       # options:: A hash table of configuration options.
       #
       # Supported options are:
@@ -79,6 +81,7 @@ module JekyllImport
           :user           => opts.fetch('user', ''),
           :pass           => opts.fetch('password', ''),
           :host           => opts.fetch('host', 'localhost'),
+          :socket         => opts.fetch('socket', ''),
           :dbname         => opts.fetch('dbname', ''),
           :table_prefix   => opts.fetch('prefix', 'wp_'),
           :clean_entities => opts.fetch('clean_entities', true),
@@ -103,7 +106,7 @@ module JekyllImport
         FileUtils.mkdir_p("_posts")
 
         db = Sequel.mysql2(options[:dbname], :user => options[:user], :password => options[:pass],
-                          :host => options[:host], :encoding => 'utf8')
+                          :socket => options[:socket], :host => options[:host], :encoding => 'utf8')
 
         px = options[:table_prefix]
 

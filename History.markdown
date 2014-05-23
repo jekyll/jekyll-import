@@ -7,6 +7,7 @@
   * Import WordPress.org `author` data as hash (#139)
   * Add `socket` option to the WordPress importer (#140)
   * Allow the CSV importer to skip writing front matter (#143)
+  * WordPress.com: Download images locally and update links to them (#134)
 
 ### Bug Fixes
 

@@ -6,6 +6,7 @@
 
   * Import WordPress.org `author` data as hash (#139)
   * Add `socket` option to the WordPress importer (#140)
+  * Allow the CSV importer to skip writing front matter (#143)
 
 ### Bug Fixes
 

@@ -12,11 +12,14 @@ To import your posts from a [WordPress.com](http://wordpress.com) blog, run:
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::WordpressDotCom.run({
-      "source" => "wordpress.xml"
+      "source" => "wordpress.xml",
+      "no_fetch_images" => false,
+      "assets_folder" => "assets"
     })'
 {% endhighlight %}
 
-The `source` field is not required. Its default is what you see above.
+The `source`, `no_fetch_images`, and `assets_folder` fields are not required.
+Their default values are what you see above.
 
 <div class="note">
   <h5>ProTip™: WordPress.com Export Tool</h5>

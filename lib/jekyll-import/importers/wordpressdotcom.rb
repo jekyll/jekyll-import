@@ -55,7 +55,7 @@ module JekyllImport
 
       def self.process(options)
         source        = options.fetch('source', "wordpress.xml")
-        no_fetch      = options.fetch('no_fetch_images', false)
+        fetch         = !options.fetch('no_fetch_images', false)
         assets_folder = options.fetch('assets_folder', 'assets')
         FileUtils.mkdir_p(assets_folder)
 
@@ -120,13 +120,10 @@ module JekyllImport
           begin
             content = Hpricot(item.at('content:encoded').inner_text)
 
-            if !no_fetch
+            if fetch
               download_images(title, content, assets_folder)
             end
 
-            (content/"pre").each do |pre|
-              pre["class"] = 'prettyprint'
-            end
             FileUtils.mkdir_p "_#{type}s"
             File.open("_#{type}s/#{name}", "w") do |f|
               f.puts header.to_yaml

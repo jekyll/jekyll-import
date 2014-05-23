@@ -13,19 +13,54 @@ module JekyllImport
           safe_yaml
           hpricot
           time
+          open-uri
         ])
       end
 
       def self.specify_options(c)
         c.option 'source', '--source FILE', 'WordPress export XML file (default: "wordpress.xml")'
+        c.option 'no_fetch_images', '--no-fetch-images', 'Do not fetch the images referenced in the posts'
+        c.option 'assets_folder', '--assets_folder FOLDER', 'Folder where assets such as images will be downloaded to (default: assets)'
+      end
+
+      # Will modify post DOM tree
+      def self.download_images(title, post_hpricot, assets_folder)
+        images = (post_hpricot/"img")
+        if images.length == 0
+          return
+        end
+        puts "Downloading images for " + title
+        images.each do |i|
+          uri = i["src"]
+
+          i["src"] = assets_folder + "/" + File.basename(uri)
+          dst = File.join(assets_folder, File.basename(uri))
+          puts "  " + uri
+          if File.exist?(dst)
+            puts "    Already in cache. Clean assets folder if you want a redownload."
+            next
+          end
+          begin
+            open(uri) {|f|
+              File.open(dst, "wb") do |out|
+                out.puts f.read
+              end
+            }
+            puts "    OK!"
+          rescue => e
+            puts "    Errorr: #{e.message}"
+          end
+        end
       end
 
       def self.process(options)
-        source = options.fetch('source', "wordpress.xml")
+        source        = options.fetch('source', "wordpress.xml")
+        no_fetch      = options.fetch('no_fetch_images', false)
+        assets_folder = options.fetch('assets_folder', 'assets')
+        FileUtils.mkdir_p(assets_folder)
 
         import_count = Hash.new(0)
         doc = Hpricot::XML(File.read(source))
-
         # Fetch authors data from header
         authors = Hash[
           (doc/:channel/'wp:author').map do |author|
@@ -83,11 +118,20 @@ module JekyllImport
           }
 
           begin
+            content = Hpricot(item.at('content:encoded').inner_text)
+
+            if !no_fetch
+              download_images(title, content, assets_folder)
+            end
+
+            (content/"pre").each do |pre|
+              pre["class"] = 'prettyprint'
+            end
             FileUtils.mkdir_p "_#{type}s"
             File.open("_#{type}s/#{name}", "w") do |f|
               f.puts header.to_yaml
               f.puts '---'
-              f.puts Util.wpautop(item.at('content:encoded').inner_text)
+              f.puts Util.wpautop(content.to_html)
             end
           rescue => e
             puts "Couldn't import post!"

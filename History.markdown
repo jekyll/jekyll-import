@@ -8,6 +8,7 @@
   * Add `socket` option to the WordPress importer (#140)
   * Allow the CSV importer to skip writing front matter (#143)
   * WordPress.com: Download images locally and update links to them (#134)
+  * WordPress: Import WP pages as proper Jekyll pages instead of as posts (#137)
 
 ### Bug Fixes
 

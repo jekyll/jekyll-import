@@ -352,11 +352,15 @@ module JekyllImport
       end
 
       def self.page_path( page_id, page_name_list )
-        path = ''
         if page_name_list.key?(page_id)
-          path = page_path(page_name_list[page_id][:parent],page_name_list) + page_name_list[page_id][:slug] + '/'
+          [
+            page_path(page_name_list[page_id][:parent],page_name_list),
+            page_name_list[page_id][:slug],
+            '/'
+          ].join("")
+        else
+          ""
         end
-        return path
       end
 
     end

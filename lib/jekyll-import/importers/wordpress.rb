@@ -306,7 +306,7 @@ module JekyllImport
         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
         if post[:type] == 'page'
-          filename = page_path(post[:id], page_name_list) << 'index.markdown'
+          filename = page_path(post[:id], page_name_list) + 'index.markdown'
           FileUtils.mkdir_p(File.dirname(filename))
         else
           filename = "_posts/#{name}"
@@ -351,7 +351,7 @@ module JekyllImport
       def self.page_path( page_id, page_name_list )
         path = ''
         if page_name_list.key?(page_id)
-          path = page_path(page_name_list[page_id][:parent],page_name_list) << page_name_list[page_id][:slug] << '/'
+          path = page_path(page_name_list[page_id][:parent],page_name_list) + page_name_list[page_id][:slug] + '/'
         end
         return path
       end

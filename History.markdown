@@ -4,6 +4,16 @@
 
 ### Minor Enhancements
 
+### Bug Fixes
+
+### Site Enhancements
+
+### Development Fixes
+
+## 0.3.0 / 2014-05-23
+
+### Minor Enhancements
+
   * Import WordPress.org `author` data as hash (#139)
   * Add `socket` option to the WordPress importer (#140)
   * Allow the CSV importer to skip writing front matter (#143)
@@ -13,10 +23,6 @@
 ### Bug Fixes
 
   * Replace errant `continue` expression with the valid `next` expression (#133)
-
-### Site Enhancements
-
-### Development Fixes
 
 ## 0.2.0 / 2014-03-16
 

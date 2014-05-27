@@ -5,6 +5,20 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.3.0 / 2014-05-23
+
+### Minor Enhancements
+
+- Import WordPress.org `author` data as hash ([#139]({{ site.repository }}/issues/139))
+- Add `socket` option to the WordPress importer ([#140]({{ site.repository }}/issues/140))
+- Allow the CSV importer to skip writing front matter ([#143]({{ site.repository }}/issues/143))
+- WordPress.com: Download images locally and update links to them ([#134]({{ site.repository }}/issues/134))
+- WordPress: Import WP pages as proper Jekyll pages instead of as posts ([#137]({{ site.repository }}/issues/137))
+
+### Bug Fixes
+
+- Replace errant `continue` expression with the valid `next` expression ([#133]({{ site.repository }}/issues/133))
+
 ## 0.2.0 / 2014-03-16
 
 ### Major Enhancements

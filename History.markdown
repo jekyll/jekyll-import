@@ -4,6 +4,8 @@
 
 ### Minor Enhancements
 
+  * Add easyblog importer (#136)
+
 ### Bug Fixes
 
   * Tumblr: Photo posts with multiple photos will now all import (#145)

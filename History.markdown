@@ -10,6 +10,8 @@
 
 ### Development Fixes
 
+  * Add GitHub `script/*` conventions for easy pick-up. (#146)
+
 ## 0.3.0 / 2014-05-23
 
 ### Minor Enhancements

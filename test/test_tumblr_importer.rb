@@ -14,7 +14,7 @@ class TestTumblrImporter < Test::Unit::TestCase
     should "have a post" do
       assert_equal(2, @posts["posts"].size)
     end
-  
+
     should "convert post into hash" do
       refute_nil(@batch, "a batch with a valid post should exist")
     end
@@ -23,31 +23,31 @@ class TestTumblrImporter < Test::Unit::TestCase
       should "have a corresponding type" do
         assert_equal("regular", @posts['posts'][0]['type'])
       end
-  
+
       should "have a hash with a valid name" do
         assert_equal("2013-07-06-jekyll-test.html", @batch[0][:name])
       end
-  
+
       should "have a hash with a valid layout" do
         assert_equal("post", @batch[0][:header]['layout'])
       end
-  
+
       should "have a hash with a valid title" do
         assert_equal("Jekyll: Test", @batch[0][:header]['title'])
       end
-  
+
       should "have a hash with valid tags" do
         assert_equal("jekyll", @batch[0][:header]['tags'][0])
       end
-  
+
       should "have a hash with valid content" do
         assert_equal("<p>Testing...</p>", @batch[0][:content])
       end
-  
+
       should "have a hash with a valid url" do
         assert_equal("https://github.com/post/54759400073", @batch[0][:url])
       end
-  
+
       should "have a hash with a valid slug" do
         assert_equal("http://github.com/post/54759400073/jekyll-test", @batch[0][:slug])
       end
@@ -57,34 +57,52 @@ class TestTumblrImporter < Test::Unit::TestCase
       should "have a corresponding type" do
         assert_equal("answer", @posts['posts'][1]['type'])
       end
-  
+
       should "have a hash with a valid name" do
         assert_equal("2014-01-01-knock-knock.html", @batch[1][:name])
       end
-  
+
       should "have a hash with a valid layout" do
         assert_equal("post", @batch[1][:header]['layout'])
       end
-  
+
       should "have a hash with a valid title" do
         assert_equal("Knock knock?", @batch[1][:header]['title'])
       end
-  
+
       should "have a hash with valid tags" do
         assert_equal([], @batch[1][:header]['tags'])
       end
-  
+
       should "have a hash with valid content" do
         assert_equal("<p>Who is there?</p>", @batch[1][:content])
       end
-  
+
       should "have a hash with a valid url" do
         assert_equal("http://example.com/post/71845593082", @batch[1][:url])
       end
-  
+
       should "have a hash with a valid slug" do
         assert_equal("http://example.com/post/71845593082/knock-knock", @batch[1][:slug])
       end
     end
   end
+
+  context "a Tumblr photo blog" do
+    setup do
+      @jsonPhotoPayload = '{"tumblelog":{"title":"jekyll-test","description":"","name":"jekyll-test","timezone":"US\/Eastern","cname":false,"feeds":[]},"posts-start":0,"posts-total":"2","posts-type":false,"posts":[{"id":59226212476,"url":"http:\/\/jekyll-test.tumblr.com\/post\/59226212476","url-with-slug":"http:\/\/jekyll-test.tumblr.com\/post\/59226212476\/testing-multiple-photo-blog-posts","type":"photo","date-gmt":"2013-08-24 20:37:34 GMT","date":"Sat, 24 Aug 2013 16:37:34","bookmarklet":null,"mobile":null,"feed-item":"","from-feed-id":0,"unix-timestamp":1377376654,"format":"html","reblog-key":"CTkEpLrW","slug":"testing-multiple-photo-blog-posts","photo-caption":"<p>testing multiple photo blog posts<\/p>","width":"500","height":"500","photo-url-1280":"http:\/\/31.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_500.jpg","photo-url-500":"http:\/\/31.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_500.jpg","photo-url-400":"http:\/\/31.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_400.jpg","photo-url-250":"http:\/\/24.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_250.jpg","photo-url-100":"http:\/\/31.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_100.jpg","photo-url-75":"http:\/\/24.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_75sq.jpg","photos":[{"offset":"o1","caption":"","width":"500","height":"500","photo-url-1280":"http:\/\/31.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_500.jpg","photo-url-500":"http:\/\/31.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_500.jpg","photo-url-400":"http:\/\/31.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_400.jpg","photo-url-250":"http:\/\/24.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_250.jpg","photo-url-100":"http:\/\/31.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_100.jpg","photo-url-75":"http:\/\/24.media.tumblr.com\/9c7a3d2a18322ed8720eb2efefe91542\/tumblr_ms1ymmMFhF1sgzdxzo1_75sq.jpg"},{"offset":"o2","caption":"","width":"804","height":"732","photo-url-1280":"http:\/\/24.media.tumblr.com\/deb244a5beaae6e32301c06eb32f39d9\/tumblr_ms1ymmMFhF1sgzdxzo2_1280.jpg","photo-url-500":"http:\/\/24.media.tumblr.com\/deb244a5beaae6e32301c06eb32f39d9\/tumblr_ms1ymmMFhF1sgzdxzo2_500.jpg","photo-url-400":"http:\/\/24.media.tumblr.com\/deb244a5beaae6e32301c06eb32f39d9\/tumblr_ms1ymmMFhF1sgzdxzo2_400.jpg","photo-url-250":"http:\/\/24.media.tumblr.com\/deb244a5beaae6e32301c06eb32f39d9\/tumblr_ms1ymmMFhF1sgzdxzo2_250.jpg","photo-url-100":"http:\/\/31.media.tumblr.com\/deb244a5beaae6e32301c06eb32f39d9\/tumblr_ms1ymmMFhF1sgzdxzo2_100.jpg","photo-url-75":"http:\/\/31.media.tumblr.com\/deb244a5beaae6e32301c06eb32f39d9\/tumblr_ms1ymmMFhF1sgzdxzo2_75sq.jpg"}],"tags":["jekyll"]},{"id":59226098458,"url":"http:\/\/jekyll-test.tumblr.com\/post\/59226098458","url-with-slug":"http:\/\/jekyll-test.tumblr.com\/post\/59226098458\/kitty-with-toy","type":"photo","date-gmt":"2013-08-24 20:36:09 GMT","date":"Sat, 24 Aug 2013 16:36:09","bookmarklet":null,"mobile":null,"feed-item":"","from-feed-id":0,"unix-timestamp":1377376569,"format":"html","reblog-key":"UwhVmPot","slug":"kitty-with-toy","photo-caption":"<p>kitty with toy<\/p>","width":"351","height":"600","photo-url-1280":"http:\/\/24.media.tumblr.com\/51a0da0c6fb64291508ef43fbf817085\/tumblr_ms1yk9QKGh1sgzdxzo1_400.jpg","photo-url-500":"http:\/\/24.media.tumblr.com\/51a0da0c6fb64291508ef43fbf817085\/tumblr_ms1yk9QKGh1sgzdxzo1_400.jpg","photo-url-400":"http:\/\/24.media.tumblr.com\/51a0da0c6fb64291508ef43fbf817085\/tumblr_ms1yk9QKGh1sgzdxzo1_400.jpg","photo-url-250":"http:\/\/31.media.tumblr.com\/51a0da0c6fb64291508ef43fbf817085\/tumblr_ms1yk9QKGh1sgzdxzo1_250.jpg","photo-url-100":"http:\/\/24.media.tumblr.com\/51a0da0c6fb64291508ef43fbf817085\/tumblr_ms1yk9QKGh1sgzdxzo1_100.jpg","photo-url-75":"http:\/\/31.media.tumblr.com\/51a0da0c6fb64291508ef43fbf817085\/tumblr_ms1yk9QKGh1sgzdxzo1_75sq.jpg","photos":[]}]}'
+      @posts = JSON.parse(@jsonPhotoPayload)
+    end
+
+    should "import a post with multiple photos" do
+      batch = @posts["posts"].map { |post| Importers::Tumblr.post_to_hash(post, 'html') }
+      assert_match(/tumblr_ms1ymmMFhF1sgzdxzo1_500\.jpg/, batch[0][:content])
+      assert_match(/tumblr_ms1ymmMFhF1sgzdxzo2_1280\.jpg/, batch[0][:content])
+    end
+    should "import a post with a single photo" do
+      batch = @posts["posts"].map { |post| Importers::Tumblr.post_to_hash(post, 'html') }
+      assert_match(/tumblr_ms1yk9QKGh1sgzdxzo1_400\.jpg/, batch[1][:content])
+    end
+  end
+
 end

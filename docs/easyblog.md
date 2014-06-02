@@ -4,7 +4,7 @@ title: EasyBlog
 prev_section: drupal7
 link_source:  easyblog
 next_section: enki
-permalink: /docs/joomla/
+permalink: /docs/easyblog/
 ---
 
 To import your posts from a [EasyBlog](http://stackideas.com/easyblog) installation, run:

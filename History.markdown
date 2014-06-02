@@ -6,6 +6,8 @@
 
 ### Bug Fixes
 
+  * Tumblr: Photo posts with multiple photos will now all import (#145)
+
 ### Site Enhancements
 
 ### Development Fixes

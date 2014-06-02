@@ -1,6 +1,4 @@
 language: ruby
-before_install:
-  - gem install bundler
 install:
   - export NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   - travis_retry ./script/bootstrap

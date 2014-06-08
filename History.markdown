@@ -5,6 +5,7 @@
 ### Minor Enhancements
 
   * Add easyblog importer (#136)
+  * WordPress: import draft posts into `_drafts` folder (#147)
 
 ### Bug Fixes
 

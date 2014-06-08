@@ -104,6 +104,7 @@ module JekyllImport
         end
 
         FileUtils.mkdir_p("_posts")
+        FileUtils.mkdir_p("_drafts") if options[:status].include? :draft
 
         db = Sequel.mysql2(options[:dbname], :user => options[:user], :password => options[:pass],
                           :socket => options[:socket], :host => options[:host], :encoding => 'utf8')
@@ -292,7 +293,7 @@ module JekyllImport
         data = {
           'layout'        => post[:type].to_s,
           'status'        => post[:status].to_s,
-          'published'     => (post[:status].to_s == "publish"),
+          'published'     => post[:status].to_s == 'draft' ? nil : (post[:status].to_s == 'publish'),
           'title'         => title.to_s,
           'author'        => {
             'display_name'=> post[:author].to_s,
@@ -317,6 +318,8 @@ module JekyllImport
         if post[:type] == 'page'
           filename = page_path(post[:id], page_name_list) + 'index.markdown'
           FileUtils.mkdir_p(File.dirname(filename))
+        elsif post[:status] == 'draft'
+          filename = "_drafts/#{slug}.md"
         else
           filename = "_posts/#{name}"
         end

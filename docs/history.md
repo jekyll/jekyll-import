@@ -5,6 +5,26 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.4.0 / 2014-06-29
+
+### Minor Enhancements
+
+- Add easyblog importer ([#136]({{ site.repository }}/issues/136))
+- WordPress: import draft posts into `_drafts` folder ([#147]({{ site.repository }}/issues/147))
+- Be really permissive about which Jekyll version to use
+
+### Bug Fixes
+
+- Tumblr: Photo posts with multiple photos will now all import ([#145]({{ site.repository }}/issues/145))
+
+### Site Enhancements
+
+- Fix table prefix key in WordPress docs. ([#150]({{ site.repository }}/issues/150))
+
+### Development Fixes
+
+- Add GitHub `script/*` conventions for easy pick-up. ([#146]({{ site.repository }}/issues/146))
+
 ## 0.3.0 / 2014-05-23
 
 ### Minor Enhancements

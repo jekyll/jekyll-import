@@ -4,6 +4,16 @@
 
 ### Minor Enhancements
 
+### Bug Fixes
+
+### Site Enhancements
+
+### Development Fixes
+
+## 0.4.0 / 2014-06-29
+
+### Minor Enhancements
+
   * Add easyblog importer (#136)
   * WordPress: import draft posts into `_drafts` folder (#147)
   * Be really permissive about which Jekyll version to use

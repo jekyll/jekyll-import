@@ -71,7 +71,7 @@ prev_section: contributing
 - Drupal 7 importer should use latest revision of a post ([#38]({{ site.repository }}/issues/38))
 - Improve the handling of tags in the Drupal 6 importer. Tags with
     spaces are handled now and the importer doesn't eat tags anymore. ([#42]({{ site.repository }}/issues/42))
-- Upgrade to `jekyll ~> 1.3` and `safe_yaml ~> 0.9.7` 
+- Upgrade to `jekyll ~> 1.3` and `safe_yaml ~> 0.9.7`
 - Add license to gemspec ([#83]({{ site.repository }}/issues/83))
 - Add an `Importer.run` method for easy invocation ([#88]({{ site.repository }}/issues/88))
 

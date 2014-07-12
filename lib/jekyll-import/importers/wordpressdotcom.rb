@@ -108,6 +108,7 @@ module JekyllImport
           header = {
             'layout' => type,
             'title'  => title,
+            'date' => date,
             'categories' => categories,
             'tags'   => tags,
             'status'   => status,

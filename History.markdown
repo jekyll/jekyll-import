@@ -10,6 +10,8 @@
 
 ### Development Fixes
 
+  * Remove all comments from the Ruby classes. (#159)
+
 ## 0.4.1 / 2014-07-31
 
 ### Bug Fixes

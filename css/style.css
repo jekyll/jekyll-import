@@ -304,6 +304,10 @@ body > footer a:hover img {
 
 /* Free Hosting */
 
+.free-hosting {
+  margin-top: 10px;
+}
+
 .free-hosting .pane {
   background: #444;
   border-radius: 10px;

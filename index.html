@@ -13,65 +13,22 @@ overview: true
 </section>
 <section class="features">
   <div class="grid">
-    <div class="unit one-third">
-      <h2>Simple</h2>
+    <div class="unit two-thirds">
+      <h2>Wide Range of Available Importers</h2>
       <p>
-        No more databases, comment moderation, or pesky updates to install—just <em>your content</em>.
+        <div class="grid">
+            {% for importer in site.importers %}
+            <div class="unit w-1-4 center-on-mobiles"><a href="{{ importer.url }}" title="{{ importer.title }} Importer">{{ importer.title }}</a></div>
+            {% endfor %}
+        </div>
       </p>
-      <a href="http://jekyllrb.com/docs/usage/" class="">How Jekyll works &rarr;</a>
     </div>
     <div class="unit one-third">
-      <h2>Static</h2>
-      <p><a href="http://daringfireball.net/projects/markdown/">Markdown</a> (or <a href="http://textile.sitemonks.com/">Textile</a>), <a href="http://wiki.shopify.com/Liquid">Liquid</a>, HTML <span class="amp">&amp;</span> CSS go in. Static sites come out ready for deployment.</p>
-      <a href="http://jekyllrb.com/docs/templates/" class="">Jekyll template guide &rarr;</a>
-    </div>
-    <div class="unit one-third">
-      <h2>Blog-aware</h2>
+      <h2>Open-Source</h2>
       <p>
-        Permalinks, categories, pages, posts, and custom layouts are all first-class citizens here.
+        No importer for your system? No problem. Creating one is easy.
       </p>
-      <a href="/docs/home/" class="">Migrate your blog &rarr;</a>
-    </div>
-    <div class="clear"></div>
-  </div>
-</section>
-<section class="quickstart">
-  <div class="grid">
-    <div class="unit whole center-on-mobiles">
-      <h4>Get up and running <em>in&nbsp;seconds</em>.</h4>
-    </div>
-    <div class="unit whole center-on-mobiles code">
-      <p class="title">Quick-start Instructions</p>
-      <div class="shell">
-        <p class="line">
-          <span class="path">~</span>
-          <span class="prompt">$</span>
-          <span class="command">gem install jekyll jekyll-import</span>
-        </p>
-        <p class="line">
-          <span class="path">~</span>
-          <span class="prompt">$</span>
-          <span class="command">jekyll new my-awesome-site</span>
-        </p>
-        <p class="line">
-          <span class="path">~</span>
-          <span class="prompt">$</span>
-          <span class="command">cd my-awesome-site</span>
-        </p>
-        <p class="line">
-          <span class="path">~/my-awesome-site</span>
-          <span class="prompt">$</span>
-          <span class="command">jekyll import wordpressdotcom --source wordpress.xml</span>
-        </p>
-        <p class="line">
-          <span class="path">~/my-awesome-site</span>
-          <span class="prompt">$</span>
-          <span class="command">jekyll serve</span>
-        </p>
-        <p class="line">
-          <span class="output"># => Now browse to http://localhost:4000</span>
-        </p>
-      </div>
+      <a href="/docs/home/" class="">Create a New Importer &rarr;</a>
     </div>
     <div class="clear"></div>
   </div>

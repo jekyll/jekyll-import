@@ -10,11 +10,11 @@
     {% assign c = '' %}
   {% endif %}
 
-  {% for p in site.pages %}
+  {% for p in site.docs %}
     {% if p.url == item_url %}
       <li class="{{ c }}"><a href="{{ site.url }}{{ p.url }}">{{ p.title }}</a></li>
     {% endif %}
   {% endfor %}
 
-{% endfor %}  
+{% endfor %}
 </ul>

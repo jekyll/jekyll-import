@@ -6,14 +6,20 @@
 
 ### Bug Fixes
 
+### Site Enhancements
+
+### Development Fixes
+
+## 0.4.1 / 2014-07-31
+
+### Bug Fixes
+
   * Update WordPress importer to use `table_prefix` everywhere (#154)
   * Add `date` to WordPressDotCom importer output (#152)
 
 ### Site Enhancements
 
   * Update site to use Jekyll 2.2 (#157)
-
-### Development Fixes
 
 ## 0.4.0 / 2014-06-29
 

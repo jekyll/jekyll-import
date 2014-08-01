@@ -8,7 +8,13 @@ rvm:
   - 1.9.3
 script: ./script/cibuild
 notifications:
-  irc: "irc.freenode.org#jekyll"
+  irc:
+    on_success: change
+    on_failure: change
+    channels:
+      - irc.freenode.org#jekyll
+    template:
+      - '%{repository}#%{build_number} %{message} %{build_url}'
   email:
     on_success: never
     on_failure: never

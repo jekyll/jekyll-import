@@ -5,6 +5,17 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.4.1 / 2014-07-31
+
+### Bug Fixes
+
+- Update WordPress importer to use `table_prefix` everywhere ([#154]({{ site.repository }}/issues/154))
+- Add `date` to WordPressDotCom importer output ([#152]({{ site.repository }}/issues/152))
+
+### Site Enhancements
+
+- Update site to use Jekyll 2.2 ([#157]({{ site.repository }}/issues/157))
+
 ## 0.4.0 / 2014-06-29
 
 ### Minor Enhancements

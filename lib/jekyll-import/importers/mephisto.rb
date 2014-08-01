@@ -1,13 +1,3 @@
-# Quickly hacked together my Michael Ivey
-# Based on mt.rb by Nick Gerakines, open source and publically
-# available under the MIT license. Use this module at your own risk.
-
-# NOTE: This converter requires Sequel and the MySQL gems.
-# The MySQL gem can be difficult to install on OS X. Once you have MySQL
-# installed, running the following commands should work:
-# $ sudo gem install sequel
-# $ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
-
 module JekyllImport
   module Importers
     class Mephisto < Importer

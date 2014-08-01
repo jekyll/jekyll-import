@@ -1,13 +1,3 @@
-# Created by Kendall Buchanan (https://github.com/kendagriff) on 2011-12-22.
-# Use at your own risk. The end.
-#
-# Usage:
-#   (URL)
-#   ruby -r 'jekyll/jekyll-import/rss' -e "JekyllImport::RSS.process(:source => 'http://yourdomain.com/your-favorite-feed.xml')"
-#
-#   (Local file)
-#   ruby -r 'jekyll/jekyll-import/rss' -e "JekyllImport::RSS.process(:source => './somefile/on/your/computer.xml')"
-
 module JekyllImport
   module Importers
     class RSS < Importer

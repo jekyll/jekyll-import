@@ -1,6 +1,4 @@
-# coding: utf-8
-# This importer takes a wordpress.xml file, which can be exported from your
-# wordpress.com blog (/wp-admin/export.php).
+# encoding: UTF-8
 
 module JekyllImport
   module Importers

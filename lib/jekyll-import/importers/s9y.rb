@@ -1,10 +1,3 @@
-# Migrator to import entries from an Serendipity (S9Y) blog
-#
-# Entries can be exported from http://blog.example.com/rss.php?version=2.0&all=1
-#
-# Usage:
-# ruby -r './s9y_rss.rb' -e 'Jekyll::S9Y.process("http://blog.example.com/rss.php?version=2.0&all=1")'
-
 module JekyllImport
   module Importers
     class S9Y < Importer

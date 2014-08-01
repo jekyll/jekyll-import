@@ -117,11 +117,9 @@ namespace :site do
 
   desc "Update normalize.css library to the latest version and minify"
   task :update_normalize_css do
-    Dir.chdir("site/css") do
-      sh 'curl "http://necolas.github.io/normalize.css/latest/normalize.css" -o "normalize.scss"'
-      sh 'sass "normalize.scss":"normalize.css" --style compressed'
-      sh 'rm "normalize.scss"'
-    end
+    normalize_file = "site/_sass/normalize.scss"
+    sh "curl \"http://necolas.github.io/normalize.css/latest/normalize.css\" -o #{normalize_file}"
+    sh "sass #{normalize_file}:#{normalize_file} --style compressed"
   end
 
   desc "Commit the local site to the gh-pages branch and publish to GitHub Pages"
@@ -153,31 +151,6 @@ namespace :site do
       end
     else
       abort "You seem to have misplaced your History.markdown file. I can haz?"
-    end
-  end
-
-  namespace :releases do
-    desc "Create new release post"
-    task :new, :version do |t, args|
-      raise "Specify a version: rake site:releases:new['1.2.3']" unless args.version
-      today = Time.new.strftime('%Y-%m-%d')
-      release = args.version.to_s
-      filename = "site/_posts/#{today}-jekyll-import-#{release.split('.').join('-')}-released.markdown"
-
-      File.open(filename, "wb") do |post|
-        post.puts("---")
-        post.puts("layout: news_item")
-        post.puts("title: 'jekyll-import #{release} Released'")
-        post.puts("date: #{Time.new.strftime('%Y-%m-%d %H:%M:%S %z')}")
-        post.puts("author: ")
-        post.puts("version: #{version}")
-        post.puts("categories: [release]")
-        post.puts("---")
-        post.puts
-        post.puts
-      end
-
-      puts "Created #{filename}"
     end
   end
 end

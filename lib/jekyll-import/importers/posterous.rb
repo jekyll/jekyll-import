@@ -1,12 +1,3 @@
-# ruby -r './lib/jekyll/migrators/posterous.rb' -e 'Jekyll::Posterous.process(email, pass, api_key)'
-# Other arguments are optional; the default values are:
-# * :include_imgs => false         # should images be downloaded as well?
-# * :blog         => 'primary'     # blog, if you have more than one.
-# * :base_path    => '/'           # for image, if they will be served from a different host for eg.
-
-# For example, to download images as well as your posts, use the above command with
-# ....process(email, pass, api_key, :include_imgs => true)
-
 module JekyllImport
   module Importers
     class Posterous < Importer

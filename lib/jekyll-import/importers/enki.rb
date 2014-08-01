@@ -1,6 +1,3 @@
-# Adapted by Rodrigo Pinto <rodrigopqn@gmail.com>
-# Based on typo.rb by Toby DiPasquale
-
 module JekyllImport
     module Importers
     class Enki < Importer

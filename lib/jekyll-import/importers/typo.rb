@@ -1,4 +1,3 @@
-# Author: Toby DiPasquale <toby@cbcg.net>
 module JekyllImport
   module Importers
     class Typo < Importer

@@ -1,4 +1,3 @@
-# NOTE: This migrator is made for Ghost sqlite databases.
 module JekyllImport
   module Importers
     class Ghost < Importer
@@ -38,7 +37,7 @@ module JekyllImport
         # detect if the post is a draft
         draft = post[:status].eql?('draft')
 
-        # Ghost saves the time in an weird format with 3 more numbers. 
+        # Ghost saves the time in an weird format with 3 more numbers.
         # But the time is correct when we remove the last 3 numbers.
         date = Time.at(post[:created_at].to_i.to_s[0..-4].to_i)
 

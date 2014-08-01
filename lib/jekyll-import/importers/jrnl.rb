@@ -1,5 +1,3 @@
-# Author: Aniket Pant <me@aniketpant.com>
-
 module JekyllImport
   module Importers
     class Jrnl < Importer

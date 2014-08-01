@@ -11,6 +11,8 @@
 
 ### Site Enhancements
 
+  * Update site to use Jekyll 2.2 (#157)
+
 ### Development Fixes
 
 ## 0.4.0 / 2014-06-29

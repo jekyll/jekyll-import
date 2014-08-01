@@ -7,6 +7,7 @@
 ### Bug Fixes
 
   * Update WordPress importer to use `table_prefix` everywhere (#154)
+  * Add `date` to WordPressDotCom importer output (#152)
 
 ### Site Enhancements
 

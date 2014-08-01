@@ -139,14 +139,14 @@ namespace :site do
         "permalink" => "/docs/history/",
         "prev_section" => "contributing"
       }
-      Dir.chdir('site/docs/') do
+      Dir.chdir('site/_docs/') do
         File.open("history.md", "w") do |file|
           file.write("#{front_matter.to_yaml}---\n\n")
           file.write(converted_history(history_file))
         end
       end
-      unless `git diff site/docs/history.md`.strip.empty?
-        sh "git add site/docs/history.md"
+      unless `git diff site/_docs/history.md`.strip.empty?
+        sh "git add site/_docs/history.md"
         sh "git commit -m 'Updated generated history.md file in the site.'"
       else
         puts "No updates to commit at this time. Skipping..."

@@ -28,7 +28,7 @@
 .grid .unit:last-child { padding-right: 20px; }
 
 /* Nested grids already have padding though, so let’s nuke it */
-.unit .unit:first-child { padding-left: 0; }
+.unit .unit:nth-child(2n+1) { padding-left: 0; }
 .unit .unit:last-child { padding-right: 0; }
 .unit .grid:first-child > .unit { padding-top: 0; }
 .unit .grid:last-child > .unit { padding-bottom: 0; }

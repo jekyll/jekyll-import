@@ -1,3 +1,9 @@
+---
+---
+
+@import "normalize";
+@import "gridism";
+
 /* Base */
 
 * {
@@ -303,6 +309,10 @@ body > footer a:hover img {
 }
 
 /* Free Hosting */
+
+.free-hosting {
+  margin-top: 10px;
+}
 
 .free-hosting .pane {
   background: #444;
@@ -943,3 +953,5 @@ code.option, code.flag, code.filter, code.output {
     padding: 0 10px;
   }
 }
+
+@import "pygments";

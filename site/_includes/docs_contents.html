@@ -3,7 +3,16 @@
     <h4>Getting Started</h4>
     {% include docs_ul.html items='home installation usage' %}
     <h4>Importers</h4>
-    {% include docs_ul.html items='csv drupal6 drupal7 easyblog enki ghost google_reader joomla jrnl marley mephisto mt posterous rss s9y textpattern tumblr typo wordpress wordpressdotcom' %}
+    <ul>
+    {% for p in site.importers %}
+        {% if p.url == page.url %}
+          {% assign c = 'current' %}
+        {% else %}
+          {% assign c = '' %}
+        {% endif %}
+        <li class="{{ c }}"><a href="{{ site.url }}{{ p.url }}">{{ p.title }}</a></li>
+    {% endfor %}
+    </ul>
     <h4>Meta</h4>
     {% include docs_ul.html items='third-party contributing history' %}
   </aside>

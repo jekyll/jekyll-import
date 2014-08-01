@@ -145,8 +145,8 @@ namespace :site do
           file.write(converted_history(history_file))
         end
       end
-      unless `git diff site/docs/history.md`.strip.empty?
-        sh "git add site/docs/history.md"
+      unless `git diff site/_docs/history.md`.strip.empty?
+        sh "git add site/_docs/history.md"
         sh "git commit -m 'Updated generated history.md file in the site.'"
       else
         puts "No updates to commit at this time. Skipping..."

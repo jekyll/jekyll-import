@@ -27,7 +27,7 @@ module JekyllImport
         c.option 'user', '--user USER', 'Database user name (default: "")'
         c.option 'password', '--password PW', "Database user's password (default: "")"
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
-        c.option 'table_prefix', '--prefix PREFIX', 'Table prefix name (default: "wp_")'
+        c.option 'table_prefix', '--table_prefix PREFIX', 'Table prefix name (default: "wp_")'
         c.option 'clean_entities', '--clean_entities', 'Whether to clean entities (default: true)'
         c.option 'comments', '--comments', 'Whether to import comments (default: true)'
         c.option 'categories', '--categories', 'Whether to import categories (default: true)'
@@ -83,7 +83,7 @@ module JekyllImport
           :host           => opts.fetch('host', 'localhost'),
           :socket         => opts.fetch('socket', ''),
           :dbname         => opts.fetch('dbname', ''),
-          :table_prefix   => opts.fetch('prefix', 'wp_'),
+          :table_prefix   => opts.fetch('table_prefix', 'wp_'),
           :clean_entities => opts.fetch('clean_entities', true),
           :comments       => opts.fetch('comments', true),
           :categories     => opts.fetch('categories', true),

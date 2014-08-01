@@ -6,6 +6,8 @@
 
 ### Bug Fixes
 
+  * Update WordPress importer to use `table_prefix` everywhere (#154)
+
 ### Site Enhancements
 
 ### Development Fixes

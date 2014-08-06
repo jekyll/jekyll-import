@@ -162,7 +162,25 @@ module JekyllImport
             header['blogger_orig_url'] = @in_entry_elem[:meta][:original_url]
         
             body = @in_entry_elem[:body]
-            # TODO text replacement
+
+            # body escaping associated with liquid
+            if body =~ /{{/
+              body.gsub!(/{{/, '{{ "{{" }}')
+            end
+            if body =~ /{%/
+              body.gsub!(/{%/, '{{ "{%" }}')
+            end
+            # Replace intra-blog link URL
+            orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_uri.scheme)}://#{Regexp.escape(original_uri.host)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
+            if body =~ orig_url_pattern
+              body.gsub!(orig_url_pattern) do
+                # for post_url
+                quote = $1
+                post_file = Dir.glob("_posts/#{$2}-#{$3}-*-#{$4.to_s.tr('/', '-')}").first
+                raise "Could not found: #{$&}" if post_file.nil?
+                " href=#{quote}{% post_url #{File.basename(post_file, '.html')} %}#{quote}"
+              end
+            end
   
             { :header => header, :body => body }
           else

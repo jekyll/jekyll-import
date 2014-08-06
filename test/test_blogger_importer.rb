@@ -97,7 +97,7 @@ class TestBloggerImporter < Test::Unit::TestCase
           :id => "id-#{$$}",
           :title => "<< title >>",
           :content_type => 'text/html',
-          :original_url => 'http://foobar.blogspot.com/yyyy/mm/foobar.html',
+          :original_url => 'http://foobar.blogspot.com/1900/01/foobar.html',
         },
         :body => ''
       })
@@ -108,7 +108,7 @@ class TestBloggerImporter < Test::Unit::TestCase
       assert_equal("<< title >>", post_data[:header]['title'])
 
       assert_equal("id-#{$$}", post_data[:header]['blogger_id'])
-      assert_equal('http://foobar.blogspot.com/yyyy/mm/foobar.html', post_data[:header]['blogger_orig_url'])
+      assert_equal('http://foobar.blogspot.com/1900/01/foobar.html', post_data[:header]['blogger_orig_url'])
     end
 
     should "generate body" do
@@ -120,13 +120,25 @@ class TestBloggerImporter < Test::Unit::TestCase
           :published => published,
           :updated => updated,
           :content_type => 'text/html',
-          :original_url => 'http://foobar.blogspot.com/yyyy/mm/foobar.html',
+          :original_url => 'http://foobar.blogspot.com/1900/01/foobar.html',
         },
         :body => 'foobar'
       })
       post_data = listener.get_post_data_from_in_entry_elem_info()
-
       assert_equal('foobar', post_data[:body])
+
+      listener.instance_variable_set(:@in_entry_elem, {
+        :meta => {
+          :kind => 'post',
+          :published => published,
+          :updated => updated,
+          :content_type => 'text/html',
+          :original_url => 'http://foobar.blogspot.com/1900/01/foobar.html',
+        },
+        :body => '{% {{ foobar }} %}'
+      })
+      post_data = listener.get_post_data_from_in_entry_elem_info()
+      assert_equal('{{ "{%" }} {{ "{{" }} foobar }} %}', post_data[:body])
     end
 
   end

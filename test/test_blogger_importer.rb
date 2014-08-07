@@ -111,6 +111,34 @@ class TestBloggerImporter < Test::Unit::TestCase
       assert_equal('http://foobar.blogspot.com/1900/01/foobar.html', post_data[:header]['blogger_orig_url'])
     end
 
+    should "not generate header hash items if the associated options are specified" do
+      published = '1900-01-01T00:00:00'
+      updated = '1900-01-01T00:00:01'
+      listener.instance_variable_set(:@in_entry_elem, {
+        :meta => {
+          :kind => 'post',
+          :published => published,
+          :updated => updated,
+          :category => %w[a b c],
+          :id => "id-#{$$}",
+          :title => "<< title >>",
+          :content_type => 'text/html',
+          :original_url => 'http://foobar.blogspot.com/1900/01/foobar.html',
+        },
+        :body => ''
+      })
+      listener.use_tags = false
+      listener.leave_blogger_info = false
+      post_data = listener.get_post_data_from_in_entry_elem_info()
+
+      assert_equal(published, post_data[:header]['date'])
+      assert(!post_data[:header].include?('tags'))
+      assert_equal("<< title >>", post_data[:header]['title'])
+
+      assert(! post_data[:header].include?('blogger_id'))
+      assert(! post_data[:header].include?('blogger_orig_url'))
+    end
+
     should "generate body" do
       published = '1900-01-01T00:00:00'
       updated = '1900-01-01T00:00:01'

@@ -5,6 +5,9 @@ module JekyllImport
     class Blogger < Importer
       def self.specify_options(c)
         c.option 'source', '--source NAME', 'The XML file (blog-MM-DD-YYYY.xml) path to import'
+        c.option 'tags', '--tags', 'Whether to import tags (default: true)'
+        c.option 'leave-blogger-info', '--leave-blogger-info', 'Whether to leave blogger info (id and old URL.) as YAML data (default: true)'
+        c.option 'replace-internal-link', '--replace-internal-link', 'Whether to replace internal links with the post_url liquid codes (default: true)'
       end
 
       def self.validate(options)
@@ -29,13 +32,21 @@ module JekyllImport
 
       # Process the import.
       #
-      # source - a URL or a local file String.
+      # source::  a local file String.
+      # use-tags::              a boolean if use tags.
+      # leave-blogger-info::    a boolean if leave blogger info (id and original URL).
+      # replace-internal-link:: a boolean if replace internal link
       #
       # Returns nothing.
       def self.process(options)
         source = options.fetch('source')
 
         listener = BloggerAtomStreamListener.new
+
+        listener.use_tags = options.fetch('tags', true),
+        listener.leave_blogger_info = options.fetch('leave-blogger-info', true),
+        listener.replace_internal_link = options.fetch('replace-internal-link', true),
+
         File.open(source, 'r') do |f|
           f.flock(File::LOCK_SH)
           REXML::Parsers::StreamParser.new(f, listener).parse()
@@ -50,7 +61,13 @@ module JekyllImport
       
           @in_entry_elem = nil
           @in_category_elem_attrs = nil
+
+          # options
+          @use_tags = true
+          @leave_blogger_info = true
+          @replace_internal_link = true
         end
+        attr_accessor :use_tags, :leave_blogger_info, :replace_internal_link
       
         def tag_start(tag, attrs)
           @tag_bread.push(tag)
@@ -149,10 +166,10 @@ module JekyllImport
               'layout' => 'post',
               'title' => @in_entry_elem[:meta][:title],
               'date' => @in_entry_elem[:meta][:published],
-              'tags' => @in_entry_elem[:meta][:category],
             }
-            header['blogger_id'] = @in_entry_elem[:meta][:id]
-            header['blogger_orig_url'] = @in_entry_elem[:meta][:original_url]
+            header['tags'] = @in_entry_elem[:meta][:category] if @use_tags
+            header['blogger_id'] = @in_entry_elem[:meta][:id] if @leave_blogger_info
+            header['blogger_orig_url'] = @in_entry_elem[:meta][:original_url] if @leave_blogger_info
         
             body = @in_entry_elem[:body]
 
@@ -163,15 +180,17 @@ module JekyllImport
             if body =~ /{%/
               body.gsub!(/{%/, '{{ "{%" }}')
             end
-            # Replace intra-blog link URL
-            orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_uri.scheme)}://#{Regexp.escape(original_uri.host)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
-            if body =~ orig_url_pattern
-              body.gsub!(orig_url_pattern) do
-                # for post_url
-                quote = $1
-                post_file = Dir.glob("_posts/#{$2}-#{$3}-*-#{$4.to_s.tr('/', '-')}").first
-                raise "Could not found: #{$&}" if post_file.nil?
-                " href=#{quote}{% post_url #{File.basename(post_file, '.html')} %}#{quote}"
+            # Replace internal link URL
+            if @replace_internal_link
+              orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_uri.scheme)}://#{Regexp.escape(original_uri.host)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
+              if body =~ orig_url_pattern
+                body.gsub!(orig_url_pattern) do
+                  # for post_url
+                  quote = $1
+                  post_file = Dir.glob("_posts/#{$2}-#{$3}-*-#{$4.to_s.tr('/', '-')}").first
+                  raise "Could not found: #{$&}" if post_file.nil?
+                  " href=#{quote}{% post_url #{File.basename(post_file, '.html')} %}#{quote}"
+                end
               end
             end
   

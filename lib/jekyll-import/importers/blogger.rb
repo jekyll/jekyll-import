@@ -1,10 +1,3 @@
-# Created by @cat_in_136.
-# Use at your own risk.
-#
-# Usage:
-#   ruby -r 'jekyll/jekyll-import/blogger' -e "JekyllImport::Blogger.process(:source => '/path/to/blog-MM-DD-YYYY.xml')"
-#
-
 require 'rexml/streamlistener'
 
 module JekyllImport

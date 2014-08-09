@@ -121,6 +121,10 @@ module JekyllImport
               @in_entry_elem[:meta][:title] = text
             when 'content'
               @in_entry_elem[:body] = text
+            when 'name'
+              if @tag_bread[-2..-1] == %w[author name]
+                @in_entry_elem[:meta][:author] = text
+              end
             end
           end
         end 
@@ -170,7 +174,9 @@ module JekyllImport
               'layout' => 'post',
               'title' => @in_entry_elem[:meta][:title],
               'date' => @in_entry_elem[:meta][:published],
+              'author' => @in_entry_elem[:meta][:author],
             }
+            header['modified_time'] = @in_entry_elem[:meta][:updated] if @in_entry_elem[:meta][:updated] && @in_entry_elem[:meta][:updated] != @in_entry_elem[:meta][:published]
             header['thumbnail'] = @in_entry_elem[:meta][:thumbnail] if @in_entry_elem[:meta][:thumbnail]
             header['tags'] = @in_entry_elem[:meta][:category] if @use_tags
             header['blogger_id'] = @in_entry_elem[:meta][:id] if @leave_blogger_info

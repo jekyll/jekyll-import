@@ -101,6 +101,10 @@ module JekyllImport
                 @in_entry_elem[:meta][:original_url] = attrs['href']
               end
             end
+          when 'media:thumbnail'
+            if @in_entry_elem
+              @in_entry_elem[:meta][:thumbnail] = attrs['url']
+            end
           end
         end
       
@@ -132,7 +136,7 @@ module JekyllImport
               if post_data
                 FileUtils.mkdir_p('_posts')
       
-                File.open("_posts/#{filename}.html", 'w') do |f|
+                File.open("_posts/#{post_data[:filename]}.html", 'w') do |f|
                   f.flock(File::LOCK_EX)
       
                   f << post_data[:header].to_yaml
@@ -167,6 +171,7 @@ module JekyllImport
               'title' => @in_entry_elem[:meta][:title],
               'date' => @in_entry_elem[:meta][:published],
             }
+            header['thumbnail'] = @in_entry_elem[:meta][:thumbnail] if @in_entry_elem[:meta][:thumbnail]
             header['tags'] = @in_entry_elem[:meta][:category] if @use_tags
             header['blogger_id'] = @in_entry_elem[:meta][:id] if @leave_blogger_info
             header['blogger_orig_url'] = @in_entry_elem[:meta][:original_url] if @leave_blogger_info
@@ -194,7 +199,7 @@ module JekyllImport
               end
             end
   
-            { :header => header, :body => body }
+            { :filename => filename, :header => header, :body => body }
           else
             nil
           end

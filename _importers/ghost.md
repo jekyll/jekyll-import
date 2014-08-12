@@ -17,3 +17,5 @@ $ ruby -rubygems -e 'require "jekyll-import";
 {% endhighlight %}
 
 There are no required fields. `dbfile` defaults to `"ghost.db"`.
+
+If you have a Ghost backup file, consider using another tool called [jekyll_ghost_importer](https://github.com/eloyesp/jekyll_ghost_importer) to import your content. It is a separate gem and docs can be found at the link provided.

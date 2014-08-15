@@ -7,7 +7,7 @@ module JekyllImport
         c.option 'source', '--source NAME', 'The XML file (blog-MM-DD-YYYY.xml) path to import'
         c.option 'tags', '--tags', 'Whether to import tags (default: true)'
         c.option 'leave-blogger-info', '--leave-blogger-info', 'Whether to leave blogger info (id and old URL.) as YAML data (default: true)'
-        c.option 'replace-internal-link', '--replace-internal-link', 'Whether to replace internal links with the post_url liquid codes (default: true)'
+        c.option 'replace-internal-link', '--replace-internal-link', 'Whether to replace internal links with the post_url liquid codes (default: false)'
       end
 
       def self.validate(options)
@@ -32,7 +32,7 @@ module JekyllImport
 
       # Process the import.
       #
-      # source::  a local file String.
+      # source::                a local file String (or IO object for internal use purpose)..
       # use-tags::              a boolean if use tags.
       # leave-blogger-info::    a boolean if leave blogger info (id and original URL).
       # replace-internal-link:: a boolean if replace internal link
@@ -45,11 +45,50 @@ module JekyllImport
 
         listener.use_tags = options.fetch('tags', true),
         listener.leave_blogger_info = options.fetch('leave-blogger-info', true),
-        listener.replace_internal_link = options.fetch('replace-internal-link', true),
 
         File.open(source, 'r') do |f|
           f.flock(File::LOCK_SH)
           REXML::Parsers::StreamParser.new(f, listener).parse()
+        end
+
+        options['original-url-base'] = listener.original_url_base
+
+        postprocess(options)
+      end
+
+      # Post-process after import.
+      #
+      # replace-internal-link:: a boolean if replace internal link
+      #
+      # Returns nothing.
+      def self.postprocess(options)
+        # Replace internal link URL
+        if options.fetch('replace-internal-link', false)
+          original_url_base = options.fetch('original-url-base', nil)
+          if original_url_base
+            orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_url_base)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
+
+            Dir.glob('_posts/*.*') do |filename|
+              body = nil
+              File.open(filename, 'r') do |f|
+                f.flock(File::LOCK_SH)
+                body = f.read
+              end
+
+              body.gsub!(orig_url_pattern) do
+                # for post_url
+                quote = $1
+                post_file = Dir.glob("_posts/#{$2}-#{$3}-*-#{$4.to_s.tr('/', '-')}").first
+                raise "Could not found: _posts/#{$2}-#{$3}-*-#{$4.to_s.tr('/', '-')}" if post_file.nil?
+                " href=#{quote}{% post_url #{File.basename(post_file, '.html')} %}#{quote}"
+              end
+
+              File.open(filename, 'w') do |f|
+                f.flock(File::LOCK_EX)
+                f << body
+              end
+            end
+          end
         end
       end
 
@@ -65,9 +104,9 @@ module JekyllImport
           # options
           @use_tags = true
           @leave_blogger_info = true
-          @replace_internal_link = true
         end
-        attr_accessor :use_tags, :leave_blogger_info, :replace_internal_link
+        attr_accessor :use_tags, :leave_blogger_info
+        attr_reader :original_url_base
       
         def tag_start(tag, attrs)
           @tag_bread.push(tag)
@@ -166,6 +205,8 @@ module JekyllImport
               filename = "%s-%s" %
                 [Time.parse(@in_entry_elem[:meta][:published]).strftime('%Y-%m-%d'),
                  File.basename(original_path, File.extname(original_path))]
+
+              @original_url_base = "#{original_uri.scheme}://#{original_uri.host}"
             else
               raise 'Original URL is missing'
             end
@@ -191,19 +232,6 @@ module JekyllImport
             if body =~ /{%/
               body.gsub!(/{%/, '{{ "{%" }}')
             end
-            # Replace internal link URL
-            if @replace_internal_link
-              orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_uri.scheme)}://#{Regexp.escape(original_uri.host)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
-              if body =~ orig_url_pattern
-                body.gsub!(orig_url_pattern) do
-                  # for post_url
-                  quote = $1
-                  post_file = Dir.glob("_posts/#{$2}-#{$3}-*-#{$4.to_s.tr('/', '-')}").first
-                  raise "Could not found: #{$&}" if post_file.nil?
-                  " href=#{quote}{% post_url #{File.basename(post_file, '.html')} %}#{quote}"
-                end
-              end
-            end
   
             { :filename => filename, :header => header, :body => body }
           else
@@ -218,8 +246,12 @@ module JekyllImport
 end
 
 if $0 == __FILE__
-  listener = JekyllImport::Importers::Blogger::BloggerAtomStreamListener.new
-  REXML::Parsers::StreamParser.new(ARGF, listener).parse()
+  JekyllImport::Importers::Blogger::process(
+    'source' => ARGV.first,
+    'use-tags' => true,
+    'leave-blogger-info' => true,
+    'replace-internal-link' => true,
+  )
 end
 
 # vim: filetype=ruby fileencoding=UTF-8 shiftwidth=2 tabstop=2 autoindent expandtab

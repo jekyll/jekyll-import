@@ -5,7 +5,6 @@ module JekyllImport
     class Blogger < Importer
       def self.specify_options(c)
         c.option 'source', '--source NAME', 'The XML file (blog-MM-DD-YYYY.xml) path to import'
-        c.option 'tags', '--tags', 'Whether to import tags (default: true)'
         c.option 'leave-blogger-info', '--leave-blogger-info', 'Whether to leave blogger info (id and old URL.) as YAML data (default: true)'
         c.option 'replace-internal-link', '--replace-internal-link', 'Whether to replace internal links with the post_url liquid codes (default: false)'
       end
@@ -33,7 +32,6 @@ module JekyllImport
       # Process the import.
       #
       # source::                a local file String (or IO object for internal use purpose)..
-      # use-tags::              a boolean if use tags.
       # leave-blogger-info::    a boolean if leave blogger info (id and original URL).
       # replace-internal-link:: a boolean if replace internal link
       #
@@ -43,7 +41,6 @@ module JekyllImport
 
         listener = BloggerAtomStreamListener.new
 
-        listener.use_tags = options.fetch('tags', true),
         listener.leave_blogger_info = options.fetch('leave-blogger-info', true),
 
         File.open(source, 'r') do |f|
@@ -102,10 +99,9 @@ module JekyllImport
           @in_category_elem_attrs = nil
 
           # options
-          @use_tags = true
           @leave_blogger_info = true
         end
-        attr_accessor :use_tags, :leave_blogger_info
+        attr_accessor :leave_blogger_info
         attr_reader :original_url_base
       
         def tag_start(tag, attrs)
@@ -216,10 +212,10 @@ module JekyllImport
               'title' => @in_entry_elem[:meta][:title],
               'date' => @in_entry_elem[:meta][:published],
               'author' => @in_entry_elem[:meta][:author],
+              'tags' => @in_entry_elem[:meta][:category],
             }
             header['modified_time'] = @in_entry_elem[:meta][:updated] if @in_entry_elem[:meta][:updated] && @in_entry_elem[:meta][:updated] != @in_entry_elem[:meta][:published]
             header['thumbnail'] = @in_entry_elem[:meta][:thumbnail] if @in_entry_elem[:meta][:thumbnail]
-            header['tags'] = @in_entry_elem[:meta][:category] if @use_tags
             header['blogger_id'] = @in_entry_elem[:meta][:id] if @leave_blogger_info
             header['blogger_orig_url'] = @in_entry_elem[:meta][:original_url] if @leave_blogger_info
         
@@ -248,7 +244,6 @@ end
 if $0 == __FILE__
   JekyllImport::Importers::Blogger::process(
     'source' => ARGV.first,
-    'use-tags' => true,
     'leave-blogger-info' => true,
     'replace-internal-link' => true,
   )

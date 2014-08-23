@@ -294,12 +294,11 @@ EOD
         },
         :body => ''
       })
-      listener.use_tags = false
       listener.leave_blogger_info = false
       post_data = listener.get_post_data_from_in_entry_elem_info()
 
       assert_equal(published, post_data[:header]['date'])
-      assert(!post_data[:header].include?('tags'))
+      assert_equal(%w[a b c], post_data[:header]['tags'])
       assert_equal("<< title >>", post_data[:header]['title'])
 
       assert(! post_data[:header].include?('blogger_id'))

@@ -5,8 +5,8 @@ module JekyllImport
     class Blogger < Importer
       def self.specify_options(c)
         c.option 'source', '--source NAME', 'The XML file (blog-MM-DD-YYYY.xml) path to import'
-        c.option 'leave-blogger-info', '--leave-blogger-info', 'Whether to leave blogger info (id and old URL.) as YAML data (default: true)'
-        c.option 'replace-internal-link', '--replace-internal-link', 'Whether to replace internal links with the post_url liquid codes (default: false)'
+        c.option 'leave-blogger-info', '--leave-blogger-info BOOL', 'Whether to leave blogger info (id and old URL.) as YAML data (default: true)'
+        c.option 'replace-internal-link', '--replace-internal-link BOOL', 'Whether to replace internal links with the post_url liquid codes (default: false)'
       end
 
       def self.validate(options)

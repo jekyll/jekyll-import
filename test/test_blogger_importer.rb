@@ -59,7 +59,7 @@ EOF
           post0_replacement = <<EOF
 ---
 ---
-<a href="{% post_url 1900-02-01-post1 %}">aaa</a>
+<a href="{{ site.baseurl }}{% post_url 1900-02-01-post1 %}">aaa</a>
 EOF
           post1_src = <<EOF
 ---
@@ -70,7 +70,7 @@ EOF
           post1_replacement = <<EOF
 ---
 ---
-<a href="{% post_url 1900-01-01-post0 %}">aaa</a>
+<a href="{{ site.baseurl }}{% post_url 1900-01-01-post0 %}">aaa</a>
 <a href="http://external.blogspot.com/1900/01/post0.html">bbb</a>
 EOF
           FileUtils.mkdir_p('_posts')

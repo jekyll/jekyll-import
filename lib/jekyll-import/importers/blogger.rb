@@ -77,7 +77,7 @@ module JekyllImport
                 quote = $1
                 post_file = Dir.glob("_posts/#{$2}-#{$3}-*-#{$4.to_s.tr('/', '-')}").first
                 raise "Could not found: _posts/#{$2}-#{$3}-*-#{$4.to_s.tr('/', '-')}" if post_file.nil?
-                " href=#{quote}{% post_url #{File.basename(post_file, '.html')} %}#{quote}"
+                " href=#{quote}{{ site.baseurl }}{% post_url #{File.basename(post_file, '.html')} %}#{quote}"
               end
 
               File.open(filename, 'w') do |f|

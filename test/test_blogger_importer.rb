@@ -176,13 +176,29 @@ EOF
     </author>
     <!--media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="post1.thumbnail.url"/-->
   </entry>
+  <entry>
+    <published>1900-04-01T00:00:00.000Z</published>
+    <updated>1900-04-01T01:00:00.000Z</updated>
+    <category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/blogger/2008/kind#post"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="post2.atom.ns.0"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="post2.atom.ns.1"/>
+    <title type="text">post2.title</title>
+    <content type="html">&lt;p&gt;*post2.content*&lt;/p&gt;</content>
+    <link rel="replies" type="text/html" href="http://foobar.blogspot.com/1900/04/post2.link.html#comment-form" title="post2.comments"/>
+    <!-- snip -->
+    <author>
+      <name>post2.author.name</name>
+      <!-- snip -->
+    </author>
+    <!--media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="post2.thumbnail.url"/-->
+  </entry>
 </feed>
 EOD
       StringIO.open(xml_str, 'r') do |f|
         REXML::Parsers::StreamParser.new(f, listener).parse()
       end
 
-      assert_equal(2, listener.entry_elem_info_array.length)
+      assert_equal(3, listener.entry_elem_info_array.length)
 
       assert_equal(%w[post0.atom.ns.0], listener.entry_elem_info_array[0][:meta][:category])
       assert_equal('post', listener.entry_elem_info_array[0][:meta][:kind])
@@ -205,6 +221,17 @@ EOD
       assert_equal('<p>*post1.content*</p>', listener.entry_elem_info_array[1][:body])
       assert_equal('post1.author.name', listener.entry_elem_info_array[1][:meta][:author])
       assert_equal(nil, listener.entry_elem_info_array[1][:meta][:thumbnail])
+
+      assert_equal(%w[post2.atom.ns.0 post2.atom.ns.1], listener.entry_elem_info_array[2][:meta][:category])
+      assert_equal('post', listener.entry_elem_info_array[2][:meta][:kind])
+      assert_equal('html', listener.entry_elem_info_array[2][:meta][:content_type])
+      assert_equal('http://foobar.blogspot.com/1900/04/post2.link.html', listener.entry_elem_info_array[2][:meta][:original_url])
+      assert_equal('1900-04-01T00:00:00.000Z', listener.entry_elem_info_array[2][:meta][:published])
+      assert_equal('1900-04-01T01:00:00.000Z', listener.entry_elem_info_array[2][:meta][:updated])
+      assert_equal('post2.title', listener.entry_elem_info_array[2][:meta][:title])
+      assert_equal('<p>*post2.content*</p>', listener.entry_elem_info_array[2][:body])
+      assert_equal('post2.author.name', listener.entry_elem_info_array[2][:meta][:author])
+      assert_equal(nil, listener.entry_elem_info_array[2][:meta][:thumbnail])
     end
   end
 

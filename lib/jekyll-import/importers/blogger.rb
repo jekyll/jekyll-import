@@ -134,6 +134,10 @@ module JekyllImport
             if @in_entry_elem
               if attrs['rel'] == 'alternate' && attrs['type'] == 'text/html'
                 @in_entry_elem[:meta][:original_url] = attrs['href']
+              elsif attrs['rel'] == 'replies' && attrs['type'] == 'text/html'
+                unless @in_entry_elem[:meta][:original_url]
+                  @in_entry_elem[:meta][:original_url] = attrs['href'].sub(/\#comment-form$/, '')
+                end
               end
             end
           when 'media:thumbnail'
@@ -160,6 +164,10 @@ module JekyllImport
               if @tag_bread[-2..-1] == %w[author name]
                 @in_entry_elem[:meta][:author] = text
               end
+            when 'app:draft'
+              if @tag_bread[-2..-1] == %w[app:control app:draft]
+                @in_entry_elem[:meta][:draft] = true if text == 'yes'
+              end
             end
           end
         end 
@@ -173,9 +181,12 @@ module JekyllImport
               post_data = get_post_data_from_in_entry_elem_info
 
               if post_data
-                FileUtils.mkdir_p('_posts')
+                target_dir = '_posts'
+                target_dir = '_drafts' if @in_entry_elem[:meta][:draft]
+
+                FileUtils.mkdir_p(target_dir)
       
-                File.open("_posts/#{post_data[:filename]}.html", 'w') do |f|
+                File.open(File.join(target_dir, "#{post_data[:filename]}.html"), 'w') do |f|
                   f.flock(File::LOCK_EX)
       
                   f << post_data[:header].to_yaml

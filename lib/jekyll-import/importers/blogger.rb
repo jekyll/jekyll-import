@@ -5,8 +5,8 @@ module JekyllImport
     class Blogger < Importer
       def self.specify_options(c)
         c.option 'source', '--source NAME', 'The XML file (blog-MM-DD-YYYY.xml) path to import'
-        c.option 'leave-blogger-info', '--leave-blogger-info BOOL', 'Whether to leave blogger info (id and old URL.) as YAML data (default: true)'
-        c.option 'replace-internal-link', '--replace-internal-link BOOL', 'Whether to replace internal links with the post_url liquid codes (default: false)'
+        c.option 'no-blogger-info', '--no-blogger-info', 'Leave blogger-URL info (id and old URL.) as YAML data (default: false)'
+        c.option 'replace-internal-link', '--replace-internal-link', 'Whether to replace internal links with the post_url liquid codes (default: false)'
       end
 
       def self.validate(options)
@@ -32,7 +32,7 @@ module JekyllImport
       # Process the import.
       #
       # source::                a local file String (or IO object for internal use purpose)..
-      # leave-blogger-info::    a boolean if leave blogger info (id and original URL).
+      # no-blogger-info::       a boolean if not leave blogger info (id and original URL).
       # replace-internal-link:: a boolean if replace internal link
       #
       # Returns nothing.
@@ -41,7 +41,7 @@ module JekyllImport
 
         listener = BloggerAtomStreamListener.new
 
-        listener.leave_blogger_info = options.fetch('leave-blogger-info', true),
+        listener.leave_blogger_info = ! options.fetch('no-blogger-info', false),
 
         File.open(source, 'r') do |f|
           f.flock(File::LOCK_SH)
@@ -244,7 +244,7 @@ end
 if $0 == __FILE__
   JekyllImport::Importers::Blogger::process(
     'source' => ARGV.first,
-    'leave-blogger-info' => true,
+    'no-blogger-info' => false,
     'replace-internal-link' => true,
   )
 end

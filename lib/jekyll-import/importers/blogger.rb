@@ -251,13 +251,3 @@ module JekyllImport
     end
   end
 end
-
-if $0 == __FILE__
-  JekyllImport::Importers::Blogger::process(
-    'source' => ARGV.first,
-    'no-blogger-info' => false,
-    'replace-internal-link' => true,
-  )
-end
-
-# vim: filetype=ruby fileencoding=UTF-8 shiftwidth=2 tabstop=2 autoindent expandtab

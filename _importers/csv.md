@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: CSV
-prev_section: behance
+prev_section: blogger
 link_source: csv
 next_section: drupal6
 permalink: /docs/csv/

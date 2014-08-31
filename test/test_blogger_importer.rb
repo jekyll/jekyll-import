@@ -254,21 +254,28 @@ EOD
 
     should "raise an error if original_url not exists" do
       listener.instance_variable_set(:@in_entry_elem, {
-        :meta => { :kind => 'post' }
+        :meta => {
+          :kind => 'post',
+          :published => '1900-01-01T00:00:00',
+        }
       })
       assert_raises(RuntimeError) do
         listener.get_post_data_from_in_entry_elem_info()
       end
 
       listener.instance_variable_set(:@in_entry_elem, {
-        :meta => { :kind => 'post', :original_url => 'http://foobar.blogspot.com/yyyy/mm/foobar.html' }
+        :meta => {
+          :kind => 'post',
+          :published => '1900-01-01T00:00:00',
+          :original_url => 'http://foobar.blogspot.com/yyyy/mm/foobar.html',
+        }
       })
       assert_nothing_raised(RuntimeError) do
         listener.get_post_data_from_in_entry_elem_info()
       end
     end
 
-    should "raise an error if original_url not exists" do
+    should "raise an error if the kind is not set to post" do
       listener.instance_variable_set(:@in_entry_elem, {
         :meta => { :kind => 'post' }
       })

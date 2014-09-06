@@ -1,5 +1,3 @@
-require 'rexml/streamlistener'
-
 module JekyllImport
   module Importers
     class Blogger < Importer
@@ -90,21 +88,21 @@ module JekyllImport
       end
 
       class BloggerAtomStreamListener
-        include REXML::StreamListener
-      
         def initialize
-          @tag_bread = []
-      
-          @in_entry_elem = nil
-          @in_category_elem_attrs = nil
+          # use `extend` instead of `include` to use `require_deps` instead of `require`.
+          extend REXML::StreamListener
+          extend BloggerAtomStreamListenerMethods
 
-          # options
           @leave_blogger_info = true
         end
+      end
+
+      module BloggerAtomStreamListenerMethods
         attr_accessor :leave_blogger_info
         attr_reader :original_url_base
       
         def tag_start(tag, attrs)
+          @tag_bread = [] unless @tag_bread
           @tag_bread.push(tag)
       
           case tag

@@ -4,6 +4,8 @@
 
 ### Minor Enhancements
 
+  * Add Blogger (blogspot.com) importer (#162)
+
 ### Bug Fixes
 
 ### Site Enhancements

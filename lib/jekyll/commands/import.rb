@@ -54,7 +54,11 @@ module Jekyll
           if IMPORTERS.keys.include?(migrator.to_sym)
             if JekyllImport::Importers.const_defined?(IMPORTERS[migrator.to_sym])
               klass = JekyllImport::Importers.const_get(IMPORTERS[migrator.to_sym])
-              klass.run(options.__hash__)
+              if options.respond_to?(:__hash__)
+                klass.run(options.__hash__)
+              else
+                klass.run(options)
+              end
             end
           else
             abort_on_invalid_migrator(migrator)

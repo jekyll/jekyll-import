@@ -4,11 +4,17 @@
 
 ### Minor Enhancements
 
-  * Add Blogger (blogspot.com) importer (#162)
-
 ### Bug Fixes
 
 ### Site Enhancements
+
+### Development Fixes
+
+## 0.5.0 / 2014-09-19
+
+### Minor Enhancements
+
+  * Add Blogger (blogspot.com) importer (#162)
 
 ### Development Fixes
 

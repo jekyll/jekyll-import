@@ -7,6 +7,7 @@ module Jekyll
     class Import < Command
 
       IMPORTERS = {
+        :blogger => 'Blogger',
         :behance => 'Behance',
         :csv => 'CSV',
         :drupal6 => 'Drupal6',

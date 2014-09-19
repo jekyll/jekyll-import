@@ -6,7 +6,6 @@ module JekyllImport
       def self.require_deps
         JekyllImport.require_with_fallback(%w[
           rubygems
-          sequel
           fileutils
           safe_yaml
           hpricot

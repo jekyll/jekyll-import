@@ -5,6 +5,17 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.5.0 / 2014-09-19
+
+### Minor Enhancements
+
+- Add Blogger (blogspot.com) importer ([#162]({{ site.repository }}/issues/162))
+
+### Development Fixes
+
+- Remove all comments from the Ruby classes. ([#159]({{ site.repository }}/issues/159))
+- Remove a bunch of useless stuff from the Rakefile
+
 ## 0.4.1 / 2014-07-31
 
 ### Bug Fixes

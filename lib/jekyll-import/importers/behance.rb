@@ -71,7 +71,7 @@ module JekyllImport
       private
 
       def self.fetch_projects(token, user)
-        Behance::Client.new(access_token: token).user_projects(user)
+        ::Behance::Client.new(access_token: token).user_projects(user)
       end
     end
   end

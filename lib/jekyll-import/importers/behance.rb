@@ -52,9 +52,11 @@ module JekyllImport
 
           name = "#{formatted_date}-#{post_name}"
 
-          header = details
-
-          header["layout"] = "post"
+          header = {
+            "layout" => "post",
+            "title" => title,
+            "details" => details
+          }
 
           FileUtils.mkdir_p("_posts")
 

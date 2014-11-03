@@ -6,6 +6,8 @@
 
 ### Bug Fixes
 
+  * Fixes for Behance import file (#167)
+
 ### Site Enhancements
 
 ### Development Fixes

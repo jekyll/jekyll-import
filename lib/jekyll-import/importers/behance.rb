@@ -34,11 +34,13 @@ module JekyllImport
         user  = options.fetch('user')
         token = options.fetch('api_token')
 
-        projects = fetch_projects(token, user)
+        client = fetch_behance(token)
 
-        puts "#{projects.length} project(s) found. Importing now..."
+        user_projects = client.user_projects(user)
 
-        projects.each do |project|
+        puts "#{user_projects.length} project(s) found. Importing now..."
+
+        user_projects.each do |project|
 
           details = client.project(project['id'])
           title   = project['name'].to_s
@@ -53,7 +55,7 @@ module JekyllImport
           header = {
             "layout" => "post",
             "title" => title,
-            "project" => details
+            "details" => details
           }
 
           FileUtils.mkdir_p("_posts")
@@ -61,7 +63,7 @@ module JekyllImport
           File.open("_posts/#{name}.md", "w") do |f|
             f.puts header.to_yaml
             f.puts "---\n\n"
-            f.puts details['description']
+            f.puts details['description'].to_s
           end
         end
 
@@ -70,8 +72,8 @@ module JekyllImport
 
       private
 
-      def self.fetch_projects(token, user)
-        Behance::Client.new(access_token: token).user_projects(user)
+      def self.fetch_behance(token)
+        ::Behance::Client.new(access_token: token)
       end
     end
   end

@@ -1,16 +1,8 @@
-## HEAD
-
-### Major Enhancements
-
-### Minor Enhancements
+## 0.5.1 / 2014-11-03
 
 ### Bug Fixes
 
   * Fixes for Behance import file (#167)
-
-### Site Enhancements
-
-### Development Fixes
 
 ## 0.5.0 / 2014-09-19
 

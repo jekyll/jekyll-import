@@ -140,6 +140,7 @@ module JekyllImport
         end
         date = Date.parse(post['date']).to_s
         title = Nokogiri::HTML(title).text
+        title = "no title" if title.empty?
         slug = if post["slug"] && post["slug"].strip != ""
           post["slug"]
         else

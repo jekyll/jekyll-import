@@ -1,3 +1,9 @@
+## HEAD
+
+### Bug Fixes
+
+  * WordPress: Use `nil` instead of `""` for default socket (#170)
+
 ## 0.5.1 / 2014-11-03
 
 ### Bug Fixes

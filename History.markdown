@@ -1,8 +1,9 @@
-## HEAD
+## 0.5.2 / 2014-12-03
 
 ### Bug Fixes
 
   * WordPress: Use `nil` instead of `""` for default socket (#170)
+  * Tumblr: Set title to `"no title"` if no title available (#168)
 
 ## 0.5.1 / 2014-11-03
 

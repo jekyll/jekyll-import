@@ -72,7 +72,7 @@ module JekyllImport
           :user           => opts.fetch('user', ''),
           :pass           => opts.fetch('password', ''),
           :host           => opts.fetch('host', 'localhost'),
-          :socket         => opts.fetch('socket', ''),
+          :socket         => opts.fetch('socket', nil),
           :dbname         => opts.fetch('dbname', ''),
           :table_prefix   => opts.fetch('table_prefix', 'wp_'),
           :clean_entities => opts.fetch('clean_entities', true),

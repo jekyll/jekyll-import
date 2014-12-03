@@ -1,11 +1,13 @@
 language: ruby
-install:
-  - export NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-  - travis_retry ./script/bootstrap
 rvm:
   - 2.1
   - 2.0
   - 1.9.3
+env:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+cache: bundler
+sudo: false
+before_script: bundle update
 script: ./script/cibuild
 notifications:
   irc:

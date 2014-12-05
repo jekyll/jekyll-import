@@ -27,4 +27,4 @@ alternatives:
   [Octopress](http://octopress.org). It is like [@ngauthier’s
   version](https://gist.github.com/1506614) but separates drafts from posts, as
   well as importing tags and permalinks.
-
+- [@dseeman](https://github.com/dseeman) created [seriously, yet another](https://gist.github.com/dseeman/a1f0bd96d4511a8f156e)   importer based on the work of [@ngauthier’s version](https://gist.github.com/1506614). It is more lean (exluding comments and   any "type" besides a "post") but it will create markdown files instead of html files.

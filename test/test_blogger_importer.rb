@@ -275,13 +275,11 @@ EOD
       end
     end
 
-    should "raise an error if the kind is not set to post" do
+    should "return nil if the kind is not set to post" do
       listener.instance_variable_set(:@in_entry_elem, {
-        :meta => { :kind => 'post' }
+        :meta => { :kind => 'foo' }
       })
-      assert_raises(RuntimeError) do
-        listener.get_post_data_from_in_entry_elem_info()
-      end
+      assert_nil(listener.get_post_data_from_in_entry_elem_info())
     end
 
     should "generate header hash" do

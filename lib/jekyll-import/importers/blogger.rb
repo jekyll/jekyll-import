@@ -204,15 +204,26 @@ module JekyllImport
           if (@in_entry_elem.nil? || ! @in_entry_elem.has_key?(:meta) || ! @in_entry_elem[:meta].has_key?(:kind))
             nil
           elsif @in_entry_elem[:meta][:kind] == 'post'
+            timestamp = Time.parse(@in_entry_elem[:meta][:published]).strftime('%Y-%m-%d')
             if @in_entry_elem[:meta][:original_url]
               original_uri = URI.parse(@in_entry_elem[:meta][:original_url])
               original_path = original_uri.path.to_s
               filename = "%s-%s" %
-                [Time.parse(@in_entry_elem[:meta][:published]).strftime('%Y-%m-%d'),
+                [timestamp,
                  File.basename(original_path, File.extname(original_path))]
 
               @original_url_base = "#{original_uri.scheme}://#{original_uri.host}"
-            else
+            elsif @in_entry_elem[:meta][:draft]
+              # Drafts don't have published urls
+              name = @in_entry_elem[:meta][:title]
+              if name.nil?
+                filename = timestamp
+              else
+                filename = "%s-%s" %
+                  [timestamp,
+                   CGI.escape(name.downcase).tr('+','-')]
+              end
+            else 
               raise 'Original URL is missing'
             end
         
@@ -226,7 +237,7 @@ module JekyllImport
             header['modified_time'] = @in_entry_elem[:meta][:updated] if @in_entry_elem[:meta][:updated] && @in_entry_elem[:meta][:updated] != @in_entry_elem[:meta][:published]
             header['thumbnail'] = @in_entry_elem[:meta][:thumbnail] if @in_entry_elem[:meta][:thumbnail]
             header['blogger_id'] = @in_entry_elem[:meta][:id] if @leave_blogger_info
-            header['blogger_orig_url'] = @in_entry_elem[:meta][:original_url] if @leave_blogger_info
+            header['blogger_orig_url'] = @in_entry_elem[:meta][:original_url] if @leave_blogger_info && @in_entry_elem[:meta][:original_url]
         
             body = @in_entry_elem[:body]
 

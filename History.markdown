@@ -4,6 +4,10 @@
 
   * Blogger: Fix draft importing. (#175)
 
+### Site Enhancements
+
+  * Add link to another third-party importer. (#172)
+
 ## 0.5.2 / 2014-12-03
 
 ### Bug Fixes

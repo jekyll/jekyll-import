@@ -1,3 +1,9 @@
+## HEAD
+
+### Bug Fixes
+
+  * Blogger: Fix draft importing. (#175)
+
 ## 0.5.2 / 2014-12-03
 
 ### Bug Fixes

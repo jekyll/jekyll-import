@@ -3,8 +3,7 @@ module JekyllImport
     class Drupal7 < Importer
       # Reads a MySQL database via Sequel and creates a post file for each story
       # and blog node.
-      QUERY = "SELECT n.nid, \
-                      n.title, \
+      QUERY = "SELECT n.title, \
                       fdb.body_value, \
                       n.created, \
                       n.status \
@@ -59,7 +58,6 @@ module JekyllImport
 
         db[QUERY].each do |post|
           # Get required fields and construct Jekyll compatible name
-          node_id = post[:nid]
           title = post[:title]
           content = post[:body_value]
           created = post[:created]

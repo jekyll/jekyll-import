@@ -1,3 +1,9 @@
+## HEAD
+
+### Bug Fixes
+
+  * Drupal 7: Remove unused `nid` from MySQL `SELECT` (#177)
+
 ## 0.5.3 / 2014-12-29
 
 ### Bug Fixes

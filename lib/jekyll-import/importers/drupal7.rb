@@ -5,6 +5,7 @@ module JekyllImport
       # and blog node.
       QUERY = "SELECT n.title, \
                       fdb.body_value, \
+                      fdb.body_summary, \
                       n.created, \
                       n.status \
                FROM node AS n, \
@@ -60,6 +61,7 @@ module JekyllImport
           # Get required fields and construct Jekyll compatible name
           title = post[:title]
           content = post[:body_value]
+          summary = post[:body_summary]
           created = post[:created]
           time = Time.at(created)
           is_published = post[:status] == 1
@@ -70,10 +72,11 @@ module JekyllImport
           # Get the relevant fields as a hash, delete empty fields and convert
           # to YAML for the header
           data = {
-             'layout' => 'post',
-             'title' => title.to_s,
-             'created' => created,
-           }.delete_if { |k,v| v.nil? || v == ''}.to_yaml
+            'layout' => 'post',
+            'title' => title.to_s,
+            'created' => created,
+            'excerpt' => summary
+          }.delete_if { |k,v| v.nil? || v == ''}.to_yaml
 
           # Write out the data and content to file
           File.open("#{dir}/#{name}", "w") do |f|

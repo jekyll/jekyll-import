@@ -1,5 +1,9 @@
 ## HEAD
 
+### Minor Enhancements
+
+  * Drupal 7: use the `body_summary` field as an `excerpt` if it's available (#176)
+
 ### Bug Fixes
 
   * Drupal 7: Remove unused `nid` from MySQL `SELECT` (#177)

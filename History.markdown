@@ -8,6 +8,10 @@
 
   * Drupal 7: Remove unused `nid` from MySQL `SELECT` (#177)
 
+### Development Fixes
+
+  * Updated the LICENSE file to the "standard" formatting (#178)
+
 ## 0.5.3 / 2014-12-29
 
 ### Bug Fixes

@@ -14,6 +14,7 @@ module Jekyll
         :drupal7 => 'Drupal7',
         :enki => 'Enki',
         :joomla => 'Joomla',
+        :joomla3 => 'Joomla3',
         :jrnl => 'Jrnl',
         :ghost => 'Ghost',
         :google_reader => 'GoogleReader',

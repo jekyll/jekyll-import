@@ -32,7 +32,7 @@ module JekyllImport
         user    = options.fetch('user')
         pass    = options.fetch('password', '')
         host    = options.fetch('host', "localhost")
-        cid	    = options.fetch('category', '')
+        cid	    = options.fetch('category', 0)
         table_prefix = options.fetch('prefix', "jos_")
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
@@ -45,9 +45,9 @@ module JekyllImport
 		query << "`cn`.`created`, `cn`.`id`, `ct`.`title` AS `category`, `u`.`name` AS `author` "
 		query << "FROM `#{table_prefix}content` AS `cn` JOIN `#{table_prefix}categories` AS `ct` ON `cn`.`catid` = `ct`.`id` "
 		query << "JOIN `#{table_prefix}users` AS `u` ON `cn`.`created_by` = `u`.`id` "
-		query << "WHERE (`cn`.`state` = '0' OR `cn`.`state` = '1') "
+		query << "WHERE (`cn`.`state` = '1' OR `cn`.`state` = '2') " # Only published and archived content items to be imported
 
-		if !cid.empty?
+		if cid > 0
 			query << " AND `cn`.`catid` = '#{cid}' "
 		else 
 			query << " AND `cn`.`catid` != '2' " #Filter out uncategorized content

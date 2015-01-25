@@ -74,7 +74,7 @@ module JekyllImport
              'joomla_url' => slug,
              'date' => date,
 			 'author' => author,
-			 'excerpt' => excerpt,
+			 'excerpt' => excerpt.strip.to_s,
 			 'category' => category
            }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 

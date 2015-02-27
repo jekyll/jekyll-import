@@ -24,7 +24,6 @@ module JekyllImport
           sequel
           fileutils
           safe_yaml
-          unidecode
         ])
       end
 
@@ -84,7 +83,7 @@ module JekyllImport
 
       # Borrowed from the Wordpress importer
       def self.sluggify( title )
-        title = title.to_ascii.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
+        title = title.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
       end
     end
   end

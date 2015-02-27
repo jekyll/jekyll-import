@@ -24,6 +24,7 @@ module JekyllImport
           sequel
           fileutils
           safe_yaml
+          unidecode
         ])
       end
 
@@ -47,9 +48,18 @@ module JekyllImport
         db[query].each do |post|
           # Get required fields and construct Jekyll compatible name.
           title = post[:title]
-          slug = post[:alias]
           date = post[:created]
           content = post[:content]
+
+          # Construct a slug from the title if alias field empty.
+          # Remove illegal filename characters.
+          if !post[:alias] or post[:alias].empty?
+            slug = sluggify(post[:title])
+          else
+            slug = sluggify(post[:alias])
+          end
+
+	  
           name = "%02d-%02d-%02d-%s.markdown" % [date.year, date.month, date.day,
                                                  slug]
 
@@ -70,6 +80,11 @@ module JekyllImport
             f.puts content
           end
         end
+      end
+
+      # Borrowed from the Wordpress importer
+      def self.sluggify( title )
+        title = title.to_ascii.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
       end
     end
   end

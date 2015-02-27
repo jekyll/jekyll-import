@@ -49,6 +49,7 @@ module JekyllImport
           title = post[:title]
           date = post[:created]
           content = post[:content]
+          id = post[:id]
 
           # Construct a slug from the title if alias field empty.
           # Remove illegal filename characters.
@@ -59,8 +60,8 @@ module JekyllImport
           end
 
 	  
-          name = "%02d-%02d-%02d-%s.markdown" % [date.year, date.month, date.day,
-                                                 slug]
+          name = "%02d-%02d-%02d_%03d_%s.markdown" % [date.year, date.month, date.day,
+                                                 id,slug]
 
           # Get the relevant fields as a hash, delete empty fields and convert
           # to YAML for the header.

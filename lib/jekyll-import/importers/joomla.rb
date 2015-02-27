@@ -60,7 +60,7 @@ module JekyllImport
           end
 
 	  
-          name = "%02d-%02d-%02d_%03d_%s.markdown" % [date.year, date.month, date.day,
+          name = "%02d-%02d-%02d-%03d-%s.markdown" % [date.year, date.month, date.day,
                                                  id,slug]
 
           # Get the relevant fields as a hash, delete empty fields and convert

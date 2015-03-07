@@ -3,6 +3,7 @@
 ### Minor Enhancements
 
   * Drupal 7: use the `body_summary` field as an `excerpt` if it's available (#176)
+  * WordPress.com: Extract post excerpt (#189)
 
 ### Bug Fixes
 

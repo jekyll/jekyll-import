@@ -1,3 +1,7 @@
+## HEAD
+
+  * Tumblr: pass `redirect_dir` so it's accessible from `add_syntax_highlights` (#191)
+
 ## 0.6.0 / 2015-03-07
 
 ### Minor Enhancements

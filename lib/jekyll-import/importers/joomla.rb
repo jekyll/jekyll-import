@@ -59,7 +59,6 @@ module JekyllImport
             slug = sluggify(post[:alias])
           end
 
-	  
           name = "%02d-%02d-%02d-%03d-%s.markdown" % [date.year, date.month, date.day,
                                                  id,slug]
 

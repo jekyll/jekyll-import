@@ -1,6 +1,7 @@
 ## HEAD
 
   * Tumblr: pass `redirect_dir` so it's accessible from `add_syntax_highlights` (#191)
+  * Drupal 7: Fix Title extraction bug where it's read as binary (#192)
 
 ## 0.6.0 / 2015-03-07
 

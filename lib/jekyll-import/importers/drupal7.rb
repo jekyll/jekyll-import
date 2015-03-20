@@ -73,7 +73,7 @@ module JekyllImport
           # to YAML for the header
           data = {
             'layout' => 'post',
-            'title' => title.to_s,
+            'title' => title.strip.force_encoding("UTF-8"),
             'created' => created,
             'excerpt' => summary
           }.delete_if { |k,v| v.nil? || v == ''}.to_yaml

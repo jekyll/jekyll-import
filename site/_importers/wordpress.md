@@ -6,6 +6,13 @@ link_source: wordpress
 next_section: wordpressdotcom
 permalink: /docs/wordpress/
 ---
+<div class="note info">
+  <h5>Install additional gems</h5>
+  <p>
+    To use this importer, you need to install these additional gems:
+    `gem install unidecode sequel mysql2 htmlentities`
+  </p>
+</div>
 
 To import your posts from a self-hosted [WordPress](http://wordpress.org)
 installation, run:

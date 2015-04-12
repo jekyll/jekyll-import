@@ -72,7 +72,12 @@ module JekyllImport
         if content
           if use_markdown
             content = html_to_markdown content
-            content = add_syntax_highlights content if add_highlights
+            if add_highlights
+              tumblr_url = URI.parse(post[:slug]).path
+              redirect_dir = tumblr_url.sub(/\//, "") + "/"
+              FileUtils.mkdir_p redirect_dir
+              content = add_syntax_highlights(content, redirect_dir)
+            end
           end
 
           File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
@@ -236,7 +241,7 @@ module JekyllImport
       # For example, my code block only contain Python and JavaScript,
       # so I can assume the block is JavaScript if it contains a
       # semi-colon.
-      def self.add_syntax_highlights(content)
+      def self.add_syntax_highlights(content, redirect_dir)
         lines = content.split("\n")
         block, indent, lang, start = false, /^    /, nil, nil
         lines.each_with_index do |line, i|

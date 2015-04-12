@@ -5,6 +5,29 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.5.3 / 2014-12-29
+
+### Bug Fixes
+
+- Blogger: Fix draft importing. ([#175]({{ site.repository }}/issues/175))
+
+### Site Enhancements
+
+- Add link to another third-party importer. ([#172]({{ site.repository }}/issues/172))
+
+## 0.5.2 / 2014-12-03
+
+### Bug Fixes
+
+- WordPress: Use `nil` instead of `""` for default socket ([#170]({{ site.repository }}/issues/170))
+- Tumblr: Set title to `"no title"` if no title available ([#168]({{ site.repository }}/issues/168))
+
+## 0.5.1 / 2014-11-03
+
+### Bug Fixes
+
+- Fixes for Behance import file ([#167]({{ site.repository }}/issues/167))
+
 ## 0.5.0 / 2014-09-19
 
 ### Minor Enhancements

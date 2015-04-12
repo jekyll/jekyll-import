@@ -1,8 +1,33 @@
 ## HEAD
 
+  * Tumblr: pass `redirect_dir` so it's accessible from `add_syntax_highlights` (#191)
+  * Drupal 7: Fix Title extraction bug where it's read as binary (#192)
+  * WordPress: update docs to explictly define dependencies. (#190)
+
+## 0.6.0 / 2015-03-07
+
+### Minor Enhancements
+
+  * Drupal 7: use the `body_summary` field as an `excerpt` if it's available (#176)
+  * WordPress.com: Extract post excerpt (#189)
+
+### Bug Fixes
+
+  * Drupal 7: Remove unused `nid` from MySQL `SELECT` (#177)
+
+### Development Fixes
+
+  * Updated the LICENSE file to the "standard" formatting (#178)
+
+## 0.5.3 / 2014-12-29
+
 ### Bug Fixes
 
   * Blogger: Fix draft importing. (#175)
+
+### Site Enhancements
+
+  * Add link to another third-party importer. (#172)
 
 ## 0.5.2 / 2014-12-03
 

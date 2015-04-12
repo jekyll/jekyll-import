@@ -117,6 +117,11 @@ module JekyllImport
 
           begin
             content = Hpricot(item.at('content:encoded').inner_text)
+            excerpt = Hpricot(item.at('excerpt:encoded').inner_text)
+
+            if excerpt
+              header['excerpt'] = excerpt
+            end
 
             if fetch
               download_images(title, content, assets_folder)

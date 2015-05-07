@@ -1,3 +1,7 @@
+## HEAD
+
+  * RSS: Require all of `rss` to get atom parser. (#196)
+
 ## 0.7.0 / 2015-05-06
 
   * Tumblr: check for content when parsing a video caption to avoid Nil error (#179)

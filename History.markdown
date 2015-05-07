@@ -1,4 +1,4 @@
-## HEAD
+## 0.7.1 / 2015-05-06
 
   * RSS: Require all of `rss` to get atom parser. (#196)
 

@@ -5,6 +5,32 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.7.1 / 2015-05-06
+
+- RSS: Require all of `rss` to get atom parser. ([#196]({{ site.repository }}/issues/196))
+
+## 0.7.0 / 2015-05-06
+
+- Tumblr: check for content when parsing a video caption to avoid Nil error ([#179]({{ site.repository }}/issues/179))
+- Tumblr: pass `redirect_dir` so it's accessible from `add_syntax_highlights` ([#191]({{ site.repository }}/issues/191))
+- Drupal 7: Fix Title extraction bug where it's read as binary ([#192]({{ site.repository }}/issues/192))
+- WordPress: update docs to explictly define dependencies. ([#190]({{ site.repository }}/issues/190))
+
+## 0.6.0 / 2015-03-07
+
+### Minor Enhancements
+
+- Drupal 7: use the `body_summary` field as an `excerpt` if it's available ([#176]({{ site.repository }}/issues/176))
+- WordPress.com: Extract post excerpt ([#189]({{ site.repository }}/issues/189))
+
+### Bug Fixes
+
+- Drupal 7: Remove unused `nid` from MySQL `SELECT` ([#177]({{ site.repository }}/issues/177))
+
+### Development Fixes
+
+- Updated the LICENSE file to the "standard" formatting ([#178]({{ site.repository }}/issues/178))
+
 ## 0.5.3 / 2014-12-29
 
 ### Bug Fixes

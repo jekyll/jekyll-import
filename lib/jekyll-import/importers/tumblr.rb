@@ -137,7 +137,11 @@ module JekyllImport
             title = post["video-title"]
             content = post["video-player"]
             unless post["video-caption"].nil?
-              content << "<br/>" + post["video-caption"]
+              unless content.nil?
+                content << "<br/>" + post["video-caption"]
+              else
+                content = post["video-caption"]
+              end
             end
           when "answer"
             title = post["question"]

@@ -1,4 +1,4 @@
-## HEAD
+## 0.7.0 / 2015-05-06
 
   * Tumblr: check for content when parsing a video caption to avoid Nil error (#179)
   * Tumblr: pass `redirect_dir` so it's accessible from `add_syntax_highlights` (#191)

@@ -15,7 +15,7 @@ $ ruby -rubygems -e 'require "jekyll-import";
     })'
 {% endhighlight %}
 
-Where IMPORTER is the name of the specific importer.
+Where `MyImporter` is the name of the specific importer.
 
 <div class="note info">
   <h5>Note: Always double-check migrated content</h5>

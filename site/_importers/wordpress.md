@@ -26,6 +26,7 @@ $ ruby -rubygems -e 'require "jekyll-import";
       "host"     => "localhost",
       "socket"   => "",
       "table_prefix"   => "wp_",
+      "site_prefix"    => "",
       "clean_entities" => true,
       "comments"       => true,
       "categories"     => true,

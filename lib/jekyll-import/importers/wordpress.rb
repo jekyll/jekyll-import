@@ -19,7 +19,7 @@ module JekyllImport
         c.option 'password', '--password PW', "Database user's password (default: "")"
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
         c.option 'table_prefix', '--table_prefix PREFIX', 'Table prefix name (default: "wp_")'
-        c.option 'site_prefix', '--site_prefix PREFIX', 'Site prefix name (default: "2_")'
+        c.option 'site_prefix', '--site_prefix PREFIX', 'Site prefix name (default: "")'
         c.option 'clean_entities', '--clean_entities', 'Whether to clean entities (default: true)'
         c.option 'comments', '--comments', 'Whether to import comments (default: true)'
         c.option 'categories', '--categories', 'Whether to import categories (default: true)'
@@ -43,8 +43,8 @@ module JekyllImport
       # :table_prefix::   Prefix of database tables used by WordPress.
       #                   Default: 'wp_'
       # :site_prefix::    Prefix of database tables used by WordPress
-      #                   Multisite.
-      #                   Default: nil
+      #                   Multisite, eg: 2_.
+      #                   Default: ''
       # :clean_entities:: If true, convert non-ASCII characters to HTML
       #                   entities in the posts, comments, titles, and
       #                   names. Requires the 'htmlentities' gem to

@@ -19,6 +19,7 @@ module JekyllImport
         c.option 'password', '--password PW', "Database user's password (default: "")"
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
         c.option 'table_prefix', '--table_prefix PREFIX', 'Table prefix name (default: "wp_")'
+        c.option 'site_prefix', '--site_prefix PREFIX', 'Site prefix name (default: "2_")'
         c.option 'clean_entities', '--clean_entities', 'Whether to clean entities (default: true)'
         c.option 'comments', '--comments', 'Whether to import comments (default: true)'
         c.option 'categories', '--categories', 'Whether to import categories (default: true)'
@@ -41,6 +42,9 @@ module JekyllImport
       #
       # :table_prefix::   Prefix of database tables used by WordPress.
       #                   Default: 'wp_'
+      # :site_prefix::    Prefix of database tables used by WordPress
+      #                   Multisite.
+      #                   Default: nil
       # :clean_entities:: If true, convert non-ASCII characters to HTML
       #                   entities in the posts, comments, titles, and
       #                   names. Requires the 'htmlentities' gem to
@@ -75,6 +79,7 @@ module JekyllImport
           :socket         => opts.fetch('socket', nil),
           :dbname         => opts.fetch('dbname', ''),
           :table_prefix   => opts.fetch('table_prefix', 'wp_'),
+          :site_prefix    => opts.fetch('site_prefix', nil),
           :clean_entities => opts.fetch('clean_entities', true),
           :comments       => opts.fetch('comments', true),
           :categories     => opts.fetch('categories', true),
@@ -101,6 +106,7 @@ module JekyllImport
                           :socket => options[:socket], :host => options[:host], :encoding => 'utf8')
 
         px = options[:table_prefix]
+        sx = options[:site_prefix]
 
         page_name_list = {}
 
@@ -110,7 +116,7 @@ module JekyllImport
              posts.post_title    AS `title`,
              posts.post_name     AS `slug`,
              posts.post_parent   AS `parent`
-           FROM #{px}posts AS `posts`
+           FROM #{px}#{sx}posts AS `posts`
            WHERE posts.post_type = 'page'"
 
         db[page_name_query].each do |page|
@@ -140,7 +146,7 @@ module JekyllImport
              users.user_login    AS `author_login`,
              users.user_email    AS `author_email`,
              users.user_url      AS `author_url`
-           FROM #{px}posts AS `posts`
+           FROM #{px}#{sx}posts AS `posts`
              LEFT JOIN #{px}users AS `users`
                ON posts.post_author = users.ID"
 
@@ -162,6 +168,7 @@ module JekyllImport
 
       def self.process_post(post, db, options, page_name_list)
         px = options[:table_prefix]
+        sx = options[:site_prefix]
 
         title = post[:title]
         if options[:clean_entities]
@@ -191,7 +198,6 @@ module JekyllImport
             excerpt = content[0...more_index]
           end
           if options[:more_anchor]
-            more_link = "more"
             content.sub!(/<!-- *more *-->/,
                          "<a id=\"more\"></a>" +
                          "<a id=\"more-#{post[:id]}\"></a>")
@@ -208,9 +214,9 @@ module JekyllImport
                terms.name AS `name`,
                ttax.taxonomy AS `type`
              FROM
-               #{px}terms AS `terms`,
-               #{px}term_relationships AS `trels`,
-               #{px}term_taxonomy AS `ttax`
+               #{px}#{sx}terms AS `terms`,
+               #{px}#{sx}term_relationships AS `trels`,
+               #{px}#{sx}term_taxonomy AS `ttax`
              WHERE
                trels.object_id = '#{post[:id]}' AND
                trels.term_taxonomy_id = ttax.term_taxonomy_id AND
@@ -245,7 +251,7 @@ module JekyllImport
                comment_date         AS `date`,
                comment_date_gmt     AS `date_gmt`,
                comment_content      AS `content`
-             FROM #{px}comments
+             FROM #{px}#{sx}comments
              WHERE
                comment_post_ID = '#{post[:id]}' AND
                comment_approved != 'spam'"

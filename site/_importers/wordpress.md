@@ -33,7 +33,7 @@ $ ruby -rubygems -e 'require "jekyll-import";
       "tags"           => true,
       "more_excerpt"   => true,
       "more_anchor"    => true,
-      "extension"      => "markdown",
+      "extension"      => "html",
       "status"         => ["publish"]
     })'
 {% endhighlight %}

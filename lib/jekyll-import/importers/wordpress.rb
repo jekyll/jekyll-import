@@ -64,7 +64,7 @@ module JekyllImport
       #                   two HTML anchors with ids "more" and
       #                   "more-NNN" (where NNN is the post number).
       #                   Default: true.
-      # :extension::      Set the post extension. Default: "markdown"
+      # :extension::      Set the post extension. Default: "html"
       # :status::         Array of allowed post statuses. Only
       #                   posts with matching status will be migrated.
       #                   Known statuses are :publish, :draft, :private,
@@ -87,7 +87,7 @@ module JekyllImport
           :tags           => opts.fetch('tags', true),
           :more_excerpt   => opts.fetch('more_excerpt', true),
           :more_anchor    => opts.fetch('more_anchor', true),
-          :extension      => opts.fetch('extension', 'markdown'),
+          :extension      => opts.fetch('extension', 'html'),
           :status         => opts.fetch('status', ['publish']).map(&:to_sym) # :draft, :private, :revision
         }
 

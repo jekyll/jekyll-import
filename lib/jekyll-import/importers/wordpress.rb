@@ -316,7 +316,7 @@ module JekyllImport
         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
         if post[:type] == 'page'
-          filename = page_path(post[:id], page_name_list) + 'index.markdown'
+          filename = page_path(post[:id], page_name_list) + "index.#{extension}"
           FileUtils.mkdir_p(File.dirname(filename))
         elsif post[:status] == 'draft'
           filename = "_drafts/#{slug}.md"

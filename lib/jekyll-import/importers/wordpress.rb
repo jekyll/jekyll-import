@@ -184,7 +184,8 @@ module JekyllImport
         end
 
         date = post[:date] || Time.now
-        name = "%02d-%02d-%02d-%s.#{extension}" % [date.year, date.month, date.day, slug]
+        name = "%02d-%02d-%02d-%s.%s" % [date.year, date.month, date.day,
+                                         slug, extension]
         content = post[:content].to_s
         if options[:clean_entities]
           content = clean_entities(content)

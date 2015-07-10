@@ -53,9 +53,9 @@ module JekyllImport
       #                   are saved in the post's YAML front matter.
       #                   Default: true.
       # :categories::     If true, save the post's categories in its
-      #                   YAML front matter.
+      #                   YAML front matter. Default: true.
       # :tags::           If true, save the post's tags in its
-      #                   YAML front matter.
+      #                   YAML front matter. Default: true.
       # :more_excerpt::   If true, when a post has no excerpt but
       #                   does have a <!-- more --> tag, use the
       #                   preceding post content as the excerpt.
@@ -64,6 +64,7 @@ module JekyllImport
       #                   two HTML anchors with ids "more" and
       #                   "more-NNN" (where NNN is the post number).
       #                   Default: true.
+      # :extension::      Set the post extension. Default: "html"
       # :status::         Array of allowed post statuses. Only
       #                   posts with matching status will be migrated.
       #                   Known statuses are :publish, :draft, :private,
@@ -86,7 +87,8 @@ module JekyllImport
           :tags           => opts.fetch('tags', true),
           :more_excerpt   => opts.fetch('more_excerpt', true),
           :more_anchor    => opts.fetch('more_anchor', true),
-          :status         => opts.fetch('status', ["publish"]).map(&:to_sym) # :draft, :private, :revision
+          :extension      => opts.fetch('extension', 'html'),
+          :status         => opts.fetch('status', ['publish']).map(&:to_sym) # :draft, :private, :revision
         }
 
         if options[:clean_entities]
@@ -169,6 +171,7 @@ module JekyllImport
       def self.process_post(post, db, options, page_name_list)
         px = options[:table_prefix]
         sx = options[:site_prefix]
+        extension = options[:extension]
 
         title = post[:title]
         if options[:clean_entities]
@@ -181,8 +184,8 @@ module JekyllImport
         end
 
         date = post[:date] || Time.now
-        name = "%02d-%02d-%02d-%s.markdown" % [date.year, date.month,
-                                               date.day, slug]
+        name = "%02d-%02d-%02d-%s.%s" % [date.year, date.month, date.day,
+                                         slug, extension]
         content = post[:content].to_s
         if options[:clean_entities]
           content = clean_entities(content)
@@ -314,7 +317,7 @@ module JekyllImport
         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
         if post[:type] == 'page'
-          filename = page_path(post[:id], page_name_list) + 'index.markdown'
+          filename = page_path(post[:id], page_name_list) + "index.#{extension}"
           FileUtils.mkdir_p(File.dirname(filename))
         elsif post[:status] == 'draft'
           filename = "_drafts/#{slug}.md"

@@ -1,6 +1,8 @@
 ## HEAD
 
   * WordPress: Add `site_prefix` to support WP multi-site (#203)
+  * WordPress: Add `extension` option to support different output file
+    extensions (#208)
 
 ## 0.7.1 / 2015-05-06
 

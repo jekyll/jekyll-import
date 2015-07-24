@@ -30,7 +30,7 @@ module JekyllImport
         images.each do |i|
           uri = i["src"]
 
-          i["src"] = assets_folder + "/" + File.basename(uri)
+          i["src"] = "{{ site.baseurl }}/%s/%s" % [assets_folder, File.basename(uri)]
           dst = File.join(assets_folder, File.basename(uri))
           puts "  " + uri
           if File.exist?(dst)

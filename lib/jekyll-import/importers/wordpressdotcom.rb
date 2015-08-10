@@ -70,7 +70,9 @@ module JekyllImport
         end
 
         def published_at
-          Time.parse(@node.at('wp:post_date').inner_text)
+          if published?
+            Time.parse(@node.at('wp:post_date').inner_text)
+          end
         end
 
         def status
@@ -82,11 +84,19 @@ module JekyllImport
         end
 
         def file_name
-          "#{published_at.strftime('%Y-%m-%d')}-#{permalink_title}.html"
+          if published?
+            "#{published_at.strftime('%Y-%m-%d')}-#{permalink_title}.html"
+          else
+            "#{permalink_title}.html"
+          end
         end
 
         def directory_name
-          "_#{post_type}s"
+          if !published? && post_type == 'post'
+            '_drafts'
+          else
+            "_#{post_type}s"
+          end
         end
 
         def published?

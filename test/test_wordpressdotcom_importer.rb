@@ -90,6 +90,18 @@ class TestWordpressDotComDraftItem < TestWordpressDotComItem
     Importers::WordpressDotCom::Item.new(node)
   end
 
+  should "extract a nil publish-date" do
+    assert_equal(nil, item.published_at)
+  end
+
+  should 'not put the date in the file_name' do
+    assert_equal('post-name.html', item.file_name)
+  end
+
+  should "put the file in ./_drafts" do
+    assert_equal('_drafts', item.directory_name)
+  end
+
   should 'know its status' do
     assert_equal('draft', item.status)
   end

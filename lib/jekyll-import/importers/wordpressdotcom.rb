@@ -71,16 +71,16 @@ module JekyllImport
           end
         ] rescue {}
 
-        (doc/:channel/:item).each do |item|
-          title = item.at(:title).inner_text.strip
-          permalink_title = item.at('wp:post_name').inner_text
+        (doc/:channel/:item).each do |node|
+          title = node.at(:title).inner_text.strip
+          permalink_title = node.at('wp:post_name').inner_text
           # Fallback to "prettified" title if post_name is empty (can happen)
           if permalink_title == ""
             permalink_title = sluggify(title)
           end
 
-          date = Time.parse(item.at('wp:post_date').inner_text)
-          status = item.at('wp:status').inner_text
+          date = Time.parse(node.at('wp:post_date').inner_text)
+          status = node.at('wp:status').inner_text
 
           if status == "publish"
             published = true
@@ -88,18 +88,18 @@ module JekyllImport
             published = false
           end
 
-          type = item.at('wp:post_type').inner_text
-          categories = item.search('category[@domain="category"]').map{|c| c.inner_text}.reject{|c| c == 'Uncategorized'}.uniq
-          tags = item.search('category[@domain="post_tag"]').map{|t| t.inner_text}.uniq
+          type = node.at('wp:post_type').inner_text
+          categories = node.search('category[@domain="category"]').map{|c| c.inner_text}.reject{|c| c == 'Uncategorized'}.uniq
+          tags = node.search('category[@domain="post_tag"]').map{|t| t.inner_text}.uniq
 
           metas = Hash.new
-          item.search("wp:postmeta").each do |meta|
+          node.search("wp:postmeta").each do |meta|
             key = meta.at('wp:meta_key').inner_text
             value = meta.at('wp:meta_value').inner_text
             metas[key] = value
           end
 
-          author_login = item.at('dc:creator').inner_text.strip
+          author_login = node.at('dc:creator').inner_text.strip
 
           name = "#{date.strftime('%Y-%m-%d')}-#{permalink_title}.html"
           header = {
@@ -116,8 +116,8 @@ module JekyllImport
           }
 
           begin
-            content = Hpricot(item.at('content:encoded').inner_text)
-            excerpt = Hpricot(item.at('excerpt:encoded').inner_text)
+            content = Hpricot(node.at('content:encoded').inner_text)
+            excerpt = Hpricot(node.at('excerpt:encoded').inner_text)
 
             if excerpt
               header['excerpt'] = excerpt

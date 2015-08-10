@@ -50,6 +50,50 @@ module JekyllImport
         end
       end
 
+      class Item
+        def initialize(node)
+          @node = node
+        end
+
+        def title
+          @node.at(:title).inner_text.strip
+        end
+
+        def permalink_title
+          p_title = @node.at('wp:post_name').inner_text
+          # Fallback to "prettified" title if post_name is empty (can happen)
+          if p_title == ""
+            p_title = WordpressDotCom.sluggify(title)
+          end
+
+          return p_title
+        end
+
+        def published_at
+          Time.parse(@node.at('wp:post_date').inner_text)
+        end
+
+        def status
+          @node.at('wp:status').inner_text
+        end
+
+        def post_type
+          @node.at('wp:post_type').inner_text
+        end
+
+        def file_name
+          "#{published_at.strftime('%Y-%m-%d')}-#{permalink_title}.html"
+        end
+
+        def directory_name
+          "_#{post_type}s"
+        end
+
+        def published?
+          status == 'publish'
+        end
+      end
+
       def self.process(options)
         source        = options.fetch('source', "wordpress.xml")
         fetch         = !options.fetch('no_fetch_images', false)
@@ -72,23 +116,14 @@ module JekyllImport
         ] rescue {}
 
         (doc/:channel/:item).each do |node|
-          title = node.at(:title).inner_text.strip
-          permalink_title = node.at('wp:post_name').inner_text
-          # Fallback to "prettified" title if post_name is empty (can happen)
-          if permalink_title == ""
-            permalink_title = sluggify(title)
-          end
+          item = Item.new(node)
+          title = item.title
+          permalink_title = item.permalink_title
+          date = item.published_at
+          status = item.status
+          published = item.published?
 
-          date = Time.parse(node.at('wp:post_date').inner_text)
-          status = node.at('wp:status').inner_text
-
-          if status == "publish"
-            published = true
-          else
-            published = false
-          end
-
-          type = node.at('wp:post_type').inner_text
+          type = item.post_type
           categories = node.search('category[@domain="category"]').map{|c| c.inner_text}.reject{|c| c == 'Uncategorized'}.uniq
           tags = node.search('category[@domain="post_tag"]').map{|t| t.inner_text}.uniq
 
@@ -101,7 +136,7 @@ module JekyllImport
 
           author_login = node.at('dc:creator').inner_text.strip
 
-          name = "#{date.strftime('%Y-%m-%d')}-#{permalink_title}.html"
+          name = item.file_name
           header = {
             'layout' => type,
             'title'  => title,
@@ -127,8 +162,8 @@ module JekyllImport
               download_images(title, content, assets_folder)
             end
 
-            FileUtils.mkdir_p "_#{type}s"
-            File.open("_#{type}s/#{name}", "w") do |f|
+            FileUtils.mkdir_p item.directory_name
+            File.open("#{item.directory_name}/#{name}", "w") do |f|
               f.puts header.to_yaml
               f.puts '---'
               f.puts Util.wpautop(content.to_html)

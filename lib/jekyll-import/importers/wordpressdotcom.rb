@@ -50,6 +50,64 @@ module JekyllImport
         end
       end
 
+      class Item
+        def initialize(node)
+          @node = node
+        end
+
+        def text_for(path)
+          @node.at(path).inner_text
+        end
+
+        def title
+          @title ||= text_for(:title).strip
+        end
+
+        def permalink_title
+          post_name = text_for('wp:post_name')
+          # Fallback to "prettified" title if post_name is empty (can happen)
+          @permalink_title ||= if post_name.empty?
+            WordpressDotCom.sluggify(title)
+          else
+            post_name
+          end
+        end
+
+        def published_at
+          if published?
+            @published_at ||= Time.parse(text_for('wp:post_date'))
+          end
+        end
+
+        def status
+          @status ||= text_for('wp:status')
+        end
+
+        def post_type
+          @post_type ||= text_for('wp:post_type')
+        end
+
+        def file_name
+          @file_name ||= if published?
+            "#{published_at.strftime('%Y-%m-%d')}-#{permalink_title}.html"
+          else
+            "#{permalink_title}.html"
+          end
+        end
+
+        def directory_name
+          @directory_name ||= if !published? && post_type == 'post'
+            '_drafts'
+          else
+            "_#{post_type}s"
+          end
+        end
+
+        def published?
+          @published ||= (status == 'publish')
+        end
+      end
+
       def self.process(options)
         source        = options.fetch('source', "wordpress.xml")
         fetch         = !options.fetch('no_fetch_images', false)
@@ -71,64 +129,45 @@ module JekyllImport
           end
         ] rescue {}
 
-        (doc/:channel/:item).each do |item|
-          title = item.at(:title).inner_text.strip
-          permalink_title = item.at('wp:post_name').inner_text
-          # Fallback to "prettified" title if post_name is empty (can happen)
-          if permalink_title == ""
-            permalink_title = sluggify(title)
-          end
-
-          date = Time.parse(item.at('wp:post_date').inner_text)
-          status = item.at('wp:status').inner_text
-
-          if status == "publish"
-            published = true
-          else
-            published = false
-          end
-
-          type = item.at('wp:post_type').inner_text
-          categories = item.search('category[@domain="category"]').map{|c| c.inner_text}.reject{|c| c == 'Uncategorized'}.uniq
-          tags = item.search('category[@domain="post_tag"]').map{|t| t.inner_text}.uniq
+        (doc/:channel/:item).each do |node|
+          item = Item.new(node)
+          categories = node.search('category[@domain="category"]').map(&:inner_text).reject{|c| c == 'Uncategorized'}.uniq
+          tags = node.search('category[@domain="post_tag"]').map(&:inner_text).uniq
 
           metas = Hash.new
-          item.search("wp:postmeta").each do |meta|
+          node.search("wp:postmeta").each do |meta|
             key = meta.at('wp:meta_key').inner_text
             value = meta.at('wp:meta_value').inner_text
             metas[key] = value
           end
 
-          author_login = item.at('dc:creator').inner_text.strip
+          author_login = item.text_for('dc:creator').strip
 
-          name = "#{date.strftime('%Y-%m-%d')}-#{permalink_title}.html"
           header = {
-            'layout' => type,
-            'title'  => title,
-            'date' => date,
+            'layout'     => item.post_type,
+            'title'      => item.title,
+            'date'       => item.published_at,
+            'type'       => item.post_type,
+            'published'  => item.published?,
+            'status'     => item.status,
             'categories' => categories,
-            'tags'   => tags,
-            'status'   => status,
-            'type'   => type,
-            'published' => published,
-            'meta'   => metas,
-            'author' => authors[author_login]
+            'tags'       => tags,
+            'meta'       => metas,
+            'author'     => authors[author_login]
           }
 
           begin
-            content = Hpricot(item.at('content:encoded').inner_text)
-            excerpt = Hpricot(item.at('excerpt:encoded').inner_text)
+            content = Hpricot(item.text_for('content:encoded'))
+            excerpt = Hpricot(item.text_for('excerpt:encoded'))
 
-            if excerpt
-              header['excerpt'] = excerpt
-            end
+            header['excerpt'] = excerpt if excerpt && !excerpt.empty?
 
             if fetch
               download_images(title, content, assets_folder)
             end
 
-            FileUtils.mkdir_p "_#{type}s"
-            File.open("_#{type}s/#{name}", "w") do |f|
+            FileUtils.mkdir_p item.directory_name
+            File.open(File.join(item.directory_name, item.file_name), "w") do |f|
               f.puts header.to_yaml
               f.puts '---'
               f.puts Util.wpautop(content.to_html)
@@ -136,7 +175,7 @@ module JekyllImport
           rescue => e
             puts "Couldn't import post!"
             puts "Title: #{title}"
-            puts "Name/Slug: #{name}\n"
+            puts "Name/Slug: #{item.file_name}\n"
             puts "Error: #{e.message}"
             next
           end

@@ -163,7 +163,7 @@ module JekyllImport
             header['excerpt'] = excerpt if excerpt && !excerpt.empty?
 
             if fetch
-              download_images(title, content, assets_folder)
+              download_images(item.title, content, assets_folder)
             end
 
             FileUtils.mkdir_p item.directory_name
@@ -174,13 +174,13 @@ module JekyllImport
             end
           rescue => e
             puts "Couldn't import post!"
-            puts "Title: #{title}"
+            puts "Title: #{item.title}"
             puts "Name/Slug: #{item.file_name}\n"
             puts "Error: #{e.message}"
             next
           end
 
-          import_count[type] += 1
+          import_count[item.post_type] += 1
         end
 
         import_count.each do |key, value|

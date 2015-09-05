@@ -106,6 +106,17 @@ module JekyllImport
         def published?
           @published ||= (status == 'publish')
         end
+
+        def excerpt
+          @excerpt ||= begin
+            text = Hpricot(text_for('excerpt:encoded')).inner_text
+            if text.empty?
+              nil
+            else
+              text
+            end
+          end
+        end
       end
 
       def self.process(options)
@@ -158,9 +169,7 @@ module JekyllImport
 
           begin
             content = Hpricot(item.text_for('content:encoded'))
-            excerpt = Hpricot(item.text_for('excerpt:encoded'))
-
-            header['excerpt'] = excerpt if excerpt && !excerpt.empty?
+            header['excerpt'] = item.excerpt if item.excerpt
 
             if fetch
               download_images(item.title, content, assets_folder)

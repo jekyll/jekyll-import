@@ -39,6 +39,26 @@ class TestWordpressDotComItem < Test::Unit::TestCase
     item = Importers::WordpressDotCom::Item.new(node)
     assert_equal('dear-science', item.permalink_title)
   end
+
+  should "return nil for the excerpt, if it's missing" do
+    node = Hpricot(%q{
+      <item>
+        <excerpt:encoded><![CDATA[]]></excerpt:encoded>
+      </item>}).at('item')
+
+    item = Importers::WordpressDotCom::Item.new(node)
+    assert_equal(nil, item.excerpt)
+  end
+
+  should "extract the excerpt as plaintext, if it's present" do
+    node = Hpricot(%q{
+      <item>
+        <excerpt:encoded><![CDATA[...this one weird trick.]]></excerpt:encoded>
+      </item>}).at('item')
+
+    item = Importers::WordpressDotCom::Item.new(node)
+    assert_equal('...this one weird trick.', item.excerpt)
+  end
 end
 
 class TestWordpressDotComPublishedItem < TestWordpressDotComItem

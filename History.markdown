@@ -5,6 +5,7 @@
     extensions (#208)
   * WordPress.com: Fix `assets_folder` to include leading slash. (#212)
   * WordPress.com: Write dateless posts to `_drafts` (#213)
+  * Wordpress.com: Fix a few issues introduced by #213 (#218)
 
 ## 0.7.1 / 2015-05-06
 

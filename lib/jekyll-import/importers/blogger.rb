@@ -5,6 +5,7 @@ module JekyllImport
         c.option 'source', '--source NAME', 'The XML file (blog-MM-DD-YYYY.xml) path to import'
         c.option 'no-blogger-info', '--no-blogger-info', 'not to leave blogger-URL info (id and old URL) in the front matter (default: false)'
         c.option 'replace-internal-link', '--replace-internal-link', 'replace internal links using the post_url liquid tag. (default: false)'
+        c.option 'markdown', '--markdown', 'convert into markdown format'
       end
 
       def self.validate(options)
@@ -24,6 +25,8 @@ module JekyllImport
           time
           fileutils
           safe_yaml
+          open-uri
+          reverse_markdown
         ])
       end
 
@@ -32,6 +35,7 @@ module JekyllImport
       # source::                a local file String (or IO object for internal use purpose)..
       # no-blogger-info::       a boolean if not leave blogger info (id and original URL).
       # replace-internal-link:: a boolean if replace internal link
+      # markdown::              a boolean if convert into markdown format
       #
       # Returns nothing.
       def self.process(options)
@@ -39,6 +43,7 @@ module JekyllImport
 
         listener = BloggerAtomStreamListener.new
 
+        listener.markdown = options['markdown']
         listener.leave_blogger_info = ! options.fetch('no-blogger-info', false),
 
         File.open(source, 'r') do |f|
@@ -99,12 +104,13 @@ module JekyllImport
 
       module BloggerAtomStreamListenerMethods
         attr_accessor :leave_blogger_info
+        attr_accessor :markdown
         attr_reader :original_url_base
-      
+
         def tag_start(tag, attrs)
           @tag_bread = [] unless @tag_bread
           @tag_bread.push(tag)
-      
+
           case tag
           when 'entry'
             raise 'nest entry element' if @in_entry_elem
@@ -144,7 +150,7 @@ module JekyllImport
             end
           end
         end
-      
+
         def text(text)
           if @in_entry_elem
             case @tag_bread.last
@@ -168,13 +174,13 @@ module JekyllImport
               end
             end
           end
-        end 
-      
+        end
+
         def tag_end(tag)
           case tag
           when 'entry'
             raise 'nest entry element' unless @in_entry_elem
-      
+
             if @in_entry_elem[:meta][:kind] == 'post'
               post_data = get_post_data_from_in_entry_elem_info
 
@@ -183,20 +189,26 @@ module JekyllImport
                 target_dir = '_drafts' if @in_entry_elem[:meta][:draft]
 
                 FileUtils.mkdir_p(target_dir)
-      
-                File.open(File.join(target_dir, "#{post_data[:filename]}.html"), 'w') do |f|
+
+                extension = markdown ? 'md' : 'html'
+                file_name = URI::decode("#{post_data[:filename]}.#{extension}")
+                File.open(File.join(target_dir, file_name), 'w') do |f|
                   f.flock(File::LOCK_EX)
-      
+
                   f << post_data[:header].to_yaml
                   f << "---\n\n"
-                  f << post_data[:body]
+                  if markdown
+                    f << ReverseMarkdown.convert(post_data[:body])
+                  else
+                    f << post_data[:body]
+                  end
                 end
               end
             end
-      
+
             @in_entry_elem = nil
           end
-      
+
           @tag_bread.pop
         end
 
@@ -223,10 +235,10 @@ module JekyllImport
                   [timestamp,
                    CGI.escape(name.downcase).tr('+','-')]
               end
-            else 
+            else
               raise 'Original URL is missing'
             end
-        
+
             header = {
               'layout' => 'post',
               'title' => @in_entry_elem[:meta][:title],
@@ -238,7 +250,7 @@ module JekyllImport
             header['thumbnail'] = @in_entry_elem[:meta][:thumbnail] if @in_entry_elem[:meta][:thumbnail]
             header['blogger_id'] = @in_entry_elem[:meta][:id] if @leave_blogger_info
             header['blogger_orig_url'] = @in_entry_elem[:meta][:original_url] if @leave_blogger_info && @in_entry_elem[:meta][:original_url]
-        
+
             body = @in_entry_elem[:body]
 
             # body escaping associated with liquid
@@ -248,7 +260,7 @@ module JekyllImport
             if body =~ /{%/
               body.gsub!(/{%/, '{{ "{%" }}')
             end
-  
+
             { :filename => filename, :header => header, :body => body }
           else
             nil

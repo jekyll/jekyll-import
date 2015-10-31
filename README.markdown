@@ -8,7 +8,7 @@ The new __Jekyll__ command for importing from various blogs to Jekyll format.
 
 ## How `jekyll-import` works:
 
-### Jekyll v2.x
+### Jekyll v2.x and higher
 
 1. Install the _rubygem_ with `gem install jekyll-import`.
 2. Run `jekyll import IMPORTER [options]`

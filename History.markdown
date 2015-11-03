@@ -1,5 +1,6 @@
 ## HEAD
 
+  * Tumblr: If invalid post slug, fall back to the post ID (#210)
   * Add Joomla 3 importer (#184)
   * Joomla 1: various fixes related to correct import (#188)
   * Travis: test against Jekyll 2 & 3 with all supported Rubies. (#227)

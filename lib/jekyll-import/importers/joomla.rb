@@ -42,16 +42,25 @@ module JekyllImport
         # Reads a MySQL database via Sequel and creates a post file for each
         # post in wp_posts that has post_status = 'publish'. This restriction is
         # made because 'draft' posts are not guaranteed to have valid dates.
-        query = "SELECT `title`, `alias`, CONCAT(`introtext`,`fulltext`) as content, `created`, `id` FROM #{table_prefix}content WHERE state = '0' OR state = '1' AND sectionid = '#{section}'"
+        query = "SELECT `title`, `alias`, CONCAT(`introtext`,`fulltext`) as content, `created`, `id` FROM #{table_prefix}content WHERE (state = '0' OR state = '1') AND sectionid = '#{section}'"
 
         db[query].each do |post|
           # Get required fields and construct Jekyll compatible name.
           title = post[:title]
-          slug = post[:alias]
           date = post[:created]
           content = post[:content]
-          name = "%02d-%02d-%02d-%s.markdown" % [date.year, date.month, date.day,
-                                                 slug]
+          id = post[:id]
+
+          # Construct a slug from the title if alias field empty.
+          # Remove illegal filename characters.
+          if !post[:alias] or post[:alias].empty?
+            slug = sluggify(post[:title])
+          else
+            slug = sluggify(post[:alias])
+          end
+
+          name = "%02d-%02d-%02d-%03d-%s.markdown" % [date.year, date.month, date.day,
+                                                 id,slug]
 
           # Get the relevant fields as a hash, delete empty fields and convert
           # to YAML for the header.
@@ -70,6 +79,11 @@ module JekyllImport
             f.puts content
           end
         end
+      end
+
+      # Borrowed from the Wordpress importer
+      def self.sluggify( title )
+        title = title.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
       end
     end
   end

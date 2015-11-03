@@ -11,6 +11,7 @@ module JekyllImport
           hpricot
           time
           open-uri
+          open_uri_redirections
         ])
       end
 
@@ -38,14 +39,15 @@ module JekyllImport
             next
           end
           begin
-            open(uri) {|f|
+            open(uri, allow_redirections: :safe) {|f|
               File.open(dst, "wb") do |out|
                 out.puts f.read
               end
             }
             puts "    OK!"
           rescue => e
-            puts "    Errorr: #{e.message}"
+            puts "    Error: #{e.message}"
+            puts e.backtrace.join("\n")
           end
         end
       end

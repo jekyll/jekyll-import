@@ -207,7 +207,7 @@ module JekyllImport
           # Create an initial empty file for the post so that
           # we can instantiate a post object.
           File.open("_posts/tumblr/#{post[:name]}", "w")
-          tumblr_url = URI.parse(post[:slug]).path
+          tumblr_url = URI.parse(URI.encode(post[:slug])).path
           jekyll_url = Jekyll::Post.new(site, Dir.pwd, "", "tumblr/" + post[:name]).url
           redirect_dir = tumblr_url.sub(/\//, "") + "/"
           FileUtils.mkdir_p redirect_dir

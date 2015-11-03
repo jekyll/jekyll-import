@@ -1,5 +1,6 @@
 ## HEAD
 
+  * WordPress.com: Now follows 'safe' http to https redirections for images (#223)
   * Blogger: Decode URI encoded multibyte file names (#221)
   * Tumblr: Encode source URL before parsing (#217)
   * Tumblr: If invalid post slug, fall back to the post ID (#210)

@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('jekyll', '>= 1.4')
   s.add_runtime_dependency('fastercsv')
   s.add_runtime_dependency('nokogiri')
-  s.add_runtime_dependency('open_uri_redirections')
 
   # development dependencies
   s.add_development_dependency('rake', "~> 10.1.0")

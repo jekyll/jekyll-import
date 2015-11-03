@@ -12,10 +12,11 @@ env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   matrix:
-    - JEKYLL_VERSION="~> 3.0"
-    - JEKYLL_VERSION="~> 2.0"
+    - JEKYLL_VERSION=3.0
+    - JEKYLL_VERSION=2.5
 cache: bundler
 sudo: false
 before_script: bundle update
 script: ./script/cibuild
-notifications: false
+notifications:
+  email: false

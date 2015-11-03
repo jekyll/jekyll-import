@@ -1,3 +1,7 @@
+## HEAD
+
+  * Travis: test against Jekyll 2 & 3 with all supported Rubies. (#227)
+
 ## 0.8.0 / 2015-09-13
 
   * WordPress: Add `site_prefix` to support WP multi-site (#203)

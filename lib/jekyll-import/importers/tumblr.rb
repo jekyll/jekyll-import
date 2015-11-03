@@ -152,9 +152,11 @@ module JekyllImport
         title = "no title" if title.empty?
         slug = if post["slug"] && post["slug"].strip != ""
           post["slug"]
-        else
-          slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+        elsif title && title.downcase.gsub(/[^a-z0-9\-]/, '') != '' && title != 'no title'
+          slug = title.downcase.strip.gsub(' ', '-').gsub(/[^a-z0-9\-]/, '')
           slug.length > 200 ? slug.slice(0..200) : slug
+        else
+          slug = post['id']
         end
         {
           :name => "#{date}-#{slug}.#{format}",

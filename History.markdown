@@ -1,6 +1,7 @@
 ## HEAD
 
   * Add Joomla 3 importer (#184)
+  * Joomla 1: various fixes related to correct import (#188)
   * Travis: test against Jekyll 2 & 3 with all supported Rubies. (#227)
 
 ## 0.8.0 / 2015-09-13

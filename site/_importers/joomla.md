@@ -3,7 +3,7 @@ layout: docs
 title: Joomla
 prev_section: google_reader
 link_source:  joomla
-next_section: jrnl
+next_section: joomla3
 permalink: /docs/joomla/
 ---
 

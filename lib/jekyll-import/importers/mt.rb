@@ -26,10 +26,17 @@ module JekyllImport
       end
 
       def self.specify_options(c)
+        c.option 'engine', "--engine ENGINE", "Database engine, (default: 'mysql', postgres also supported)"
         c.option 'dbname', '--dbname DB', 'Database name'
         c.option 'user', '--user USER', 'Database user name'
         c.option 'password', '--password PW', "Database user's password, (default: '')"
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
+        c.option 'port', '--port PORT', 'Custom database port connect to (optional)'
+        c.option 'blog_id', '--blog_id ID', 'Specify a single Movable Type blog ID to import (default: all blogs)'
+        c.option 'categories', '--categories', "If true, save post's categories in its YAML front matter. (default: true)"
+        c.option 'src_encoding', '--src_encoding ENCODING', "Encoding of strings from database. (default: UTF-8)"
+        c.option 'dest_encoding', '--dest_encoding ENCODING', "Encoding of output strings. (default: UTF-8)"
+        c.option 'comments','--comments', "If true, output comments in _comments directory (default: false)"
       end
 
       # By default this migrator will include posts for all your MovableType blogs.
@@ -58,6 +65,7 @@ module JekyllImport
       def self.process(options)
         options  = default_options.merge(options)
 
+        engine   = options.fetch('engine', 'mysql')
         dbname   = options.fetch('dbname')
         user     = options.fetch('user')
         pass     = options.fetch('password', "")
@@ -66,7 +74,19 @@ module JekyllImport
 
         posts_name_by_id = { } if comments
 
-        db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host)
+        db_opts = { user => user, :password => pass, :host => host }
+
+        # Use the default port by default, but set the port if one is provided.
+        if options['port']
+          db_opts[:port] = options['port']
+        end
+
+        if engine != 'mysql' && engine != 'postgres'
+          abort("unsupported --engine value supplied '#{engine}'. Only 'mysql' and 'postgres' are supported")
+        end 
+
+        db = Sequel.public_send(engine, dbname, db_opts)
+
         post_categories = db[:mt_placement].join(:mt_category, :category_id => :placement_category_id)
 
         FileUtils.mkdir_p "_posts"

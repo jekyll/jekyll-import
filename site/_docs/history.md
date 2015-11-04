@@ -5,6 +5,26 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.9.0 / 2015-11-04
+
+- WordPress.com: Now follows 'safe' http to https redirections for images ([#223]({{ site.repository }}/issues/223))
+- Blogger: Decode URI encoded multibyte file names ([#221]({{ site.repository }}/issues/221))
+- Tumblr: Encode source URL before parsing ([#217]({{ site.repository }}/issues/217))
+- Tumblr: If invalid post slug, fall back to the post ID ([#210]({{ site.repository }}/issues/210))
+- Add Joomla 3 importer ([#184]({{ site.repository }}/issues/184))
+- Joomla 1: various fixes related to correct import ([#188]({{ site.repository }}/issues/188))
+- Travis: test against Jekyll 2 & 3 with all supported Rubies. ([#227]({{ site.repository }}/issues/227))
+- MovableType: Add support for importing from PostgreSQL-backed sites ([#224]({{ site.repository }}/issues/224))
+
+## 0.8.0 / 2015-09-13
+
+- WordPress: Add `site_prefix` to support WP multi-site ([#203]({{ site.repository }}/issues/203))
+- WordPress: Add `extension` option to support different output file
+    extensions ([#208]({{ site.repository }}/issues/208))
+- WordPress.com: Fix `assets_folder` to include leading slash. ([#212]({{ site.repository }}/issues/212))
+- WordPress.com: Write dateless posts to `_drafts` ([#213]({{ site.repository }}/issues/213))
+- Wordpress.com: Fix a few issues introduced by [#213]({{ site.repository }}/issues/213) ([#218]({{ site.repository }}/issues/218))
+
 ## 0.7.1 / 2015-05-06
 
 - RSS: Require all of `rss` to get atom parser. ([#196]({{ site.repository }}/issues/196))

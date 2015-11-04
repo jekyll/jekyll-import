@@ -1,4 +1,4 @@
-## HEAD
+## 0.9.0 / 2015-11-04
 
   * WordPress.com: Now follows 'safe' http to https redirections for images (#223)
   * Blogger: Decode URI encoded multibyte file names (#221)

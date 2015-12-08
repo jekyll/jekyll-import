@@ -10,7 +10,7 @@ module JekyllImport
                       n.status \
                FROM node AS n, \
                     field_data_body AS fdb \
-               WHERE (n.type = 'blog' OR n.type = 'story' OR n.type = 'article') \
+               WHERE (%types%) \
                AND n.nid = fdb.entity_id \
                AND n.vid = fdb.revision_id"
 
@@ -28,6 +28,7 @@ module JekyllImport
         c.option 'password', '--password PW', 'Database user\'s password (default: "")'
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
         c.option 'prefix', '--prefix PREFIX', 'Table prefix name'
+        c.option 'types', '--types TYPE1[,TYPE2[,TYPE3...]]', Array, 'The Drupal content types to be imported.'
       end
 
       def self.require_deps
@@ -45,6 +46,7 @@ module JekyllImport
         pass   = options.fetch('password', "")
         host   = options.fetch('host', "localhost")
         prefix = options.fetch('prefix', "")
+        types  = options.fetch('types', ['blog', 'story', 'article'])
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
@@ -52,6 +54,9 @@ module JekyllImport
           QUERY[" node "] = " " + prefix + "node "
           QUERY[" field_data_body "] = " " + prefix + "field_data_body "
         end
+
+        types = types.join("' OR n.type = '")
+        QUERY[" WHERE (%types%) "] = " WHERE (n.type = '#{types}') "
 
         FileUtils.mkdir_p "_posts"
         FileUtils.mkdir_p "_drafts"

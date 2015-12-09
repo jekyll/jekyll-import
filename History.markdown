@@ -1,3 +1,7 @@
+## HEAD
+
+  * Drupal 7: Allow importing any node type via the `types` option (#230)
+
 ## 0.9.0 / 2015-11-04
 
   * WordPress.com: Now follows 'safe' http to https redirections for images (#223)

@@ -46,7 +46,8 @@ module JekyllImport
         logger.error "  2. Run 'bundle install'"
         logger.error ""
         logger.error "If you're not using bundler:"
-        logger.abort_with "  1. Run 'gem install #{gem}'."
+        logger.error "  1. Run 'gem install #{gem}'."
+        abort
       end
     end
   end

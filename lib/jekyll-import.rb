@@ -9,10 +9,6 @@ require 'jekyll-import/importers'
 require 'jekyll-import/util'
 
 module JekyllImport
-  def self.logger
-    @logger ||= Jekyll::Stevenson.new
-  end
-
   # Public: Add the subcommands for each importer
   #
   # cmd - the instance of Mercenary::Command from the
@@ -39,14 +35,14 @@ module JekyllImport
       begin
         require gem
       rescue LoadError
-        logger.error "Whoops! Looks like you need to install '#{gem}' before you can use this importer."
-        logger.error ""
-        logger.error "If you're using bundler:"
-        logger.error "  1. Add 'gem \"#{gem}\"' to your Gemfile"
-        logger.error "  2. Run 'bundle install'"
-        logger.error ""
-        logger.error "If you're not using bundler:"
-        logger.abort_with "  1. Run 'gem install #{gem}'."
+        Jekyll.logger.error "Whoops! Looks like you need to install '#{gem}' before you can use this importer."
+        Jekyll.logger.error ""
+        Jekyll.logger.error "If you're using bundler:"
+        Jekyll.logger.error "  1. Add 'gem \"#{gem}\"' to your Gemfile"
+        Jekyll.logger.error "  2. Run 'bundle install'"
+        Jekyll.logger.error ""
+        Jekyll.logger.error "If you're not using bundler:"
+        Jekyll.logger.abort_with "  1. Run 'gem install #{gem}'."
       end
     end
   end

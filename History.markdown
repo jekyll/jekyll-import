@@ -1,6 +1,7 @@
 ## HEAD
 
   * Drupal 7: Allow importing any node type via the `types` option (#230)
+  * Drupal 6: Allow importing any node type via the `types` option (#231)
 
 ## 0.9.0 / 2015-11-04
 

@@ -13,7 +13,7 @@ module JekyllImport
                       node AS n \
                  LEFT OUTER JOIN term_node AS tn ON tn.nid = n.nid \
                  LEFT OUTER JOIN term_data AS td ON tn.tid = td.tid \
-                WHERE (n.type = 'blog' OR n.type = 'story' OR n.type = 'article') \
+                WHERE (%types%) \
                   AND n.vid = nr.vid \
              GROUP BY n.nid"
 
@@ -31,6 +31,7 @@ module JekyllImport
         c.option 'password', '--password PW', "Database user's password (default: '')"
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
         c.option 'prefix', '--prefix PREFIX', 'Table prefix name'
+        c.option 'types', '--types TYPE1[,TYPE2[,TYPE3...]]', Array, 'The Drupal content types to be imported.'
       end
 
       def self.require_deps
@@ -48,6 +49,7 @@ module JekyllImport
         pass   = options.fetch('password', "")
         host   = options.fetch('host', "localhost")
         prefix = options.fetch('prefix', "")
+        types  = options.fetch('types', ['blog', 'story', 'article'])
 
         db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
@@ -57,6 +59,9 @@ module JekyllImport
           QUERY[" term_node "] = " " + prefix + "term_node "
           QUERY[" term_data "] = " " + prefix + "term_data "
         end
+
+        types = types.join("' OR n.type = '")
+        QUERY[" WHERE (%types%) "] = " WHERE (n.type = '#{types}') "
 
         FileUtils.mkdir_p "_posts"
         FileUtils.mkdir_p "_drafts"

@@ -2,6 +2,8 @@ module JekyllImport
   module Importers
     class MT < Importer
 
+      SUPPORTED_ENGINES = %{mysql postgres sqlite}
+
       STATUS_DRAFT = 1
       STATUS_PUBLISHED = 2
       MORE_CONTENT_SEPARATOR = '<!--more-->'
@@ -65,27 +67,10 @@ module JekyllImport
       def self.process(options)
         options  = default_options.merge(options)
 
-        engine   = options.fetch('engine', 'mysql')
-        dbname   = options.fetch('dbname')
-        user     = options.fetch('user')
-        pass     = options.fetch('password', "")
-        host     = options.fetch('host', "localhost")
         comments = options.fetch('comments')
+        posts_name_by_id = {} if comments
 
-        posts_name_by_id = { } if comments
-
-        db_opts = { user => user, :password => pass, :host => host }
-
-        # Use the default port by default, but set the port if one is provided.
-        if options['port']
-          db_opts[:port] = options['port']
-        end
-
-        if engine != 'mysql' && engine != 'postgres'
-          abort("unsupported --engine value supplied '#{engine}'. Only 'mysql' and 'postgres' are supported")
-        end 
-
-        db = Sequel.public_send(engine, dbname, db_opts)
+        db = database_from_opts(options)
 
         post_categories = db[:mt_placement].join(:mt_category, :category_id => :placement_category_id)
 
@@ -102,7 +87,7 @@ module JekyllImport
 
           data = post_metadata(post, options)
           data['categories'] = categories if !categories.empty? && options['categories']
-          yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+          yaml_front_matter = data.delete_if { |_,v| v.nil? || v == '' }.to_yaml
 
           # save post path for comment processing
           posts_name_by_id[data['post_id']] = file_name if comments
@@ -122,13 +107,13 @@ module JekyllImport
 
           comments = db[:mt_comment]
           comments.each do |comment|
-            if posts_name_by_id.has_key?(comment[:comment_entry_id]) # if the entry exists
+            if posts_name_by_id.key?(comment[:comment_entry_id]) # if the entry exists
               dir_name, base_name = comment_file_dir_and_base_name(posts_name_by_id, comment, options)
               FileUtils.mkdir_p "_comments/#{dir_name}"
 
               data = comment_metadata(comment, options)
               content = comment_content(comment, options)
-              yaml_front_matter = data.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+              yaml_front_matter = data.delete_if { |_,v| v.nil? || v == '' }.to_yaml
 
               File.open("_comments/#{dir_name}/#{base_name}", "w") do |f|
                 f.puts yaml_front_matter
@@ -241,6 +226,30 @@ module JekyllImport
         else
           # Other values might need custom work.
           entry_type
+        end
+      end
+
+      def self.database_from_opts(options)
+        engine   = options.fetch('engine', 'mysql')
+        dbname   = options.fetch('dbname')
+
+        case engine
+        when "sqlite"
+          Sequel.sqlite(dbname)
+        when "mysql", "postgres"
+          db_connect_opts = {
+            :host =>     options.fetch('host', 'localhost'),
+            :user =>     options.fetch('user'),
+            :password => options.fetch('password', '')
+          }
+          db_connect_opts = options['port'] if options['port']
+          Sequel.public_send(
+            engine,
+            dbname,
+            db_connect_opts
+          )
+        else
+          abort("Unsupported engine: '#{engine}'. Must be one of #{SUPPORTED_ENGINES.join(', ')}")
         end
       end
     end

@@ -7,12 +7,16 @@ module JekyllImport
                       fdb.body_value, \
                       fdb.body_summary, \
                       n.created, \
-                      n.status \
+                      n.status, \
+                      n.nid, \
+                      u.name \
                FROM node AS n, \
-                    field_data_body AS fdb \
+                    field_data_body AS fdb, \
+                    users AS u \
                WHERE (%types%) \
                AND n.nid = fdb.entity_id \
-               AND n.vid = fdb.revision_id"
+               AND n.vid = fdb.revision_id
+               AND n.uid = u.uid"
 
       def self.validate(options)
         %w[dbname user].each do |option|
@@ -53,6 +57,7 @@ module JekyllImport
         unless prefix.empty?
           QUERY[" node "] = " " + prefix + "node "
           QUERY[" field_data_body "] = " " + prefix + "field_data_body "
+          QUERY[" users "] = " " + prefix + "users "
         end
 
         types = types.join("' OR n.type = '")
@@ -68,6 +73,8 @@ module JekyllImport
           content = post[:body_value]
           summary = post[:body_summary]
           created = post[:created]
+          author = post[:name]
+          nid = post[:nid]
           time = Time.at(created)
           is_published = post[:status] == 1
           dir = is_published ? "_posts" : "_drafts"
@@ -79,6 +86,8 @@ module JekyllImport
           data = {
             'layout' => 'post',
             'title' => title.strip.force_encoding("UTF-8"),
+            'author' => author,
+            'nid' => nid,
             'created' => created,
             'excerpt' => summary
           }.delete_if { |k,v| v.nil? || v == ''}.to_yaml

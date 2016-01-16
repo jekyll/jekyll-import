@@ -1,11 +1,8 @@
-## HEAD
+## 0.10.0 / 2016-01-16
 
   * Drupal 7: Allow importing any node type via the `types` option (#230)
   * Drupal 6: Allow importing any node type via the `types` option (#231)
   * Drupal 7: Add author and nid fields to import. (#237)
-
-### Minor Enhancements
-
   * MT: allow use of SQLite for installation. (#234)
   * CSV: parse the post using a class which errors on missing data. (#238)
 

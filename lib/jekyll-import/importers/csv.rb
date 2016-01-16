@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module JekyllImport
   module Importers
     class CSV < Importer
@@ -5,6 +7,7 @@ module JekyllImport
         JekyllImport.require_with_fallback(%w[
           csv
           fileutils
+          yaml
         ])
       end
 

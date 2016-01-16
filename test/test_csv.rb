@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'helper'
 
 class TestCSVImporter < Test::Unit::TestCase
@@ -38,17 +40,17 @@ class TestCSVImporter < Test::Unit::TestCase
         Importers::CSV.write_post(post, {})
         output_filename = "_posts/2015-01-10-hi.markdown"
         assert File.exist?(output_filename), "Post should be written."
-        assert_equal File.read(output_filename), <<-CONTENTS
----
-layout: post
-title: My Title
-date: '2015-01-10T00:00:00+00:00'
-permalink: "/2015/05/05/hi.html"
----
-Welcome to Jekyll!
 
-I am a post body.
-CONTENTS
+        lines = IO.readlines(output_filename)
+        assert_equal "---\n", lines[0]
+        assert_equal "layout: post\n", lines[1]
+        assert_equal "title: My Title\n", lines[2]
+        assert_equal "date: '2015-01-10T00:00:00+00:00'\n", lines[3]
+        assert_match /permalink: "?\/2015\/05\/05\/hi\.html"?/, lines[4]
+        assert_equal "---\n", lines[5]
+        assert_equal "Welcome to Jekyll!\n", lines[6]
+        assert_equal "\n", lines[7]
+        assert_equal "I am a post body.\n", lines[8]
         File.unlink(output_filename)
       end
     end

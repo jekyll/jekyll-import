@@ -7,6 +7,7 @@
 ### Minor Enhancements
 
   * MT: allow use of SQLite for installation. (#234)
+  * CSV: parse the post using a class which errors on missing data. (#238)
 
 ## 0.9.0 / 2015-11-04
 

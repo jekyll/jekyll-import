@@ -16,7 +16,8 @@ $ ruby -rubygems -e 'require "jekyll-import";
       "user"     => "myuser",
       "password" => "mypassword",
       "host"     => "myhost",
-      "prefix"   => "mytableprefix"
+      "prefix"   => "mytableprefix",
+      "types"    => ["blog", "story", "article"]
     })'
 {% endhighlight %}
 

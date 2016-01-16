@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module JekyllImport
   module Importers
     class CSV < Importer
@@ -5,6 +7,7 @@ module JekyllImport
         JekyllImport.require_with_fallback(%w[
           csv
           fileutils
+          yaml
         ])
       end
 
@@ -23,34 +26,69 @@ module JekyllImport
         abort "Cannot find the file '#{file}'. Aborting." unless File.file?(file)
 
         ::CSV.foreach(file) do |row|
-          next if row[0] == "title"
+          next if row[0] == "title" # header
           posts += 1
-          name = build_name(row)
-          write_post(name, row[0], row[2], options)
+          write_post(CSVPost.new(row), options)
         end
-        "Created #{posts} posts!"
+        Jekyll.logger.info "Created #{posts} posts!"
       end
 
-      def self.write_post(name, title, content, options)
-        File.open("_posts/#{name}", "w") do |f|
-          write_frontmatter(f, title, options)
-          f.puts content
+      class CSVPost
+        attr_reader :title, :permalink, :body, :markup
+
+        MissingDataError = Class.new(RuntimeError)
+
+        # Creates a CSVPost
+        #
+        # row - Array of data, length of 4 or 5 with the columns:
+        #
+        #   1. title
+        #   2. permalink
+        #   3. body
+        #   4. published_at
+        #   5. markup (markdown, textile)
+        def initialize(row)
+          @title = row[0]        || missing_data("Post title not present in first column.")
+          @permalink = row[1]    || missing_data("Post permalink not present in second column.")
+          @body = row[2]         || missing_data("Post body not present in third column.")
+          @published_at = row[3] || missing_data("Post publish date not present in fourth column.")
+          @markup = row[4]       || "markdown"
+        end
+
+        def published_at
+          if @published_at && !@published_at.is_a?(DateTime)
+            @published_at = DateTime.parse(@published_at)
+          else
+            @published_at
+          end
+        end
+
+        def filename
+          "#{published_at.strftime("%Y-%m-%d")}-#{File.basename(permalink, ".*")}.#{markup}"
+        end
+
+        def missing_data(message)
+          raise MissingDataError, message
         end
       end
 
-      def self.build_name(row)
-        row[3].split(" ")[0]+"-"+row[1]+(row[4] =~ /markdown/ ? ".markdown" : ".textile")
+      def self.write_post(post, options = {})
+        File.open(File.join("_posts", post.filename), "w") do |f|
+          write_frontmatter(f, post, options)
+          f.puts post.body
+        end
       end
 
-      def self.write_frontmatter(f, title, options)
+      def self.write_frontmatter(f, post, options)
         no_frontmatter = options.fetch('no-front-matter', false)
         unless no_frontmatter
-          f.puts <<-HEADER
----
-layout: post
-title: #{title}
----
-HEADER
+          f.puts YAML.dump({
+            "layout"    => "post",
+            "title"     => post.title,
+            "date"      => post.published_at.to_s,
+            "permalink" => post.permalink
+          })
+          f.puts "---"
         end
       end
     end

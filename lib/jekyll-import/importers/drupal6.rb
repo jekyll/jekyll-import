@@ -40,6 +40,7 @@ module JekyllImport
           sequel
           fileutils
           safe_yaml
+          mysql
         ])
       end
 

@@ -1,3 +1,9 @@
+## HEAD
+
+### Bug Fixes
+
+  * Drupal 6 importer depends on mysql. (#242)
+
 ## 0.10.0 / 2016-01-16
 
   * Drupal 7: Allow importing any node type via the `types` option (#230)

@@ -4,6 +4,10 @@
 
   * Drupal 6 importer depends on mysql. (#242)
 
+### Site Enhancements
+
+  * Correct "How to Contribute" link (#244)
+
 ## 0.10.0 / 2016-01-16
 
   * Drupal 7: Allow importing any node type via the `types` option (#230)

@@ -18,7 +18,7 @@ Found an issue with one of the importers? Sorry about that! In order to better a
 4. Ensure the `--trace` option is specified if you're running `jekyll import` from the command-line.
 4. [Open a new issue]({{ site.repository }}/issues/new) describing the four above points, as well as what you expected the outcome of your incantation to be.
 
-You should receive help soon. As always, check out [our help repo](https;//github.com/jekyll/jekyll-help) if you just have a question.
+You should receive help soon. As always, check out [our help repo](https://talk.jekyllrb.com/) if you just have a question.
 
 ## Creating a New Importer
 

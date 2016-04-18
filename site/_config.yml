@@ -1,5 +1,5 @@
 title: "jekyll-import • Import your old &amp; busted site to Jekyll"
-highlighter: pygments
+highlighter: rouge
 relative_permalinks: false
 permalink: /news/:year/:month/:day/:title/
 excerpt_separator: ""

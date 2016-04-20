@@ -19,6 +19,15 @@ module JekyllImport
           c.option 'prefix', '--prefix PREFIX', 'Table prefix name'
           c.option 'types', '--types TYPE1[,TYPE2[,TYPE3...]]', Array, 'The Drupal content types to be imported.'
         end
+
+        def require_deps
+          JekyllImport.require_with_fallback(%w[
+          rubygems
+          sequel
+          fileutils
+          safe_yaml
+        ])
+        end
       end
 
       def get_query(prefix, types)
@@ -43,15 +52,6 @@ module JekyllImport
             abort "Missing mandatory option --#{option}."
           end
         end
-      end
-
-      def require_deps
-        JekyllImport.require_with_fallback(%w[
-          rubygems
-          sequel
-          fileutils
-          safe_yaml
-        ])
       end
 
       def process(options)

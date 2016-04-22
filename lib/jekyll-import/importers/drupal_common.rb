@@ -67,6 +67,7 @@ EOF
             title = data[:title] = post[:title].strip.force_encoding('UTF-8')
             time = data[:created] = post[:created]
 
+            # Get the relevant fields as a hash and delete empty fields
             data = data.delete_if { |k,v| v.nil? || v == ''}.each_pair {
                 |k,v| ((v.is_a? String) ? v.force_encoding('UTF-8') : v)
             }

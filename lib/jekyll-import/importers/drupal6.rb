@@ -38,8 +38,6 @@ module JekyllImport
         summary = post[:teaser]
         tags = (post[:tags] || '').downcase.strip
 
-        # Get the relevant fields as a hash, delete empty fields and convert
-        # to YAML for the header
         data = {
           :excerpt => summary,
           :categories => tags.split('|')

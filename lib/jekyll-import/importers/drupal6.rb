@@ -34,8 +34,8 @@ module JekyllImport
       end
 
       def self.get_data(post)
-        content = post[:body]
-        summary = post[:teaser]
+        content = post[:body].to_s
+        summary = post[:teaser].to_s
         tags = (post[:tags] || '').downcase.strip
 
         data = {

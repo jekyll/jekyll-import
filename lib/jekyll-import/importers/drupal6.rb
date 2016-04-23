@@ -41,8 +41,8 @@ EOS
         tags = (post[:tags] || '').downcase.strip
 
         data = {
-          :excerpt => summary,
-          :categories => tags.split('|')
+          'excerpt' => summary,
+          'categories' => tags.split('|')
         }
 
          return data, content

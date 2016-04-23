@@ -71,9 +71,9 @@ EOF
             # Get required fields
             data, content = self.get_data(post)
 
-            data[:layout] = post[:type]
-            title = data[:title] = post[:title].strip.force_encoding('UTF-8')
-            time = data[:created] = post[:created]
+            data['layout'] = post[:type]
+            title = data['title'] = post[:title].strip.force_encoding('UTF-8')
+            time = data['created'] = post[:created]
 
             # Get the relevant fields as a hash and delete empty fields
             data = data.delete_if { |k,v| v.nil? || v == ''}.each_pair {

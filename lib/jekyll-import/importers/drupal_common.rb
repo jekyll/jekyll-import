@@ -41,13 +41,21 @@ module JekyllImport
 
           query = self.get_query(prefix, types)
 
-          FileUtils.mkdir_p '_posts'
-          FileUtils.mkdir_p '_drafts'
-          FileUtils.mkdir_p '_layouts'
+          src_dir = Jekyll.configuration({})['source']
+
+          dirs = {
+              :_posts => File.join(src_dir, '_posts').to_s,
+              :_drafts => File.join(src_dir, '_drafts').to_s,
+              :_layouts => File.join(src_dir, '_layouts').to_s
+          }
+
+          dirs.each do |key, dir|
+            FileUtils.mkdir_p dir
+          end
 
           # Create the refresh layout
           # Change the refresh url if you customized your permalink config
-          File.open('_layouts/refresh.html', 'w') do |f|
+          File.open(File.join(dirs[:_layouts], 'refresh.html'), 'w') do |f|
             f.puts <<EOF
 <!DOCTYPE html>
 <html>
@@ -75,7 +83,7 @@ EOF
             # Construct a Jekyll compatible file name
             is_published = post[:status] == 1
             node_id = post[:nid]
-            dir = is_published ? '_posts' : '_drafts'
+            dir = is_published ? dirs[:_posts] : dirs[:_drafts]
             slug = title.strip.downcase.gsub(/(&|&amp;)/, ' and ').gsub(/[\s\.\/\\]/, '-').gsub(/[^\w-]/, '').gsub(/[-_]{2,}/, '-').gsub(/^[-_]/, '').gsub(/[-_]$/, '')
             filename = Time.at(time).to_datetime.strftime('%Y-%m-%d-') + slug + '.md'
 

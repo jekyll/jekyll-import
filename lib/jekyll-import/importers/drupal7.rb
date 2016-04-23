@@ -31,7 +31,7 @@ module JekyllImport
       end
 
       def self.get_aliases_query(prefix)
-        return "SELECT alias FROM #{prefix}url_alias WHERE source = ?"
+        return "SELECT source, alias FROM #{prefix}url_alias WHERE source = ?"
       end
 
       def self.get_data(post)

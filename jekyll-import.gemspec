@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rr', "~> 1.0")
   s.add_development_dependency('simplecov', "~> 0.7")
   s.add_development_dependency('simplecov-gem-adapter', "~> 1.0.1")
+  s.add_development_dependency('rubocop')
 
   # migrator dependencies:
   s.add_development_dependency('sequel', "~> 3.42")

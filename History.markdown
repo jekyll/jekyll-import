@@ -3,6 +3,7 @@
 ### Bug Fixes
 
   * Drupal 6 importer depends on mysql. (#242)
+  * Tumblr: Update range of JSON readlines to extract JSON from JS (Tumblr may have changed structure of JSON) (#243)
 
 ### Site Enhancements
 

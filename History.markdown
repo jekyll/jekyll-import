@@ -7,6 +7,7 @@
 ### Site Enhancements
 
   * Correct "How to Contribute" link (#244)
+  * Correct "our community forum" link (#246)
 
 ## 0.10.0 / 2016-01-16
 

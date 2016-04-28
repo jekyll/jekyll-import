@@ -4,6 +4,7 @@
 
   * Drupal 6 importer depends on mysql. (#242)
   * Tumblr: Update range of JSON readlines to extract JSON from JS (Tumblr may have changed structure of JSON) (#243)
+  * Tumblr: look up beginning and end of JSON dynamically (#249)
 
 ### Site Enhancements
 

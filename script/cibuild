@@ -1,3 +1,4 @@
 #!/bin/bash
 
+script/fmt --format offenses || true
 bundle exec rake test

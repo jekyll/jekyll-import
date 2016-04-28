@@ -11,6 +11,10 @@
   * Correct "How to Contribute" link (#244)
   * Correct "our community forum" link (#246)
 
+### Development Fixes
+
+  * Add rubocop (#248)
+
 ## 0.10.0 / 2016-01-16
 
   * Drupal 7: Allow importing any node type via the `types` option (#230)

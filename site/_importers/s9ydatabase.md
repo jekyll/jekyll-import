@@ -11,7 +11,7 @@ permalink: /docs/s9ydatabase/
   <h5>Install additional gems</h5>
   <p>
     To use this importer, you need to install these additional gems:
-    `gem install unidecode sequel mysql2 htmlentities`
+    `gem install unidecode sequel mysql2 htmlentities reverse_markdown`
   </p>
 </div>
 

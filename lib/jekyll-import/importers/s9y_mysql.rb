@@ -143,7 +143,7 @@ module JekyllImport
           slug = sluggify(title)
         end
 
-        status = post[:isdraft] ? 'draft' : 'published'
+        status = post[:isdraft] == 'true' ? 'draft' : 'published'
         date = Time.at(post[:timestamp]) || Time.now
         name = "%02d-%02d-%02d-%02d-%02d-%s.%s" % [date.year, date.month, date.day, date.hour, date.min, slug, extension]
 
@@ -229,7 +229,7 @@ module JekyllImport
         data = {
           'layout'        => post[:type].to_s,
           'status'        => status.to_s,
-          'published'     => status.to_s == 'draft' ? nil : (post[:status].to_s == 'published'),
+          'published'     => status.to_s == 'draft' ? nil : (status.to_s == 'published'),
           'title'         => title.to_s,
           'author'        => {
             'display_name'=> post[:author].to_s,
@@ -246,7 +246,7 @@ module JekyllImport
         if post[:type] == 'page'
           filename = page_path(post[:id], page_name_list) + "index.#{extension}"
           FileUtils.mkdir_p(File.dirname(filename))
-        elsif post[:status] == 'draft'
+        elsif status == 'draft'
           filename = "_drafts/#{slug}.#{extension}"
         else
           filename = "_posts/#{name}"

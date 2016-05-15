@@ -1,6 +1,6 @@
 module JekyllImport
   module Importers
-    class S9YMySQL < Importer
+    class S9YDatabase < Importer
 
       def self.require_deps
         JekyllImport.require_with_fallback(

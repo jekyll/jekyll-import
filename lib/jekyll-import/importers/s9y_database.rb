@@ -10,7 +10,6 @@ module JekyllImport
           fileutils
           safe_yaml
           unidecode
-          reverse_markdown
           ])
       end
 
@@ -83,6 +82,16 @@ module JekyllImport
             STDERR.puts "Could not require 'htmlentities', so the " +
               ":clean_entities option is now disabled."
             options[:clean_entities] = false
+          end
+        end
+
+        if options[:markdown]
+          begin
+            require 'reverse_markdown'
+          rescue LoadError
+            STDERR.puts "Could not require 'reverse_markdown', so the " +
+              ":markdown option is now disabled."
+            options[:markdown] = false
           end
         end
 

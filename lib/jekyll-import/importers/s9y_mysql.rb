@@ -24,6 +24,7 @@ module JekyllImport
         c.option 'clean_entities', '--clean_entities', 'Whether to clean entities (default: true)'
         c.option 'comments', '--comments', 'Whether to import comments (default: true)'
         c.option 'categories', '--categories', 'Whether to import categories (default: true)'
+        c.option 'tags', '--tags', 'Whether to import tags (default: true)'
         c.option 'export_drafts', '--export_drafts', 'Whether to export drafts as well'
         c.option 'markdown', '--markdown', 'convert into markdown format (default: false)'
       end
@@ -50,6 +51,8 @@ module JekyllImport
       #                   Default: true.
       # :categories::     If true, save the post's categories in its
       #                   YAML front matter. Default: true.
+      # :tags::           If true, save the post's tags in its
+      #                   YAML front matter. Default: true.
       # :extension::      Set the post extension. Default: "html"
       # :export_drafts::  If true, export drafts as well
       #                   Default: true.
@@ -67,6 +70,7 @@ module JekyllImport
           :clean_entities => opts.fetch('clean_entities', true),
           :comments       => opts.fetch('comments', true),
           :categories     => opts.fetch('categories', true),
+          :tags           => opts.fetch('tags', true),
           :extension      => opts.fetch('extension', 'html'),
           :export_drafts  => opts.fetch('export_drafts', true),
           :markdown       => opts.fetch('markdown', false)
@@ -92,11 +96,12 @@ module JekyllImport
 
         page_name_list = {}
 
-        page_name_query = "
+        page_name_query = %(
            SELECT
              entries.ID             AS `id`,
              entries.title          AS `title`
-           FROM #{px}entries AS `entries`"
+           FROM #{px}entries AS `entries`
+        )
 
         db[page_name_query].each do |page|
           page[:slug] = sluggify(page[:title])
@@ -130,7 +135,6 @@ module JekyllImport
       end
 
       def self.process_post(post, db, options, page_name_list)
-        px = options[:table_prefix]
         extension = options[:extension]
 
         title = post[:title]
@@ -154,75 +158,12 @@ module JekyllImport
         end
 
         if options[:markdown]
-         content = ReverseMarkdown.convert(content)
+          content = ReverseMarkdown.convert(content)
         end
 
-        categories = []
-
-        if options[:categories]
-          cquery =
-            "SELECT
-               categories.category_name AS `name`
-             FROM
-            #{px}entrycat AS `entrycat`,
-            #{px}category AS `categories`
-             WHERE
-               entrycat.entryid = '#{post[:id]}' AND
-               entrycat.categoryid = categories.categoryid"
-
-            db[cquery].each do |category|
-            if options[:categories]
-              if options[:clean_entities]
-                categories << clean_entities(category[:name])
-              else
-                categories << category[:name]
-              end
-            end
-            end
-        end
-
-        comments = []
-
-        if options[:comments]
-          cquery =
-            "SELECT
-               id           AS `id`,
-               author       AS `author`,
-               email        AS `author_email`,
-               url          AS `author_url`,
-               timestamp    AS `date`,
-               body         AS `content`
-             FROM #{px}comments
-             WHERE
-               entry_id = '#{post[:id]}' AND
-               status = 'approved'"
-
-            db[cquery].each do |comment|
-              comcontent = comment[:content].to_s
-              if comcontent.respond_to?(:force_encoding)
-                comcontent.force_encoding("UTF-8")
-              end
-              if options[:clean_entities]
-                comcontent = clean_entities(comcontent)
-              end
-
-              comauthor = comment[:author].to_s
-              if options[:clean_entities]
-                comauthor = clean_entities(comauthor)
-              end
-
-              comments << {
-                'id'           => comment[:id].to_i,
-                'author'       => comauthor,
-                'author_email' => comment[:author_email].to_s,
-                'author_url'   => comment[:author_url].to_s,
-                'date'         => comment[:date].to_s,
-                'content'      => comcontent,
-              }
-            end
-
-          comments.sort!{ |a,b| a['id'] <=> b['id'] }
-        end
+        categories = process_categories(db, options, post)
+        comments = process_comments(db, options, post)
+        tags = process_tags(db, options, post)
 
         # Get the relevant fields as a hash, delete empty fields and
         # convert to YAML for the header.
@@ -240,6 +181,7 @@ module JekyllImport
           'author_email'  => post[:author_email].to_s,
           'date'          => date.to_s,
           'categories'    => options[:categories] ? categories : nil,
+          'tags'          => options[:tags] ? tags : nil,
           'comments'      => options[:comments] ? comments : nil,
         }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
 
@@ -257,6 +199,97 @@ module JekyllImport
           f.puts data
           f.puts "---"
           f.puts Util.wpautop(content)
+        end
+      end
+
+      def self.process_categories(db, options, post)
+        return [] unless options[:categories]
+
+        px = options[:table_prefix]
+
+        cquery = %(
+            SELECT
+               categories.category_name AS `name`
+             FROM
+              #{px}entrycat AS `entrycat`,
+              #{px}category AS `categories`
+             WHERE
+               entrycat.entryid = '#{post[:id]}' AND
+               entrycat.categoryid = categories.categoryid
+        )
+
+        db[cquery].each_with_object([]) do |category, categories|
+          if options[:clean_entities]
+            categories << clean_entities(category[:name])
+          else
+            categories << category[:name]
+          end
+        end
+      end
+
+      def self.process_comments(db, options, post)
+        return [] unless options[:comments]
+
+        px = options[:table_prefix]
+
+        cquery = %(
+            SELECT
+               id           AS `id`,
+               author       AS `author`,
+               email        AS `author_email`,
+               url          AS `author_url`,
+               timestamp    AS `date`,
+               body         AS `content`
+             FROM #{px}comments
+             WHERE
+               entry_id = '#{post[:id]}' AND
+               status = 'approved'
+        )
+
+        db[cquery].each_with_object([]) do |comment, comments|
+          comcontent = comment[:content].to_s
+          comauthor = comment[:author].to_s
+
+          if comcontent.respond_to?(:force_encoding)
+            comcontent.force_encoding("UTF-8")
+          end
+
+          if options[:clean_entities]
+            comcontent = clean_entities(comcontent)
+            comauthor = clean_entities(comauthor)
+          end
+
+          comments << {
+            'id'           => comment[:id].to_i,
+            'author'       => comauthor,
+            'author_email' => comment[:author_email].to_s,
+            'author_url'   => comment[:author_url].to_s,
+            'date'         => comment[:date].to_s,
+            'content'      => comcontent,
+          }
+        end.sort!{ |a,b| a['id'] <=> b['id'] }
+      end
+
+      def self.process_tags(db, options, post)
+        return [] unless options[:categories]
+
+        px = options[:table_prefix]
+
+        cquery = %(
+            SELECT
+               entrytags.tag AS `name`
+             FROM
+              #{px}entrytags AS `entrytags`
+             WHERE
+               entrytags.entryid = '#{post[:id]}'
+        )
+
+        db[cquery].each_with_object([]) do |tag, tags|
+          if options[:clean_entities]
+            tags << clean_entities(tag[:name])
+          else
+            tags << tag[:name]
+          end
         end
       end
 

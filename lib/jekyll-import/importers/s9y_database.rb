@@ -76,23 +76,11 @@ module JekyllImport
         }
 
         if options[:clean_entities]
-          begin
-            require 'htmlentities'
-          rescue LoadError
-            STDERR.puts "Could not require 'htmlentities', so the " +
-              ":clean_entities option is now disabled."
-            options[:clean_entities] = false
-          end
+          options[:clean_entities] = require_if_available('htmlentities', 'clean_entities')
         end
 
         if options[:markdown]
-          begin
-            require 'reverse_markdown'
-          rescue LoadError
-            STDERR.puts "Could not require 'reverse_markdown', so the " +
-              ":markdown option is now disabled."
-            options[:markdown] = false
-          end
+          options[:markdown] = require_if_available('reverse_markdown', 'markdown')
         end
 
         FileUtils.mkdir_p("_posts")
@@ -208,6 +196,16 @@ module JekyllImport
           f.puts data
           f.puts "---"
           f.puts Util.wpautop(content)
+        end
+      end
+
+      def self.require_if_available(gem_name, option_name)
+        begin
+          require gem_name
+          return true
+        rescue LoadError
+          STDERR.puts "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
+          return true
         end
       end
 

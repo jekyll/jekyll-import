@@ -126,7 +126,7 @@ module JekyllImport
              LEFT JOIN #{px}authors AS `authors`
                ON entries.authorid = authors.authorid"
 
-        if !options[:drafts]
+        unless options[:drafts]
           posts_query << "WHERE posts.isdraft = 'false'"
         end
 
@@ -144,7 +144,7 @@ module JekyllImport
         end
 
         slug = post[:slug]
-        if !slug or slug.empty?
+        if !slug || slug.empty?
           slug = sluggify(title)
         end
 

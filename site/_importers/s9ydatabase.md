@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: S9Y
+title: S9Y Database
 prev_section: s9y
 link_source:  s9ydatabase
 next_section: textpattern

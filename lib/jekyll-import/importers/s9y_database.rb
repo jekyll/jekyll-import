@@ -24,7 +24,7 @@ module JekyllImport
         c.option 'comments', '--comments', 'Whether to import comments (default: true)'
         c.option 'categories', '--categories', 'Whether to import categories (default: true)'
         c.option 'tags', '--tags', 'Whether to import tags (default: true)'
-        c.option 'export_drafts', '--export_drafts', 'Whether to export drafts as well'
+        c.option 'drafts', '--drafts', 'Whether to export drafts as well'
         c.option 'markdown', '--markdown', 'convert into markdown format (default: false)'
         c.option 'permalinks', '--permalinks', 'preserve S9Y permalinks (default: false)'
       end
@@ -54,7 +54,7 @@ module JekyllImport
       # :tags::           If true, save the post's tags in its
       #                   YAML front matter. Default: true.
       # :extension::      Set the post extension. Default: "html"
-      # :export_drafts::  If true, export drafts as well
+      # :drafts::  If true, export drafts as well
       #                   Default: true.
       # :markdown::       If true, convert the content to markdown
       #                   Default: false
@@ -74,7 +74,7 @@ module JekyllImport
           :categories     => opts.fetch('categories', true),
           :tags           => opts.fetch('tags', true),
           :extension      => opts.fetch('extension', 'html'),
-          :export_drafts  => opts.fetch('export_drafts', true),
+          :drafts  => opts.fetch('drafts', true),
           :markdown       => opts.fetch('markdown', false),
           :permalinks     => opts.fetch('permalinks', false),
         }
@@ -88,7 +88,7 @@ module JekyllImport
         end
 
         FileUtils.mkdir_p("_posts")
-        FileUtils.mkdir_p("_drafts") if options[:export_drafts]
+        FileUtils.mkdir_p("_drafts") if options[:drafts]
 
         db = Sequel.mysql2(options[:dbname], :user => options[:user], :password => options[:pass],
                            :socket => options[:socket], :host => options[:host], :encoding => 'utf8')
@@ -126,7 +126,7 @@ module JekyllImport
              LEFT JOIN #{px}authors AS `authors`
                ON entries.authorid = authors.authorid"
 
-        if !options[:export_drafts]
+        if !options[:drafts]
           posts_query << "WHERE posts.isdraft = 'false'"
         end
 

@@ -146,7 +146,7 @@ module JekyllImport
 
         status = post[:isdraft] == 'true' ? 'draft' : 'published'
         date = Time.at(post[:timestamp]) || Time.now
-        name = "%02d-%02d-%02d-%02d-%02d-%s.%s" % [date.year, date.month, date.day, date.hour, date.min, slug, extension]
+        name = "%02d-%02d-%02d_%02d-%02d-%s.%s" % [date.year, date.month, date.day, date.hour, date.min, slug, extension]
 
         content = post[:body].to_s
 

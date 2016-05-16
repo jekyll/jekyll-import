@@ -74,7 +74,7 @@ module JekyllImport
           :categories     => opts.fetch('categories', true),
           :tags           => opts.fetch('tags', true),
           :extension      => opts.fetch('extension', 'html'),
-          :drafts  => opts.fetch('drafts', true),
+          :drafts         => opts.fetch('drafts', true),
           :markdown       => opts.fetch('markdown', false),
           :permalinks     => opts.fetch('permalinks', false),
         }

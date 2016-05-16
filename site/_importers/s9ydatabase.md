@@ -32,7 +32,8 @@ $ ruby -rubygems -e 'require "jekyll-import";
       "tags"           => true,
       "extension"      => "html",
       "export_drafts " => true,
-      "markdown"       => false
+      "markdown"       => false,
+      "permalinks"     => false
     })
 {% endhighlight %}
 

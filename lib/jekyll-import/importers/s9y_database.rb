@@ -26,6 +26,7 @@ module JekyllImport
         c.option 'tags', '--tags', 'Whether to import tags (default: true)'
         c.option 'export_drafts', '--export_drafts', 'Whether to export drafts as well'
         c.option 'markdown', '--markdown', 'convert into markdown format (default: false)'
+        c.option 'permalinks', '--permalinks', 'preserve S9Y permalinks (default: false)'
       end
 
       # Main migrator function. Call this to perform the migration.
@@ -57,6 +58,8 @@ module JekyllImport
       #                   Default: true.
       # :markdown::       If true, convert the content to markdown
       #                   Default: false
+      # :permalinks::     If true, save the post's original permalink in its
+      #                   YAML front matter. Default: false.
       #
       def self.process(opts)
         options = {
@@ -72,7 +75,8 @@ module JekyllImport
           :tags           => opts.fetch('tags', true),
           :extension      => opts.fetch('extension', 'html'),
           :export_drafts  => opts.fetch('export_drafts', true),
-          :markdown       => opts.fetch('markdown', false)
+          :markdown       => opts.fetch('markdown', false),
+          :permalinks     => opts.fetch('permalinks', false),
         }
 
         if options[:clean_entities]
@@ -161,6 +165,7 @@ module JekyllImport
         categories = process_categories(db, options, post)
         comments = process_comments(db, options, post)
         tags = process_tags(db, options, post)
+        permalink = process_permalink(db, options, post)
 
         # Get the relevant fields as a hash, delete empty fields and
         # convert to YAML for the header.
@@ -177,6 +182,7 @@ module JekyllImport
           'author_login'  => post[:author_login].to_s,
           'author_email'  => post[:author_email].to_s,
           'date'          => date.to_s,
+          'permalink'     => options[:permalinks] ? permalink : nil,
           'categories'    => options[:categories] ? categories : nil,
           'tags'          => options[:tags] ? tags : nil,
           'comments'      => options[:comments] ? comments : nil,
@@ -297,6 +303,26 @@ module JekyllImport
           else
             tags << tag[:name]
           end
+        end
+      end
+
+      def self.process_permalink(db, options, post)
+        return unless options[:permalinks]
+
+        px = options[:table_prefix]
+
+        cquery = %(
+            SELECT
+               permalinks.permalink AS `permalink`
+             FROM
+        #{px}permalinks AS `permalinks`
+             WHERE
+               permalinks.entry_id = '#{post[:id]}' AND
+               permalinks.type = 'entry'
+        )
+
+        db[cquery].each do |link|
+          return "/#{link[:permalink]}"
         end
       end
 

@@ -5,6 +5,7 @@ module JekyllImport
         c.option 'source', '--source NAME', 'The XML file (blog-MM-DD-YYYY.xml) path to import'
         c.option 'no-blogger-info', '--no-blogger-info', 'not to leave blogger-URL info (id and old URL) in the front matter (default: false)'
         c.option 'replace-internal-link', '--replace-internal-link', 'replace internal links using the post_url liquid tag. (default: false)'
+        c.option 'comments', '--comments', 'import comments to _comments collection'
       end
 
       def self.validate(options)
@@ -41,6 +42,7 @@ module JekyllImport
         listener = BloggerAtomStreamListener.new
 
         listener.leave_blogger_info = ! options.fetch('no-blogger-info', false),
+        listener.comments = options.fetch('comments', false),
 
         File.open(source, 'r') do |f|
           f.flock(File::LOCK_SH)
@@ -95,11 +97,12 @@ module JekyllImport
           extend BloggerAtomStreamListenerMethods
 
           @leave_blogger_info = true
+          @comments = false
         end
       end
 
       module BloggerAtomStreamListenerMethods
-        attr_accessor :leave_blogger_info
+        attr_accessor :leave_blogger_info, :comments
         attr_reader :original_url_base
 
         def tag_start(tag, attrs)
@@ -198,7 +201,7 @@ module JekyllImport
                   f << post_data[:body]
                 end
               end
-            elsif @in_entry_elem[:meta][:kind] == 'comment'
+            elsif @in_entry_elem[:meta][:kind] == 'comment' and @comments
               post_data = get_post_data_from_in_entry_elem_info
 
               if post_data

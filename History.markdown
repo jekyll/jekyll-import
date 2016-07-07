@@ -1,3 +1,7 @@
+## HEAD
+
+  * Joomla: require the `mysql` gem (#197)
+
 ## 0.11.0 / 2016-06-27
 
 ### Bug Fixes

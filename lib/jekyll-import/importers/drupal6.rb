@@ -1,4 +1,4 @@
-require 'jekyll-import/importers/drupal_common.rb'
+require 'jekyll-import/importers/drupal_common'
 
 module JekyllImport
   module Importers
@@ -6,7 +6,7 @@ module JekyllImport
       include DrupalCommon
       extend DrupalCommon::ClassMethods
 
-      def self.get_query(prefix, types)
+      def self.build_query(prefix, types)
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
 
@@ -31,14 +31,14 @@ EOS
         return query
       end
 
-      def self.get_aliases_query(prefix)
-        return "SELECT src AS source, dst AS alias FROM #{prefix}url_alias WHERE src = ?"
+      def self.aliases_query(prefix)
+        "SELECT src AS source, dst AS alias FROM #{prefix}url_alias WHERE src = ?"
       end
 
-      def self.get_data(post)
-        content = post[:body].to_s
-        summary = post[:teaser].to_s
-        tags = (post[:tags] || '').downcase.strip
+      def self.post_data(sql_post_data)
+        content = sql_post_data[:body].to_s
+        summary = sql_post_data[:teaser].to_s
+        tags = (sql_post_data[:tags] || '').downcase.strip
 
         data = {
           'excerpt' => summary,

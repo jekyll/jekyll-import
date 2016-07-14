@@ -22,11 +22,11 @@ module JekyllImport
 
         def require_deps
           JekyllImport.require_with_fallback(%w[
-          rubygems
-          sequel
-          fileutils
-          safe_yaml
-        ])
+            rubygems
+            sequel
+            fileutils
+            safe_yaml
+          ])
         end
 
         def process(options)
@@ -39,7 +39,7 @@ module JekyllImport
 
           db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
-          query = self.get_query(prefix, types)
+          query = self.build_query(prefix, types)
 
           src_dir = Jekyll.configuration({})['source']
 
@@ -56,7 +56,7 @@ module JekyllImport
           # Create the refresh layout
           # Change the refresh url if you customized your permalink config
           File.open(File.join(dirs[:_layouts], 'refresh.html'), 'w') do |f|
-            f.puts <<EOF
+            f.puts <<-HTML
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,12 +64,12 @@ module JekyllImport
 <meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
 </head>
 </html>
-EOF
+HTML
           end
 
           db[query].each do |post|
             # Get required fields
-            data, content = self.get_data(post)
+            data, content = self.post_data(post)
 
             data['layout'] = post[:type]
             title = data['title'] = post[:title].strip.force_encoding('UTF-8')
@@ -97,7 +97,7 @@ EOF
 
             # Make a file to redirect from the old Drupal URL
             if is_published
-              alias_query = self.get_aliases_query(prefix)
+              alias_query = self.aliases_query(prefix)
               type = post[:type]
 
               aliases = db[alias_query, "#{type}/#{node_id}"].all
@@ -118,11 +118,11 @@ EOF
         end
       end
 
-      def get_query(prefix, types)
+      def build_query(prefix, types)
         raise 'The importer you are trying to use does not implement the get_query() method.'
       end
 
-      def get_aliases_query(prefix)
+      def aliases_query(prefix)
         # Make sure you implement the query returning "alias" as the column name
         # for the URL aliases. See the Drupal 6 importer for an example. The
         # alias field is called 'dst' but we alias it to 'alias', to follow
@@ -130,7 +130,7 @@ EOF
         raise 'The importer you are trying to use does not implement the get_aliases_query() method.'
       end
 
-      def get_data(post)
+      def post_data(sql_post_data)
         raise 'The importer you are trying to use does not implement the get_query() method.'
       end
 

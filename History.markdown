@@ -5,6 +5,7 @@
   * tumblr: only append to content if its truthy (#265)
   * Add S9y database importer (#259)
   * Add functionality for importing Blogger comments (#258)
+  * joomla: use & require mysql2 instead of mysql (#255)
 
 ## 0.11.0 / 2016-06-27
 

@@ -2,6 +2,7 @@
 
   * Joomla: require the `mysql` gem (#197)
   * Tumblr: improve compatibility with Jekyll 3 (#239)
+  * tumblr: only append to content if its truthy (#265)
 
 ## 0.11.0 / 2016-06-27
 

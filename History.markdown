@@ -4,6 +4,7 @@
   * Tumblr: improve compatibility with Jekyll 3 (#239)
   * tumblr: only append to content if its truthy (#265)
   * Add S9y database importer (#259)
+  * Add functionality for importing Blogger comments (#258)
 
 ## 0.11.0 / 2016-06-27
 

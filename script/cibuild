@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/bash -x
 
+find ./lib | egrep '.*\.rb$' | xargs -t ruby -vc
 script/fmt --format offenses || true
 bundle exec rake test

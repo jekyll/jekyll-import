@@ -43,8 +43,8 @@ module JekyllImport
           feed = open(feed_url)
           contents = feed.readlines.join("\n")
           beginning = contents.index("{")
-          ending = contents.rindex("}")
-          json = contents[beginning..ending]  # Strip Tumblr's JSONP chars.
+          ending = contents.rindex("}")+1
+          json = contents[beginning...ending]  # Strip Tumblr's JSONP chars.
           blog = JSON.parse(json)
           puts "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
           batch = blog["posts"].map { |post| post_to_hash(post, format) }

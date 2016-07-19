@@ -135,7 +135,7 @@ module JekyllImport
             post["conversation"].each do |line|
               content << "<dt>#{line['label']}</dt><dd>#{line['phrase']}</dd>"
             end
-            content << "</section></dialog>"
+            content << "</dialog></section>"
           when "video"
             title = post["video-title"]
             content = post["video-player"]

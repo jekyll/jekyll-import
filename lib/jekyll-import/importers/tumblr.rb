@@ -42,10 +42,7 @@ module JekyllImport
           puts "Fetching #{feed_url}"
           feed = open(feed_url)
           contents = feed.readlines.join("\n")
-          beginning = contents.index("{")
-          ending = contents.rindex("}")+1
-          json = contents[beginning...ending]  # Strip Tumblr's JSONP chars.
-          blog = JSON.parse(json)
+          blog = extract_json(contents)
           puts "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
           batch = blog["posts"].map { |post| post_to_hash(post, format) }
 
@@ -67,6 +64,13 @@ module JekyllImport
       end
 
       private
+
+      def self.extract_json(contents)
+        beginning = contents.index("{")
+        ending = contents.rindex("}")+1
+        json = contents[beginning...ending]  # Strip Tumblr's JSONP chars.
+        blog = JSON.parse(json)
+      end
 
       # Writes a post out to disk
       def self.write_post(post, use_markdown, add_highlights)

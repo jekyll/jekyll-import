@@ -11,13 +11,21 @@ module JekyllImport
       # and creates a post file for each node it finds in the Drupal database.
 
       module ClassMethods
+        DEFAULTS = {
+          "password" => "",
+          "host"     => "localhost",
+          "prefix"   => "",
+          "types"    => %w(blog story article)
+        }
+
         def specify_options(c)
           c.option 'dbname', '--dbname DB', 'Database name'
           c.option 'user', '--user USER', 'Database user name'
-          c.option 'password', '--password PW', "Database user's password (default: '')"
-          c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
-          c.option 'prefix', '--prefix PREFIX', 'Table prefix name'
-          c.option 'types', '--types TYPE1[,TYPE2[,TYPE3...]]', Array, 'The Drupal content types to be imported.'
+          c.option 'password', '--password PW', "Database user's password (default: #{DEFAULTS["password"].inspect})"
+          c.option 'host', '--host HOST', "Database host name (default: #{DEFAULTS["host"].inspect})"
+          c.option 'prefix', '--prefix PREFIX', "Table prefix name (default: #{DEFAULTS["prefix"].inspect})"
+          c.option 'types', '--types TYPE1[,TYPE2[,TYPE3...]]', Array,
+            "The Drupal content types to be imported  (default: #{DEFAULTS["types"].join(",")})"
         end
 
         def require_deps
@@ -32,10 +40,10 @@ module JekyllImport
         def process(options)
           dbname = options.fetch('dbname')
           user   = options.fetch('user')
-          pass   = options.fetch('password', '')
-          host   = options.fetch('host', 'localhost')
-          prefix = options.fetch('prefix', '')
-          types  = options.fetch('types', %w(blog story article))
+          pass   = options.fetch('password', DEFAULTS["password"])
+          host   = options.fetch('host',     DEFAULTS["host"])
+          prefix = options.fetch('prefix',   DEFAULTS["prefix"])
+          types  = options.fetch('types',    DEFAULTS["types"])
 
           db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 

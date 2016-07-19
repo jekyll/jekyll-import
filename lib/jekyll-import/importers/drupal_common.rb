@@ -49,12 +49,13 @@ module JekyllImport
 
           query = self.build_query(prefix, types)
 
-          src_dir = Jekyll.configuration({})['source']
+          conf = Jekyll.configuration({})
+          src_dir = conf['source']
 
           dirs = {
-              :_posts => File.join(src_dir, '_posts').to_s,
-              :_drafts => File.join(src_dir, '_drafts').to_s,
-              :_layouts => File.join(src_dir, '_layouts').to_s
+              :_posts   => File.join(src_dir, '_posts').to_s,
+              :_drafts  => File.join(src_dir, '_drafts').to_s,
+              :_layouts => Jekyll.sanitized_path(src_dir, conf['layouts_dir'].to_s)
           }
 
           dirs.each do |key, dir|

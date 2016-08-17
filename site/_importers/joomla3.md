@@ -16,7 +16,7 @@ $ ruby -rubygems -e 'require "jekyll-import";
       "user"     => "myuser",
       "password" => "mypassword",
       "host"     => "myhost",
-      "category" => "category",
+      "category" => category,
       "prefix"   => "mytableprefix"
     })'
 {% endhighlight %}
@@ -24,5 +24,5 @@ $ ruby -rubygems -e 'require "jekyll-import";
 The only required fields are `dbname`, `prefix` and `user`. `password` defaults to `""`,
 and `host` defaults to `"localhost"`.
 
-If the `category` field is not filled, all articles will be imported, except the ones that are 
+If the `category` numerical field is not filled, all articles will be imported, except the ones that are 
 uncategorized. 

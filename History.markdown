@@ -11,6 +11,10 @@
   * Clean up the Drupal importers (#235)
   * DrupalCommon: centralize defaults & use config for layouts dir (#267)
 
+### Development Fixes
+
+  * Fix Travis CI build (#273)
+
 ## 0.11.0 / 2016-06-27
 
 ### Bug Fixes

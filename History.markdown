@@ -15,6 +15,10 @@
 
   * Fix Travis CI build (#273)
 
+### Site Enhancements
+
+  * Fix for misnamed Joomla3 module in docs (#271)
+
 ## 0.11.0 / 2016-06-27
 
 ### Bug Fixes

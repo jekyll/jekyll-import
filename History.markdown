@@ -19,6 +19,10 @@
 
   * Fix for misnamed Joomla3 module in docs (#271)
 
+### Bug Fixes
+
+  * Tumblr: save images in binary mode (#278)
+
 ## 0.11.0 / 2016-06-27
 
 ### Bug Fixes

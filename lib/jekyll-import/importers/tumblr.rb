@@ -289,7 +289,7 @@ module JekyllImport
           # Don't fetch if we've already cached this file
           unless File.size? path
             puts "Fetching photo #{url}"
-            File.open(path, "w") { |f| f.write(open(url).read) }
+            File.open(path, "wb") { |f| f.write(open(url).read) }
           end
           url = "/" + path
         end

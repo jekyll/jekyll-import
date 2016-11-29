@@ -22,6 +22,7 @@
 ### Bug Fixes
 
   * Tumblr: save images in binary mode (#278)
+  * Tumblr: fix creation of rewrite rules (#283)
 
 ## 0.11.0 / 2016-06-27
 

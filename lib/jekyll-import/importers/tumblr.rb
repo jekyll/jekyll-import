@@ -213,12 +213,12 @@ module JekyllImport
         urls = Hash[posts.map { |post|
           # Create an initial empty file for the post so that
           # we can instantiate a post object.
+          File.write("_posts/tumblr/#{post[:name]}", "")
           tumblr_url = URI.parse(URI.encode(post[:slug])).path
           jekyll_url = if Jekyll.const_defined? :Post
-                         File.open("_posts/tumblr/#{post[:name]}", "w") { |f| f.puts }
                          Jekyll::Post.new(site, Dir.pwd, "", "tumblr/" + post[:name]).url
                        else
-                         Jekyll::Document.new(File.expand_path("tumblr/#{post[:name]}"), site: site, collection: site.posts).url
+                         Jekyll::Document.new(File.expand_path("_posts/tumblr/#{post[:name]}"), site: site, collection: site.posts).url
                        end
           redirect_dir = tumblr_url.sub(/\//, "") + "/"
           FileUtils.mkdir_p redirect_dir

@@ -1,4 +1,4 @@
-## HEAD
+## 0.12.0 / 2016-11-28
 
   * Joomla: require the `mysql` gem (#197)
   * Tumblr: improve compatibility with Jekyll 3 (#239)
@@ -10,6 +10,8 @@
   * Tumblr: Fixing double-read and off-by-one error (#253)
   * Clean up the Drupal importers (#235)
   * DrupalCommon: centralize defaults & use config for layouts dir (#267)
+  * Tumblr: save images in binary mode (#278)
+  * Tumblr: fix creation of rewrite rules (#283)
 
 ### Development Fixes
 
@@ -18,11 +20,6 @@
 ### Site Enhancements
 
   * Fix for misnamed Joomla3 module in docs (#271)
-
-### Bug Fixes
-
-  * Tumblr: save images in binary mode (#278)
-  * Tumblr: fix creation of rewrite rules (#283)
 
 ## 0.11.0 / 2016-06-27
 

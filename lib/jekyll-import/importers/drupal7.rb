@@ -26,7 +26,7 @@ module JekyllImport
                 WHERE (#{types})
                   AND n.nid = fdb.entity_id
                   AND n.vid = fdb.revision_id
-                GROUP BY n.nid"
+                GROUP BY n.nid
 EOS
 
         return query

@@ -18,15 +18,10 @@ module JekyllImport
                        n.created,
                        n.status,
                        n.type,
-                       GROUP_CONCAT( td.name SEPARATOR '|' ) AS 'tags'
-                FROM #{prefix}field_data_body AS fdb,
-                     #{prefix}node AS n
-                     LEFT OUTER JOIN #{prefix}taxonomy_index AS ti ON ti.nid = n.nid
-                     LEFT OUTER JOIN #{prefix}taxonomy_term_data AS td ON ti.tid = td.tid
+                       (SELECT GROUP_CONCAT(td.name SEPARATOR '|') FROM taxonomy_term_data td, taxonomy_index ti WHERE ti.tid = td.tid AND ti.nid = n.nid) AS 'tags'
+                FROM #{prefix}node AS n
+                LEFT JOIN #{prefix}field_data_body AS fdb ON fdb.entity_id = n.nid AND fdb.entity_type = 'node'
                 WHERE (#{types})
-                  AND n.nid = fdb.entity_id
-                  AND n.vid = fdb.revision_id
-                GROUP BY n.nid"
 EOS
 
         return query

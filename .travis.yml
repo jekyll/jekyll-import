@@ -7,9 +7,8 @@ env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   matrix:
-    - JEKYLL_VERSION=3.3
     - JEKYLL_VERSION=3.0
-    - JEKYLL_VERSION=2.5.3
+    - JEKYLL_VERSION=2.5
 cache: bundler
 sudo: false
 before_script: bundle update

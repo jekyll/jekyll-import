@@ -1,3 +1,9 @@
+## HEAD
+
+### Bug Fixes
+
+  * Drupal 7: Remove uneeded double quote in SQL query (#287)
+
 ## 0.12.0 / 2016-11-28
 
   * Joomla: require the `mysql` gem (#197)

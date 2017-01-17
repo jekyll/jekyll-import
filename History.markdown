@@ -9,6 +9,10 @@
 
   * Updating Ruby and Jekyll versions for testing (#290)
 
+### Site Enhancements
+
+  * Corrected Joomla3 importer name and clarified "category" field (#286)
+
 ## 0.12.0 / 2016-11-28
 
   * Joomla: require the `mysql` gem (#197)

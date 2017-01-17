@@ -11,12 +11,12 @@ To import your posts from a [Joomla 3](http://joomla.org) installation, run:
 
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Joomla.run({
+    JekyllImport::Importers::Joomla3.run({
       "dbname"   => "name",
       "user"     => "myuser",
       "password" => "mypassword",
       "host"     => "myhost",
-      "category" => "category",
+      "category" => 0, # Category ID to import
       "prefix"   => "mytableprefix"
     })'
 {% endhighlight %}

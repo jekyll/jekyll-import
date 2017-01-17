@@ -5,6 +5,10 @@
   * Drupal 7: Remove uneeded double quote in SQL query (#287)
   * Drupal 7: Fixes SQL grouping error (#289)
 
+### Development Fixes
+
+  * Updating Ruby and Jekyll versions for testing (#290)
+
 ## 0.12.0 / 2016-11-28
 
   * Joomla: require the `mysql` gem (#197)

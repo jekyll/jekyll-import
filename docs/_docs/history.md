@@ -5,6 +5,47 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.12.0 / 2016-11-28
+
+- Joomla: require the `mysql` gem ([#197]({{ site.repository }}/issues/197))
+- Tumblr: improve compatibility with Jekyll 3 ([#239]({{ site.repository }}/issues/239))
+- tumblr: only append to content if its truthy ([#265]({{ site.repository }}/issues/265))
+- Add S9y database importer ([#259]({{ site.repository }}/issues/259))
+- Add functionality for importing Blogger comments ([#258]({{ site.repository }}/issues/258))
+- joomla: use & require mysql2 instead of mysql ([#255]({{ site.repository }}/issues/255))
+- Tumblr: close conversation HTML tags in the right order ([#266]({{ site.repository }}/issues/266))
+- Tumblr: Fixing double-read and off-by-one error ([#253]({{ site.repository }}/issues/253))
+- Clean up the Drupal importers ([#235]({{ site.repository }}/issues/235))
+- DrupalCommon: centralize defaults & use config for layouts dir ([#267]({{ site.repository }}/issues/267))
+- Tumblr: save images in binary mode ([#278]({{ site.repository }}/issues/278))
+- Tumblr: fix creation of rewrite rules ([#283]({{ site.repository }}/issues/283))
+
+### Development Fixes
+
+- Fix Travis CI build ([#273]({{ site.repository }}/issues/273))
+
+### Site Enhancements
+
+- Fix for misnamed Joomla3 module in docs ([#271]({{ site.repository }}/issues/271))
+
+## 0.11.0 / 2016-06-27
+
+### Bug Fixes
+
+- Drupal 6 importer depends on mysql. ([#242]({{ site.repository }}/issues/242))
+- Tumblr: Update range of JSON readlines to extract JSON from JS (Tumblr may have changed structure of JSON) ([#243]({{ site.repository }}/issues/243))
+- Tumblr: look up beginning and end of JSON dynamically ([#249]({{ site.repository }}/issues/249))
+- Tumblr: fix stripping of JSONP characters from feed ([#251]({{ site.repository }}/issues/251))
+
+### Site Enhancements
+
+- Correct "How to Contribute" link ([#244]({{ site.repository }}/issues/244))
+- Correct "our community forum" link ([#246]({{ site.repository }}/issues/246))
+
+### Development Fixes
+
+- Add rubocop ([#248]({{ site.repository }}/issues/248))
+
 ## 0.10.0 / 2016-01-16
 
 - Drupal 7: Allow importing any node type via the `types` option ([#230]({{ site.repository }}/issues/230))

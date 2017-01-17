@@ -101,21 +101,21 @@ namespace :site do
 
     # Generate the site in server mode.
     puts "Running Jekyll..."
-    Dir.chdir("site") do
+    Dir.chdir("docs") do
       sh "jekyll serve --watch"
     end
   end
 
   desc "Update normalize.css library to the latest version and minify"
   task :update_normalize_css do
-    normalize_file = "site/_sass/normalize.scss"
+    normalize_file = "docs/_sass/normalize.scss"
     sh "curl \"http://necolas.github.io/normalize.css/latest/normalize.css\" -o #{normalize_file}"
     sh "sass #{normalize_file}:#{normalize_file} --style compressed"
   end
 
   desc "Commit the local site to the gh-pages branch and publish to GitHub Pages"
   task :publish => [:history] do
-    sh "git subtree push --prefix site origin gh-pages"
+    puts "We now publish directly from the docs/ subfolder on the master branch."
   end
 
   desc "Create a nicely formatted history page for the jekyll site based on the repo history."
@@ -128,14 +128,14 @@ namespace :site do
         "permalink" => "/docs/history/",
         "prev_section" => "contributing"
       }
-      Dir.chdir('site/_docs/') do
+      Dir.chdir('docs/_docs/') do
         File.open("history.md", "w") do |file|
           file.write("#{front_matter.to_yaml}---\n\n")
           file.write(converted_history(history_file))
         end
       end
-      unless `git diff site/_docs/history.md`.strip.empty?
-        sh "git add site/_docs/history.md"
+      unless `git diff docs/_docs/history.md`.strip.empty?
+        sh "git add docs/_docs/history.md"
         sh "git commit -m 'Updated generated history.md file in the site.'"
       else
         puts "No updates to commit at this time. Skipping..."

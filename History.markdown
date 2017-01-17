@@ -3,7 +3,7 @@
 ### Bug Fixes
 
   * Drupal 7: Remove uneeded double quote in SQL query (#287)
-  * Fixes SQL grouping error in #288 (#289)
+  * Drupal 7: Fixes SQL grouping error (#289)
 
 ## 0.12.0 / 2016-11-28
 

@@ -346,7 +346,7 @@ module JekyllImport
         text.gsub!("&gt;", ">")
         text.gsub!("&quot;", '"')
         text.gsub!("&apos;", "'")
-        text.gsub!("/", "&#47;")
+        text.gsub!("&#47;", "/")
         text
       end
 

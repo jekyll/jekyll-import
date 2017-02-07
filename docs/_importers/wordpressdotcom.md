@@ -40,7 +40,7 @@ might be useful to you:
   while keeping as much metadata as possible. Exitwp also downloads attachments
   and pages.
 - [A great
-  article](http://vitobotta.com/how-to-migrate-from-wordpress-to-jekyll/) with a
+  article](https://vitobotta.com/2011/03/28/migrating-from-wordpress-to-jekyll-part-2-everything-you-need-to-know/) with a
   step-by-step guide for migrating a WordPress blog to Jekyll while keeping most
   of the structure and metadata.
 - [wpXml2Jekyll](https://github.com/theaob/wpXml2Jekyll) is an executable

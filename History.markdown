@@ -13,6 +13,7 @@
 
   * Corrected Joomla3 importer name and clarified "category" field (#286)
   * Fixed style issues on HTTPS site (#296)
+  * Change broken link for "A great article" (#294)
 
 ## 0.12.0 / 2016-11-28
 

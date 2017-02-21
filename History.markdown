@@ -12,6 +12,7 @@
 ### Site Enhancements
 
   * Corrected Joomla3 importer name and clarified "category" field (#286)
+  * Fixed style issues on HTTPS site (#296)
 
 ## 0.12.0 / 2016-11-28
 

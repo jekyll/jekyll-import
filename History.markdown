@@ -1,5 +1,7 @@
 ## HEAD
 
+  * WordPress: replace was backwards, broke end tags (#292)
+
 ### Bug Fixes
 
   * Drupal 7: Remove uneeded double quote in SQL query (#287)

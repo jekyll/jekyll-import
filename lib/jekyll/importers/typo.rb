@@ -13,6 +13,7 @@ module Jekyll
            c.title title,
            c.permalink slug,
            c.body body,
+           c.extended extended,
            c.published_at date,
            c.state state,
            c.keywords keywords,
@@ -27,6 +28,15 @@ module Jekyll
       db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
       db[SQL].each do |post|
         next unless post[:state] =~ /published/i
+
+        if post[:slug] == nil
+          post[:slug] = "no slug"
+        end
+
+        if post[:extended]
+          post[:body] << "\n<!-- more -->\n"
+          post[:body] << post[:extended]
+        end
 
         name = [ sprintf("%.04d", post[:date].year),
                  sprintf("%.02d", post[:date].month),

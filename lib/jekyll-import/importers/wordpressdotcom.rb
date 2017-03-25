@@ -1,4 +1,6 @@
 # encoding: UTF-8
+require 'pry'
+require 'reverse_markdown'
 
 module JekyllImport
   module Importers
@@ -91,9 +93,9 @@ module JekyllImport
 
         def file_name
           @file_name ||= if published?
-            "#{published_at.strftime('%Y-%m-%d')}-#{permalink_title}.html"
+            "#{published_at.strftime('%Y-%m-%d')}-#{permalink_title}.markdown"
           else
-            "#{permalink_title}.html"
+            "#{permalink_title}.markdown"
           end
         end
 
@@ -144,7 +146,7 @@ module JekyllImport
 
         (doc/:channel/:item).each do |node|
           item = Item.new(node)
-          categories = node.search('category[@domain="category"]').map(&:inner_text).reject{|c| c == 'Uncategorized'}.uniq
+          categories = node.search('category[@domain="category"]').map(&:inner_text).map{|c| sluggify(c)}.reject{|c| c == 'uncategorized'}.uniq
           tags = node.search('category[@domain="post_tag"]').map(&:inner_text).uniq
 
           metas = Hash.new
@@ -172,16 +174,22 @@ module JekyllImport
           begin
             content = Hpricot(item.text_for('content:encoded'))
             header['excerpt'] = item.excerpt if item.excerpt
+            first_image = (content/'img').first
 
             if fetch
               download_images(item.title, content, assets_folder)
+            end
+            if first_image
+                header['image'] = File.basename(first_image['src'])
+                content.search('img:first').remove
             end
 
             FileUtils.mkdir_p item.directory_name
             File.open(File.join(item.directory_name, item.file_name), "w") do |f|
               f.puts header.to_yaml
               f.puts '---'
-              f.puts Util.wpautop(content.to_html)
+              content = Util.wpautop(content.to_html)
+              f.puts ReverseMarkdown.convert content
             end
           rescue => e
             puts "Couldn't import post!"

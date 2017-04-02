@@ -123,6 +123,7 @@ module JekyllImport
              entries.title          AS `title`,
              entries.timestamp      AS `timestamp`,
              entries.body           AS `body`,
+						 entries.extended       AS `body_extended`,
              authors.realname     AS `author`,
              authors.username     AS `author_login`,
              authors.email        AS `author_email`
@@ -157,6 +158,9 @@ module JekyllImport
         name = "%02d-%02d-%02d-%s.%s" % [date.year, date.month, date.day, slug, extension]
 
         content = post[:body].to_s
+        unless post[:body_extended].to_s.empty?
+					content += "\n\n" + post[:body_extended].to_s
+        end
 
         if options[:clean_entities]
           content = clean_entities(content)

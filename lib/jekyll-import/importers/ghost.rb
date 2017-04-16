@@ -29,7 +29,7 @@ module JekyllImport
       private
       def self.fetch_posts(dbfile)
         db = Sequel.sqlite(dbfile)
-        query = "SELECT `title`, `slug`, `markdown`, `created_at`, `status` FROM posts"
+        query = "SELECT `title`, `slug`, `markdown`, `created_at`, `published_at`, `status` FROM posts"
         db[query]
       end
 
@@ -37,9 +37,8 @@ module JekyllImport
         # detect if the post is a draft
         draft = post[:status].eql?('draft')
 
-        # Ghost saves the time in an weird format with 3 more numbers.
-        # But the time is correct when we remove the last 3 numbers.
-        date = Time.at(post[:created_at].to_i.to_s[0..-4].to_i)
+        # the publish date if the post has been published, creation date otherwise
+        date = Time.at(post[draft ? :created_at : :published_at].to_i)
 
         # the directory where the file will be saved to. either _drafts or _posts
         directory = draft ? "_drafts" : "_posts"

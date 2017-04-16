@@ -29,7 +29,7 @@ module JekyllImport
       private
       def self.fetch_posts(dbfile)
         db = Sequel.sqlite(dbfile)
-        query = "SELECT `title`, `slug`, `markdown`, `created_at`, `published_at`, `status` FROM posts"
+        query = "SELECT `title`, `slug`, `markdown`, `created_at`, `published_at`, `status`, `page` FROM posts"
         db[query]
       end
 
@@ -37,18 +37,29 @@ module JekyllImport
         # detect if the post is a draft
         draft = post[:status].eql?('draft')
 
+        # detect if the post is considered a static page
+        page = post[:page]
+
         # the publish date if the post has been published, creation date otherwise
         date = Time.at(post[draft ? :created_at : :published_at].to_i)
 
-        # the directory where the file will be saved to. either _drafts or _posts
-        directory = draft ? "_drafts" : "_posts"
+        if page then
+          # the filename under which the page is stored
+          filename = "#{post[:slug]}.markdown"
+        else
+          # the directory where the file will be saved to. either _drafts or _posts
+          directory = draft ? "_drafts" : "_posts"
 
-        # the filename under which the post is stored
-        filename = File.join(directory, "#{date.strftime('%Y-%m-%d')}-#{post[:slug]}.markdown")
+          # the filename under which the post is stored
+          filename = File.join(directory, "#{date.strftime('%Y-%m-%d')}-#{post[:slug]}.markdown")
+        end
 
         # the YAML FrontMatter
-        frontmatter = { 'layout' => 'post', 'title' => post[:title] }
-        frontmatter['date'] =  date if !draft # only add the date to the frontmatter when the post is published
+        frontmatter = {
+          'layout' => page ? 'page' : 'post',
+          'title' => post[:title]
+        }
+        frontmatter['date'] = date if !draft # only add the date to the frontmatter when the post is published
         frontmatter.delete_if { |k,v| v.nil? || v == '' } # removes empty fields
 
         # write the posts to disk

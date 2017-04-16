@@ -59,7 +59,8 @@ module JekyllImport
           'layout' => page ? 'page' : 'post',
           'title' => post[:title]
         }
-        frontmatter['date'] = date if !draft # only add the date to the frontmatter when the post is published
+        frontmatter['date'] = date if !page && !draft # only add the date to the frontmatter when the post is published
+        frontmatter['published'] = false if page && draft # set published to false for draft pages
         frontmatter.delete_if { |k,v| v.nil? || v == '' } # removes empty fields
 
         # write the posts to disk

@@ -17,6 +17,10 @@
   * Fixed style issues on HTTPS site (#296)
   * Change broken link for "A great article" (#294)
 
+### Minor Enhancements
+
+  * Ghost: import drafts & pages, and fix issue with date extraction (#304)
+
 ## 0.12.0 / 2016-11-28
 
   * Joomla: require the `mysql` gem (#197)

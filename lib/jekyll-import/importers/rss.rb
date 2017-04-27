@@ -3,6 +3,7 @@ module JekyllImport
     class RSS < Importer
       def self.specify_options(c)
         c.option 'source', '--source NAME', 'The RSS file or URL to import'
+        c.option 'tag', '--tag NAME', 'Add a TAG to posts'
       end
 
       def self.validate(options)
@@ -47,6 +48,11 @@ module JekyllImport
             'layout' => 'post',
             'title' => item.title
           }
+
+          tag = options.fetch('tag', '')
+          if tag != ''
+            header['tag'] = tag;
+          end
 
           FileUtils.mkdir_p("_posts")
 

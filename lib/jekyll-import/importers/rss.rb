@@ -29,7 +29,10 @@ module JekyllImport
       # Returns nothing.
       def self.process(options)
         source = options.fetch('source')
+        frontmatter = options.fetch('frontmatter', [])
+        body = options.fetch('body', ["description"])
 
+        output = ""
         content = ""
         open(source) { |s| content = s.read }
         rss = ::RSS::Parser.parse(content, false)
@@ -48,12 +51,20 @@ module JekyllImport
             'title' => item.title
           }
 
+          frontmatter.each do |value|
+            header[value] = item.send(value)
+          end
+
+          body.each do |row|
+            output += item.send(row)
+          end
+
           FileUtils.mkdir_p("_posts")
 
           File.open("_posts/#{name}.html", "w") do |f|
             f.puts header.to_yaml
             f.puts "---\n\n"
-            f.puts item.description
+            f.puts output
           end
         end
       end

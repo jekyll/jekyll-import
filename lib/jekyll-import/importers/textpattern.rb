@@ -18,6 +18,7 @@ module JekyllImport
         JekyllImport.require_with_fallback(%w[
           rubygems
           sequel
+          mysql2
           fileutils
           safe_yaml
         ])
@@ -36,7 +37,7 @@ module JekyllImport
         pass   = options.fetch('password', "")
         host   = options.fetch('host', "localhost")
 
-        db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+        db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
         FileUtils.mkdir_p "_posts"
 

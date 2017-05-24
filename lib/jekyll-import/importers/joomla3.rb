@@ -22,9 +22,9 @@ module JekyllImport
         JekyllImport.require_with_fallback(%w[
           rubygems
           sequel
+          mysql2
           fileutils
           safe_yaml
-          mysql2
         ])
       end
 

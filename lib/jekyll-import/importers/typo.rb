@@ -21,6 +21,8 @@ module JekyllImport
         JekyllImport.require_with_fallback(%w[
           rubygems
           sequel
+          mysql2
+          pg
           fileutils
           safe_yaml
         ])
@@ -46,7 +48,7 @@ module JekyllImport
         when :postgres
           db = Sequel.postgres(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
         when :mysql
-          db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+          db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
         else
           raise "Unknown database server '#{server}'"
         end

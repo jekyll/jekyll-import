@@ -20,11 +20,12 @@ module JekyllImport
 
       def self.require_deps
         JekyllImport.require_with_fallback(%w[
-                                           rubygems
-                                          sequel
-                                          fileutils
-                                          safe_yaml
-                                          ])
+          rubygems
+          sequel
+          mysql2
+          fileutils
+          safe_yaml
+        ])
       end
 
       def self.process(options)
@@ -35,7 +36,7 @@ module JekyllImport
         section = options.fetch('section', '1')
         table_prefix = options.fetch('prefix', "jos_")
 
-        db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+        db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
         FileUtils.mkdir_p("_posts")
 

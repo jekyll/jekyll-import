@@ -25,7 +25,6 @@ module JekyllImport
           mysql2
           fileutils
           safe_yaml
-          mysql
         ])
       end
 

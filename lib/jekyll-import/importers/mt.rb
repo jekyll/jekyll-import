@@ -22,6 +22,9 @@ module JekyllImport
         JekyllImport.require_with_fallback(%w[
           rubygems
           sequel
+          sqlite3
+          mysql2
+          pg
           fileutils
           safe_yaml
         ])
@@ -230,8 +233,9 @@ module JekyllImport
       end
 
       def self.database_from_opts(options)
-        engine   = options.fetch('engine', 'mysql')
-        dbname   = options.fetch('dbname')
+        engine        = options.fetch('engine', 'mysql')
+        dbname        = options.fetch('dbname')
+        sequel_engine = engine == 'mysql' ? 'mysql2' : engine
 
         case engine
         when "sqlite"
@@ -244,7 +248,7 @@ module JekyllImport
           }
           db_connect_opts = options['port'] if options['port']
           Sequel.public_send(
-            engine,
+            sequel_engine,
             dbname,
             db_connect_opts
           )

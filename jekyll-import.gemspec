@@ -50,6 +50,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('hpricot', "~> 0.8")
   s.add_development_dependency('pg', "~> 0.12")
   s.add_development_dependency('mysql2', "~> 0.3")
+  s.add_development_dependency('sqlite3', "~> 1.3.13")
   s.add_development_dependency('behance', "~> 0.3")
   s.add_development_dependency('unidecode')
   s.add_development_dependency('open_uri_redirections')

@@ -24,6 +24,7 @@ module JekyllImport
           sequel
           fileutils
           safe_yaml
+          mysql2
         ])
       end
 
@@ -35,7 +36,7 @@ module JekyllImport
         cid	    = options.fetch('category', 0)
         table_prefix = options.fetch('prefix', "jos_")
 
-        db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+        db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
 
         FileUtils.mkdir_p("_posts")
 

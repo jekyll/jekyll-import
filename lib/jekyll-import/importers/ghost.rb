@@ -10,6 +10,7 @@ module JekyllImport
         JekyllImport.require_with_fallback(%w[
           rubygems
           sequel
+          sqlite3
           fileutils
           safe_yaml
         ])

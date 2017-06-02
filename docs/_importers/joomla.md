@@ -16,11 +16,12 @@ $ ruby -rubygems -e 'require "jekyll-import";
       "user"     => "myuser",
       "password" => "mypassword",
       "host"     => "myhost",
+      "port"     => "port",
       "section"  => "thesection",
       "prefix"   => "mytableprefix"
     })'
 {% endhighlight %}
 
 The only required fields are `dbname` and `user`. `password` defaults to `""`,
-`host` defaults to `"localhost"`, and `section` defaults to `"1"` and `prefix`
-defaults to `"jos_"`.
+`host` defaults to `"localhost"`, `port` defaults to `"3306"`, `section`
+defaults to `"1"` and `prefix` defaults to `"jos_"`.

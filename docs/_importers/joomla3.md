@@ -16,14 +16,14 @@ $ ruby -rubygems -e 'require "jekyll-import";
       "user"     => "myuser",
       "password" => "mypassword",
       "host"     => "myhost",
-      "port"     => "port",
+      "port"     => portnumber,
       "category" => category,
       "prefix"   => "mytableprefix"
     })'
 {% endhighlight %}
 
 The only required fields are `dbname`, `prefix` and `user`. `password` defaults to `""`,
-`host` defaults to `"localhost"`, `port` defaults to `"3306"` and `prefix` defaults to
+`host` defaults to `"localhost"`, `portnumber` defaults to `3306` and `prefix` defaults to
 `"jos_"`.
 
 If the `category` numerical field is not filled, all articles will be imported, except the ones that are 

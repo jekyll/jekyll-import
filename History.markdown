@@ -2,6 +2,7 @@
 
   * WordPress: replace was backwards, broke end tags (#292)
   * Use mysql2 instead of mysql in Joomla3 importer (#309)
+  * Add option to specify the MySQL port for the Joomla importers (#310)
 
 ### Bug Fixes
 

@@ -14,6 +14,7 @@ module JekyllImport
         c.option 'user', '--user', 'Database user name'
         c.option 'password', '--password', "Database user's password (default: '')"
         c.option 'host', '--host', 'Database host name'
+        c.option 'port', '--port', 'Database port'
         c.option 'section', '--section', 'Table prefix name'
         c.option 'prefix', '--prefix', 'Table prefix name'
       end
@@ -32,11 +33,12 @@ module JekyllImport
         dbname  = options.fetch('dbname')
         user    = options.fetch('user')
         pass    = options.fetch('password', '')
-        host    = options.fetch('host', "localhost")
+        host    = options.fetch('host', 'localhost')
+        port    = options.fetch('port', 3306).to_i
         section = options.fetch('section', '1')
-        table_prefix = options.fetch('prefix', "jos_")
+        table_prefix = options.fetch('prefix', 'jos_')
 
-        db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+        db = Sequel.mysql2(dbname, user: user, password: pass, host: host, port: port, encoding: 'utf8')
 
         FileUtils.mkdir_p("_posts")
 

@@ -18,6 +18,7 @@ module JekyllImport
         c.option 'user', '--user USER', 'Database user name (default: "")'
         c.option 'password', '--password PW', "Database user's password (default: "")"
         c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
+        c.option 'port', '--port PORT', 'Database port number (default: "")'
         c.option 'table_prefix', '--table_prefix PREFIX', 'Table prefix name (default: "wp_")'
         c.option 'site_prefix', '--site_prefix PREFIX', 'Site prefix name (default: "")'
         c.option 'clean_entities', '--clean_entities', 'Whether to clean entities (default: true)'
@@ -35,6 +36,7 @@ module JekyllImport
       # user::    The database user name
       # pass::    The database user's password
       # host::    The address of the MySQL database host. Default: 'localhost'
+      # port::    The port number of the MySQL database. Default: '3306'
       # socket::  The database socket's path
       # options:: A hash table of configuration options.
       #
@@ -77,6 +79,7 @@ module JekyllImport
           :user           => opts.fetch('user', ''),
           :pass           => opts.fetch('password', ''),
           :host           => opts.fetch('host', 'localhost'),
+          :port           => opts.fetch('port', '3306'),
           :socket         => opts.fetch('socket', nil),
           :dbname         => opts.fetch('dbname', ''),
           :table_prefix   => opts.fetch('table_prefix', 'wp_'),
@@ -105,7 +108,8 @@ module JekyllImport
         FileUtils.mkdir_p("_drafts") if options[:status].include? :draft
 
         db = Sequel.mysql2(options[:dbname], :user => options[:user], :password => options[:pass],
-                          :socket => options[:socket], :host => options[:host], :encoding => 'utf8')
+                          :socket => options[:socket], :host => options[:host], :port => options[:port],
+                          :encoding => 'utf8')
 
         px = options[:table_prefix]
         sx = options[:site_prefix]

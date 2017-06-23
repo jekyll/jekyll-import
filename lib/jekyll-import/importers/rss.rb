@@ -32,7 +32,6 @@ module JekyllImport
         frontmatter = options.fetch('frontmatter', [])
         body = options.fetch('body', ["description"])
 
-        output = ""
         content = ""
         open(source) { |s| content = s.read }
         rss = ::RSS::Parser.parse(content, false)
@@ -54,6 +53,8 @@ module JekyllImport
           frontmatter.each do |value|
             header[value] = item.send(value)
           end
+
+          output = ""
 
           body.each do |row|
             output += item.send(row)

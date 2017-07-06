@@ -24,6 +24,10 @@
 
   * Ghost: import drafts & pages, and fix issue with date extraction (#304)
 
+### Documentation
+
+  * Add the new port setting to the Wordpress importer docs (#312)
+
 ## 0.12.0 / 2016-11-28
 
   * Joomla: require the `mysql` gem (#197)

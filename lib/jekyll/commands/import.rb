@@ -1,4 +1,4 @@
-$:.unshift File.expand_path("../../", File.dirname(__FILE__)) # load from jekyll-import/lib
+$:.unshift File.expand_path("../", __dir__) # load from jekyll-import/lib
 require 'jekyll/command'
 require 'jekyll-import'
 

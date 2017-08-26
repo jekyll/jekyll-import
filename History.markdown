@@ -13,6 +13,7 @@
 ### Development Fixes
 
   * Updating Ruby and Jekyll versions for testing (#290)
+  * Modernize Travis configuration (#317)
 
 ### Site Enhancements
 

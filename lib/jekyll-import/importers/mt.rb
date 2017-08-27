@@ -1,25 +1,24 @@
 module JekyllImport
   module Importers
     class MT < Importer
-
-      SUPPORTED_ENGINES = %{mysql postgres sqlite}
+      SUPPORTED_ENGINES = %(mysql postgres sqlite).freeze
 
       STATUS_DRAFT = 1
       STATUS_PUBLISHED = 2
-      MORE_CONTENT_SEPARATOR = '<!--more-->'
+      MORE_CONTENT_SEPARATOR = "<!--more-->".freeze
 
       def self.default_options
         {
-          'blog_id' => nil,
-          'categories' => true,
-          'dest_encoding' => 'utf-8',
-          'src_encoding' => 'utf-8',
-          'comments' => false
+          "blog_id"       => nil,
+          "categories"    => true,
+          "dest_encoding" => "utf-8",
+          "src_encoding"  => "utf-8",
+          "comments"      => false,
         }
       end
 
       def self.require_deps
-        JekyllImport.require_with_fallback(%w[
+        JekyllImport.require_with_fallback(%w(
           rubygems
           sequel
           sqlite3
@@ -27,21 +26,21 @@ module JekyllImport
           pg
           fileutils
           safe_yaml
-        ])
+        ))
       end
 
       def self.specify_options(c)
-        c.option 'engine', "--engine ENGINE", "Database engine, (default: 'mysql', postgres also supported)"
-        c.option 'dbname', '--dbname DB', 'Database name'
-        c.option 'user', '--user USER', 'Database user name'
-        c.option 'password', '--password PW', "Database user's password, (default: '')"
-        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
-        c.option 'port', '--port PORT', 'Custom database port connect to (optional)'
-        c.option 'blog_id', '--blog_id ID', 'Specify a single Movable Type blog ID to import (default: all blogs)'
-        c.option 'categories', '--categories', "If true, save post's categories in its YAML front matter. (default: true)"
-        c.option 'src_encoding', '--src_encoding ENCODING', "Encoding of strings from database. (default: UTF-8)"
-        c.option 'dest_encoding', '--dest_encoding ENCODING', "Encoding of output strings. (default: UTF-8)"
-        c.option 'comments','--comments', "If true, output comments in _comments directory (default: false)"
+        c.option "engine", "--engine ENGINE", "Database engine, (default: 'mysql', postgres also supported)"
+        c.option "dbname", "--dbname DB", "Database name"
+        c.option "user", "--user USER", "Database user name"
+        c.option "password", "--password PW", "Database user's password, (default: '')"
+        c.option "host", "--host HOST", 'Database host name (default: "localhost")'
+        c.option "port", "--port PORT", "Custom database port connect to (optional)"
+        c.option "blog_id", "--blog_id ID", "Specify a single Movable Type blog ID to import (default: all blogs)"
+        c.option "categories", "--categories", "If true, save post's categories in its YAML front matter. (default: true)"
+        c.option "src_encoding", "--src_encoding ENCODING", "Encoding of strings from database. (default: UTF-8)"
+        c.option "dest_encoding", "--dest_encoding ENCODING", "Encoding of output strings. (default: UTF-8)"
+        c.option "comments", "--comments", "If true, output comments in _comments directory (default: false)"
       end
 
       # By default this migrator will include posts for all your MovableType blogs.
@@ -70,7 +69,7 @@ module JekyllImport
       def self.process(options)
         options  = default_options.merge(options)
 
-        comments = options.fetch('comments')
+        comments = options.fetch("comments")
         posts_name_by_id = {} if comments
 
         db = database_from_opts(options)
@@ -80,20 +79,20 @@ module JekyllImport
         FileUtils.mkdir_p "_posts"
 
         posts = db[:mt_entry]
-        posts = posts.filter(:entry_blog_id => options['blog_id']) if options['blog_id']
+        posts = posts.filter(:entry_blog_id => options["blog_id"]) if options["blog_id"]
         posts.each do |post|
           categories = post_categories.filter(
             :mt_placement__placement_entry_id => post[:entry_id]
-          ).map {|ea| encode(ea[:category_basename], options) }
+          ).map { |ea| encode(ea[:category_basename], options) }
 
           file_name = post_file_name(post, options)
 
           data = post_metadata(post, options)
-          data['categories'] = categories if !categories.empty? && options['categories']
-          yaml_front_matter = data.delete_if { |_,v| v.nil? || v == '' }.to_yaml
+          data["categories"] = categories if !categories.empty? && options["categories"]
+          yaml_front_matter = data.delete_if { |_, v| v.nil? || v == "" }.to_yaml
 
           # save post path for comment processing
-          posts_name_by_id[data['post_id']] = file_name if comments
+          posts_name_by_id[data["post_id"]] = file_name if comments
 
           content = post_content(post, options)
 
@@ -110,38 +109,36 @@ module JekyllImport
 
           comments = db[:mt_comment]
           comments.each do |comment|
-            if posts_name_by_id.key?(comment[:comment_entry_id]) # if the entry exists
-              dir_name, base_name = comment_file_dir_and_base_name(posts_name_by_id, comment, options)
-              FileUtils.mkdir_p "_comments/#{dir_name}"
+            next unless posts_name_by_id.key?(comment[:comment_entry_id]) # if the entry exists
+            dir_name, base_name = comment_file_dir_and_base_name(posts_name_by_id, comment, options)
+            FileUtils.mkdir_p "_comments/#{dir_name}"
 
-              data = comment_metadata(comment, options)
-              content = comment_content(comment, options)
-              yaml_front_matter = data.delete_if { |_,v| v.nil? || v == '' }.to_yaml
+            data = comment_metadata(comment, options)
+            content = comment_content(comment, options)
+            yaml_front_matter = data.delete_if { |_, v| v.nil? || v == "" }.to_yaml
 
-              File.open("_comments/#{dir_name}/#{base_name}", "w") do |f|
-                f.puts yaml_front_matter
-                f.puts "---"
-                f.puts encode(content, options)
-              end
+            File.open("_comments/#{dir_name}/#{base_name}", "w") do |f|
+              f.puts yaml_front_matter
+              f.puts "---"
+              f.puts encode(content, options)
             end
           end
         end
-
       end
 
       # Extracts metadata for YAML front matter from post
       def self.post_metadata(post, options = default_options)
         metadata = {
-          'layout' => 'post',
-          'title' => encode(post[:entry_title], options),
-          'date' => post_date(post).strftime("%Y-%m-%d %H:%M:%S %z"),
-          'excerpt' => encode(post[:entry_excerpt].to_s, options),
-          'mt_id' => post[:entry_id],
-          'blog_id' => post[:entry_blog_id],
-          'post_id' => post[:entry_id], # for link with comments
-          'basename' => post[:entry_basename]
+          "layout"   => "post",
+          "title"    => encode(post[:entry_title], options),
+          "date"     => post_date(post).strftime("%Y-%m-%d %H:%M:%S %z"),
+          "excerpt"  => encode(post[:entry_excerpt].to_s, options),
+          "mt_id"    => post[:entry_id],
+          "blog_id"  => post[:entry_blog_id],
+          "post_id"  => post[:entry_id], # for link with comments
+          "basename" => post[:entry_basename],
         }
-        metadata['published'] = false if post[:entry_status] != STATUS_PUBLISHED
+        metadata["published"] = false if post[:entry_status] != STATUS_PUBLISHED
         metadata
       end
 
@@ -155,7 +152,7 @@ module JekyllImport
         post[:entry_text_more].nil? || post[:entry_text_more].strip.empty?
       end
 
-      def self.post_content(post, options = default_options)
+      def self.post_content(post, _options = default_options)
         if extra_entry_text_empty?(post)
           post[:entry_text]
         else
@@ -163,27 +160,27 @@ module JekyllImport
         end
       end
 
-      def self.post_file_name(post, options = default_options)
+      def self.post_file_name(post, _options = default_options)
         date = post_date(post)
         slug = post[:entry_basename]
         file_ext = suffix(post[:entry_convert_breaks])
 
-        "#{date.strftime('%Y-%m-%d')}-#{slug}.#{file_ext}"
+        "#{date.strftime("%Y-%m-%d")}-#{slug}.#{file_ext}"
       end
 
       # Extracts metadata for YAML front matter from comment
       def self.comment_metadata(comment, options = default_options)
         metadata = {
-          'layout' => 'comment',
-          'comment_id' => comment[:comment_id],
-          'post_id' => comment[:comment_entry_id],
-          'author' => encode(comment[:comment_author], options),
-          'email' => comment[:comment_email],
-          'commenter_id' => comment[:comment_commenter_id],
-          'date' => comment_date(comment).strftime("%Y-%m-%d %H:%M:%S %z"),
-          'visible' => comment[:comment_visible] == 1,
-          'ip' => comment[:comment_ip],
-          'url' => comment[:comment_url]
+          "layout"       => "comment",
+          "comment_id"   => comment[:comment_id],
+          "post_id"      => comment[:comment_entry_id],
+          "author"       => encode(comment[:comment_author], options),
+          "email"        => comment[:comment_email],
+          "commenter_id" => comment[:comment_commenter_id],
+          "date"         => comment_date(comment).strftime("%Y-%m-%d %H:%M:%S %z"),
+          "visible"      => comment[:comment_visible] == 1,
+          "ip"           => comment[:comment_ip],
+          "url"          => comment[:comment_url],
         }
         metadata
       end
@@ -193,12 +190,12 @@ module JekyllImport
         comment[:comment_modified_on] || comment[:comment_created_on]
       end
 
-      def self.comment_content(comment, options = default_options)
+      def self.comment_content(comment, _options = default_options)
         comment[:comment_text]
       end
 
-      def self.comment_file_dir_and_base_name(posts_name_by_id, comment, options = default_options)
-        post_basename = posts_name_by_id[comment[:comment_entry_id]].sub(/\.\w+$/, '')
+      def self.comment_file_dir_and_base_name(posts_name_by_id, comment, _options = default_options)
+        post_basename = posts_name_by_id[comment[:comment_entry_id]].sub(%r!\.\w+$!, "")
         comment_id = comment[:comment_id]
 
         [post_basename, "#{comment_id}.markdown"]
@@ -206,7 +203,7 @@ module JekyllImport
 
       def self.encode(str, options = default_options)
         if str.respond_to?(:encoding)
-          str.encode(options['dest_encoding'], options['src_encoding'])
+          str.encode(options["dest_encoding"], options["src_encoding"])
         else
           str
         end
@@ -233,27 +230,27 @@ module JekyllImport
       end
 
       def self.database_from_opts(options)
-        engine        = options.fetch('engine', 'mysql')
-        dbname        = options.fetch('dbname')
-        sequel_engine = engine == 'mysql' ? 'mysql2' : engine
+        engine        = options.fetch("engine", "mysql")
+        dbname        = options.fetch("dbname")
+        sequel_engine = engine == "mysql" ? "mysql2" : engine
 
         case engine
         when "sqlite"
           Sequel.sqlite(dbname)
         when "mysql", "postgres"
           db_connect_opts = {
-            :host =>     options.fetch('host', 'localhost'),
-            :user =>     options.fetch('user'),
-            :password => options.fetch('password', '')
+            :host     => options.fetch("host", "localhost"),
+            :user     => options.fetch("user"),
+            :password => options.fetch("password", ""),
           }
-          db_connect_opts = options['port'] if options['port']
+          db_connect_opts = options["port"] if options["port"]
           Sequel.public_send(
             sequel_engine,
             dbname,
             db_connect_opts
           )
         else
-          abort("Unsupported engine: '#{engine}'. Must be one of #{SUPPORTED_ENGINES.join(', ')}")
+          abort("Unsupported engine: '#{engine}'. Must be one of #{SUPPORTED_ENGINES.join(", ")}")
         end
       end
     end

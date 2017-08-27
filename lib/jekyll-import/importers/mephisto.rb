@@ -1,8 +1,8 @@
 module JekyllImport
   module Importers
     class Mephisto < Importer
-      #Accepts a hash with database config variables, exports mephisto posts into a csv
-      #export PGPASSWORD if you must
+      # Accepts a hash with database config variables, exports mephisto posts into a csv
+      # export PGPASSWORD if you must
       def self.postgres(c)
         sql = <<-SQL
         BEGIN;
@@ -12,14 +12,14 @@ module JekyllImport
         COPY jekyll TO STDOUT WITH CSV HEADER;
         ROLLBACK;
         SQL
-        command = %Q(psql -h #{c[:host] || "localhost"} -c "#{sql.strip}" #{c[:database]} #{c[:username]} -o #{c[:filename] || "posts.csv"})
+        command = %(psql -h #{c[:host] || "localhost"} -c "#{sql.strip}" #{c[:database]} #{c[:username]} -o #{c[:filename] || "posts.csv"})
         puts command
         `#{command}`
         CSV.process
       end
 
       def self.validate(options)
-        %w[dbname user].each do |option|
+        %w(dbname user).each do |option|
           if options[option].nil?
             abort "Missing mandatory option --#{option}."
           end
@@ -27,20 +27,20 @@ module JekyllImport
       end
 
       def self.require_deps
-        JekyllImport.require_with_fallback(%w[
+        JekyllImport.require_with_fallback(%w(
           rubygems
           sequel
           mysql2
           fastercsv
           fileutils
-        ])
+        ))
       end
 
       def self.specify_options(c)
-        c.option 'dbname', '--dbname DB', 'Database name'
-        c.option 'user', '--user USER', 'Database user name'
-        c.option 'password', '--password PW', "Database user's password (default: '')"
-        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
+        c.option "dbname", "--dbname DB", "Database name"
+        c.option "user", "--user USER", "Database user name"
+        c.option "password", "--password PW", "Database user's password (default: '')"
+        c.option "host", "--host HOST", 'Database host name (default: "localhost")'
       end
 
       # This query will pull blog posts from all entries across all blogs. If
@@ -55,18 +55,18 @@ module JekyllImport
                WHERE user_id = 1 AND \
                      type = 'Article' AND \
                      published_at IS NOT NULL \
-               ORDER BY published_at"
+               ORDER BY published_at".freeze
 
       def self.process(options)
-        dbname = options.fetch('dbname')
-        user   = options.fetch('user')
-        pass   = options.fetch('password', '')
-        host   = options.fetch('host', "localhost")
+        dbname = options.fetch("dbname")
+        user   = options.fetch("user")
+        pass   = options.fetch("password", "")
+        host   = options.fetch("host", "localhost")
 
-        db = Sequel.mysql2(dbname, :user => user,
+        db = Sequel.mysql2(dbname, :user     => user,
                                    :password => pass,
-                                   :host => host,
-                                   :encoding => 'utf8')
+                                   :host     => host,
+                                   :encoding => "utf8")
 
         FileUtils.mkdir_p "_posts"
 
@@ -79,13 +79,13 @@ module JekyllImport
           # Ideally, this script would determine the post format (markdown,
           # html, etc) and create files with proper extensions. At this point
           # it just assumes that markdown will be acceptable.
-          name = [date.year, date.month, date.day, slug].join('-') + ".markdown"
+          name = [date.year, date.month, date.day, slug].join("-") + ".markdown"
 
           data = {
-             'layout' => 'post',
-             'title' => title.to_s,
-             'mt_id' => post[:entry_id],
-           }.delete_if { |k,v| v.nil? || v == ''}.to_yaml
+            "layout" => "post",
+            "title"  => title.to_s,
+            "mt_id"  => post[:entry_id],
+          }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml
 
           File.open("_posts/#{name}", "w") do |f|
             f.puts data
@@ -93,7 +93,6 @@ module JekyllImport
             f.puts content
           end
         end
-
       end
     end
   end

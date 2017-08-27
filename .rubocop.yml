@@ -1,2 +1,64 @@
 inherit_gem:
   jekyll: .rubocop.yml
+Metrics/BlockLength:
+  Exclude:
+    - lib/jekyll-import/importers/drupal_common.rb
+    - lib/jekyll-import/importers/posterous.rb
+    - lib/jekyll-import/importers/wordpress.rb
+    - lib/jekyll-import/importers/wordpressdotcom.rb
+    - test/**/*
+    - jekyll-import.gemspec
+    - Rakefile
+Metrics/LineLength:
+  Exclude:
+    - lib/jekyll-import.rb
+    - lib/jekyll-import/util.rb
+    - lib/jekyll-import/importers/blogger.rb
+    - lib/jekyll-import/importers/csv.rb
+    - lib/jekyll-import/importers/drupal_common.rb
+    - lib/jekyll-import/importers/easyblog.rb
+    - lib/jekyll-import/importers/enki.rb
+    - lib/jekyll-import/importers/ghost.rb
+    - lib/jekyll-import/importers/google_reader.rb
+    - lib/jekyll-import/importers/joomla.rb
+    - lib/jekyll-import/importers/joomla3.rb
+    - lib/jekyll-import/importers/jrnl.rb
+    - lib/jekyll-import/importers/marley.rb
+    - lib/jekyll-import/importers/mephisto.rb
+    - lib/jekyll-import/importers/mt.rb
+    - lib/jekyll-import/importers/posterous.rb
+    - lib/jekyll-import/importers/rss.rb
+    - lib/jekyll-import/importers/s9y.rb
+    - lib/jekyll-import/importers/s9y_database.rb
+    - lib/jekyll-import/importers/textpattern.rb
+    - lib/jekyll-import/importers/tumblr.rb
+    - lib/jekyll-import/importers/typo.rb
+    - lib/jekyll-import/importers/wordpress.rb
+    - lib/jekyll-import/importers/wordpressdotcom.rb
+    - test/**/*
+    - jekyll-import.gemspec
+    - Rakefile
+Metrics/MethodLength:
+  Exclude:
+    - test/**/*.rb
+    - lib/jekyll-import/util.rb
+    - lib/jekyll-import/importers/behance.rb
+    - lib/jekyll-import/importers/blogger.rb
+    - lib/jekyll-import/importers/drupal_common.rb
+    - lib/jekyll-import/importers/easyblog.rb
+    - lib/jekyll-import/importers/enki.rb
+    - lib/jekyll-import/importers/google_reader.rb
+    - lib/jekyll-import/importers/joomla.rb
+    - lib/jekyll-import/importers/joomla3.rb
+    - lib/jekyll-import/importers/marley.rb
+    - lib/jekyll-import/importers/mephisto.rb
+    - lib/jekyll-import/importers/mt.rb
+    - lib/jekyll-import/importers/posterous.rb
+    - lib/jekyll-import/importers/rss.rb
+    - lib/jekyll-import/importers/s9y.rb
+    - lib/jekyll-import/importers/s9y_database.rb
+    - lib/jekyll-import/importers/textpattern.rb
+    - lib/jekyll-import/importers/tumblr.rb
+    - lib/jekyll-import/importers/typo.rb
+    - lib/jekyll-import/importers/wordpress.rb
+    - lib/jekyll-import/importers/wordpressdotcom.rb

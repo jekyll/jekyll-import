@@ -30,6 +30,8 @@ module JekyllImport
         c.option "drafts",         "--drafts",              "Whether to export drafts as well"
         c.option "markdown",       "--markdown",            "convert into markdown format (default: false)"
         c.option "permalinks",     "--permalinks",          "preserve S9Y permalinks (default: false)"
+        c.option "excerpt_separator", "--excerpt_separator", "Demarkation for excerpts (default: "<a id=\"extended\"></a>")"
+
       end
 
       # Main migrator function. Call this to perform the migration.
@@ -64,6 +66,9 @@ module JekyllImport
       #                   Default: false
       # :permalinks::     If true, save the post's original permalink in its
       #                   YAML front matter. Default: false.
+      # :excerpt_separator:: A string to use to separate the excerpt (body 
+      #                      in S9Y) from the rest of the article (extended
+      #                      body in S9Y). Default: "<a id=\"extended\"></a>".
       #
       def self.process(opts)
         options = {
@@ -82,11 +87,17 @@ module JekyllImport
           :drafts         => opts.fetch("drafts", true),
           :markdown       => opts.fetch("markdown", false),
           :permalinks     => opts.fetch("permalinks", false),
+          :excerpt_separator => opts.fetch("excerpt_separator", "<a id="extended"></a>"),
+
         }
 
-        options[:clean_entities] = require_if_available("htmlentities", "clean_entities") if options[:clean_entities]
+        if options[:clean_entities]
+          options[:clean_entities] = require_if_available("htmlentities", "clean_entities") if options[:clean_entities]
+        end
 
-        options[:markdown] = require_if_available("reverse_markdown", "markdown") if options[:markdown]
+        if options[:markdown]
+          options[:markdown] = require_if_available("reverse_markdown", "markdown") if options[:markdown]
+        end
 
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts") if options[:drafts]
@@ -154,8 +165,8 @@ module JekyllImport
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
 
         content = post[:body].to_s
-        content += "\n\n" + post[:body_extended].to_s unless post[:body_extended].to_s.empty?
-
+        extended_content = post[:body_extended].to_s
+        content += options[:excerpt_separator] + extended_content unless post[:body_extended].to_s.empty?
         content = clean_entities(content) if options[:clean_entities]
 
         content = ReverseMarkdown.convert(content) if options[:markdown]
@@ -177,14 +188,14 @@ module JekyllImport
             "login"        => post[:author_login].to_s,
             "email"        => post[:author_email].to_s,
           },
-          "author_login" => post[:author_login].to_s,
-          "author_email" => post[:author_email].to_s,
-          "date"         => date.to_s,
-          "permalink"    => options[:permalinks] ? permalink : nil,
-          "categories"   => options[:categories] ? categories : nil,
-          "tags"         => options[:tags] ? tags : nil,
-          "comments"     => options[:comments] ? comments : nil,
-        }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml
+          "author_login"  => post[:author_login].to_s,
+          "author_email"  => post[:author_email].to_s,
+          "date"          => date.to_s,
+          "permalink"     => options[:permalinks] ? permalink : nil,
+          "categories"    => options[:categories] ? categories : nil,
+          "tags"          => options[:tags] ? tags : nil,
+          "comments"      => options[:comments] ? comments : nil,
+        }.delete_if { |k,v| v.nil? || v == "" }.to_yaml
 
         if post[:type] == "page"
           filename = page_path(post[:id], page_name_list) + "index.#{extension}"
@@ -228,11 +239,11 @@ module JekyllImport
         )
 
         db[cquery].each_with_object([]) do |category, categories|
-          categories << if options[:clean_entities]
-                          clean_entities(category[:name])
-                        else
-                          category[:name]
-                        end
+          if options[:clean_entities]
+            categories << clean_entities(category[:name])
+          else
+            categories << category[:name]
+          end
         end
       end
 
@@ -292,11 +303,11 @@ module JekyllImport
         )
 
         db[cquery].each_with_object([]) do |tag, tags|
-          tags << if options[:clean_entities]
-                    clean_entities(tag[:name])
-                  else
-                    tag[:name]
-                  end
+          if options[:clean_entities]
+            tags << clean_entities(tag[:name])
+          else
+            tags << tag[:name]
+          end
         end
       end
 

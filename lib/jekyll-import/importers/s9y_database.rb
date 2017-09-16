@@ -65,7 +65,10 @@ module JekyllImport
       # :markdown::       If true, convert the content to markdown
       #                   Default: false
       # :permalinks::     If true, save the post's original permalink in its
-      #                   YAML front matter. Default: false.
+      #                   YAML front matter. If the 'entryproperties' plugin
+      #                   was used, its permalink will become the canonical 
+      #                   permalink, and any other will become redirects. 
+      #                   Default: false.
       # :excerpt_separator:: A string to use to separate the excerpt (body 
       #                      in S9Y) from the rest of the article (extended
       #                      body in S9Y). Default: "<a id=\"extended\"></a>".
@@ -165,16 +168,24 @@ module JekyllImport
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
 
         content = post[:body].to_s
-        extended_content = post[:body_extended].to_s
-        content += options[:excerpt_separator] + extended_content unless post[:body_extended].to_s.empty?
         content = clean_entities(content) if options[:clean_entities]
+        extended_content = post[:body_extended].to_s
+        extended_content = clean_entities(extended_content) if options[:clean_entities]
+        content += options[:excerpt_separator] + extended_content unless extended_content.empty?
 
         content = ReverseMarkdown.convert(content) if options[:markdown]
 
         categories = process_categories(db, options, post)
         comments = process_comments(db, options, post)
         tags = process_tags(db, options, post)
-        permalink = process_permalink(db, options, post)
+        redirect_from = process_permalink(db, options, post)
+        if redirect_from.nil? or redirect_from.empty?
+          permalink = nil
+          redirect_from = nil
+        else 
+          permalink = redirect_from.shift
+          redirect_from = nil if redirect_from.empty?
+        end
 
         # Get the relevant fields as a hash, delete empty fields and
         # convert to YAML for the header.
@@ -192,9 +203,11 @@ module JekyllImport
           "author_email"  => post[:author_email].to_s,
           "date"          => date.to_s,
           "permalink"     => options[:permalinks] ? permalink : nil,
+          "redirect_from" => options[:permalinks] ? redirect_from : nil,
           "categories"    => options[:categories] ? categories : nil,
           "tags"          => options[:tags] ? tags : nil,
           "comments"      => options[:comments] ? comments : nil,
+          "excerpt_separator" => extended_content.empty? ? nil : excerpt_separator
         }.delete_if { |k,v| v.nil? || v == "" }.to_yaml
 
         if post[:type] == "page"
@@ -313,8 +326,25 @@ module JekyllImport
 
       def self.process_permalink(db, options, post)
         return unless options[:permalinks]
+        permalinks = []
 
         px = options[:table_prefix]
+
+        if db.table_exists?("#{px}entryproperties")
+          pquery = %(
+            SELECT
+              props.value AS `permalink`
+            FROM
+              #{px}entryproperties AS props
+            WHERE
+              props.entryid = '#{post[:id]}' AND
+              props.property = 'permalink'
+          )
+          db[pquery].each do |link|
+            plink = "#{link[:permalink]}"
+            permalinks << plink unless plink.end_with? "/UNKNOWN.html"
+          end
+        end
 
         cquery = %(
             SELECT
@@ -327,8 +357,10 @@ module JekyllImport
         )
 
         db[cquery].each do |link|
-          return "/#{link[:permalink]}"
+          permalinks << "/#{link[:permalink]}"
         end
+
+        return permalinks
       end
 
       def self.clean_entities(text)

@@ -134,6 +134,7 @@ module JekyllImport
 
         posts_query = "
            SELECT
+             'post'                 AS `type`,
              entries.ID             AS `id`,
              entries.isdraft        AS `isdraft`,
              entries.title          AS `title`,

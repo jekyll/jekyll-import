@@ -31,7 +31,7 @@ module JekyllImport
         c.option "markdown",       "--markdown",            "convert into markdown format (default: false)"
         c.option "permalinks",     "--permalinks",          "preserve S9Y permalinks (default: false)"
         c.option "excerpt_separator", "--excerpt_separator", "Demarkation for excerpts (default: "<a id=\"extended\"></a>")"
-
+        c.option "includeentry",   "--includeentry",        "Replace macros from the includeentry plugin"
       end
 
       # Main migrator function. Call this to perform the migration.
@@ -72,25 +72,30 @@ module JekyllImport
       # :excerpt_separator:: A string to use to separate the excerpt (body 
       #                      in S9Y) from the rest of the article (extended
       #                      body in S9Y). Default: "<a id=\"extended\"></a>".
+      # :includentry::    Replace macros from the includentry plugin - these are
+      #                   the [s9y-include-entry] and [s9y-include-block] macros.
+      #                   Default: false.
       #
+
       def self.process(opts)
         options = {
-          :user           => opts.fetch("user", ""),
-          :pass           => opts.fetch("password", ""),
-          :host           => opts.fetch("host", "localhost"),
-          :port           => opts.fetch("port", 3306),
-          :socket         => opts.fetch("socket", nil),
-          :dbname         => opts.fetch("dbname", ""),
-          :table_prefix   => opts.fetch("table_prefix", "serendipity_"),
-          :clean_entities => opts.fetch("clean_entities", true),
-          :comments       => opts.fetch("comments", true),
-          :categories     => opts.fetch("categories", true),
-          :tags           => opts.fetch("tags", true),
-          :extension      => opts.fetch("extension", "html"),
-          :drafts         => opts.fetch("drafts", true),
-          :markdown       => opts.fetch("markdown", false),
-          :permalinks     => opts.fetch("permalinks", false),
+          :user              => opts.fetch("user", ""),
+          :pass              => opts.fetch("password", ""),
+          :host              => opts.fetch("host", "localhost"),
+          :port              => opts.fetch("port", 3306),
+          :socket            => opts.fetch("socket", nil),
+          :dbname            => opts.fetch("dbname", ""),
+          :table_prefix      => opts.fetch("table_prefix", "serendipity_"),
+          :clean_entities    => opts.fetch("clean_entities", true),
+          :comments          => opts.fetch("comments", true),
+          :categories        => opts.fetch("categories", true),
+          :tags              => opts.fetch("tags", true),
+          :extension         => opts.fetch("extension", "html"),
+          :drafts            => opts.fetch("drafts", true),
+          :markdown          => opts.fetch("markdown", false),
+          :permalinks        => opts.fetch("permalinks", false),
           :excerpt_separator => opts.fetch("excerpt_separator", "<a id="extended"></a>"),
+          :includeentry      => opts.fetch("includeentry", false),
 
         }
 
@@ -169,12 +174,16 @@ module JekyllImport
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
 
         content = post[:body].to_s
+        content = process_includeentry(content, db, options)
         content = clean_entities(content) if options[:clean_entities]
+
         extended_content = post[:body_extended].to_s
+        extended_content = process_includeentry(extended_content, db, options)
         extended_content = clean_entities(extended_content) if options[:clean_entities]
+
         content += options[:excerpt_separator] + extended_content unless extended_content.empty?
 
-        content = ReverseMarkdown.convert(content) if options[:markdown]
+        content = ReverseMarkdown.convert(content)
 
         categories = process_categories(db, options, post)
         comments = process_comments(db, options, post)
@@ -183,7 +192,7 @@ module JekyllImport
         if redirect_from.nil? or redirect_from.empty?
           permalink = nil
           redirect_from = nil
-        else 
+        else
           permalink = redirect_from.shift
           redirect_from = nil if redirect_from.empty?
         end
@@ -191,23 +200,23 @@ module JekyllImport
         # Get the relevant fields as a hash, delete empty fields and
         # convert to YAML for the header.
         data = {
-          "layout"       => post[:type].to_s,
-          "status"       => status.to_s,
-          "published"    => status.to_s == "draft" ? nil : (status.to_s == "published"),
-          "title"        => title.to_s,
-          "author"       => {
+          "layout"            => post[:type].to_s,
+          "status"            => status.to_s,
+          "published"         => status.to_s == "draft" ? nil : (status.to_s == "published"),
+          "title"             => title.to_s,
+          "author"            => {
             "display_name" => post[:author].to_s,
             "login"        => post[:author_login].to_s,
             "email"        => post[:author_email].to_s,
           },
-          "author_login"  => post[:author_login].to_s,
-          "author_email"  => post[:author_email].to_s,
-          "date"          => date.to_s,
-          "permalink"     => options[:permalinks] ? permalink : nil,
-          "redirect_from" => options[:permalinks] ? redirect_from : nil,
-          "categories"    => options[:categories] ? categories : nil,
-          "tags"          => options[:tags] ? tags : nil,
-          "comments"      => options[:comments] ? comments : nil,
+          "author_login"      => post[:author_login].to_s,
+          "author_email"      => post[:author_email].to_s,
+          "date"              => date.to_s,
+          "permalink"         => options[:permalinks] ? permalink : nil,
+          "redirect_from"     => options[:permalinks] ? redirect_from : nil,
+          "categories"        => options[:categories] ? categories : nil,
+          "tags"              => options[:tags] ? tags : nil,
+          "comments"          => options[:comments] ? comments : nil,
           "excerpt_separator" => extended_content.empty? ? nil : excerpt_separator
         }.delete_if { |k,v| v.nil? || v == "" }.to_yaml
 
@@ -234,6 +243,75 @@ module JekyllImport
       rescue LoadError
         STDERR.puts "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
         true
+      end
+
+      def self.process_includeentry(text, db, options)
+        return text unless options[:includeentry]
+
+        result = text
+
+        px = options[:table_prefix]
+
+        props  = text.scan(/(\[s9y-include-entry:([0-9]+):([^:]+)\])/)
+        blocks = text.scan(/(\[s9y-include-block:([0-9]+):?([^:]+)?\])/)
+
+        props.each do |match|
+          macro = match[0]
+          id = match[1]
+          replacement = ""
+          if match[2].start_with?('prop=')
+            # Substitute a named property of the entry
+            prop = match[2].sub('prop=', '')
+            cquery = %(
+              SELECT
+                px.value AS `txt`
+              FROM
+                #{px}entryproperties AS px
+              WHERE
+                entryid = '#{id}' AND
+                property = '#{prop}'
+            )
+            db[cquery].each do |row|
+              replacement << row[:txt]
+            end
+          else
+            # Substitute a value of the entry
+            prop = match[2]
+            cquery = %(
+              SELECT
+                px.#{prop} AS `txt`
+              FROM
+                #{px}entries AS px
+              WHERE
+                entryid = '#{id}'
+            )
+            db[cquery].each do |row|
+              replacement << row[:txt]
+            end
+          end
+          result = result.sub(macro, replacement)
+        end
+
+        blocks.each do |match|
+          macro = match[0]
+          id = match[1]
+          replacement = ""
+          # match[2] *could* be 'template', but we can't run it through Smarty, so we ignore it
+	  cquery = %(
+            SELECT
+              px.body AS `txt`
+            FROM
+              #{px}staticblocks AS px
+            WHERE
+              id = '#{id}'
+          )
+	  db[cquery].each do |row|
+	    replacement << row[:txt]
+	  end
+          result = result.sub(macro, replacement)
+        end
+
+        return result
       end
 
       def self.process_categories(db, options, post)

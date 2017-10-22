@@ -15,7 +15,6 @@ unless defined?(Test::Unit::AssertionFailedError)
 end
 
 require File.expand_path("../lib/jekyll-import.rb", __dir__)
-
 include JekyllImport
 
 JekyllImport::Importer.subclasses.each(&:require_deps)

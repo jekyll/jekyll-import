@@ -16,6 +16,7 @@
   * Modernize Travis configuration (#317)
   * Define path with __dir__ (#316)
   * Appease Rubocop (#318)
+  * Stop testing against Jekyll 2.5 (#323)
 
 ### Site Enhancements
 

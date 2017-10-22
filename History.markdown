@@ -15,6 +15,7 @@
   * Updating Ruby and Jekyll versions for testing (#290)
   * Modernize Travis configuration (#317)
   * Define path with __dir__ (#316)
+  * Appease Rubocop (#318)
 
 ### Site Enhancements
 

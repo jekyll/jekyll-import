@@ -14,7 +14,7 @@ unless defined?(Test::Unit::AssertionFailedError)
   end
 end
 
-require File.expand_path('../../lib/jekyll-import.rb', __FILE__)
+require File.expand_path('../lib/jekyll-import.rb', __dir__)
 
 include JekyllImport
 
@@ -27,11 +27,11 @@ class Test::Unit::TestCase
   include RR::Adapters::TestUnit
 
   def dest_dir(*subdirs)
-    File.join(File.dirname(__FILE__), 'dest', *subdirs)
+    File.join(__dir__, 'dest', *subdirs)
   end
 
   def source_dir(*subdirs)
-    File.join(File.dirname(__FILE__), 'source', *subdirs)
+    File.join(__dir__, 'source', *subdirs)
   end
 
   def clear_dest

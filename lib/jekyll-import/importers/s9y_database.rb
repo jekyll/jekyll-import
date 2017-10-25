@@ -1,33 +1,33 @@
 module JekyllImport
   module Importers
     class S9YDatabase < Importer
-
       def self.require_deps
         JekyllImport.require_with_fallback(
-          %w[
-          rubygems
+          %w(
+            rubygems
           sequel
           fileutils
           safe_yaml
           unidecode
-          ])
+          )
+        )
       end
 
       def self.specify_options(c)
-        c.option 'dbname', '--dbname DB', 'Database name (default: "")'
-        c.option 'socket', '--socket SOCKET', 'Database socket (default: "")'
-        c.option 'user', '--user USER', 'Database user name (default: "")'
-        c.option 'password', '--password PW', "Database user's password (default: "")"
-        c.option 'host', '--host HOST', 'Database host name (default: "localhost")'
-        c.option 'port', '--port PORT', 'Custom database port connect to (default: 3306)'
-        c.option 'table_prefix', '--table_prefix PREFIX', 'Table prefix name (default: "serendipity_")'
-        c.option 'clean_entities', '--clean_entities', 'Whether to clean entities (default: true)'
-        c.option 'comments', '--comments', 'Whether to import comments (default: true)'
-        c.option 'categories', '--categories', 'Whether to import categories (default: true)'
-        c.option 'tags', '--tags', 'Whether to import tags (default: true)'
-        c.option 'drafts', '--drafts', 'Whether to export drafts as well'
-        c.option 'markdown', '--markdown', 'convert into markdown format (default: false)'
-        c.option 'permalinks', '--permalinks', 'preserve S9Y permalinks (default: false)'
+        c.option "dbname", "--dbname DB", "Database name (default: '')"
+        c.option "socket", "--socket SOCKET", "Database socket (default: '')"
+        c.option "user", "--user USER", "Database user name (default: '')"
+        c.option "password", "--password PW", "Database user's password (default: '')"
+        c.option "host", "--host HOST", "Database host name (default: 'localhost')"
+        c.option "port", "--port PORT", "Custom database port connect to (default: 3306)"
+        c.option "table_prefix", "--table_prefix PREFIX", "Table prefix name (default: 'serendipity_')"
+        c.option "clean_entities", "--clean_entities", "Whether to clean entities (default: true)"
+        c.option "comments", "--comments", "Whether to import comments (default: true)"
+        c.option "categories", "--categories", "Whether to import categories (default: true)"
+        c.option "tags", "--tags", "Whether to import tags (default: true)"
+        c.option "drafts", "--drafts", "Whether to export drafts as well"
+        c.option "markdown", "--markdown", "convert into markdown format (default: false)"
+        c.option "permalinks", "--permalinks", "preserve S9Y permalinks (default: false)"
       end
 
       # Main migrator function. Call this to perform the migration.
@@ -65,37 +65,42 @@ module JekyllImport
       #
       def self.process(opts)
         options = {
-          :user           => opts.fetch('user', ''),
-          :pass           => opts.fetch('password', ''),
-          :host           => opts.fetch('host', 'localhost'),
-					:port						=> opts.fetch('port', 3306),
-          :socket         => opts.fetch('socket', nil),
-          :dbname         => opts.fetch('dbname', ''),
-          :table_prefix   => opts.fetch('table_prefix', 'serendipity_'),
-          :clean_entities => opts.fetch('clean_entities', true),
-          :comments       => opts.fetch('comments', true),
-          :categories     => opts.fetch('categories', true),
-          :tags           => opts.fetch('tags', true),
-          :extension      => opts.fetch('extension', 'html'),
-          :drafts         => opts.fetch('drafts', true),
-          :markdown       => opts.fetch('markdown', false),
-          :permalinks     => opts.fetch('permalinks', false),
+          :user           => opts.fetch("user", ""),
+          :pass           => opts.fetch("password", ""),
+          :host           => opts.fetch("host", "localhost"),
+          :port						=> opts.fetch("port", 3306),
+          :socket         => opts.fetch("socket", nil),
+          :dbname         => opts.fetch("dbname", ""),
+          :table_prefix   => opts.fetch("table_prefix", "serendipity_"),
+          :clean_entities => opts.fetch("clean_entities", true),
+          :comments       => opts.fetch("comments", true),
+          :categories     => opts.fetch("categories", true),
+          :tags           => opts.fetch("tags", true),
+          :extension      => opts.fetch("extension", "html"),
+          :drafts         => opts.fetch("drafts", true),
+          :markdown       => opts.fetch("markdown", false),
+          :permalinks     => opts.fetch("permalinks", false),
         }
 
         if options[:clean_entities]
-          options[:clean_entities] = require_if_available('htmlentities', 'clean_entities')
+          options[:clean_entities] = require_if_available("htmlentities", "clean_entities")
         end
 
         if options[:markdown]
-          options[:markdown] = require_if_available('reverse_markdown', 'markdown')
+          options[:markdown] = require_if_available("reverse_markdown", "markdown")
         end
 
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts") if options[:drafts]
 
-        db = Sequel.mysql2(options[:dbname], :user => options[:user], :password => options[:pass],
-                           :socket => options[:socket], :host => options[:host], :port => options[:port],
-                           :encoding => 'utf8')
+        db = Sequel.mysql2(options[:dbname], 
+          :user     => options[:user], 
+          :password => options[:pass],
+          :socket   => options[:socket], 
+          :host     => options[:host], 
+          :port     => options[:port],
+          :encoding => "utf8"
+        )
 
         px = options[:table_prefix]
 
@@ -112,7 +117,7 @@ module JekyllImport
           page[:slug] = sluggify(page[:title])
 
           page_name_list[ page[:id] ] = {
-            :slug   => page[:slug]
+            :slug => page[:slug],
           }
         end
 
@@ -153,9 +158,9 @@ module JekyllImport
           slug = sluggify(title)
         end
 
-        status = post[:isdraft] == 'true' ? 'draft' : 'published'
+        status = post[:isdraft] == "true" ? "draft" : "published"
         date = Time.at(post[:timestamp]).utc || Time.now.utc
-        name = "%02d-%02d-%02d-%s.%s" % [date.year, date.month, date.day, slug, extension]
+        name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
 
         content = post[:body].to_s
         unless post[:body_extended].to_s.empty?
@@ -178,28 +183,28 @@ module JekyllImport
         # Get the relevant fields as a hash, delete empty fields and
         # convert to YAML for the header.
         data = {
-          'layout'        => post[:type].to_s,
-          'status'        => status.to_s,
-          'published'     => status.to_s == 'draft' ? nil : (status.to_s == 'published'),
-          'title'         => title.to_s,
-          'author'        => {
-            'display_name'=> post[:author].to_s,
-            'login'       => post[:author_login].to_s,
-            'email'       => post[:author_email].to_s
+          "layout"       => post[:type].to_s,
+          "status"       => status.to_s,
+          "published"    => status.to_s == "draft" ? nil : (status.to_s == "published"),
+          "title"        => title.to_s,
+          "author"       => {
+            "display_name" => post[:author].to_s,
+            "login"        => post[:author_login].to_s,
+            "email"        => post[:author_email].to_s,
           },
-          'author_login'  => post[:author_login].to_s,
-          'author_email'  => post[:author_email].to_s,
-          'date'          => date.to_s,
-          'permalink'     => options[:permalinks] ? permalink : nil,
-          'categories'    => options[:categories] ? categories : nil,
-          'tags'          => options[:tags] ? tags : nil,
-          'comments'      => options[:comments] ? comments : nil,
-        }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+          "author_login" => post[:author_login].to_s,
+          "author_email" => post[:author_email].to_s,
+          "date"         => date.to_s,
+          "permalink"    => options[:permalinks] ? permalink : nil,
+          "categories"   => options[:categories] ? categories : nil,
+          "tags"         => options[:tags] ? tags : nil,
+          "comments"     => options[:comments] ? comments : nil,
+        }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml
 
-        if post[:type] == 'page'
+        if post[:type] == "page"
           filename = page_path(post[:id], page_name_list) + "index.#{extension}"
           FileUtils.mkdir_p(File.dirname(filename))
-        elsif status == 'draft'
+        elsif status == "draft"
           filename = "_drafts/#{slug}.#{extension}"
         else
           filename = "_posts/#{name}"
@@ -214,13 +219,11 @@ module JekyllImport
       end
 
       def self.require_if_available(gem_name, option_name)
-        begin
-          require gem_name
-          return true
-        rescue LoadError
-          STDERR.puts "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
-          return true
-        end
+        require gem_name
+        return true
+      rescue LoadError
+        STDERR.puts "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
+        return true
       end
 
       def self.process_categories(db, options, post)
@@ -240,11 +243,11 @@ module JekyllImport
         )
 
         db[cquery].each_with_object([]) do |category, categories|
-          if options[:clean_entities]
-            categories << clean_entities(category[:name])
-          else
-            categories << category[:name]
-          end
+          categories << if options[:clean_entities]
+                          clean_entities(category[:name])
+                        else
+                          category[:name]
+                        end
         end
       end
 
@@ -281,14 +284,14 @@ module JekyllImport
           end
 
           comments << {
-            'id'           => comment[:id].to_i,
-            'author'       => comauthor,
-            'author_email' => comment[:author_email].to_s,
-            'author_url'   => comment[:author_url].to_s,
-            'date'         => comment[:date].to_s,
-            'content'      => comcontent,
+            "id"           => comment[:id].to_i,
+            "author"       => comauthor,
+            "author_email" => comment[:author_email].to_s,
+            "author_url"   => comment[:author_url].to_s,
+            "date"         => comment[:date].to_s,
+            "content"      => comcontent,
           }
-        end.sort!{ |a,b| a['id'] <=> b['id'] }
+        end.sort! { |a, b| a["id"] <=> b["id"] }
       end
 
       def self.process_tags(db, options, post)
@@ -306,11 +309,11 @@ module JekyllImport
         )
 
         db[cquery].each_with_object([]) do |tag, tags|
-          if options[:clean_entities]
-            tags << clean_entities(tag[:name])
-          else
-            tags << tag[:name]
-          end
+          tags << if options[:clean_entities]
+                    clean_entities(tag[:name])
+                  else
+                    tag[:name]
+                  end
         end
       end
 
@@ -334,7 +337,7 @@ module JekyllImport
         end
       end
 
-      def self.clean_entities( text )
+      def self.clean_entities(text)
         if text.respond_to?(:force_encoding)
           text.force_encoding("UTF-8")
         end
@@ -350,22 +353,20 @@ module JekyllImport
         text
       end
 
-      def self.sluggify( title )
-        title.to_ascii.downcase.gsub(/[^0-9A-Za-z]+/, " ").strip.gsub(" ", "-")
+      def self.sluggify(title)
+        title.to_ascii.downcase.gsub(%r![^0-9A-Za-z]+!, " ").strip.tr(" ", "-")
       end
 
-      def self.page_path( page_id, page_name_list )
+      def self.page_path(page_id, page_name_list)
         if page_name_list.key?(page_id)
           [
             page_name_list[page_id][:slug],
-            '/'
+            "/",
           ].join("")
         else
           ""
         end
       end
-
     end
   end
 end
-

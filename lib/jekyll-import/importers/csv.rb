@@ -4,22 +4,22 @@ module JekyllImport
   module Importers
     class CSV < Importer
       def self.require_deps
-        JekyllImport.require_with_fallback(%w[
+        JekyllImport.require_with_fallback(%w(
           csv
           fileutils
           yaml
-        ])
+        ))
       end
 
       def self.specify_options(c)
-        c.option 'file', '--file NAME', 'The CSV file to import (default: "posts.csv")'
-        c.option 'no-front-matter', '--no-front-matter', 'Do not add the default front matter to the post body'
+        c.option "file", "--file NAME", 'The CSV file to import (default: "posts.csv")'
+        c.option "no-front-matter", "--no-front-matter", "Do not add the default front matter to the post body"
       end
 
       # Reads a csv with title, permalink, body, published_at, and filter.
       # It creates a post file for each row in the csv
       def self.process(options)
-        file = options.fetch('file', "posts.csv")
+        file = options.fetch("file", "posts.csv")
 
         FileUtils.mkdir_p "_posts"
         posts = 0
@@ -80,13 +80,13 @@ module JekyllImport
       end
 
       def self.write_frontmatter(f, post, options)
-        no_frontmatter = options.fetch('no-front-matter', false)
+        no_frontmatter = options.fetch("no-front-matter", false)
         unless no_frontmatter
           f.puts YAML.dump({
             "layout"    => "post",
             "title"     => post.title,
             "date"      => post.published_at.to_s,
-            "permalink" => post.permalink
+            "permalink" => post.permalink,
           })
           f.puts "---"
         end

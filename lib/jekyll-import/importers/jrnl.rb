@@ -1,20 +1,19 @@
 module JekyllImport
   module Importers
     class Jrnl < Importer
-
       def self.require_deps
-        JekyllImport.require_with_fallback(%w[
+        JekyllImport.require_with_fallback(%w(
           time
           rubygems
           safe_yaml
-        ])
+        ))
       end
 
       def self.specify_options(c)
-        c.option 'file', '--file FILENAME', 'Journal file (default: "~/journal.txt")'
-        c.option 'time_format', '--time_format FORMAT', 'Time format of your journal (default: "%Y-%m-%d %H:%M")'
-        c.option 'extension', '--extension EXT', 'Output extension (default: "md")'
-        c.option 'layout', '--layout NAME', 'Output post layout (default: "post")'
+        c.option "file", "--file FILENAME", 'Journal file (default: "~/journal.txt")'
+        c.option "time_format", "--time_format FORMAT", 'Time format of your journal (default: "%Y-%m-%d %H:%M")'
+        c.option "extension", "--extension EXT", 'Output extension (default: "md")'
+        c.option "layout", "--layout NAME", 'Output post layout (default: "post")'
       end
 
       # Reads a jrnl file and creates a new post for each entry
@@ -24,10 +23,10 @@ module JekyllImport
       # :extension    the extension format of the output files
       # :layout       explicitly set the layout of the output
       def self.process(options)
-        file        = options.fetch('file', "~/journal.txt")
-        time_format = options.fetch('time_format', "%Y-%m-%d %H:%M")
-        extension   = options.fetch('extension', "md")
-        layout      = options.fetch('layout', "post")
+        file        = options.fetch("file", "~/journal.txt")
+        time_format = options.fetch("time_format", "%Y-%m-%d %H:%M")
+        extension   = options.fetch("extension", "md")
+        layout      = options.fetch("layout", "post")
 
         date_length = Time.now.strftime(time_format).length
 
@@ -37,7 +36,7 @@ module JekyllImport
         abort "The jrnl file was not found. Please make sure '#{file}' exists. You can specify a different file using the --file switch." unless File.file?(file)
 
         input = File.read(file)
-        entries = input.split("\n\n");
+        entries = input.split("\n\n")
 
         entries.each do |entry|
           # split dateline and body
@@ -73,7 +72,7 @@ module JekyllImport
 
       # generate slug
       def self.create_slug(title)
-        return title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+        return title.downcase.strip.tr(" ", "-").gsub(%r![^\w-]!, "")
       end
 
       # generate filename
@@ -95,11 +94,11 @@ module JekyllImport
       # Returns array converted to YAML
       def self.create_meta(layout, title, date)
         data = {
-          'layout'        => layout,
-          'title'         => title,
-          'date'          => Time.parse(date).strftime("%Y-%m-%d %H:%M %z")
+          "layout" => layout,
+          "title"  => title,
+          "date"   => Time.parse(date).strftime("%Y-%m-%d %H:%M %z"),
         }.to_yaml
-        return data;
+        return data
       end
 
       # Writes given data to file

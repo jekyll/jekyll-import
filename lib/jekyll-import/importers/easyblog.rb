@@ -2,7 +2,7 @@ module JekyllImport
   module Importers
     class Easyblog < Importer
       def self.validate(options)
-        %w[dbname user].each do |option|
+        %w(dbname user).each do |option|
           if options[option].nil?
             abort "Missing mandatory option --#{option}."
           end
@@ -10,32 +10,33 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option 'dbname', '--dbname', 'Database name'
-        c.option 'user', '--user', 'Database user name'
-        c.option 'password', '--password', "Database user's password (default: '')"
-        c.option 'host', '--host', 'Database host name'
-        c.option 'section', '--section', 'Table prefix name'
-        c.option 'prefix', '--prefix', 'Table prefix name'
+        c.option "dbname", "--dbname", "Database name"
+        c.option "user", "--user", "Database user name"
+        c.option "password", "--password", "Database user's password (default: '')"
+        c.option "host", "--host", "Database host name"
+        c.option "section", "--section", "Table prefix name"
+        c.option "prefix", "--prefix", "Table prefix name"
       end
 
       def self.require_deps
-        JekyllImport.require_with_fallback(%w[
-                                           rubygems
-                                          sequel
-                                          fileutils
-                                          safe_yaml
-                                          ])
+        JekyllImport.require_with_fallback(%w(
+          rubygems
+          sequel
+          mysql2
+          fileutils
+          safe_yaml
+        ))
       end
 
       def self.process(options)
-        dbname  = options.fetch('dbname')
-        user    = options.fetch('user')
-        pass    = options.fetch('password', '')
-        host    = options.fetch('host', "localhost")
-        section = options.fetch('section', '1')
-        table_prefix = options.fetch('prefix', "jos_")
+        dbname  = options.fetch("dbname")
+        user    = options.fetch("user")
+        pass    = options.fetch("password", "")
+        host    = options.fetch("host", "localhost")
+        section = options.fetch("section", "1")
+        table_prefix = options.fetch("prefix", "jos_")
 
-        db = Sequel.mysql(dbname, :user => user, :password => pass, :host => host, :encoding => 'utf8')
+        db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
 
         FileUtils.mkdir_p("_posts")
 
@@ -68,20 +69,19 @@ module JekyllImport
           content = post[:content]
           category = post[:category]
           tags = post[:tags]
-          name = "%02d-%02d-%02d-%s.markdown" % [date.year, date.month, date.day,
-                                                 slug]
+          name = format("%02d-%02d-%02d-%s.markdown", date.year, date.month, date.day, slug)
 
           # Get the relevant fields as a hash, delete empty fields and convert
           # to YAML for the header.
           data = {
-            'layout' => 'post',
-            'title' => title.to_s,
-            'joomla_id' => post[:id],
-            'joomla_url' => post[:alias],
-            'category' => post[:category],
-            'tags' => post[:tags],
-            'date' => date
-          }.delete_if { |k,v| v.nil? || v == '' }.to_yaml
+            "layout"     => "post",
+            "title"      => title.to_s,
+            "joomla_id"  => post[:id],
+            "joomla_url" => post[:alias],
+            "category"   => post[:category],
+            "tags"       => post[:tags],
+            "date"       => date,
+          }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml
 
           # Write out the data and content to file
           File.open("_posts/#{name}", "w") do |f|

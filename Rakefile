@@ -1,9 +1,9 @@
-require 'rubygems'
-require 'bundler/gem_tasks'
-require 'rake'
-require 'rdoc'
-require 'date'
-require 'yaml'
+require "rubygems"
+require "bundler/gem_tasks"
+require "rake"
+require "rdoc"
+require "date"
+require "yaml"
 
 #############################################################################
 #
@@ -12,7 +12,7 @@ require 'yaml'
 #############################################################################
 
 def name
-  @name ||= Dir['*.gemspec'].first.split('.').first
+  @name ||= Dir["*.gemspec"].first.split(".").first
 end
 
 def version
@@ -20,17 +20,17 @@ def version
 end
 
 def normalize_bullets(markdown)
-  markdown.gsub(/\s{2}\*{1}/, "-")
+  markdown.gsub(%r!\s{2}\*{1}!, "-")
 end
 
 def linkify_prs(markdown)
-  markdown.gsub(/#(\d+)/) do |word|
+  markdown.gsub(%r!#(\d+)!) do |word|
     "[#{word}]({{ site.repository }}/issues/#{word.delete("#")})"
   end
 end
 
 def linkify_users(markdown)
-  markdown.gsub(/(@\w+)/) do |username|
+  markdown.gsub(%r!(@\w+)!) do |username|
     "[#{username}](https://github.com/#{username.delete("@")})"
   end
 end
@@ -40,11 +40,11 @@ def linkify(markdown)
 end
 
 def liquid_escape(markdown)
-  markdown.gsub(/(`{[{%].+[}%]}`)/, "{% raw %}\\1{% endraw %}")
+  markdown.gsub(%r!(`{[{%].+[}%]}`)!, "{% raw %}\\1{% endraw %}")
 end
 
 def remove_head_from_history(markdown)
-  index = markdown =~ /^##\s+\d+\.\d+\.\d+/
+  index = markdown =~ %r!^##\s+\d+\.\d+\.\d+!
   markdown[index..-1]
 end
 
@@ -60,19 +60,19 @@ end
 
 task :default => :test
 
-require 'rake/testtask'
+require "rake/testtask"
 Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  test.libs << "lib" << "test"
+  test.pattern = "test/**/test_*.rb"
   test.verbose = true
 end
 
-require 'rdoc/task'
+require "rdoc/task"
 Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
+  rdoc.rdoc_dir = "rdoc"
   rdoc.title = "#{name} #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.rdoc_files.include("README*")
+  rdoc.rdoc_files.include("lib/**/*.rb")
 end
 
 desc "Open an irb session preloaded with this library"
@@ -123,22 +123,22 @@ namespace :site do
     if File.exist?("History.markdown")
       history_file = File.read("History.markdown")
       front_matter = {
-        "layout" => "docs",
-        "title" => "History",
-        "permalink" => "/docs/history/",
-        "prev_section" => "contributing"
+        "layout"       => "docs",
+        "title"        => "History",
+        "permalink"    => "/docs/history/",
+        "prev_section" => "contributing",
       }
-      Dir.chdir('docs/_docs/') do
+      Dir.chdir("docs/_docs/") do
         File.open("history.md", "w") do |file|
           file.write("#{front_matter.to_yaml}---\n\n")
           file.write(converted_history(history_file))
         end
       end
-      unless `git diff docs/_docs/history.md`.strip.empty?
+      if `git diff docs/_docs/history.md`.strip.empty?
+        puts "No updates to commit at this time. Skipping..."
+      else
         sh "git add docs/_docs/history.md"
         sh "git commit -m 'Updated generated history.md file in the site.'"
-      else
-        puts "No updates to commit at this time. Skipping..."
       end
     else
       abort "You seem to have misplaced your History.markdown file. I can haz?"

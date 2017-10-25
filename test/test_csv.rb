@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'helper'
+require "helper"
 
 class TestCSVImporter < Test::Unit::TestCase
   sample_row = [
@@ -8,7 +8,7 @@ class TestCSVImporter < Test::Unit::TestCase
     "/2015/05/05/hi.html",
     "Welcome to Jekyll!\n\nI am a post body.",
     "2015-01-10",
-    "markdown"
+    "markdown",
   ]
 
   context "CSVPost" do
@@ -46,7 +46,7 @@ class TestCSVImporter < Test::Unit::TestCase
         assert_equal "layout: post\n", lines[1]
         assert_equal "title: My Title\n", lines[2]
         assert_equal "date: '2015-01-10T00:00:00+00:00'\n", lines[3]
-        assert_match /permalink: "?\/2015\/05\/05\/hi\.html"?/, lines[4]
+        assert_match %r!permalink: "?\/2015\/05\/05\/hi\.html"?!, lines[4]
         assert_equal "---\n", lines[5]
         assert_equal "Welcome to Jekyll!\n", lines[6]
         assert_equal "\n", lines[7]
@@ -54,6 +54,5 @@ class TestCSVImporter < Test::Unit::TestCase
         File.unlink(output_filename)
       end
     end
-
   end
 end

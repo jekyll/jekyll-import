@@ -27,6 +27,7 @@
 ### Minor Enhancements
 
   * Ghost: import drafts & pages, and fix issue with date extraction (#304)
+  * Add parent_id to wordpressdotcom importer (#301)
 
 ### Documentation
 

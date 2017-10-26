@@ -88,6 +88,10 @@ module JekyllImport
         def post_type
           @post_type ||= text_for("wp:post_type")
         end
+      
+        def parent_id
+          @parent_id ||= text_for("wp:post_parent")
+        end
 
         def file_name
           @file_name ||= if published?
@@ -161,6 +165,7 @@ module JekyllImport
             "title"      => item.title,
             "date"       => item.published_at,
             "type"       => item.post_type,
+            "parent_id"  => item.parent_id,
             "published"  => item.published?,
             "status"     => item.status,
             "categories" => categories,

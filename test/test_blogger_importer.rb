@@ -1,47 +1,45 @@
-require 'helper'
-require 'tempfile'
-require 'tmpdir'
+require "helper"
+require "tempfile"
+require "tmpdir"
 
 class TestBloggerImporter < Test::Unit::TestCase
-
   should "requires source option" do
     assert_raise(RuntimeError) do
       Importers::Blogger.validate({})
     end
     assert_raise(RuntimeError) do
-      Importers::Blogger.validate('source' => nil)
+      Importers::Blogger.validate("source" => nil)
     end
     assert_raise(Errno::ENOENT) do
-      Importers::Blogger.validate('source' => "---not-exists-file-#{$$}.xml")
+      Importers::Blogger.validate("source" => "---not-exists-file-#{$PROCESS_ID}.xml")
     end
     assert_nothing_raised do
-      Tempfile.open('blog-foobar.xml') do |file|
-        Importers::Blogger.validate('source' => file.path)
+      Tempfile.open("blog-foobar.xml") do |file|
+        Importers::Blogger.validate("source" => file.path)
       end
     end
   end
 
   context "broken file" do
     should "raise an error on parse" do
-      Tempfile.open('blog-broken.xml') do |file|
+      Tempfile.open("blog-broken.xml") do |file|
         file << ">>>This is not a XML file.<<<\n"
         file.rewind
 
         assert_raises(REXML::ParseException) do
-          Importers::Blogger.process('source' => file.path)
+          Importers::Blogger.process("source" => file.path)
         end
       end
 
-      Tempfile.open('blog-broken.xml') do |file|
+      Tempfile.open("blog-broken.xml") do |file|
         file << "<aaa><bbb></bbb></aaa" # broken XML
         file.rewind
 
         assert_raises(REXML::ParseException) do
-          Importers::Blogger.process('source' => file.path)
+          Importers::Blogger.process("source" => file.path)
         end
       end
     end
-
   end
 
   context "postprocessing" do
@@ -73,36 +71,35 @@ EOF
 <a href="{{ site.baseurl }}{% post_url 1900-01-01-post0 %}">aaa</a>
 <a href="http://external.blogspot.com/1900/01/post0.html">bbb</a>
 EOF
-          FileUtils.mkdir_p('_posts')
-          File.open('_posts/1900-01-01-post0.html', 'w') { |f| f << post0_src }
-          File.open('_posts/1900-02-01-post1.html', 'w') { |f| f << post1_src }
+          FileUtils.mkdir_p("_posts")
+          File.open("_posts/1900-01-01-post0.html", "w") { |f| f << post0_src }
+          File.open("_posts/1900-02-01-post1.html", "w") { |f| f << post1_src }
 
-          Importers::Blogger::postprocess('replace-internal-link' => false)
+          Importers::Blogger.postprocess("replace-internal-link" => false)
 
-          StringIO.open(post0_src, 'r') do |expected|
-            File.open('_posts/1900-01-01-post0.html', 'r') do |actual|
+          StringIO.open(post0_src, "r") do |expected|
+            File.open("_posts/1900-01-01-post0.html", "r") do |actual|
               assert_equal(expected.read, actual.read)
             end
           end
-          StringIO.open(post1_src, 'r') do |expected|
-            File.open('_posts/1900-02-01-post1.html', 'r') do |actual|
-              assert_equal(expected.read, actual.read)
-            end
-          end
-
-          Importers::Blogger::postprocess('replace-internal-link' => true, 'original-url-base' => 'http://foobar.blogspot.com')
-
-          StringIO.open(post0_replacement, 'r') do |expected|
-            File.open('_posts/1900-01-01-post0.html', 'r') do |actual|
-              assert_equal(expected.read, actual.read)
-            end
-          end
-          StringIO.open(post1_replacement, 'r') do |expected|
-            File.open('_posts/1900-02-01-post1.html', 'r') do |actual|
+          StringIO.open(post1_src, "r") do |expected|
+            File.open("_posts/1900-02-01-post1.html", "r") do |actual|
               assert_equal(expected.read, actual.read)
             end
           end
 
+          Importers::Blogger.postprocess("replace-internal-link" => true, "original-url-base" => "http://foobar.blogspot.com")
+
+          StringIO.open(post0_replacement, "r") do |expected|
+            File.open("_posts/1900-01-01-post0.html", "r") do |actual|
+              assert_equal(expected.read, actual.read)
+            end
+          end
+          StringIO.open(post1_replacement, "r") do |expected|
+            File.open("_posts/1900-02-01-post1.html", "r") do |actual|
+              assert_equal(expected.read, actual.read)
+            end
+          end
         ensure
           Dir.chdir(orig_pwd)
         end
@@ -194,49 +191,48 @@ EOF
   </entry>
 </feed>
 EOD
-      StringIO.open(xml_str, 'r') do |f|
-        REXML::Parsers::StreamParser.new(f, listener).parse()
+      StringIO.open(xml_str, "r") do |f|
+        REXML::Parsers::StreamParser.new(f, listener).parse
       end
 
       assert_equal(3, listener.entry_elem_info_array.length)
 
-      assert_equal(%w[post0.atom.ns.0], listener.entry_elem_info_array[0][:meta][:category])
-      assert_equal('post', listener.entry_elem_info_array[0][:meta][:kind])
-      assert_equal('html', listener.entry_elem_info_array[0][:meta][:content_type])
-      assert_equal('http://foobar.blogspot.com/1900/02/post0.link.html', listener.entry_elem_info_array[0][:meta][:original_url])
-      assert_equal('1900-02-01T00:00:00.000Z', listener.entry_elem_info_array[0][:meta][:published])
-      assert_equal('1900-02-01T01:00:00.000Z', listener.entry_elem_info_array[0][:meta][:updated])
-      assert_equal('post0.title', listener.entry_elem_info_array[0][:meta][:title])
-      assert_equal('<p>*post0.content*</p>', listener.entry_elem_info_array[0][:body])
-      assert_equal('post0.author.name', listener.entry_elem_info_array[0][:meta][:author])
-      assert_equal('post0.thumbnail.url', listener.entry_elem_info_array[0][:meta][:thumbnail])
+      assert_equal(%w(post0.atom.ns.0), listener.entry_elem_info_array[0][:meta][:category])
+      assert_equal("post", listener.entry_elem_info_array[0][:meta][:kind])
+      assert_equal("html", listener.entry_elem_info_array[0][:meta][:content_type])
+      assert_equal("http://foobar.blogspot.com/1900/02/post0.link.html", listener.entry_elem_info_array[0][:meta][:original_url])
+      assert_equal("1900-02-01T00:00:00.000Z", listener.entry_elem_info_array[0][:meta][:published])
+      assert_equal("1900-02-01T01:00:00.000Z", listener.entry_elem_info_array[0][:meta][:updated])
+      assert_equal("post0.title", listener.entry_elem_info_array[0][:meta][:title])
+      assert_equal("<p>*post0.content*</p>", listener.entry_elem_info_array[0][:body])
+      assert_equal("post0.author.name", listener.entry_elem_info_array[0][:meta][:author])
+      assert_equal("post0.thumbnail.url", listener.entry_elem_info_array[0][:meta][:thumbnail])
 
-      assert_equal(%w[post1.atom.ns.0 post1.atom.ns.1], listener.entry_elem_info_array[1][:meta][:category])
-      assert_equal('post', listener.entry_elem_info_array[1][:meta][:kind])
-      assert_equal('html', listener.entry_elem_info_array[1][:meta][:content_type])
-      assert_equal('http://foobar.blogspot.com/1900/03/post1.link.html', listener.entry_elem_info_array[1][:meta][:original_url])
-      assert_equal('1900-03-01T00:00:00.000Z', listener.entry_elem_info_array[1][:meta][:published])
-      assert_equal('1900-03-01T01:00:00.000Z', listener.entry_elem_info_array[1][:meta][:updated])
-      assert_equal('post1.title', listener.entry_elem_info_array[1][:meta][:title])
-      assert_equal('<p>*post1.content*</p>', listener.entry_elem_info_array[1][:body])
-      assert_equal('post1.author.name', listener.entry_elem_info_array[1][:meta][:author])
+      assert_equal(%w(post1.atom.ns.0 post1.atom.ns.1), listener.entry_elem_info_array[1][:meta][:category])
+      assert_equal("post", listener.entry_elem_info_array[1][:meta][:kind])
+      assert_equal("html", listener.entry_elem_info_array[1][:meta][:content_type])
+      assert_equal("http://foobar.blogspot.com/1900/03/post1.link.html", listener.entry_elem_info_array[1][:meta][:original_url])
+      assert_equal("1900-03-01T00:00:00.000Z", listener.entry_elem_info_array[1][:meta][:published])
+      assert_equal("1900-03-01T01:00:00.000Z", listener.entry_elem_info_array[1][:meta][:updated])
+      assert_equal("post1.title", listener.entry_elem_info_array[1][:meta][:title])
+      assert_equal("<p>*post1.content*</p>", listener.entry_elem_info_array[1][:body])
+      assert_equal("post1.author.name", listener.entry_elem_info_array[1][:meta][:author])
       assert_equal(nil, listener.entry_elem_info_array[1][:meta][:thumbnail])
 
-      assert_equal(%w[post2.atom.ns.0 post2.atom.ns.1], listener.entry_elem_info_array[2][:meta][:category])
-      assert_equal('post', listener.entry_elem_info_array[2][:meta][:kind])
-      assert_equal('html', listener.entry_elem_info_array[2][:meta][:content_type])
-      assert_equal('http://foobar.blogspot.com/1900/04/post2.link.html', listener.entry_elem_info_array[2][:meta][:original_url])
-      assert_equal('1900-04-01T00:00:00.000Z', listener.entry_elem_info_array[2][:meta][:published])
-      assert_equal('1900-04-01T01:00:00.000Z', listener.entry_elem_info_array[2][:meta][:updated])
-      assert_equal('post2.title', listener.entry_elem_info_array[2][:meta][:title])
-      assert_equal('<p>*post2.content*</p>', listener.entry_elem_info_array[2][:body])
-      assert_equal('post2.author.name', listener.entry_elem_info_array[2][:meta][:author])
+      assert_equal(%w(post2.atom.ns.0 post2.atom.ns.1), listener.entry_elem_info_array[2][:meta][:category])
+      assert_equal("post", listener.entry_elem_info_array[2][:meta][:kind])
+      assert_equal("html", listener.entry_elem_info_array[2][:meta][:content_type])
+      assert_equal("http://foobar.blogspot.com/1900/04/post2.link.html", listener.entry_elem_info_array[2][:meta][:original_url])
+      assert_equal("1900-04-01T00:00:00.000Z", listener.entry_elem_info_array[2][:meta][:published])
+      assert_equal("1900-04-01T01:00:00.000Z", listener.entry_elem_info_array[2][:meta][:updated])
+      assert_equal("post2.title", listener.entry_elem_info_array[2][:meta][:title])
+      assert_equal("<p>*post2.content*</p>", listener.entry_elem_info_array[2][:body])
+      assert_equal("post2.author.name", listener.entry_elem_info_array[2][:meta][:author])
       assert_equal(nil, listener.entry_elem_info_array[2][:meta][:thumbnail])
     end
   end
 
   context "the in-elem-entry-to-post-data converter" do
-
     listener = nil
 
     setup do
@@ -245,130 +241,128 @@ EOD
 
     should "return nil if wrong" do
       listener.instance_variable_set(:@in_entry_elem, nil)
-      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info())
+      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info)
       listener.instance_variable_set(:@in_entry_elem, {})
-      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info())
-      listener.instance_variable_set(:@in_entry_elem, {:meta => { :kind => 'not a post' }})
-      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info())
+      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info)
+      listener.instance_variable_set(:@in_entry_elem, { :meta => { :kind => "not a post" } })
+      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info)
     end
 
     should "raise an error if original_url not exists" do
       listener.instance_variable_set(:@in_entry_elem, {
         :meta => {
-          :kind => 'post',
-          :published => '1900-01-01T00:00:00',
-        }
+          :kind      => "post",
+          :published => "1900-01-01T00:00:00",
+        },
       })
       assert_raises(RuntimeError) do
-        listener.get_post_data_from_in_entry_elem_info()
+        listener.get_post_data_from_in_entry_elem_info
       end
 
       listener.instance_variable_set(:@in_entry_elem, {
         :meta => {
-          :kind => 'post',
-          :published => '1900-01-01T00:00:00',
-          :original_url => 'http://foobar.blogspot.com/yyyy/mm/foobar.html',
-        }
+          :kind         => "post",
+          :published    => "1900-01-01T00:00:00",
+          :original_url => "http://foobar.blogspot.com/yyyy/mm/foobar.html",
+        },
       })
       assert_nothing_raised(RuntimeError) do
-        listener.get_post_data_from_in_entry_elem_info()
+        listener.get_post_data_from_in_entry_elem_info
       end
     end
 
     should "return nil if the kind is not set to post" do
       listener.instance_variable_set(:@in_entry_elem, {
-        :meta => { :kind => 'foo' }
+        :meta => { :kind => "foo" },
       })
-      assert_nil(listener.get_post_data_from_in_entry_elem_info())
+      assert_nil(listener.get_post_data_from_in_entry_elem_info)
     end
 
     should "generate header hash" do
-      published = '1900-01-01T00:00:00'
-      updated = '1900-01-01T00:00:01'
+      published = "1900-01-01T00:00:00"
+      updated = "1900-01-01T00:00:01"
       listener.instance_variable_set(:@in_entry_elem, {
         :meta => {
-          :kind => 'post',
-          :published => published,
-          :updated => updated,
-          :category => %w[a b c],
-          :id => "id-#{$$}",
-          :title => "<< title >>",
-          :content_type => 'text/html',
-          :original_url => 'http://foobar.blogspot.com/1900/01/foobar.html',
+          :kind         => "post",
+          :published    => published,
+          :updated      => updated,
+          :category     => %w(a b c),
+          :id           => "id-#{$PROCESS_ID}",
+          :title        => "<< title >>",
+          :content_type => "text/html",
+          :original_url => "http://foobar.blogspot.com/1900/01/foobar.html",
         },
-        :body => ''
+        :body => "",
       })
-      post_data = listener.get_post_data_from_in_entry_elem_info()
+      post_data = listener.get_post_data_from_in_entry_elem_info
 
-      assert_equal(published, post_data[:header]['date'])
-      assert_equal(%w[a b c], post_data[:header]['tags'])
-      assert_equal("<< title >>", post_data[:header]['title'])
+      assert_equal(published, post_data[:header]["date"])
+      assert_equal(%w(a b c), post_data[:header]["tags"])
+      assert_equal("<< title >>", post_data[:header]["title"])
 
-      assert_equal("id-#{$$}", post_data[:header]['blogger_id'])
-      assert_equal('http://foobar.blogspot.com/1900/01/foobar.html', post_data[:header]['blogger_orig_url'])
+      assert_equal("id-#{$PROCESS_ID}", post_data[:header]["blogger_id"])
+      assert_equal("http://foobar.blogspot.com/1900/01/foobar.html", post_data[:header]["blogger_orig_url"])
 
-      assert_equal('http://foobar.blogspot.com', listener.original_url_base)
+      assert_equal("http://foobar.blogspot.com", listener.original_url_base)
     end
 
     should "not generate header hash items if the associated options are specified" do
-      published = '1900-01-01T00:00:00'
-      updated = '1900-01-01T00:00:01'
+      published = "1900-01-01T00:00:00"
+      updated = "1900-01-01T00:00:01"
       listener.instance_variable_set(:@in_entry_elem, {
         :meta => {
-          :kind => 'post',
-          :published => published,
-          :updated => updated,
-          :category => %w[a b c],
-          :id => "id-#{$$}",
-          :title => "<< title >>",
-          :content_type => 'text/html',
-          :original_url => 'http://foobar.blogspot.com/1900/01/foobar.html',
+          :kind         => "post",
+          :published    => published,
+          :updated      => updated,
+          :category     => %w(a b c),
+          :id           => "id-#{$PROCESS_ID}",
+          :title        => "<< title >>",
+          :content_type => "text/html",
+          :original_url => "http://foobar.blogspot.com/1900/01/foobar.html",
         },
-        :body => ''
+        :body => "",
       })
       listener.leave_blogger_info = false
-      post_data = listener.get_post_data_from_in_entry_elem_info()
+      post_data = listener.get_post_data_from_in_entry_elem_info
 
-      assert_equal(published, post_data[:header]['date'])
-      assert_equal(%w[a b c], post_data[:header]['tags'])
-      assert_equal("<< title >>", post_data[:header]['title'])
+      assert_equal(published, post_data[:header]["date"])
+      assert_equal(%w(a b c), post_data[:header]["tags"])
+      assert_equal("<< title >>", post_data[:header]["title"])
 
-      assert(! post_data[:header].include?('blogger_id'))
-      assert(! post_data[:header].include?('blogger_orig_url'))
+      assert(!post_data[:header].include?("blogger_id"))
+      assert(!post_data[:header].include?("blogger_orig_url"))
 
-      assert_equal('http://foobar.blogspot.com', listener.original_url_base)
+      assert_equal("http://foobar.blogspot.com", listener.original_url_base)
     end
 
     should "generate body" do
-      published = '1900-01-01T00:00:00'
-      updated = '1900-01-01T00:00:01'
+      published = "1900-01-01T00:00:00"
+      updated = "1900-01-01T00:00:01"
       listener.instance_variable_set(:@in_entry_elem, {
         :meta => {
-          :kind => 'post',
-          :published => published,
-          :updated => updated,
-          :content_type => 'text/html',
-          :original_url => 'http://foobar.blogspot.com/1900/01/foobar.html',
+          :kind         => "post",
+          :published    => published,
+          :updated      => updated,
+          :content_type => "text/html",
+          :original_url => "http://foobar.blogspot.com/1900/01/foobar.html",
         },
-        :body => 'foobar'
+        :body => "foobar",
       })
-      post_data = listener.get_post_data_from_in_entry_elem_info()
-      assert_equal('foobar', post_data[:body])
+      post_data = listener.get_post_data_from_in_entry_elem_info
+      assert_equal("foobar", post_data[:body])
 
       listener.instance_variable_set(:@in_entry_elem, {
         :meta => {
-          :kind => 'post',
-          :published => published,
-          :updated => updated,
-          :content_type => 'text/html',
-          :original_url => 'http://foobar.blogspot.com/1900/01/foobar.html',
+          :kind         => "post",
+          :published    => published,
+          :updated      => updated,
+          :content_type => "text/html",
+          :original_url => "http://foobar.blogspot.com/1900/01/foobar.html",
         },
-        :body => '{% {{ foobar }} %}'
+        :body => "{% {{ foobar }} %}",
       })
-      post_data = listener.get_post_data_from_in_entry_elem_info()
+      post_data = listener.get_post_data_from_in_entry_elem_info
       assert_equal('{{ "{%" }} {{ "{{" }} foobar }} %}', post_data[:body])
     end
-
   end
-
 end

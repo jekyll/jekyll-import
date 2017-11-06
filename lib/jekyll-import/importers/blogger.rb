@@ -243,7 +243,7 @@ module JekyllImport
               filename = if name.nil?
                            timestamp
                          else
-                           format("%s-%s", timestamp, CGI.escape(name.downcase).tr("+", "-"))
+                           format("%s-%s", timestamp, CGI.escape(name.downcase.tr("+/\\:'\"<>{}?%*|.", "-")))
                          end
             else
               raise "Original URL is missing"

@@ -1,5 +1,5 @@
-require 'helper'
-require 'htmlentities'
+require "helper"
+require "htmlentities"
 
 class TestWordpressMigrator < Test::Unit::TestCase
   should "clean slashes from slugs" do

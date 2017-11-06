@@ -1,2 +1,2 @@
 #!/bin/bash
-bundle exec rubocop $@
+bundle exec rubocop -S -D $@

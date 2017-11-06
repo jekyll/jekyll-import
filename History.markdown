@@ -1,5 +1,42 @@
 ## HEAD
 
+  * WordPress: replace was backwards, broke end tags (#292)
+  * Use mysql2 instead of mysql in Joomla3 importer (#309)
+  * Add option to specify the MySQL port for the Joomla importers (#310)
+  * add port options for wordpress mysql db connection (#311)
+
+### Bug Fixes
+
+  * Drupal 7: Remove uneeded double quote in SQL query (#287)
+  * Drupal 7: Fixes SQL grouping error (#289)
+  * F/s9y db (#299)
+
+### Development Fixes
+
+  * Updating Ruby and Jekyll versions for testing (#290)
+  * Modernize Travis configuration (#317)
+  * Define path with __dir__ (#316)
+  * Appease Rubocop (#318)
+  * Stop testing against Jekyll 2.5 (#323)
+
+### Site Enhancements
+
+  * Corrected Joomla3 importer name and clarified "category" field (#286)
+  * Fixed style issues on HTTPS site (#296)
+  * Change broken link for "A great article" (#294)
+
+### Minor Enhancements
+
+  * Ghost: import drafts & pages, and fix issue with date extraction (#304)
+  * Add parent_id to wordpressdotcom importer (#301)
+  * RSS: add &#34;tag&#34; option to add a tag to all posts (#306)
+
+### Documentation
+
+  * Add the new port setting to the Wordpress importer docs (#312)
+
+## 0.12.0 / 2016-11-28
+
   * Joomla: require the `mysql` gem (#197)
   * Tumblr: improve compatibility with Jekyll 3 (#239)
   * tumblr: only append to content if its truthy (#265)
@@ -10,6 +47,8 @@
   * Tumblr: Fixing double-read and off-by-one error (#253)
   * Clean up the Drupal importers (#235)
   * DrupalCommon: centralize defaults & use config for layouts dir (#267)
+  * Tumblr: save images in binary mode (#278)
+  * Tumblr: fix creation of rewrite rules (#283)
 
 ### Development Fixes
 
@@ -18,10 +57,6 @@
 ### Site Enhancements
 
   * Fix for misnamed Joomla3 module in docs (#271)
-
-### Bug Fixes
-
-  * Tumblr: save images in binary mode (#278)
 
 ## 0.11.0 / 2016-06-27
 

@@ -24,6 +24,7 @@ $ ruby -rubygems -e 'require "jekyll-import";
       "user"     => "",
       "password" => "",
       "host"     => "localhost",
+      "port"     => "3306",
       "socket"   => "",
       "table_prefix"   => "wp_",
       "site_prefix"    => "",

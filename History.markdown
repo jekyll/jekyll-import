@@ -28,6 +28,7 @@
 
   * Ghost: import drafts & pages, and fix issue with date extraction (#304)
   * Add parent_id to wordpressdotcom importer (#301)
+  * RSS: add &#34;tag&#34; option to add a tag to all posts (#306)
 
 ### Documentation
 

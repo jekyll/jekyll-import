@@ -128,7 +128,7 @@ module JekyllImport
              entries.title          AS `title`,
              entries.timestamp      AS `timestamp`,
              entries.body           AS `body`,
-						 entries.extended       AS `body_extended`,
+             entries.extended       AS `body_extended`,
              authors.realname     AS `author`,
              authors.username     AS `author_login`,
              authors.email        AS `author_email`

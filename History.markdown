@@ -11,6 +11,7 @@
   * Drupal 7: Fixes SQL grouping error (#289)
   * F/s9y db (#299)
   * Blogger: replace special characters with hyphens in the post name (#280)
+  * WordPress: fix variable name for `more_anchor` (#305)
 
 ### Development Fixes
 

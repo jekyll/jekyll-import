@@ -1,6 +1,9 @@
 ## HEAD
 
   * WordPress: replace was backwards, broke end tags (#292)
+  * Use mysql2 instead of mysql in Joomla3 importer (#309)
+  * Add option to specify the MySQL port for the Joomla importers (#310)
+  * add port options for wordpress mysql db connection (#311)
 
 ### Bug Fixes
 
@@ -10,6 +13,10 @@
 ### Development Fixes
 
   * Updating Ruby and Jekyll versions for testing (#290)
+  * Modernize Travis configuration (#317)
+  * Define path with __dir__ (#316)
+  * Appease Rubocop (#318)
+  * Stop testing against Jekyll 2.5 (#323)
 
 ### Site Enhancements
 
@@ -20,6 +27,12 @@
 ### Minor Enhancements
 
   * Ghost: import drafts & pages, and fix issue with date extraction (#304)
+  * Add parent_id to wordpressdotcom importer (#301)
+  * RSS: add &#34;tag&#34; option to add a tag to all posts (#306)
+
+### Documentation
+
+  * Add the new port setting to the Wordpress importer docs (#312)
 
 ## 0.12.0 / 2016-11-28
 

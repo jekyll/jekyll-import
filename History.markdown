@@ -10,6 +10,7 @@
   * Drupal 7: Remove uneeded double quote in SQL query (#287)
   * Drupal 7: Fixes SQL grouping error (#289)
   * F/s9y db (#299)
+  * Blogger: replace special characters with hyphens in the post name (#280)
 
 ### Development Fixes
 

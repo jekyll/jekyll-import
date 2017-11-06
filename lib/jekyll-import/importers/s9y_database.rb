@@ -19,6 +19,7 @@ module JekyllImport
         c.option "user", "--user USER", "Database user name (default: '')"
         c.option "password", "--password PW", "Database user's password (default: '')"
         c.option "host", "--host HOST", "Database host name (default: 'localhost')"
+        c.option "port", "--port PORT", "Custom database port connect to (default: 3306)"
         c.option "table_prefix", "--table_prefix PREFIX", "Table prefix name (default: 'serendipity_')"
         c.option "clean_entities", "--clean_entities", "Whether to clean entities (default: true)"
         c.option "comments", "--comments", "Whether to import comments (default: true)"
@@ -35,6 +36,7 @@ module JekyllImport
       # user::    The database user name
       # pass::    The database user's password
       # host::    The address of the MySQL database host. Default: 'localhost'
+      # port::    The port of the MySQL database server. Default: 3306
       # socket::  The database socket's path
       # options:: A hash table of configuration options.
       #
@@ -54,7 +56,7 @@ module JekyllImport
       # :tags::           If true, save the post's tags in its
       #                   YAML front matter. Default: true.
       # :extension::      Set the post extension. Default: "html"
-      # :drafts::  If true, export drafts as well
+      # :drafts::         If true, export drafts as well
       #                   Default: true.
       # :markdown::       If true, convert the content to markdown
       #                   Default: false
@@ -66,6 +68,7 @@ module JekyllImport
           :user           => opts.fetch("user", ""),
           :pass           => opts.fetch("password", ""),
           :host           => opts.fetch("host", "localhost"),
+          :port						=> opts.fetch("port", 3306),
           :socket         => opts.fetch("socket", nil),
           :dbname         => opts.fetch("dbname", ""),
           :table_prefix   => opts.fetch("table_prefix", "serendipity_"),
@@ -90,8 +93,14 @@ module JekyllImport
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts") if options[:drafts]
 
-        db = Sequel.mysql2(options[:dbname], :user => options[:user], :password => options[:pass],
-                           :socket => options[:socket], :host => options[:host], :encoding => "utf8")
+        db = Sequel.mysql2(options[:dbname], 
+          :user     => options[:user], 
+          :password => options[:pass],
+          :socket   => options[:socket], 
+          :host     => options[:host], 
+          :port     => options[:port],
+          :encoding => "utf8"
+        )
 
         px = options[:table_prefix]
 
@@ -119,6 +128,7 @@ module JekyllImport
              entries.title          AS `title`,
              entries.timestamp      AS `timestamp`,
              entries.body           AS `body`,
+             entries.extended       AS `body_extended`,
              authors.realname     AS `author`,
              authors.username     AS `author_login`,
              authors.email        AS `author_email`
@@ -153,6 +163,9 @@ module JekyllImport
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
 
         content = post[:body].to_s
+        unless post[:body_extended].to_s.empty?
+					content += "\n\n" + post[:body_extended].to_s
+        end
 
         if options[:clean_entities]
           content = clean_entities(content)

@@ -84,6 +84,10 @@ module JekyllImport
         def status
           @status ||= text_for("wp:status")
         end
+      
+        def password
+          @post_password ||= text_for('wp:post_password')
+        end
 
         def post_type
           @post_type ||= text_for("wp:post_type")
@@ -167,6 +171,7 @@ module JekyllImport
             "type"       => item.post_type,
             "parent_id"  => item.parent_id,
             "published"  => item.published?,
+            "password"   => item.password,
             "status"     => item.status,
             "categories" => categories,
             "tags"       => tags,

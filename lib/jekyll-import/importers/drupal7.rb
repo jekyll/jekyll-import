@@ -1,4 +1,4 @@
-require 'jekyll-import/importers/drupal_common'
+require "jekyll-import/importers/drupal_common"
 
 module JekyllImport
   module Importers
@@ -34,16 +34,15 @@ EOS
       def self.post_data(sql_post_data)
         content = sql_post_data[:body_value].to_s
         summary = sql_post_data[:body_summary].to_s
-        tags = (sql_post_data[:tags] || '').downcase.strip
+        tags = (sql_post_data[:tags] || "").downcase.strip
 
         data = {
-          'excerpt' => summary,
-          'categories' => tags.split('|')
+          "excerpt"    => summary,
+          "categories" => tags.split("|"),
         }
 
         return data, content
       end
-
     end
   end
 end

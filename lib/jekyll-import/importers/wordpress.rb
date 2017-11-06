@@ -206,7 +206,7 @@ module JekyllImport
             excerpt = content[0...more_index]
           end
           if options[:more_anchor]
-            more_link = "more"
+            more_anchor = "more"
             content.sub!(%r/<!-- *more *-->/,
                          "<a id=\"more\"></a>" \
                          "<a id=\"more-#{post[:id]}\"></a>")

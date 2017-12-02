@@ -35,6 +35,7 @@ module JekyllImport
         c.option "includeentry",      "--includeentry",        "Replace macros from the includeentry plugin (default: false)"
         c.option "imgfig",            "--imgfig",              "Replace nested img and youtube divs with HTML figure tags (default: true)"
         c.option "linebreak",         "--linebreak",           "Line break processing: wp, nokogiri, ignore (default: wp)"
+        c.option "relative",          "--relative",            "Convert links with this prefix to relative (default:nil)"
       end
 
       # Main migrator function. Call this to perform the migration.
@@ -91,6 +92,8 @@ module JekyllImport
       #                   an XHTML fragment. When set to "ignore", line breaks
       #                   will not be replaced at all.
       #                   Default: wp
+      # :relative::       Replace absolute links (http://:relative:/foo)
+      #                   to relative links (/foo). 
 
       def self.process(opts)
         options = {
@@ -113,6 +116,7 @@ module JekyllImport
           :includeentry      => opts.fetch("includeentry", false),
           :imgfig            => opts.fetch("imgfig", true),
           :linebreak         => opts.fetch("linebreak", "wp"),
+          :relative          => opts.fetch("relative", nil),
         }
 
         if options[:clean_entities]
@@ -192,11 +196,13 @@ module JekyllImport
         content = post[:body].to_s
         extended_content = post[:body_extended].to_s
 
-        content += options[:excerpt_separator] + extended_content unless extended_content.strip.empty?
+        content += options[:excerpt_separator] + extended_content unless extended_content.nil? or extended_content.strip.empty?
 
         content = process_includeentry(content, db, options) if options[:includeentry]
         content = process_img_div(content) if options[:imgfig]
         content = clean_entities(content) if options[:clean_entities]
+        content = content.gsub(%r!href=(["'])http://#{options[:relative]}!, 'href=\1') if options[:relative]
+
         content = ReverseMarkdown.convert(content) if options[:markdown]
 
         categories = process_categories(db, options, post)
@@ -354,9 +360,8 @@ module JekyllImport
 
           # Is this a thumbnail to a bigger/other image?
           bigLink = imgcaption.at_css('.serendipity_image_link')
-          if not bigLink then
+          if not bigLink 
 	   bigLink = imgcaption.at_xpath('.//a[.//img]');
-           STDOUT.puts "No classed link in figure #{imgcaption.inner_html}, XPath found #{bigLink}"
           end
 
           # Don't lose good data

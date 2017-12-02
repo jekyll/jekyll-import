@@ -11,27 +11,30 @@ module JekyllImport
             fileutils
             safe_yaml
             unidecode
+            nokogiri
           )
         )
       end
 
       def self.specify_options(c)
-        c.option "dbname",         "--dbname DB",           "Database name (default: '')"
-        c.option "socket",         "--socket SOCKET",       "Database socket (default: '')"
-        c.option "user",           "--user USER",           "Database user name (default: '')"
-        c.option "password",       "--password PW",         "Database user's password (default: '')"
-        c.option "host",           "--host HOST",           "Database host name (default: 'localhost')"
-        c.option "port",           "--port PORT",           "Custom database port connect to (default: 3306)"
-        c.option "table_prefix",   "--table_prefix PREFIX", "Table prefix name (default: 'serendipity_')"
-        c.option "clean_entities", "--clean_entities",      "Whether to clean entities (default: true)"
-        c.option "comments",       "--comments",            "Whether to import comments (default: true)"
-        c.option "categories",     "--categories",          "Whether to import categories (default: true)"
-        c.option "tags",           "--tags",                "Whether to import tags (default: true)"
-        c.option "drafts",         "--drafts",              "Whether to export drafts as well"
-        c.option "markdown",       "--markdown",            "convert into markdown format (default: false)"
-        c.option "permalinks",     "--permalinks",          "preserve S9Y permalinks (default: false)"
-        c.option "excerpt_separator", "--excerpt_separator", "Demarkation for excerpts (default: "<a id=\"extended\"></a>")"
-        c.option "includeentry",   "--includeentry",        "Replace macros from the includeentry plugin"
+        c.option "dbname",            "--dbname DB",           "Database name (default: '')"
+        c.option "socket",            "--socket SOCKET",       "Database socket (default: '')"
+        c.option "user",              "--user USER",           "Database user name (default: '')"
+        c.option "password",          "--password PW",         "Database user's password (default: '')"
+        c.option "host",              "--host HOST",           "Database host name (default: 'localhost')"
+        c.option "port",              "--port PORT",           "Custom database port connect to (default: 3306)"
+        c.option "table_prefix",      "--table_prefix PREFIX", "Table prefix name (default: 'serendipity_')"
+        c.option "clean_entities",    "--clean_entities",      "Whether to clean entities (default: true)"
+        c.option "comments",          "--comments",            "Whether to import comments (default: true)"
+        c.option "categories",        "--categories",          "Whether to import categories (default: true)"
+        c.option "tags",              "--tags",                "Whether to import tags (default: true)"
+        c.option "drafts",            "--drafts",              "Whether to export drafts as well"
+        c.option "markdown",          "--markdown",            "convert into markdown format (default: false)"
+        c.option "permalinks",        "--permalinks",          "preserve S9Y permalinks (default: false)"
+        c.option "excerpt_separator", "--excerpt_separator",   "Demarkation for excerpts (default: "<a id=\"extended\"></a>")"
+        c.option "includeentry",      "--includeentry",        "Replace macros from the includeentry plugin (default: false)"
+        c.option "imgfig",            "--imgfig",              "Replace nested img and youtube divs with HTML figure tags (default: true)"
+        c.option "linebreak",         "--linebreak",           "Line break processing: wp, nokogiri, ignore (default: wp)"
       end
 
       # Main migrator function. Call this to perform the migration.
@@ -75,7 +78,19 @@ module JekyllImport
       # :includentry::    Replace macros from the includentry plugin - these are
       #                   the [s9y-include-entry] and [s9y-include-block] macros.
       #                   Default: false.
+      # :imgfig::         Replace S9Y image-comment divs with an HTML figure
+      #                   div and figcaption, if applicable. Works for img and
+      #                   iframe.
+      #                   Default: true.
       #
+      # :linebreak::      When set to the default "wp", line breaks in entries
+      #                   will be processed WordPress style, by replacing double
+      #                   line breaks with HTML p tags, and remaining single
+      #                   line breaks with HTML br tags. When set to "nokogiri",
+      #                   entries will be loaded into Nokogiri and formatted as
+      #                   an XHTML fragment. When set to "ignore", line breaks
+      #                   will not be replaced at all.
+      #                   Default: wp
 
       def self.process(opts)
         options = {
@@ -96,7 +111,8 @@ module JekyllImport
           :permalinks        => opts.fetch("permalinks", false),
           :excerpt_separator => opts.fetch("excerpt_separator", "<a id="extended"></a>"),
           :includeentry      => opts.fetch("includeentry", false),
-
+          :imgfig            => opts.fetch("imgfig", true),
+          :linebreak         => opts.fetch("linebreak", "wp"),
         }
 
         if options[:clean_entities]
@@ -174,16 +190,14 @@ module JekyllImport
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
 
         content = post[:body].to_s
-        content = process_includeentry(content, db, options)
-        content = clean_entities(content) if options[:clean_entities]
-
         extended_content = post[:body_extended].to_s
-        extended_content = process_includeentry(extended_content, db, options)
-        extended_content = clean_entities(extended_content) if options[:clean_entities]
 
-        content += options[:excerpt_separator] + extended_content unless extended_content.empty?
+        content += options[:excerpt_separator] + extended_content unless extended_content.strip.empty?
 
-        content = ReverseMarkdown.convert(content)
+        content = process_includeentry(content, db, options) if options[:includeentry]
+        content = process_img_div(content) if options[:imgfig]
+        content = clean_entities(content) if options[:clean_entities]
+        content = ReverseMarkdown.convert(content) if options[:markdown]
 
         categories = process_categories(db, options, post)
         comments = process_comments(db, options, post)
@@ -229,11 +243,20 @@ module JekyllImport
           filename = "_posts/#{name}"
         end
 
+        if options[:linebreak] == "nokogiri"
+          content = Nokogiri::HTML.fragment(content).to_xhtml
+        elsif options[:linebreak] == "ignore"
+          # Do nothing
+        else
+          # "wp" is the only remaining option, and the default
+          content = Util.wpautop(content)
+        end
+
         # Write out the data and content to file
         File.open(filename, "w") do |f|
           f.puts data
           f.puts "---"
-          f.puts Util.wpautop(content)
+          f.puts content
         end
       end
 
@@ -313,6 +336,92 @@ module JekyllImport
 
         return result
       end
+
+      # Replace .serendipity_imageComment_* blocks 
+      def self.process_img_div(text)
+        captionClasses = [
+          '.serendipity_imageComment_left',
+          '.serendipity_imageComment_right',
+          '.serendipity_imageComment_center'
+        ]
+
+        noko = Nokogiri::HTML.fragment(text)
+        noko.css(captionClasses.join(',')).each do |imgcaption|
+          # Extract block-level attributes
+          float = imgcaption.attribute('class').value.sub('serendipity_imageComment_', '')
+          style = imgcaption.attribute('style')
+          style = " style='#{style.value}'" if style
+
+          # Is this a thumbnail to a bigger/other image?
+          bigLink = imgcaption.at_css('.serendipity_image_link')
+          if not bigLink then
+	   bigLink = imgcaption.at_xpath('.//a[.//img]');
+           STDOUT.puts "No classed link in figure #{imgcaption.inner_html}, XPath found #{bigLink}"
+          end
+
+          # Don't lose good data
+          mdbnum = imgcaption.search('.//comment()').text.strip.sub('s9ymdb:','')
+	  mdb = "<!-- mdb='#{mdbnum}' -->" if mdbnum
+
+          # The caption (if any) may have raw HTML
+          captionElem = imgcaption.at_css('.serendipity_imageComment_txt');
+          caption = ""
+          caption = "<figcaption>#{captionElem.inner_html}</figcaption>" if captionElem
+
+          imageNode = imgcaption.at_css('img')
+          youtubeNode = imgcaption.at_css('iframe')
+          if imageNode
+            # Extract image attributes
+            width = imageNode.attribute('width')
+            width = "width='#{width}'" if width
+            height = imageNode.attribute('height')
+            height = "height='#{height}'" if height
+            alt = imageNode.attribute('alt')
+            alt = "alt='#{alt}'" if alt
+            src = "src='" + imageNode.attribute('src') + "'"
+            attrs = [src, width, height, alt].join(' ')
+            # Create clean image source
+            img = "<img #{attrs}/>"
+            # Wrap image in link, if any
+	    if bigLink
+	      big = bigLink.attribute('href')
+              img = "<a href='#{big}'>#{img}</a>"
+	    end
+            # Create figure source with caption, if any
+            inc = "<figure class='figure_#{float}'#{style}>#{mdb}#{img}#{caption}</figure>"
+          elsif youtubeNode
+            # Extract iframe attributes
+            width = youtubeNode.attribute('width')
+            height = youtubeNode.attribute('height')
+            src = youtubeNode.attribute('src').value.sub('http://www.youtube.com/embed/', '').strip
+            # Create clean iframe source
+            img = "<iframe src='#{src}' width='#{width}' height=#{height} alt=#{alt}/>"
+            # Wrap in link, if any
+            if bigLink
+              big = bigLink.attribute('href')
+              fig = "<a href='#{big}'>#{img}</a>"
+            else
+              fig = img
+            end
+            # Build figure source
+            inc = <<~EOT
+              <figure class='figure_#{float}' style='#{style}'>
+                <!-- mdb='#{mdbnum}' -->
+                #{fig}#{caption}
+              </figure>
+            EOT
+          else
+            STDERR.puts "Unrecognized media block: #{imgcaption.to_s}"
+            return text
+          end
+
+          # Replace HTML with clean figure source
+          imgcaption.replace(inc)
+        end
+
+        return noko.to_s
+      end
+
 
       def self.process_categories(db, options, post)
         return [] unless options[:categories]

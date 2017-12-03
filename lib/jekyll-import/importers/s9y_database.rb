@@ -62,7 +62,7 @@ module JekyllImport
       # :categories::     If true, save the post's categories in its
       #                   YAML front matter. Default: true.
       # :tags::           If true, save the post's tags in its
-      #                   YAML front matter. Default: true.
+      #                   YAML front matter, in lowercase.  Default: true.
       # :extension::      Set the post extension. Default: "html"
       # :drafts::         If true, export drafts as well
       #                   Default: true.
@@ -510,9 +510,9 @@ module JekyllImport
 
         db[cquery].each_with_object([]) do |tag, tags|
           if options[:clean_entities]
-            tags << clean_entities(tag[:name])
+            tags << clean_entities(tag[:name]).downcase
           else
-            tags << tag[:name]
+            tags << tag[:name].downcase
           end
         end
       end

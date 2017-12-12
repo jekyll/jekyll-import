@@ -134,7 +134,7 @@ HTML
         end
       end
 
-      def build_query(_prefix, _types)
+      def build_query(_prefix, _types, _engine)
         raise "The importer you are trying to use does not implement the get_query() method."
       end
 

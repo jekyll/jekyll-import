@@ -11,9 +11,17 @@ module JekyllImport
         types = "n.type = '#{types}'"
 
         if engine == "postgresql"
-          tag_group = "STRING_AGG(td.name, '|')"
+          tag_group = <<EOS
+            (SELECT STRING_AGG(td.name, '|')
+            FROM taxonomy_term_data td, taxonomy_index ti
+            WHERE ti.tid = td.tid AND ti.nid = n.nid) AS tags
+EOS
         else
-          tag_group = "GROUP_CONCAT(td.name SEPARATOR '|')"
+          tag_group = <<EOS
+            (SELECT GROUP_CONCAT(td.name SEPARATOR '|')
+            FROM taxonomy_term_data td, taxonomy_index ti
+            WHERE ti.tid = td.tid AND ti.nid = n.nid) AS 'tags'
+EOS
         end
 
         query = <<EOS
@@ -24,9 +32,10 @@ module JekyllImport
                        n.created,
                        n.status,
                        n.type,
-                       (SELECT #{tag_group} FROM taxonomy_term_data td, taxonomy_index ti WHERE ti.tid = td.tid AND ti.nid = n.nid) AS 'tags'
+                       #{tag_group}
                 FROM #{prefix}node AS n
-                LEFT JOIN #{prefix}field_data_body AS fdb ON fdb.entity_id = n.nid AND fdb.entity_type = 'node'
+                LEFT JOIN #{prefix}field_data_body AS fdb
+                  ON fdb.entity_id = n.nid AND fdb.entity_type = 'node'
                 WHERE (#{types})
 EOS
 

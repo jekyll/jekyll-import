@@ -56,7 +56,7 @@ module JekyllImport
             db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
           end
 
-          query = self.build_query(prefix, types)
+          query = self.build_query(prefix, types, engine)
 
           conf = Jekyll.configuration({})
           src_dir = conf["source"]

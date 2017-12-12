@@ -6,9 +6,15 @@ module JekyllImport
       include DrupalCommon
       extend DrupalCommon::ClassMethods
 
-      def self.build_query(prefix, types)
+      def self.build_query(prefix, types, engine)
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
+
+        if engine == "postgresql"
+          tag_group = "STRING_AGG(td.name, '|')"
+        else
+          tag_group = "GROUP_CONCAT(td.name SEPARATOR '|')"
+        end
 
         query = <<EOS
                 SELECT n.nid,
@@ -18,7 +24,7 @@ module JekyllImport
                        n.created,
                        n.status,
                        n.type,
-                       GROUP_CONCAT( td.name SEPARATOR '|' ) AS 'tags'
+                       #{tag_group} AS 'tags'
                 FROM #{prefix}node_revisions AS nr,
                      #{prefix}node AS n
                      LEFT OUTER JOIN #{prefix}term_node AS tn ON tn.nid = n.nid

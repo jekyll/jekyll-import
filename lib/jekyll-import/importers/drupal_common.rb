@@ -53,6 +53,7 @@ module JekyllImport
             db = Sequel.postgresql(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
           else
             db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
+          end
 
           query = self.build_query(prefix, types)
 

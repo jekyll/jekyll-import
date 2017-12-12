@@ -18,7 +18,7 @@ module JekyllImport
                        n.created,
                        n.status,
                        n.type,
-                       GROUP_CONCAT(td.name SEPARATOR '|') AS 'tags'
+                       GROUP_CONCAT( td.name SEPARATOR '|' ) AS 'tags'
                 FROM #{prefix}node_revisions AS nr,
                      #{prefix}node AS n
                      LEFT OUTER JOIN #{prefix}term_node AS tn ON tn.nid = n.nid

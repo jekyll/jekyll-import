@@ -12,6 +12,7 @@ module JekyllImport
 
       module ClassMethods
         DEFAULTS = {
+          "engine"   => "mysql",
           "password" => "",
           "host"     => "localhost",
           "prefix"   => "",
@@ -19,6 +20,7 @@ module JekyllImport
         }.freeze
 
         def specify_options(c)
+          c.option "engine", "--engine [mysql|postgresql]", "Database engine (default: #{DEFAULTS["engine"].inspect})"
           c.option "dbname", "--dbname DB", "Database name"
           c.option "user", "--user USER", "Database user name"
           c.option "password", "--password PW", "Database user's password (default: #{DEFAULTS["password"].inspect})"
@@ -39,6 +41,7 @@ module JekyllImport
         end
 
         def process(options)
+          engine = options.fetch("engine")
           dbname = options.fetch("dbname")
           user   = options.fetch("user")
           pass   = options.fetch("password", DEFAULTS["password"])
@@ -46,7 +49,10 @@ module JekyllImport
           prefix = options.fetch("prefix",   DEFAULTS["prefix"])
           types  = options.fetch("types",    DEFAULTS["types"])
 
-          db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
+          if engine == "postgresql"
+            db = Sequel.postgresql(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
+          else
+            db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
 
           query = self.build_query(prefix, types)
 

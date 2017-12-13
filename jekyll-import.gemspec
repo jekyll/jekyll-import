@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
   # development dependencies
   s.add_development_dependency("rake", "~> 10.1.0")
   s.add_development_dependency("rdoc", "~> 4.0.0")
-  s.add_development_dependency("activesupport", "~> 3.2")
+  s.add_development_dependency("activesupport", "~> 4.2")
 
   # test dependencies:
   s.add_development_dependency("redgreen", "~> 1.2")

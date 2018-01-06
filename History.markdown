@@ -3,6 +3,7 @@
 ### Development Fixes
 
   * Security: Fix alert on activesupport (#332)
+  * Test against Ruby 2.5 (#336)
 
 ## 0.13.0 / 2017-11-05
 

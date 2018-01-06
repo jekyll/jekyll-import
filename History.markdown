@@ -1,3 +1,9 @@
+## HEAD
+
+### Development Fixes
+
+  * Security: Fix alert on activesupport (#332)
+
 ## 0.13.0 / 2017-11-05
 
 ### Minor Enhancements

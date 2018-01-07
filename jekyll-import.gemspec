@@ -1,4 +1,6 @@
-# coding: utf-8
+
+# frozen_string_literal: true
+
 lib = File.expand_path("lib", __dir__)
 
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
@@ -28,34 +30,35 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w(README.markdown LICENSE)
 
   # runtime dependencies
-  s.add_runtime_dependency("jekyll", ENV["JEKYLL_VERSION"] ? "~> #{ENV["JEKYLL_VERSION"]}" : ">= 1.4")
   s.add_runtime_dependency("fastercsv")
+  s.add_runtime_dependency("jekyll", ENV["JEKYLL_VERSION"] ? "~> #{ENV["JEKYLL_VERSION"]}" : ">= 1.4")
   s.add_runtime_dependency("nokogiri")
 
   # development dependencies
+  s.add_development_dependency("activesupport", "~> 4.2")
+  s.add_development_dependency("rake", "~> 10.1.0")
   s.add_development_dependency("rake", "~> 10.1.0")
   s.add_development_dependency("rdoc", "~> 4.0.0")
-  s.add_development_dependency("activesupport", "~> 4.2")
 
   # test dependencies:
   s.add_development_dependency("redgreen", "~> 1.2")
-  s.add_development_dependency("shoulda", "~> 3.5")
   s.add_development_dependency("rr", "~> 1.0")
+  s.add_development_dependency("rubocop", "0.51")
+  s.add_development_dependency("shoulda", "~> 3.5")
   s.add_development_dependency("simplecov", "~> 0.7")
   s.add_development_dependency("simplecov-gem-adapter", "~> 1.0.1")
-  s.add_development_dependency("rubocop", "0.51")
 
   # migrator dependencies:
-  s.add_development_dependency("sequel", "~> 3.42")
-  s.add_development_dependency("htmlentities", "~> 4.3")
-  s.add_development_dependency("hpricot", "~> 0.8")
-  s.add_development_dependency("pg", "~> 0.12")
-  s.add_development_dependency("mysql2", "~> 0.3")
-  s.add_development_dependency("sqlite3", "~> 1.3.13")
   s.add_development_dependency("behance", "~> 0.3")
-  s.add_development_dependency("unidecode")
+  s.add_development_dependency("hpricot", "~> 0.8")
+  s.add_development_dependency("htmlentities", "~> 4.3")
+  s.add_development_dependency("mysql2", "~> 0.3")
   s.add_development_dependency("open_uri_redirections")
+  s.add_development_dependency("pg", "~> 0.12")
   s.add_development_dependency("reverse_markdown")
+  s.add_development_dependency("sequel", "~> 3.42")
+  s.add_development_dependency("sqlite3", "~> 1.3.13")
+  s.add_development_dependency("unidecode")
 
   # site dependencies:
   s.add_development_dependency("launchy", "~> 2.4")

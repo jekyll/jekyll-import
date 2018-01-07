@@ -1,4 +1,5 @@
 title: "jekyll-import • Import your old &amp; busted site to Jekyll"
+url: https://import.jekyllrb.com
 highlighter: rouge
 relative_permalinks: false
 permalink: /news/:year/:month/:day/:title/
@@ -11,3 +12,6 @@ collections:
     output: true
   importers:
     output: true
+
+sass:
+   style: compressed

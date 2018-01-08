@@ -87,7 +87,7 @@ HTML
 
             # Get the relevant fields as a hash and delete empty fields
             data = data.delete_if { |_k, v| v.nil? || v == "" }.each_pair do |_k, v|
-              (v.is_a? String ? v.force_encoding("UTF-8") : v)
+              (v.is_a?(String) ? v.force_encoding("UTF-8") : v)
             end
 
             # Construct a Jekyll compatible file name

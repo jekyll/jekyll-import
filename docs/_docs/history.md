@@ -5,6 +5,45 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.13.0 / 2017-11-05
+
+### Minor Enhancements
+
+- WordPress: add port options for mysql db connection ([#311]({{ site.repository }}/issues/311))
+- Ghost: import drafts & pages, and fix issue with date extraction ([#304]({{ site.repository }}/issues/304))
+- Add parent_id to wordpressdotcom importer ([#301]({{ site.repository }}/issues/301))
+- RSS: add &[#34]({{ site.repository }}/issues/34);tag&[#34]({{ site.repository }}/issues/34); option to add a tag to all posts ([#306]({{ site.repository }}/issues/306))
+- WordPressDotCom: import post passwords ([#302]({{ site.repository }}/issues/302))
+- Joomla3: Use mysql2 instead of mysql ([#309]({{ site.repository }}/issues/309))
+- Joomla: Add option to specify the MySQL port ([#310]({{ site.repository }}/issues/310))
+
+### Bug Fixes
+
+- Drupal 7: Remove uneeded double quote in SQL query ([#287]({{ site.repository }}/issues/287))
+- Drupal 7: Fixes SQL grouping error ([#289]({{ site.repository }}/issues/289))
+- S9y: Add port to db options & pull out `entries.extended` field ([#299]({{ site.repository }}/issues/299))
+- Blogger: replace special characters with hyphens in the post name ([#280]({{ site.repository }}/issues/280))
+- WordPress: fix variable name for `more_anchor` ([#305]({{ site.repository }}/issues/305))
+- WordPress: replace was backwards, broke end tags ([#292]({{ site.repository }}/issues/292))
+
+### Development Fixes
+
+- Updating Ruby and Jekyll versions for testing ([#290]({{ site.repository }}/issues/290))
+- Modernize Travis configuration ([#317]({{ site.repository }}/issues/317))
+- Define path with __dir__ ([#316]({{ site.repository }}/issues/316))
+- Appease Rubocop ([#318]({{ site.repository }}/issues/318))
+- Stop testing against Jekyll 2.5 ([#323]({{ site.repository }}/issues/323))
+
+### Site Enhancements
+
+- Corrected Joomla3 importer name and clarified "category" field ([#286]({{ site.repository }}/issues/286))
+- Fixed style issues on HTTPS site ([#296]({{ site.repository }}/issues/296))
+- Change broken link for "A great article" ([#294]({{ site.repository }}/issues/294))
+
+### Documentation
+
+- Add the new port setting to the Wordpress importer docs ([#312]({{ site.repository }}/issues/312))
+
 ## 0.12.0 / 2016-11-28
 
 - Joomla: require the `mysql` gem ([#197]({{ site.repository }}/issues/197))

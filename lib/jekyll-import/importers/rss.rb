@@ -2,24 +2,25 @@ module JekyllImport
   module Importers
     class RSS < Importer
       def self.specify_options(c)
-        c.option 'source', '--source NAME', 'The RSS file or URL to import'
+        c.option "source", "--source NAME", "The RSS file or URL to import"
+        c.option "tag", "--tag NAME", "Add a tag to posts"
       end
 
       def self.validate(options)
-        if options['source'].nil?
+        if options["source"].nil?
           abort "Missing mandatory option --source."
         end
       end
 
       def self.require_deps
-        JekyllImport.require_with_fallback(%w[
+        JekyllImport.require_with_fallback(%w(
           rss
           rss/1.0
           rss/2.0
           open-uri
           fileutils
           safe_yaml
-        ])
+        ))
       end
 
       # Process the import.
@@ -28,9 +29,9 @@ module JekyllImport
       #
       # Returns nothing.
       def self.process(options)
-        source = options.fetch('source')
-        frontmatter = options.fetch('frontmatter', [])
-        body = options.fetch('body', ["description"])
+        source = options.fetch("source")
+        frontmatter = options.fetch("frontmatter", [])
+        body = options.fetch("body", ["description"])
 
         content = ""
         open(source) { |s| content = s.read }
@@ -39,16 +40,17 @@ module JekyllImport
         raise "There doesn't appear to be any RSS items at the source (#{source}) provided." unless rss
 
         rss.items.each do |item|
-          formatted_date = item.date.strftime('%Y-%m-%d')
+          formatted_date = item.date.strftime("%Y-%m-%d")
           post_name = item.title.split(%r{ |!|/|:|&|-|$|,}).map do |i|
-            i.downcase if i != ''
-          end.compact.join('-')
+            i.downcase if i != ""
+          end.compact.join("-")
           name = "#{formatted_date}-#{post_name}"
 
           header = {
-            'layout' => 'post',
-            'title' => item.title
+            "layout" => "post",
+            "title"  => item.title,
           }
+          header["tag"] = options["tag"] if !options.to_s.empty?
 
           frontmatter.each do |value|
             header[value] = item.send(value)

@@ -28,5 +28,5 @@ irb> JekyllImport::Importers.const_get(importer_class).run(options_hash)
 
 ## Documentation
 
-jekyll-import has its own documentation site, found at http://import.jekyllrb.com.
-Dedicated [documentation for each migrator](http://import.jekyllrb.com/docs/home/) is available there.
+jekyll-import has its own documentation site, found at https://import.jekyllrb.com.
+Dedicated [documentation for each migrator](https://import.jekyllrb.com/docs/home/) is available there.

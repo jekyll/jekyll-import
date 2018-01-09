@@ -41,3 +41,19 @@ $ ruby -rubygems -e 'require "jekyll-import";
 {% endhighlight %}
 
 That will import nodes of type `blog` and `post` only.
+
+The default Drupal 7 expects database to be MySQL. If you want to import posts
+from Drupal 7 installation with PostgreSQL define `"engine"` as `"postgresql"`:
+
+{% highlight bash %}
+$ ruby -rubygems -e 'require "jekyll-import";
+    JekyllImport::Importers::Drupal7.run({
+      "engine"   => "postgresql",
+      "dbname"   => "name",
+      "user"     => "myuser",
+      "password" => "mypassword",
+      "host"     => "myhost",
+      "prefix"   => "mytableprefix",
+      "types"    => ["blog", "story", "article"]
+    })'
+{% endhighlight %}

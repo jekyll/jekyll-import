@@ -1,4 +1,4 @@
-require 'jekyll-import/importers/drupal_common'
+require "jekyll-import/importers/drupal_common"
 
 module JekyllImport
   module Importers
@@ -6,7 +6,7 @@ module JekyllImport
       include DrupalCommon
       extend DrupalCommon::ClassMethods
 
-      def self.build_query(prefix, types)
+      def self.build_query(prefix, types, engine)
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
 
@@ -38,16 +38,15 @@ EOS
       def self.post_data(sql_post_data)
         content = sql_post_data[:body].to_s
         summary = sql_post_data[:teaser].to_s
-        tags = (sql_post_data[:tags] || '').downcase.strip
+        tags = (sql_post_data[:tags] || "").downcase.strip
 
         data = {
-          'excerpt' => summary,
-          'categories' => tags.split('|')
+          "excerpt"    => summary,
+          "categories" => tags.split("|"),
         }
 
-         return data, content
+        return data, content
       end
-
     end
   end
 end

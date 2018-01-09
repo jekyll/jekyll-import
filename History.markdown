@@ -1,15 +1,42 @@
 ## HEAD
 
-  * WordPress: replace was backwards, broke end tags (#292)
+### Development Fixes
+
+  * Security: Fix alert on activesupport (#332)
+  * Test against Ruby 2.5 (#336)
+
+### Minor Enhancements
+
+  * Add support for Drupal 7 installations with PostgreSQL database (#331)
+
+## 0.13.0 / 2017-11-05
+
+### Minor Enhancements
+
+  * WordPress: add port options for mysql db connection (#311)
+  * Ghost: import drafts & pages, and fix issue with date extraction (#304)
+  * Add parent_id to wordpressdotcom importer (#301)
+  * RSS: add &#34;tag&#34; option to add a tag to all posts (#306)
+  * WordPressDotCom: import post passwords (#302)
+  * Joomla3: Use mysql2 instead of mysql (#309)
+  * Joomla: Add option to specify the MySQL port (#310)
 
 ### Bug Fixes
 
   * Drupal 7: Remove uneeded double quote in SQL query (#287)
   * Drupal 7: Fixes SQL grouping error (#289)
+  * S9y: Add port to db options & pull out `entries.extended` field (#299)
+  * Blogger: replace special characters with hyphens in the post name (#280)
+  * WordPress: fix variable name for `more_anchor` (#305)
+  * WordPress: replace was backwards, broke end tags (#292)
 
 ### Development Fixes
 
   * Updating Ruby and Jekyll versions for testing (#290)
+  * Modernize Travis configuration (#317)
+  * Define path with __dir__ (#316)
+  * Appease Rubocop (#318)
+  * Stop testing against Jekyll 2.5 (#323)
 
 ### Site Enhancements
 
@@ -17,9 +44,9 @@
   * Fixed style issues on HTTPS site (#296)
   * Change broken link for "A great article" (#294)
 
-### Minor Enhancements
+### Documentation
 
-  * Ghost: import drafts & pages, and fix issue with date extraction (#304)
+  * Add the new port setting to the Wordpress importer docs (#312)
 
 ## 0.12.0 / 2016-11-28
 

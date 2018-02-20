@@ -156,7 +156,7 @@ module JekyllImport
              users.user_email    AS `author_email`,
              users.user_url      AS `author_url`
            FROM #{px}#{sx}posts AS `posts`
-             LEFT JOIN #{px}users AS `users`
+             LEFT JOIN #{px}#{sx}users AS `users`
                ON posts.post_author = users.ID"
 
         if options[:status] && !options[:status].empty?

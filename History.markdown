@@ -4,6 +4,10 @@
 
   * Fixes missing site prefix in user table (#343)
 
+### Bug Fixes
+
+  * Use mysql by default in Drupal importers. (#347)
+
 ## 0.14.0 / 2018-02-03
 
 ### Development Fixes

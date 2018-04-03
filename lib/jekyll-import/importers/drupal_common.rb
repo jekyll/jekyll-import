@@ -16,6 +16,7 @@ module JekyllImport
           "password" => "",
           "host"     => "localhost",
           "prefix"   => "",
+          "port"     => "3306",
           "types"    => %w(blog story article),
         }.freeze
 
@@ -25,6 +26,7 @@ module JekyllImport
           c.option "user", "--user USER", "Database user name"
           c.option "password", "--password PW", "Database user's password (default: #{DEFAULTS["password"].inspect})"
           c.option "host", "--host HOST", "Database host name (default: #{DEFAULTS["host"].inspect})"
+          c.option "port", "--port PORT", "Database port name (default: #{DEFAULTS["port"].inspect})"
           c.option "prefix", "--prefix PREFIX", "Table prefix name (default: #{DEFAULTS["prefix"].inspect})"
           c.option "types", "--types TYPE1[,TYPE2[,TYPE3...]]", Array,
             "The Drupal content types to be imported  (default: #{DEFAULTS["types"].join(",")})"
@@ -47,13 +49,14 @@ module JekyllImport
           user   = options.fetch("user")
           pass   = options.fetch("password", DEFAULTS["password"])
           host   = options.fetch("host",     DEFAULTS["host"])
+          port   = options.fetch("port",     DEFAULTS["port"])
           prefix = options.fetch("prefix",   DEFAULTS["prefix"])
           types  = options.fetch("types",    DEFAULTS["types"])
 
           if engine == "postgresql"
             db = Sequel.postgres(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
           else
-            db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
+            db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :port => port, :encoding => "utf8")
           end
 
           query = self.build_query(prefix, types, engine)

@@ -83,6 +83,7 @@ module JekyllImport
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
+<link rel="canonical" href="{{ page.refresh_to_post_id }}.html" />
 </head>
 </html>
 HTML
@@ -120,7 +121,9 @@ HTML
             alias_query = self.aliases_query(prefix)
             type = post[:type]
 
-            aliases = db[alias_query, "#{type}/#{node_id}"].all
+            aliases_type = db[alias_query, "#{type}/#{node_id}"].all
+            aliases_node = db[alias_query, "node/#{node_id}"].all
+            aliases = aliases_type.concat aliases_node
 
             aliases.push(:alias => "#{type}/#{node_id}")
             aliases.push(:alias => "node/#{node_id}")
@@ -133,10 +136,19 @@ HTML
                 redirect_prefix = "#{first_category}/"
               end
 
-              FileUtils.mkdir_p url_alias[:alias]
-              File.open("#{url_alias[:alias]}/index.md", "w") do |f|
+              partition = url_alias[:alias].rpartition('/')
+              dir=""
+              file=partition.last
+
+              if(partition.first.length > 0)
+                dir = "#{partition.first}/"
+                FileUtils.mkdir_p partition.first
+              end
+
+              File.open("#{dir}#{file}.md", "w") do |f|
                 f.puts "---"
                 f.puts "layout: refresh"
+                f.puts "permalink: #{dir}#{file}/"
                 f.puts "refresh_to_post_id: /#{redirect_prefix}#{Time.at(time).to_datetime.strftime("%Y/%m/%d/") + slug}"
                 f.puts "---"
               end

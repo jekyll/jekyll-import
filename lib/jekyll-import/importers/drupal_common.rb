@@ -125,11 +125,18 @@ HTML
             aliases.push(:alias => "#{type}/#{node_id}")
 
             aliases.each do |url_alias|
+              redirect_prefix = ""
+              categories = data["categories"]
+              unless categories.nil? || categories.length == 0
+                first_category = categories[0]
+                redirect_prefix = "#{first_category}/"
+              end
+
               FileUtils.mkdir_p url_alias[:alias]
               File.open("#{url_alias[:alias]}/index.md", "w") do |f|
                 f.puts "---"
                 f.puts "layout: refresh"
-                f.puts "refresh_to_post_id: /#{Time.at(time).to_datetime.strftime("%Y/%m/%d/") + slug}"
+                f.puts "refresh_to_post_id: /#{redirect_prefix}#{Time.at(time).to_datetime.strftime("%Y/%m/%d/") + slug}"
                 f.puts "---"
               end
             end

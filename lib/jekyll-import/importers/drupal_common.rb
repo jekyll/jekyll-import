@@ -123,6 +123,7 @@ HTML
             aliases = db[alias_query, "#{type}/#{node_id}"].all
 
             aliases.push(:alias => "#{type}/#{node_id}")
+            aliases.push(:alias => "node/#{node_id}")
 
             aliases.each do |url_alias|
               redirect_prefix = ""

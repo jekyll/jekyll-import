@@ -13,13 +13,13 @@ module JekyllImport
         if engine == "postgresql"
           tag_group = <<EOS
             (SELECT STRING_AGG(td.name, '|')
-            FROM taxonomy_term_data td, taxonomy_index ti
+            FROM #{prefix}taxonomy_term_data td, #{prefix}taxonomy_index ti
             WHERE ti.tid = td.tid AND ti.nid = n.nid) AS tags
 EOS
         else
           tag_group = <<EOS
             (SELECT GROUP_CONCAT(td.name SEPARATOR '|')
-            FROM taxonomy_term_data td, taxonomy_index ti
+            FROM #{prefix}taxonomy_term_data td, #{prefix}taxonomy_index ti
             WHERE ti.tid = td.tid AND ti.nid = n.nid) AS 'tags'
 EOS
         end

@@ -3,6 +3,7 @@
 ### Minor Enhancements
 
   * Fixes missing site prefix in user table (#343)
+  * Added option to configure port. Added missing prefix to taxonomy tables. (#349)
 
 ### Bug Fixes
 

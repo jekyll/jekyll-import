@@ -82,7 +82,7 @@ module JekyllImport
         posts = posts.filter(:entry_blog_id => options["blog_id"]) if options["blog_id"]
         posts.each do |post|
           categories = post_categories.filter(
-            :mt_placement__placement_entry_id => post[:entry_id]
+            :placement_entry_id => post[:entry_id]
           ).map { |ea| encode(ea[:category_basename], options) }
 
           file_name = post_file_name(post, options)

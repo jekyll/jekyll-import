@@ -16,6 +16,7 @@ module JekyllImport
           "password" => "",
           "host"     => "localhost",
           "prefix"   => "",
+          "port"     => "3306",
           "types"    => %w(blog story article),
         }.freeze
 
@@ -25,6 +26,7 @@ module JekyllImport
           c.option "user", "--user USER", "Database user name"
           c.option "password", "--password PW", "Database user's password (default: #{DEFAULTS["password"].inspect})"
           c.option "host", "--host HOST", "Database host name (default: #{DEFAULTS["host"].inspect})"
+          c.option "port", "--port PORT", "Database port name (default: #{DEFAULTS["port"].inspect})"
           c.option "prefix", "--prefix PREFIX", "Table prefix name (default: #{DEFAULTS["prefix"].inspect})"
           c.option "types", "--types TYPE1[,TYPE2[,TYPE3...]]", Array,
             "The Drupal content types to be imported  (default: #{DEFAULTS["types"].join(",")})"
@@ -47,13 +49,14 @@ module JekyllImport
           user   = options.fetch("user")
           pass   = options.fetch("password", DEFAULTS["password"])
           host   = options.fetch("host",     DEFAULTS["host"])
+          port   = options.fetch("port",     DEFAULTS["port"])
           prefix = options.fetch("prefix",   DEFAULTS["prefix"])
           types  = options.fetch("types",    DEFAULTS["types"])
 
           if engine == "postgresql"
             db = Sequel.postgres(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
           else
-            db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
+            db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :port => port, :encoding => "utf8")
           end
 
           query = self.build_query(prefix, types, engine)
@@ -80,6 +83,7 @@ module JekyllImport
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
+<link rel="canonical" href="{{ page.refresh_to_post_id }}.html" />
 </head>
 </html>
 HTML
@@ -117,16 +121,35 @@ HTML
             alias_query = self.aliases_query(prefix)
             type = post[:type]
 
-            aliases = db[alias_query, "#{type}/#{node_id}"].all
+            aliases_type = db[alias_query, "#{type}/#{node_id}"].all
+            aliases_node = db[alias_query, "node/#{node_id}"].all
+            aliases = aliases_type.concat aliases_node
 
             aliases.push(:alias => "#{type}/#{node_id}")
+            aliases.push(:alias => "node/#{node_id}")
 
             aliases.each do |url_alias|
-              FileUtils.mkdir_p url_alias[:alias]
-              File.open("#{url_alias[:alias]}/index.md", "w") do |f|
+              redirect_prefix = ""
+              categories = data["categories"]
+              unless categories.nil? || categories.length == 0
+                first_category = categories[0]
+                redirect_prefix = "#{first_category}/"
+              end
+
+              partition = url_alias[:alias].rpartition('/')
+              dir=""
+              file=partition.last
+
+              if(partition.first.length > 0)
+                dir = "#{partition.first}/"
+                FileUtils.mkdir_p partition.first
+              end
+
+              File.open("#{dir}#{file}.md", "w") do |f|
                 f.puts "---"
                 f.puts "layout: refresh"
-                f.puts "refresh_to_post_id: /#{Time.at(time).to_datetime.strftime("%Y/%m/%d/") + slug}"
+                f.puts "permalink: #{dir}#{file}/"
+                f.puts "refresh_to_post_id: /#{redirect_prefix}#{Time.at(time).to_datetime.strftime("%Y/%m/%d/") + slug}"
                 f.puts "---"
               end
             end

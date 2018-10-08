@@ -46,7 +46,7 @@ module JekyllImport
         end
 
         def process(options)
-          engine = options.fetch("engine",   DEFAULTS["engine"])
+          engine = options.fetch("engine", DEFAULTS["engine"])
           dbname = options.fetch("dbname")
           user   = options.fetch("user")
           pass   = options.fetch("password", DEFAULTS["password"])

@@ -39,11 +39,11 @@ module JekyllImport
         begin
           current_page = (current_page || -1) + 1
           feed_url = url + "?num=#{per_page}&start=#{current_page * per_page}"
-          Jekyll.logger.info  "Fetching #{feed_url}"
+          Jekyll.logger.info "Fetching #{feed_url}"
           feed = URI.parse(feed_url).open
           contents = feed.readlines.join("\n")
           blog = extract_json(contents)
-          Jekyll.logger.info  "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
+          Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
           batch = blog["posts"].map { |post| post_to_hash(post, format) }
 
           # If we're rewriting, save the posts for later.  Otherwise, go ahead and
@@ -197,7 +197,7 @@ module JekyllImport
             begin
               return "<img src=\"#{save_photo(url, ext)}\"/>"
             rescue OpenURI::HTTPError
-              Jekyll.logger.warn  "Failed to grab photo"
+              Jekyll.logger.warn "Failed to grab photo"
             end
           end
 

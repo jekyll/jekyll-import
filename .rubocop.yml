@@ -1,5 +1,6 @@
+require: rubocop-jekyll
 inherit_gem:
-  jekyll: .rubocop.yml
+  rubocop-jekyll: .rubocop.yml
 Metrics/BlockLength:
   Exclude:
     - lib/jekyll-import/importers/drupal_common.rb

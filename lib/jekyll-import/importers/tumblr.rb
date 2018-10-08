@@ -295,7 +295,7 @@ module JekyllImport
             end
             url = "/" + path
           end
-        url
+          url
         end
       end
     end

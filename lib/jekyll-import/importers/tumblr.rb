@@ -40,7 +40,7 @@ module JekyllImport
           current_page = (current_page || -1) + 1
           feed_url = url + "?num=#{per_page}&start=#{current_page * per_page}"
           Jekyll.logger.info  "Fetching #{feed_url}"
-          feed = open(feed_url)
+          feed = URI.parse(feed_url).open
           contents = feed.readlines.join("\n")
           blog = extract_json(contents)
           Jekyll.logger.info  "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
@@ -291,7 +291,7 @@ module JekyllImport
           # Don't fetch if we've already cached this file
           unless File.size? path
             Jekyll.logger.info "Fetching photo #{url}"
-            File.open(path, "wb") { |f| f.write(open(url).read) }
+            File.open(path, "wb") { |f| f.write(URI.parse(url).read) }
           end
           url = "/" + path
         end

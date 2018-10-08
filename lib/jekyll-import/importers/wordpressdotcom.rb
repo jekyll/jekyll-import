@@ -39,7 +39,7 @@ module JekyllImport
             next
           end
           begin
-            open(uri, :allow_redirections => :safe) do |f|
+            URI.parse(uri, :allow_redirections => :safe).open do |f|
               File.open(dst, "wb") do |out|
                 out.puts f.read
               end

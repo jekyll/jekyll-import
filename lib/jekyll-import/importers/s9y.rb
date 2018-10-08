@@ -28,7 +28,7 @@ module JekyllImport
         FileUtils.mkdir_p("_posts")
 
         text = ""
-        open(source) { |line| text = line.read }
+        URI.parse(source).open { |line| text = line.read }
         rss = ::RSS::Parser.parse(text)
 
         rss.items.each do |item|

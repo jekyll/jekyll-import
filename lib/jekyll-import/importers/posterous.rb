@@ -57,7 +57,7 @@ module JekyllImport
           uri = URI.parse(fullurl)
           imgname = uri.path.split("/")[-1]
           imgdata = self.fetch_one(fullurl)
-          open(directory + "/" + imgname, "wb") do |file|
+          File.open(directory + "/" + imgname, "wb") do |file|
             file.write imgdata
           end
           urls.push(directory + "/" + imgname)

@@ -58,11 +58,11 @@ module JekyllImport
           post_name = File.dirname(f).split(%r!/!).last.gsub(%r!\A\d+-!, "")
 
           name = "#{formatted_date}-#{post_name}"
-          File.open("_posts/#{name}.markdown", "w") do |f|
-            f.puts meta.to_yaml
-            f.puts "---\n"
-            f.puts "\n#{prerex}\n\n" if prerex
-            f.puts body
+          File.open("_posts/#{name}.markdown", "w") do |p|
+            p.puts meta.to_yaml
+            p.puts "---\n"
+            p.puts "\n#{prerex}\n\n" if prerex
+            p.puts body
           end
           posts += 1
         end

@@ -3,7 +3,7 @@
 module JekyllImport
   module Importers
     class Enki < Importer
-      SQL = <<~EOS.freeze
+      SQL = <<~EOS
         SELECT p.id,
                p.title,
                p.slug,

@@ -57,7 +57,7 @@ module JekyllImport
                WHERE user_id = 1 AND \
                      type = 'Article' AND \
                      published_at IS NOT NULL \
-               ORDER BY published_at".freeze
+               ORDER BY published_at"
 
       def self.process(options)
         dbname = options.fetch("dbname")

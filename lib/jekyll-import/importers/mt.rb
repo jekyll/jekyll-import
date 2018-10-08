@@ -3,11 +3,11 @@
 module JekyllImport
   module Importers
     class MT < Importer
-      SUPPORTED_ENGINES = %(mysql postgres sqlite).freeze
+      SUPPORTED_ENGINES = %(mysql postgres sqlite)
 
       STATUS_DRAFT = 1
       STATUS_PUBLISHED = 2
-      MORE_CONTENT_SEPARATOR = "<!--more-->".freeze
+      MORE_CONTENT_SEPARATOR = "<!--more-->"
 
       def self.default_options
         {

@@ -51,7 +51,7 @@ module JekyllImport
             "title"  => item.title,
           }
 
-          header["tag"] = options["tag"] if !options.to_s.empty?
+          header["tag"] = options["tag"] unless options.to_s.empty?
 
           FileUtils.mkdir_p("_posts")
 

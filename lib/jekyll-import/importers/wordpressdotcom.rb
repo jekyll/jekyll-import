@@ -86,7 +86,7 @@ module JekyllImport
         end
 
         def password
-          @post_password ||= text_for('wp:post_password')
+          @post_password ||= text_for("wp:post_password")
         end
 
         def post_type

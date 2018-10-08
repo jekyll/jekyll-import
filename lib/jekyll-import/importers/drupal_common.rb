@@ -138,7 +138,7 @@ module JekyllImport
                 redirect_prefix = "#{first_category}/"
               end
 
-              partition = url_alias[:alias].rpartition('/')
+              partition = url_alias[:alias].rpartition("/")
               dir = ""
               file = partition.last
 

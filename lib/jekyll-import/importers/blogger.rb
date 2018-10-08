@@ -186,7 +186,7 @@ module JekyllImport
             raise "nest entry element" unless @in_entry_elem
 
             if @in_entry_elem[:meta][:kind] == "post"
-              post_data = get_post_data_from_in_entry_elem_info
+              post_data = post_data_from_in_entry_elem_info
 
               if post_data
                 target_dir = "_posts"
@@ -204,7 +204,7 @@ module JekyllImport
                 end
               end
             elsif @in_entry_elem[:meta][:kind] == "comment" && @comments
-              post_data = get_post_data_from_in_entry_elem_info
+              post_data = post_data_from_in_entry_elem_info
 
               if post_data
                 target_dir = "_comments"
@@ -228,7 +228,7 @@ module JekyllImport
           @tag_bread.pop
         end
 
-        def get_post_data_from_in_entry_elem_info
+        def post_data_from_in_entry_elem_info
           if @in_entry_elem.nil? || !@in_entry_elem.key?(:meta) || !@in_entry_elem[:meta].key?(:kind)
             nil
           elsif @in_entry_elem[:meta][:kind] == "post"

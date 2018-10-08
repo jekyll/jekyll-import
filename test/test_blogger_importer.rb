@@ -114,7 +114,7 @@ EOF
       listener = Importers::Blogger::BloggerAtomStreamListener.new
       class << listener
         # overwrite with mock function
-        def get_post_data_from_in_entry_elem_info
+        def post_data_from_in_entry_elem_info
           @entry_elem_info_array = [] unless @entry_elem_info_array
           @entry_elem_info_array << @in_entry_elem.dup
 
@@ -241,11 +241,11 @@ EOD
 
     should "return nil if wrong" do
       listener.instance_variable_set(:@in_entry_elem, nil)
-      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info)
+      assert_equal(nil, listener.post_data_from_in_entry_elem_info )
       listener.instance_variable_set(:@in_entry_elem, {})
-      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info)
+      assert_equal(nil, listener.post_data_from_in_entry_elem_info )
       listener.instance_variable_set(:@in_entry_elem, { :meta => { :kind => "not a post" } })
-      assert_equal(nil, listener.get_post_data_from_in_entry_elem_info)
+      assert_equal(nil, listener.post_data_from_in_entry_elem_info )
     end
 
     should "raise an error if original_url not exists" do
@@ -256,7 +256,7 @@ EOD
         },
       })
       assert_raises(RuntimeError) do
-        listener.get_post_data_from_in_entry_elem_info
+        listener.post_data_from_in_entry_elem_info
       end
 
       listener.instance_variable_set(:@in_entry_elem, {
@@ -267,7 +267,7 @@ EOD
         },
       })
       assert_nothing_raised(RuntimeError) do
-        listener.get_post_data_from_in_entry_elem_info
+        listener.post_data_from_in_entry_elem_info
       end
     end
 
@@ -275,7 +275,7 @@ EOD
       listener.instance_variable_set(:@in_entry_elem, {
         :meta => { :kind => "foo" },
       })
-      assert_nil(listener.get_post_data_from_in_entry_elem_info)
+      assert_nil(listener.post_data_from_in_entry_elem_info )
     end
 
     should "generate header hash" do
@@ -294,7 +294,7 @@ EOD
         },
         :body => "",
       })
-      post_data = listener.get_post_data_from_in_entry_elem_info
+      post_data = listener.post_data_from_in_entry_elem_info
 
       assert_equal(published, post_data[:header]["date"])
       assert_equal(%w(a b c), post_data[:header]["tags"])
@@ -323,7 +323,7 @@ EOD
         :body => "",
       })
       listener.leave_blogger_info = false
-      post_data = listener.get_post_data_from_in_entry_elem_info
+      post_data = listener.post_data_from_in_entry_elem_info
 
       assert_equal(published, post_data[:header]["date"])
       assert_equal(%w(a b c), post_data[:header]["tags"])
@@ -348,7 +348,7 @@ EOD
         },
         :body => "foobar",
       })
-      post_data = listener.get_post_data_from_in_entry_elem_info
+      post_data = listener.post_data_from_in_entry_elem_info
       assert_equal("foobar", post_data[:body])
 
       listener.instance_variable_set(:@in_entry_elem, {
@@ -361,7 +361,7 @@ EOD
         },
         :body => "{% {{ foobar }} %}",
       })
-      post_data = listener.get_post_data_from_in_entry_elem_info
+      post_data = listener.post_data_from_in_entry_elem_info
       assert_equal('{{ "{%" }} {{ "{{" }} foobar }} %}', post_data[:body])
     end
   end

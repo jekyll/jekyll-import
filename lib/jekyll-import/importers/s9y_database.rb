@@ -166,7 +166,7 @@ module JekyllImport
 
         content = post[:body].to_s
         unless post[:body_extended].to_s.empty?
-					content += "\n\n" + post[:body_extended].to_s
+          content += "\n\n" + post[:body_extended].to_s
         end
 
         if options[:clean_entities]

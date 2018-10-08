@@ -258,43 +258,43 @@ module JekyllImport
         # so I can assume the block is JavaScript if it contains a
         # semi-colon.
         def add_syntax_highlights(content, redirect_dir)
-        lines = content.split("\n")
-        block = false
-        indent = %r!^    !
-        lang = nil
-        start = nil
-        lines.each_with_index do |line, i|
-          if !block && line =~ indent
-            block = true
-            lang = "python"
-            start = i
-          elsif block
-            lang = "javascript" if line =~ %r!;$!
-            block = line =~ indent && i < lines.size - 1 # Also handle EOF
-            unless block
-              lines[start] = "{% highlight #{lang} %}"
-              lines[i - 1] = "{% endhighlight %}"
+          lines = content.split("\n")
+          block = false
+          indent = %r!^    !
+          lang = nil
+          start = nil
+          lines.each_with_index do |line, i|
+            if !block && line =~ indent
+              block = true
+              lang = "python"
+              start = i
+            elsif block
+              lang = "javascript" if line =~ %r!;$!
+              block = line =~ indent && i < lines.size - 1 # Also handle EOF
+              unless block
+                lines[start] = "{% highlight #{lang} %}"
+                lines[i - 1] = "{% endhighlight %}"
+              end
+              FileUtils.cp(redirect_dir + "index.html", redirect_dir + "../" + "index.html")
+              lines[i] = lines[i].sub(indent, "")
             end
-            FileUtils.cp(redirect_dir + "index.html", redirect_dir + "../" + "index.html")
-            lines[i] = lines[i].sub(indent, "")
           end
-        end
-        lines.join("\n")
+          lines.join("\n")
       end
 
         def save_photo(url, ext)
-        if @grab_images
-          path = "tumblr_files/#{url.split("/").last}"
-          path += ext unless path =~ %r!#{ext}$!
-          FileUtils.mkdir_p "tumblr_files"
+          if @grab_images
+            path = "tumblr_files/#{url.split("/").last}"
+            path += ext unless path =~ %r!#{ext}$!
+            FileUtils.mkdir_p "tumblr_files"
 
-          # Don't fetch if we've already cached this file
-          unless File.size? path
-            Jekyll.logger.info "Fetching photo #{url}"
-            File.open(path, "wb") { |f| f.write(URI.parse(url).read) }
+            # Don't fetch if we've already cached this file
+            unless File.size? path
+              Jekyll.logger.info "Fetching photo #{url}"
+              File.open(path, "wb") { |f| f.write(URI.parse(url).read) }
+            end
+            url = "/" + path
           end
-          url = "/" + path
-        end
         url
       end
       end

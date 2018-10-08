@@ -139,8 +139,8 @@ module JekyllImport
               end
 
               partition = url_alias[:alias].rpartition('/')
-              dir=""
-              file=partition.last
+              dir = ""
+              file = partition.last
 
               if(partition.first.length > 0)
                 dir = "#{partition.first}/"

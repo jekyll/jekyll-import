@@ -108,7 +108,7 @@ module JekyllImport
         attr_reader :original_url_base
 
         def tag_start(tag, attrs)
-          @tag_bread = [] unless @tag_bread
+          @tag_bread ||= []
           @tag_bread.push(tag)
 
           case tag
@@ -277,9 +277,7 @@ module JekyllImport
           elsif @in_entry_elem[:meta][:kind] == "comment"
             timestamp = Time.parse(@in_entry_elem[:meta][:published]).strftime("%Y-%m-%d")
             if @in_entry_elem[:meta][:original_url]
-              unless @comment_seq
-                @comment_seq = 1
-              end
+              @comment_seq ||= 1
 
               original_uri = URI.parse(@in_entry_elem[:meta][:original_url])
               original_path = original_uri.path.to_s

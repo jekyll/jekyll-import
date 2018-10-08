@@ -77,8 +77,8 @@ module JekyllImport
 
           File.open("_posts/#{name}", "w") do |f|
             f.puts({ "layout"  => "post",
-                     "title"   => (post[:title] && post[:title].to_s.force_encoding("UTF-8")),
-                     "tags"    => (post[:keywords] && post[:keywords].to_s.force_encoding("UTF-8")),
+                     "title"   => (post[:title]&.to_s.force_encoding("UTF-8")),
+                     "tags"    => (post[:keywords]&.to_s.force_encoding("UTF-8")),
                      "typo_id" => post[:id], }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml)
             f.puts "---"
             f.puts post[:body].delete("\r")

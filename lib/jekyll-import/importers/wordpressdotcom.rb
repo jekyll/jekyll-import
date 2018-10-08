@@ -45,7 +45,7 @@ module JekyllImport
               end
             end
             Jekyll.logger.info "    OK!"
-          rescue => e
+          rescue StandardError => e
             Jekyll.logger.error "    Error: #{e.message}"
             Jekyll.logger.error e.backtrace.join("\n")
           end
@@ -193,7 +193,7 @@ module JekyllImport
               f.puts "---"
               f.puts Util.wpautop(content.to_html)
             end
-          rescue => e
+          rescue StandardError => e
             Jekyll.logger.error "Couldn't import post!"
             Jekyll.logger.error "Title: #{item.title}"
             Jekyll.logger.error "Name/Slug: #{item.file_name}\n"

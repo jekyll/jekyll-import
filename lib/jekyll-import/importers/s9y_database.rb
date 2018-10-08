@@ -70,7 +70,7 @@ module JekyllImport
           :user           => opts.fetch("user", ""),
           :pass           => opts.fetch("password", ""),
           :host           => opts.fetch("host", "localhost"),
-          :port						=> opts.fetch("port", 3306),
+          :port           => opts.fetch("port", 3306),
           :socket         => opts.fetch("socket", nil),
           :dbname         => opts.fetch("dbname", ""),
           :table_prefix   => opts.fetch("table_prefix", "serendipity_"),

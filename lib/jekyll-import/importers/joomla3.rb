@@ -37,7 +37,7 @@ module JekyllImport
         pass    = options.fetch("password", "")
         host    = options.fetch("host", "localhost")
         port    = options.fetch("port", 3306).to_i
-        cid	    = options.fetch("category", 0)
+        cid     = options.fetch("category", 0)
         table_prefix = options.fetch("prefix", "jos_")
 
         db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :port => port, :encoding => "utf8")

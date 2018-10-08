@@ -142,7 +142,7 @@ module JekyllImport
               dir = ""
               file = partition.last
 
-              if (partition.first.length.positive?)
+              if partition.first.length.positive?
                 dir = "#{partition.first}/"
                 FileUtils.mkdir_p partition.first
               end

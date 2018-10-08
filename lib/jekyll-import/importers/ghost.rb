@@ -29,6 +29,7 @@ module JekyllImport
       end
 
       private
+
       class << self
         def fetch_posts(dbfile)
           db = Sequel.sqlite(dbfile)

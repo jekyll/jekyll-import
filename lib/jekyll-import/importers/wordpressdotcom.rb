@@ -24,9 +24,8 @@ module JekyllImport
       # Will modify post DOM tree
       def self.download_images(title, post_hpricot, assets_folder)
         images = (post_hpricot / "img")
-        if images.empty?
-          return
-        end
+        return if images.empty?
+
         Jekyll.logger.info "Downloading images for " + title
         images.each do |i|
           uri = i["src"]
@@ -76,9 +75,7 @@ module JekyllImport
         end
 
         def published_at
-          if published?
-            @published_at ||= Time.parse(text_for("wp:post_date"))
-          end
+          @published_at ||= Time.parse(text_for("wp:post_date")) if published?
         end
 
         def status
@@ -183,9 +180,7 @@ module JekyllImport
             content = Hpricot(item.text_for("content:encoded"))
             header["excerpt"] = item.excerpt if item.excerpt
 
-            if fetch
-              download_images(item.title, content, assets_folder)
-            end
+            download_images(item.title, content, assets_folder) if fetch
 
             FileUtils.mkdir_p item.directory_name
             File.open(File.join(item.directory_name, item.file_name), "w") do |f|

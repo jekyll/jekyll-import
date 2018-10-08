@@ -112,6 +112,7 @@ module JekyllImport
           comments = db[:mt_comment]
           comments.each do |comment|
             next unless posts_name_by_id.key?(comment[:comment_entry_id]) # if the entry exists
+
             dir_name, base_name = comment_file_dir_and_base_name(posts_name_by_id, comment, options)
             FileUtils.mkdir_p "_comments/#{dir_name}"
 

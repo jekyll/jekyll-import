@@ -44,12 +44,12 @@ module JekyllImport
         listener = BloggerAtomStreamListener.new
 
         listener.leave_blogger_info = !options.fetch("no-blogger-info", false),
-        listener.comments = options.fetch("comments", false),
+                                      listener.comments = options.fetch("comments", false),
 
-        File.open(source, "r") do |f|
-          f.flock(File::LOCK_SH)
-          REXML::Parsers::StreamParser.new(f, listener).parse
-        end
+                                      File.open(source, "r") do |f|
+                                        f.flock(File::LOCK_SH)
+                                        REXML::Parsers::StreamParser.new(f, listener).parse
+                                      end
 
         options["original-url-base"] = listener.original_url_base
 
@@ -80,6 +80,7 @@ module JekyllImport
                 quote = Regexp.last_match(1)
                 post_file = Dir.glob("_posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}").first
                 raise "Could not found: _posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}" if post_file.nil?
+
                 " href=#{quote}{{ site.baseurl }}{% post_url #{File.basename(post_file, ".html")} %}#{quote}"
               end
 
@@ -114,6 +115,7 @@ module JekyllImport
           case tag
           when "entry"
             raise "nest entry element" if @in_entry_elem
+
             @in_entry_elem = { :meta => {}, :body => nil }
           when "title"
             if @in_entry_elem
@@ -131,9 +133,7 @@ module JekyllImport
               end
             end
           when "content"
-            if @in_entry_elem
-              @in_entry_elem[:meta][:content_type] = attrs["type"]
-            end
+            @in_entry_elem[:meta][:content_type] = attrs["type"] if @in_entry_elem
           when "link"
             if @in_entry_elem
               if attrs["rel"] == "alternate" && attrs["type"] == "text/html"
@@ -145,13 +145,9 @@ module JekyllImport
               end
             end
           when "media:thumbnail"
-            if @in_entry_elem
-              @in_entry_elem[:meta][:thumbnail] = attrs["url"]
-            end
+            @in_entry_elem[:meta][:thumbnail] = attrs["url"] if @in_entry_elem
           when "thr:in-reply-to"
-            if @in_entry_elem
-              @in_entry_elem[:meta][:post_id] = attrs["ref"]
-            end
+            @in_entry_elem[:meta][:post_id] = attrs["ref"] if @in_entry_elem
           end
         end
 
@@ -169,9 +165,7 @@ module JekyllImport
             when "content"
               @in_entry_elem[:body] = text
             when "name"
-              if @tag_bread[-2..-1] == %w(author name)
-                @in_entry_elem[:meta][:author] = text
-              end
+              @in_entry_elem[:meta][:author] = text if @tag_bread[-2..-1] == %w(author name)
             when "app:draft"
               if @tag_bread[-2..-1] == %w(app:control app:draft)
                 @in_entry_elem[:meta][:draft] = true if text == "yes"
@@ -266,12 +260,8 @@ module JekyllImport
             body = @in_entry_elem[:body]
 
             # body escaping associated with liquid
-            if body =~ %r!{{!
-              body.gsub!(%r!{{!, '{{ "{{" }}')
-            end
-            if body =~ %r!{%!
-              body.gsub!(%r!{%!, '{{ "{%" }}')
-            end
+            body.gsub!(%r!{{!, '{{ "{{" }}') if body =~ %r!{{!
+            body.gsub!(%r!{%!, '{{ "{%" }}') if body =~ %r!{%!
 
             { :filename => filename, :header => header, :body => body }
           elsif @in_entry_elem[:meta][:kind] == "comment"
@@ -303,17 +293,12 @@ module JekyllImport
             body = @in_entry_elem[:body]
 
             # body escaping associated with liquid
-            if body =~ %r!{{!
-              body.gsub!(%r!{{!, '{{ "{{" }}')
-            end
-            if body =~ %r!{%!
-              body.gsub!(%r!{%!, '{{ "{%" }}')
-            end
+            body.gsub!(%r!{{!, '{{ "{{" }}') if body =~ %r!{{!
+            body.gsub!(%r!{%!, '{{ "{%" }}') if body =~ %r!{%!
 
             { :filename => filename, :header => header, :body => body }
           end
         end
-
       end
     end
   end

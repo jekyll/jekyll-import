@@ -20,9 +20,7 @@ module JekyllImport
 
       def self.validate(options)
         %w(user api_token).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." if options[option].nil?
         end
       end
 
@@ -73,6 +71,7 @@ module JekyllImport
 
       class << self
         private
+
         def fetch_behance(token)
           ::Behance::Client.new(:access_token => token)
         end

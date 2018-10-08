@@ -63,6 +63,7 @@ module JekyllImport
       end
 
       private
+
       class << self
         def extract_json(contents)
           beginning = contents.index("{")
@@ -102,9 +103,7 @@ module JekyllImport
           when "link"
             title = post["link-text"] || post["link-url"]
             content = "<a href=\"#{post["link-url"]}\">#{title}</a>"
-            unless post["link-description"].nil?
-              content << "<br/>" + post["link-description"]
-            end
+            content << "<br/>" + post["link-description"] unless post["link-description"].nil?
           when "photo"
             title = post["slug"].tr("-", " ")
             if post["photos"].size > 1
@@ -129,9 +128,7 @@ module JekyllImport
           when "quote"
             title = post["quote-text"]
             content = "<blockquote>#{post["quote-text"]}</blockquote>"
-            unless post["quote-source"].nil?
-              content << "&#8212;" + post["quote-source"]
-            end
+            content << "&#8212;" + post["quote-source"] unless post["quote-source"].nil?
           when "conversation"
             title = post["conversation-title"]
             content = "<section><dialog>"
@@ -194,6 +191,7 @@ module JekyllImport
           sizes.each do |size|
             url = post["photo-url"] || post["photo-url-#{size}"]
             next if url.nil?
+
             begin
               return "<img src=\"#{save_photo(url, ext)}\"/>"
             rescue OpenURI::HTTPError

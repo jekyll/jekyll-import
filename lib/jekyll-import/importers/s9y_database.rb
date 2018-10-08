@@ -7,10 +7,10 @@ module JekyllImport
         JekyllImport.require_with_fallback(
           %w(
             rubygems
-          sequel
-          fileutils
-          safe_yaml
-          unidecode
+            sequel
+            fileutils
+            safe_yaml
+            unidecode
           )
         )
       end
@@ -96,12 +96,12 @@ module JekyllImport
         FileUtils.mkdir_p("_drafts") if options[:drafts]
 
         db = Sequel.mysql2(options[:dbname],
-          :user     => options[:user],
-          :password => options[:pass],
-          :socket   => options[:socket],
-          :host     => options[:host],
-          :port     => options[:port],
-          :encoding => "utf8")
+                           :user     => options[:user],
+                           :password => options[:pass],
+                           :socket   => options[:socket],
+                           :host     => options[:host],
+                           :port     => options[:port],
+                           :encoding => "utf8")
 
         px = options[:table_prefix]
 
@@ -137,9 +137,7 @@ module JekyllImport
              LEFT JOIN #{px}authors AS `authors`
                ON entries.authorid = authors.authorid"
 
-        unless options[:drafts]
-          posts_query << "WHERE posts.isdraft = 'false'"
-        end
+        posts_query << "WHERE posts.isdraft = 'false'" unless options[:drafts]
 
         db[posts_query].each do |post|
           process_post(post, db, options, page_name_list)
@@ -150,31 +148,21 @@ module JekyllImport
         extension = options[:extension]
 
         title = post[:title]
-        if options[:clean_entities]
-          title = clean_entities(title)
-        end
+        title = clean_entities(title) if options[:clean_entities]
 
         slug = post[:slug]
-        if !slug || slug.empty?
-          slug = sluggify(title)
-        end
+        slug = sluggify(title) if !slug || slug.empty?
 
         status = post[:isdraft] == "true" ? "draft" : "published"
         date = Time.at(post[:timestamp]).utc || Time.now.utc
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
 
         content = post[:body].to_s
-        unless post[:body_extended].to_s.empty?
-          content += "\n\n" + post[:body_extended].to_s
-        end
+        content += "\n\n" + post[:body_extended].to_s unless post[:body_extended].to_s.empty?
 
-        if options[:clean_entities]
-          content = clean_entities(content)
-        end
+        content = clean_entities(content) if options[:clean_entities]
 
-        if options[:markdown]
-          content = ReverseMarkdown.convert(content)
-        end
+        content = ReverseMarkdown.convert(content) if options[:markdown]
 
         categories = process_categories(db, options, post)
         comments = process_comments(db, options, post)
@@ -221,10 +209,10 @@ module JekyllImport
 
       def self.require_if_available(gem_name, option_name)
         require gem_name
-        return true
+        true
       rescue LoadError
         STDERR.puts "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
-        return true
+        true
       end
 
       def self.process_categories(db, options, post)
@@ -275,9 +263,7 @@ module JekyllImport
           comcontent = comment[:content].to_s
           comauthor = comment[:author].to_s
 
-          if comcontent.respond_to?(:force_encoding)
-            comcontent.force_encoding("UTF-8")
-          end
+          comcontent.force_encoding("UTF-8") if comcontent.respond_to?(:force_encoding)
 
           if options[:clean_entities]
             comcontent = clean_entities(comcontent)
@@ -339,9 +325,7 @@ module JekyllImport
       end
 
       def self.clean_entities(text)
-        if text.respond_to?(:force_encoding)
-          text.force_encoding("UTF-8")
-        end
+        text.force_encoding("UTF-8") if text.respond_to?(:force_encoding)
         text = HTMLEntities.new.encode(text, :named)
         # We don't want to convert these, it would break all
         # HTML tags in the post and comments.

@@ -31,7 +31,7 @@ module JekyllImport
           c.option "port", "--port PORT", "Database port name (default: #{DEFAULTS["port"].inspect})"
           c.option "prefix", "--prefix PREFIX", "Table prefix name (default: #{DEFAULTS["prefix"].inspect})"
           c.option "types", "--types TYPE1[,TYPE2[,TYPE3...]]", Array,
-            "The Drupal content types to be imported  (default: #{DEFAULTS["types"].join(",")})"
+                   "The Drupal content types to be imported  (default: #{DEFAULTS["types"].join(",")})"
         end
 
         def require_deps
@@ -61,7 +61,7 @@ module JekyllImport
             db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :port => port, :encoding => "utf8")
           end
 
-          query = self.build_query(prefix, types, engine)
+          query = build_query(prefix, types, engine)
 
           conf = Jekyll.configuration({})
           src_dir = conf["source"]
@@ -93,7 +93,7 @@ module JekyllImport
 
           db[query].each do |post|
             # Get required fields
-            data, content = self.post_data(post)
+            data, content = post_data(post)
 
             data["layout"] = post[:type]
             title = data["title"] = post[:title].strip.force_encoding("UTF-8")
@@ -120,7 +120,8 @@ module JekyllImport
 
             # Make a file to redirect from the old Drupal URL
             next unless is_published
-            alias_query = self.aliases_query(prefix)
+
+            alias_query = aliases_query(prefix)
             type = post[:type]
 
             aliases_type = db[alias_query, "#{type}/#{node_id}"].all
@@ -177,12 +178,9 @@ module JekyllImport
 
       def validate(options)
         %w(dbname user).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." if options[option].nil?
         end
       end
-
     end
   end
 end

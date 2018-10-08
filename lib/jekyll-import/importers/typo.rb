@@ -5,18 +5,18 @@ module JekyllImport
     class Typo < Importer
       # This SQL *should* work for both MySQL and PostgreSQL.
       SQL = <<~EOS
-      SELECT c.id id,
-             c.title title,
-             c.permalink slug,
-             c.body body,
-             c.extended extended,
-             c.published_at date,
-             c.state state,
-             c.keywords keywords,
-             COALESCE(tf.name, 'html') filter
-        FROM contents c
-             LEFT OUTER JOIN text_filters tf
-                          ON c.text_filter_id = tf.id
+        SELECT c.id id,
+               c.title title,
+               c.permalink slug,
+               c.body body,
+               c.extended extended,
+               c.published_at date,
+               c.state state,
+               c.keywords keywords,
+               COALESCE(tf.name, 'html') filter
+          FROM contents c
+               LEFT OUTER JOIN text_filters tf
+                            ON c.text_filter_id = tf.id
       EOS
 
       def self.require_deps
@@ -57,9 +57,7 @@ module JekyllImport
         db[SQL].each do |post|
           next unless post[:state] =~ %r!published!i
 
-          if post[:slug].nil?
-            post[:slug] = "no slug"
-          end
+          post[:slug] = "no slug" if post[:slug].nil?
 
           if post[:extended]
             post[:body] << "\n<!-- more -->\n"

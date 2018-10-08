@@ -7,12 +7,12 @@ module JekyllImport
       # export PGPASSWORD if you must
       def self.postgres(c)
         sql = <<~SQL
-        BEGIN;
-        CREATE TEMP TABLE jekyll AS
-          SELECT title, permalink, body, published_at, filter FROM contents
-          WHERE user_id = 1 AND type = 'Article' ORDER BY published_at;
-        COPY jekyll TO STDOUT WITH CSV HEADER;
-        ROLLBACK;
+          BEGIN;
+          CREATE TEMP TABLE jekyll AS
+            SELECT title, permalink, body, published_at, filter FROM contents
+            WHERE user_id = 1 AND type = 'Article' ORDER BY published_at;
+          COPY jekyll TO STDOUT WITH CSV HEADER;
+          ROLLBACK;
         SQL
         command = %(psql -h #{c[:host] || "localhost"} -c "#{sql.strip}" #{c[:database]} #{c[:username]} -o #{c[:filename] || "posts.csv"})
         Jekyll.logger.info command
@@ -22,9 +22,7 @@ module JekyllImport
 
       def self.validate(options)
         %w(dbname user).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." if options[option].nil?
         end
       end
 

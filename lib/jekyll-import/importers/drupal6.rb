@@ -30,7 +30,7 @@ module JekyllImport
                 GROUP BY n.nid
 EOS
 
-        return query
+        query
       end
 
       def self.aliases_query(prefix)
@@ -47,7 +47,7 @@ EOS
           "categories" => tags.split("|"),
         }
 
-        return data, content
+        [data, content]
       end
     end
   end

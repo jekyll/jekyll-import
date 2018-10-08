@@ -101,8 +101,7 @@ module JekyllImport
           :socket   => options[:socket],
           :host     => options[:host],
           :port     => options[:port],
-          :encoding => "utf8"
-        )
+          :encoding => "utf8")
 
         px = options[:table_prefix]
 

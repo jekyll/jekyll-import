@@ -40,7 +40,7 @@ module JekyllImport
 
         user_projects = client.user_projects(user)
 
-        puts "#{user_projects.length} project(s) found. Importing now..."
+        Jekyll.logger.info "#{user_projects.length} project(s) found. Importing now..."
 
         user_projects.each do |project|
           details = client.project(project["id"])
@@ -68,7 +68,7 @@ module JekyllImport
           end
         end
 
-        puts "Finished importing."
+        Jekyll.logger.info "Finished importing."
       end
 
       class << self

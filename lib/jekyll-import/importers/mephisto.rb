@@ -15,7 +15,7 @@ module JekyllImport
         ROLLBACK;
         SQL
         command = %(psql -h #{c[:host] || "localhost"} -c "#{sql.strip}" #{c[:database]} #{c[:username]} -o #{c[:filename] || "posts.csv"})
-        puts command
+        Jekyll.logger.info command
         `#{command}`
         CSV.process
       end

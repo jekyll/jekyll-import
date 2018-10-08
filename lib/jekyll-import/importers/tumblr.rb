@@ -62,8 +62,6 @@ module JekyllImport
         end
       end
 
-      private
-
       class << self
         def extract_json(contents)
           beginning = contents.index("{")

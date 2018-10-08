@@ -35,7 +35,7 @@ module JekyllImport
         user    = options.fetch("user")
         pass    = options.fetch("password", "")
         host    = options.fetch("host", "localhost")
-        section = options.fetch("section", "1")
+        # section = options.fetch("section", "1")
         table_prefix = options.fetch("prefix", "jos_")
 
         db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
@@ -69,8 +69,8 @@ module JekyllImport
           slug = post[:alias]
           date = post[:created]
           content = post[:content]
-          category = post[:category]
-          tags = post[:tags]
+          # category = post[:category]
+          # tags = post[:tags]
           name = format("%02d-%02d-%02d-%s.markdown", date.year, date.month, date.day, slug)
 
           # Get the relevant fields as a hash, delete empty fields and convert

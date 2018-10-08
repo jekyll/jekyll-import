@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # load from jekyll-import/lib
 $LOAD_PATH.unshift File.expand_path("../", __dir__)
 require "jekyll/command"
@@ -51,7 +53,7 @@ module Jekyll
         def process(migrator, options)
           migrator = migrator.to_s.downcase
 
-          if IMPORTERS.keys.include?(migrator.to_sym)
+          if IMPORTERS.key?(migrator.to_sym)
             if JekyllImport::Importers.const_defined?(IMPORTERS[migrator.to_sym])
               klass = JekyllImport::Importers.const_get(IMPORTERS[migrator.to_sym])
               if options.respond_to?(:__hash__)
@@ -66,8 +68,8 @@ module Jekyll
         end
 
         def abort_on_invalid_migrator(migrator)
-          $stderr.puts "Sorry, '#{migrator}' isn't a valid migrator. Valid choices:"
-          IMPORTERS.keys.each { |k| $stderr.puts "* #{k}" }
+          warn "Sorry, '#{migrator}' isn't a valid migrator. Valid choices:"
+          IMPORTERS.keys.each { |k| warn "* #{k}" }
           raise "'#{migrator}' is not a valid migrator."
         end
       end

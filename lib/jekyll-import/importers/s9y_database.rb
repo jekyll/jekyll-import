@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class S9YDatabase < Importer
@@ -93,11 +95,11 @@ module JekyllImport
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts") if options[:drafts]
 
-        db = Sequel.mysql2(options[:dbname], 
-          :user     => options[:user], 
+        db = Sequel.mysql2(options[:dbname],
+          :user     => options[:user],
           :password => options[:pass],
-          :socket   => options[:socket], 
-          :host     => options[:host], 
+          :socket   => options[:socket],
+          :host     => options[:host],
           :port     => options[:port],
           :encoding => "utf8"
         )

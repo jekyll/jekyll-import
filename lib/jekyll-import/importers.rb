@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     Dir.chdir(File.expand_path(File.join("importers"), __dir__)) do

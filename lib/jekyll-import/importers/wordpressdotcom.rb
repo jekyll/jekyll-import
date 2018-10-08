@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module JekyllImport
   module Importers
@@ -84,7 +84,7 @@ module JekyllImport
         def status
           @status ||= text_for("wp:status")
         end
-      
+
         def password
           @post_password ||= text_for('wp:post_password')
         end
@@ -92,7 +92,7 @@ module JekyllImport
         def post_type
           @post_type ||= text_for("wp:post_type")
         end
-      
+
         def parent_id
           @parent_id ||= text_for("wp:post_parent")
         end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "jekyll-import/importers/drupal_common"
 
 module JekyllImport

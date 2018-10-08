@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   class Importer
     def self.inherited(base)

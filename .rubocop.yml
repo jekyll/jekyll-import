@@ -8,6 +8,7 @@ AllCops:
     - docs/**/*
     - script/**/*
     - test/**/*
+    - vendor/**/*
     - jekyll-import.gemspec
     - Rakefile
 

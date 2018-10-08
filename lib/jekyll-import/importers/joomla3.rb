@@ -52,7 +52,7 @@ module JekyllImport
         query << "JOIN `#{table_prefix}users` AS `u` ON `cn`.`created_by` = `u`.`id` "
         query << "WHERE (`cn`.`state` = '1' OR `cn`.`state` = '2') " # Only published and archived content items to be imported
 
-        query << if cid > 0
+        query << if cid.positive?
                    " AND `cn`.`catid` = '#{cid}' "
                  else
                    " AND `cn`.`catid` != '2' " # Filter out uncategorized content

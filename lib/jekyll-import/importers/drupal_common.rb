@@ -133,7 +133,7 @@ module JekyllImport
             aliases.each do |url_alias|
               redirect_prefix = ""
               categories = data["categories"]
-              unless categories.nil? || categories.length == 0
+              unless categories.nil? || categories.length.zero?
                 first_category = categories[0]
                 redirect_prefix = "#{first_category}/"
               end
@@ -142,7 +142,7 @@ module JekyllImport
               dir = ""
               file = partition.last
 
-              if (partition.first.length > 0)
+              if (partition.first.length.positive?)
                 dir = "#{partition.first}/"
                 FileUtils.mkdir_p partition.first
               end

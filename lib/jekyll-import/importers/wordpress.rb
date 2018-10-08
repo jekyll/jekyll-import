@@ -252,7 +252,7 @@ module JekyllImport
 
         comments = []
 
-        if options[:comments] && post[:comment_count].to_i > 0
+        if options[:comments] && post[:comment_count].to_i.positive?
           cquery =
             "SELECT
                comment_ID           AS `id`,

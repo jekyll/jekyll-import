@@ -79,16 +79,16 @@ module JekyllImport
           # Create the refresh layout
           # Change the refresh url if you customized your permalink config
           File.open(File.join(dirs[:_layouts], "refresh.html"), "w") do |f|
-            f.puts <<-HTML
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
-<link rel="canonical" href="{{ page.refresh_to_post_id }}.html" />
-</head>
-</html>
-HTML
+            f.puts <<~HTML
+              <!DOCTYPE html>
+              <html>
+              <head>
+              <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+              <meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
+              <link rel="canonical" href="{{ page.refresh_to_post_id }}.html" />
+              </head>
+              </html>
+            HTML
           end
 
           db[query].each do |post|

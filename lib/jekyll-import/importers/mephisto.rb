@@ -6,7 +6,7 @@ module JekyllImport
       # Accepts a hash with database config variables, exports mephisto posts into a csv
       # export PGPASSWORD if you must
       def self.postgres(c)
-        sql = <<-SQL
+        sql = <<~SQL
         BEGIN;
         CREATE TEMP TABLE jekyll AS
           SELECT title, permalink, body, published_at, filter FROM contents

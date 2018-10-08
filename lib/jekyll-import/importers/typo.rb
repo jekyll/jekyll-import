@@ -4,7 +4,7 @@ module JekyllImport
   module Importers
     class Typo < Importer
       # This SQL *should* work for both MySQL and PostgreSQL.
-      SQL = <<-EOS.freeze
+      SQL = <<~EOS.freeze
       SELECT c.id id,
              c.title title,
              c.permalink slug,

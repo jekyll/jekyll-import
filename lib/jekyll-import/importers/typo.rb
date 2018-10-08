@@ -66,10 +66,10 @@ module JekyllImport
             post[:body] << post[:extended]
           end
 
-          name = [ format("%.04d", post[:date].year),
-                   format("%.02d", post[:date].month),
-                   format("%.02d", post[:date].day),
-                   post[:slug].strip, ].join("-")
+          name = [format("%.04d", post[:date].year),
+                  format("%.02d", post[:date].month),
+                  format("%.02d", post[:date].day),
+                  post[:slug].strip,].join("-")
 
           # Can have more than one text filter in this field, but we just want
           # the first one for this.

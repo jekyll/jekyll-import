@@ -4,7 +4,7 @@ module JekyllImport
   module Importers
     class Typo < Importer
       # This SQL *should* work for both MySQL and PostgreSQL.
-      SQL = <<~EOS
+      SQL = <<~QUERY
         SELECT c.id id,
                c.title title,
                c.permalink slug,
@@ -17,7 +17,7 @@ module JekyllImport
           FROM contents c
                LEFT OUTER JOIN text_filters tf
                             ON c.text_filter_id = tf.id
-      EOS
+      QUERY
 
       def self.require_deps
         JekyllImport.require_with_fallback(%w(

@@ -3,7 +3,7 @@
 module JekyllImport
   module Importers
     class Enki < Importer
-      SQL = <<~EOS
+      SQL = <<~QUERY
         SELECT p.id,
                p.title,
                p.slug,
@@ -11,7 +11,7 @@ module JekyllImport
                p.published_at as date,
                p.cached_tag_list as tags
         FROM posts p
-      EOS
+      QUERY
 
       def self.validate(options)
         %w(dbname user).each do |option|

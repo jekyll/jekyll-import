@@ -43,6 +43,9 @@ Metrics/BlockNesting:
   Exclude:
     - lib/jekyll-import/importers/blogger.rb
 
+Metrics/ClassLength:
+  Max: 280
+
 Metrics/LineLength:
   Exclude:
     - lib/jekyll-import.rb

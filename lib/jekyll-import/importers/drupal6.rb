@@ -8,7 +8,7 @@ module JekyllImport
       include DrupalCommon
       extend DrupalCommon::ClassMethods
 
-      def self.build_query(prefix, types, engine)
+      def self.build_query(prefix, types, _engine)
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
 

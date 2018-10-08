@@ -12,19 +12,19 @@ module JekyllImport
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
 
-        if engine == "postgresql"
-          tag_group = <<EOS
+        tag_group = if engine == "postgresql"
+                      <<EOS
             (SELECT STRING_AGG(td.name, '|')
             FROM #{prefix}taxonomy_term_data td, #{prefix}taxonomy_index ti
             WHERE ti.tid = td.tid AND ti.nid = n.nid) AS tags
 EOS
-        else
-          tag_group = <<EOS
+                    else
+                      <<EOS
             (SELECT GROUP_CONCAT(td.name SEPARATOR '|')
             FROM #{prefix}taxonomy_term_data td, #{prefix}taxonomy_index ti
             WHERE ti.tid = td.tid AND ti.nid = n.nid) AS 'tags'
 EOS
-        end
+                    end
 
         query = <<EOS
                 SELECT n.nid,

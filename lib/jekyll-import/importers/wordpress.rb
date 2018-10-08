@@ -235,17 +235,17 @@ module JekyllImport
 
           db[cquery].each do |term|
             if options[:categories] && term[:type] == "category"
-              if options[:clean_entities]
-                categories << clean_entities(term[:name])
-              else
-                categories << term[:name]
-              end
+              categories << if options[:clean_entities]
+                              clean_entities(term[:name])
+                            else
+                              term[:name]
+                            end
             elsif options[:tags] && term[:type] == "post_tag"
-              if options[:clean_entities]
-                tags << clean_entities(term[:name])
-              else
-                tags << term[:name]
-              end
+              tags << if options[:clean_entities]
+                        clean_entities(term[:name])
+                      else
+                        term[:name]
+                      end
             end
           end
         end

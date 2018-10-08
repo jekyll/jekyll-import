@@ -280,7 +280,7 @@ module JekyllImport
             end
           end
           lines.join("\n")
-      end
+        end
 
         def save_photo(url, ext)
           if @grab_images
@@ -296,7 +296,7 @@ module JekyllImport
             url = "/" + path
           end
         url
-      end
+        end
       end
     end
   end

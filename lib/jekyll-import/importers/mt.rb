@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class MT < Importer
-      SUPPORTED_ENGINES = %(mysql postgres sqlite).freeze
+      SUPPORTED_ENGINES = %w(mysql postgres sqlite).freeze
 
       STATUS_DRAFT = 1
       STATUS_PUBLISHED = 2
-      MORE_CONTENT_SEPARATOR = "<!--more-->".freeze
+      MORE_CONTENT_SEPARATOR = "<!--more-->"
 
       def self.default_options
         {
@@ -82,7 +84,7 @@ module JekyllImport
         posts = posts.filter(:entry_blog_id => options["blog_id"]) if options["blog_id"]
         posts.each do |post|
           categories = post_categories.filter(
-            :mt_placement__placement_entry_id => post[:entry_id]
+            :placement_entry_id => post[:entry_id]
           ).map { |ea| encode(ea[:category_basename], options) }
 
           file_name = post_file_name(post, options)
@@ -110,6 +112,7 @@ module JekyllImport
           comments = db[:mt_comment]
           comments.each do |comment|
             next unless posts_name_by_id.key?(comment[:comment_entry_id]) # if the entry exists
+
             dir_name, base_name = comment_file_dir_and_base_name(posts_name_by_id, comment, options)
             FileUtils.mkdir_p "_comments/#{dir_name}"
 

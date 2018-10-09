@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Behance < Importer
@@ -18,9 +20,7 @@ module JekyllImport
 
       def self.validate(options)
         %w(user api_token).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." if options[option].nil?
         end
       end
 
@@ -38,7 +38,7 @@ module JekyllImport
 
         user_projects = client.user_projects(user)
 
-        puts "#{user_projects.length} project(s) found. Importing now..."
+        Jekyll.logger.info "#{user_projects.length} project(s) found. Importing now..."
 
         user_projects.each do |project|
           details = client.project(project["id"])
@@ -66,11 +66,12 @@ module JekyllImport
           end
         end
 
-        puts "Finished importing."
+        Jekyll.logger.info "Finished importing."
       end
 
       class << self
         private
+
         def fetch_behance(token)
           ::Behance::Client.new(:access_token => token)
         end

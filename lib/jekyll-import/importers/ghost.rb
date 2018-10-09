@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Ghost < Importer
@@ -26,8 +28,9 @@ module JekyllImport
         end
       end
 
-      private
       class << self
+        private
+
         def fetch_posts(dbfile)
           db = Sequel.sqlite(dbfile)
           query = "SELECT `title`, `slug`, `markdown`, `created_at`, `published_at`, `status`, `page` FROM posts"

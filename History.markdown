@@ -1,5 +1,21 @@
 ## HEAD
 
+### Minor Enhancements
+
+  * Fixes missing site prefix in user table (#343)
+  * Added option to configure port. Added missing prefix to taxonomy tables. (#349)
+  * Column name typo (#351)
+
+### Bug Fixes
+
+  * Use mysql by default in Drupal importers. (#347)
+
+### Development Fixes  
+  
+  * style: inherit rubocop-jekyll's rules (#357)
+
+## 0.14.0 / 2018-02-03
+
 ### Development Fixes
 
   * Security: Fix alert on activesupport (#332)

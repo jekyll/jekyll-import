@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Joomla < Importer
       def self.validate(options)
         %w(dbname user).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." if options[option].nil?
         end
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Posterous < Importer
@@ -39,10 +41,11 @@ module JekyllImport
       def self.fetch_images(directory, imgs)
         def self.fetch_one(url, limit = 10)
           raise ArgumentError, "HTTP redirect too deep" if limit.zero?
+
           response = Net::HTTP.get_response(URI.parse(url))
           case response
           when Net::HTTPSuccess     then response.body
-          when Net::HTTPRedirection then self.fetch_one(response["location"], limit - 1)
+          when Net::HTTPRedirection then fetch_one(response["location"], limit - 1)
           else
             response.error!
           end
@@ -54,14 +57,14 @@ module JekyllImport
           fullurl = img["full"]["url"]
           uri = URI.parse(fullurl)
           imgname = uri.path.split("/")[-1]
-          imgdata = self.fetch_one(fullurl)
-          open(directory + "/" + imgname, "wb") do |file|
+          imgdata = fetch_one(fullurl)
+          File.open(directory + "/" + imgname, "wb") do |file|
             file.write imgdata
           end
           urls.push(directory + "/" + imgname)
         end
 
-        return urls
+        urls
       end
 
       def self.process(options)
@@ -76,7 +79,7 @@ module JekyllImport
         opts = defaults.merge(opts)
         FileUtils.mkdir_p "_posts"
 
-        posts = JSON.parse(self.fetch("/api/v2/users/me/sites/#{opts[:blog]}/posts?api_token=#{@api_token}").body)
+        posts = JSON.parse(fetch("/api/v2/users/me/sites/#{opts[:blog]}/posts?api_token=#{@api_token}").body)
         page = 1
 
         while posts.any?
@@ -94,7 +97,7 @@ module JekyllImport
               post_imgs = post["media"]["images"]
               if post_imgs.any?
                 img_dir = format("imgs/%s", basename)
-                img_urls = self.fetch_images(img_dir, post_imgs)
+                img_urls = fetch_images(img_dir, post_imgs)
 
                 img_urls.map! do |url|
                   '<li><img src="' + opts[:base_path] + url + '"></li>'
@@ -123,7 +126,7 @@ module JekyllImport
           end
 
           page += 1
-          posts = JSON.parse(self.fetch("/api/v2/users/me/sites/#{opts[:blog]}/posts?api_token=#{@api_token}&page=#{page}").body)
+          posts = JSON.parse(fetch("/api/v2/users/me/sites/#{opts[:blog]}/posts?api_token=#{@api_token}&page=#{page}").body)
         end
       end
     end

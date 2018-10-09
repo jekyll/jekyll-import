@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Util
-
     # Ruby translation of wordpress wpautop (see https://core.trac.wordpress.org/browser/trunk/src/wp-includes/formatting.php)
     #
     # A group of regex replaces used to identify text formatted with newlines and

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class RSS < Importer
@@ -7,9 +9,7 @@ module JekyllImport
       end
 
       def self.validate(options)
-        if options["source"].nil?
-          abort "Missing mandatory option --source."
-        end
+        abort "Missing mandatory option --source." if options["source"].nil?
       end
 
       def self.require_deps
@@ -34,7 +34,7 @@ module JekyllImport
         body = options.fetch("body", ["description"])
 
         content = ""
-        open(source) { |s| content = s.read }
+        URI.parse(source).open { |s| content = s.read }
         rss = ::RSS::Parser.parse(content, false)
 
         raise "There doesn't appear to be any RSS items at the source (#{source}) provided." unless rss
@@ -50,7 +50,8 @@ module JekyllImport
             "layout" => "post",
             "title"  => item.title,
           }
-          header["tag"] = options["tag"] if !options.to_s.empty?
+
+          header["tag"] = options["tag"] unless options.to_s.empty?
 
           frontmatter.each do |value|
             header[value] = item.send(value)

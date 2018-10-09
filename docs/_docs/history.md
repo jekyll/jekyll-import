@@ -5,6 +5,17 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.14.0 / 2018-02-03
+
+### Development Fixes
+
+- Security: Fix alert on activesupport ([#332]({{ site.repository }}/issues/332))
+- Test against Ruby 2.5 ([#336]({{ site.repository }}/issues/336))
+
+### Minor Enhancements
+
+- Add support for Drupal 7 installations with PostgreSQL database ([#331]({{ site.repository }}/issues/331))
+
 ## 0.13.0 / 2017-11-05
 
 ### Minor Enhancements

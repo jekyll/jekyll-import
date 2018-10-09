@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module JekyllImport
   module Importers
@@ -27,6 +27,7 @@ module JekyllImport
 
         ::CSV.foreach(file) do |row|
           next if row[0] == "title" # header
+
           posts += 1
           write_post(CSVPost.new(row), options)
         end
@@ -82,12 +83,12 @@ module JekyllImport
       def self.write_frontmatter(f, post, options)
         no_frontmatter = options.fetch("no-front-matter", false)
         unless no_frontmatter
-          f.puts YAML.dump({
+          f.puts YAML.dump(
             "layout"    => "post",
             "title"     => post.title,
             "date"      => post.published_at.to_s,
-            "permalink" => post.permalink,
-          })
+            "permalink" => post.permalink
+          )
           f.puts "---"
         end
       end

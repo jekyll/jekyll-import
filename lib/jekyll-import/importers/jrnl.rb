@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Jrnl < Importer
@@ -57,27 +59,27 @@ module JekyllImport
 
       # strip body from jrnl entry
       def self.get_post_content(content)
-        return content[1]
+        content[1]
       end
 
       # strip timestamp from the dateline
       def self.get_date(content, offset)
-        return content[0, offset]
+        content[0, offset]
       end
 
       # strip title from the dateline
       def self.get_title(content, offset)
-        return content[offset + 1, content.length]
+        content[offset + 1, content.length]
       end
 
       # generate slug
       def self.create_slug(title)
-        return title.downcase.strip.tr(" ", "-").gsub(%r![^\w-]!, "")
+        title.downcase.strip.tr(" ", "-").gsub(%r![^\w-]!, "")
       end
 
       # generate filename
       def self.create_filename(date, slug, extension)
-        return "#{Time.parse(date).strftime("%Y-%m-%d")}-#{slug}.#{extension}"
+        "#{Time.parse(date).strftime("%Y-%m-%d")}-#{slug}.#{extension}"
       end
 
       # Prepare YAML meta data
@@ -98,7 +100,7 @@ module JekyllImport
           "title"  => title,
           "date"   => Time.parse(date).strftime("%Y-%m-%d %H:%M %z"),
         }.to_yaml
-        return data
+        data
       end
 
       # Writes given data to file

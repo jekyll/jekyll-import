@@ -1,14 +1,57 @@
+require: rubocop-jekyll
 inherit_gem:
-  jekyll: .rubocop.yml
+  rubocop-jekyll: .rubocop.yml
+
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - docs/**/*
+    - script/**/*
+    - test/**/*
+    - vendor/**/*
+    - jekyll-import.gemspec
+    - Rakefile
+
+Lint/NestedMethodDefinition:
+  Exclude:
+    - lib/jekyll-import/importers/posterous.rb
+
+Lint/UriEscapeUnescape:
+  Exclude:
+    - lib/jekyll-import/importers/blogger.rb
+    - lib/jekyll-import/importers/tumblr.rb
+
+Lint/UselessAssignment:
+  Exclude:
+    - lib/jekyll-import/importers/easyblog.rb
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Max: 20
+  Exclude:
+    - lib/jekyll-import/importers/blogger.rb
+    - lib/jekyll-import/importers/tumblr.rb
+    - lib/jekyll-import/importers/wordpress.rb
+
 Metrics/BlockLength:
   Exclude:
     - lib/jekyll-import/importers/drupal_common.rb
     - lib/jekyll-import/importers/posterous.rb
     - lib/jekyll-import/importers/wordpress.rb
     - lib/jekyll-import/importers/wordpressdotcom.rb
-    - test/**/*
-    - jekyll-import.gemspec
-    - Rakefile
+
+Metrics/BlockNesting:
+  Exclude:
+    - lib/jekyll-import/importers/blogger.rb
+
+Metrics/ClassLength:
+  Max: 280
+
 Metrics/LineLength:
   Exclude:
     - lib/jekyll-import.rb
@@ -35,16 +78,13 @@ Metrics/LineLength:
     - lib/jekyll-import/importers/typo.rb
     - lib/jekyll-import/importers/wordpress.rb
     - lib/jekyll-import/importers/wordpressdotcom.rb
-    - test/**/*
-    - jekyll-import.gemspec
-    - Rakefile
+
 Metrics/MethodLength:
   Exclude:
-    - test/**/*.rb
-    - lib/jekyll-import/util.rb
     - lib/jekyll-import/importers/behance.rb
     - lib/jekyll-import/importers/blogger.rb
     - lib/jekyll-import/importers/drupal_common.rb
+    - lib/jekyll-import/importers/drupal7.rb
     - lib/jekyll-import/importers/easyblog.rb
     - lib/jekyll-import/importers/enki.rb
     - lib/jekyll-import/importers/google_reader.rb
@@ -55,10 +95,30 @@ Metrics/MethodLength:
     - lib/jekyll-import/importers/mt.rb
     - lib/jekyll-import/importers/posterous.rb
     - lib/jekyll-import/importers/rss.rb
-    - lib/jekyll-import/importers/s9y.rb
     - lib/jekyll-import/importers/s9y_database.rb
+    - lib/jekyll-import/importers/s9y.rb
     - lib/jekyll-import/importers/textpattern.rb
     - lib/jekyll-import/importers/tumblr.rb
     - lib/jekyll-import/importers/typo.rb
     - lib/jekyll-import/importers/wordpress.rb
     - lib/jekyll-import/importers/wordpressdotcom.rb
+    - lib/jekyll-import/util.rb
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+Style/DateTime:
+  Exclude:
+    - lib/jekyll-import/importers/csv.rb
+    - lib/jekyll-import/importers/marley.rb
+
+Style/FormatStringToken:
+  EnforcedStyle: unannotated
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - lib/jekyll-import/importers/tumblr.rb
+
+Style/MultilineBlockChain:
+  Exclude:
+    - lib/jekyll-import/importers/s9y_database.rb

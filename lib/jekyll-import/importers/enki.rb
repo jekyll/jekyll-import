@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Enki < Importer
-      SQL = <<-EOS.freeze
+      SQL = <<~SQL
         SELECT p.id,
                p.title,
                p.slug,
@@ -9,13 +11,11 @@ module JekyllImport
                p.published_at as date,
                p.cached_tag_list as tags
         FROM posts p
-EOS
+      SQL
 
       def self.validate(options)
         %w(dbname user).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." if options[option].nil?
         end
       end
 
@@ -52,10 +52,12 @@ EOS
                              :encoding => "utf8")
 
         db[SQL].each do |post|
-          name = [ format("%.04d", post[:date].year),
-                   format("%.02d", post[:date].month),
-                   format("%.02d", post[:date].day),
-                   post[:slug].strip, ].join("-")
+          name = [
+            format("%.04d", post[:date].year),
+            format("%.02d", post[:date].month),
+            format("%.02d", post[:date].day),
+            post[:slug].strip,
+          ].join("-")
           name += ".textile"
 
           File.open("_posts/#{name}", "w") do |f|

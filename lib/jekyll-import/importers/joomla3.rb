@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Joomla3 < Importer
       def self.validate(options)
         %w(dbname user prefix).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." if options[option].nil?
         end
       end
 
@@ -30,12 +30,12 @@ module JekyllImport
       end
 
       def self.process(options)
-        dbname  = options.fetch("dbname")
-        user    = options.fetch("user")
-        pass    = options.fetch("password", "")
-        host    = options.fetch("host", "localhost")
-        port    = options.fetch("port", 3306).to_i
-        cid	    = options.fetch("category", 0)
+        dbname = options.fetch("dbname")
+        user   = options.fetch("user")
+        pass   = options.fetch("password", "")
+        host   = options.fetch("host", "localhost")
+        port   = options.fetch("port", 3306).to_i
+        cid    = options.fetch("category", 0)
         table_prefix = options.fetch("prefix", "jos_")
 
         db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :port => port, :encoding => "utf8")
@@ -50,7 +50,7 @@ module JekyllImport
         query << "JOIN `#{table_prefix}users` AS `u` ON `cn`.`created_by` = `u`.`id` "
         query << "WHERE (`cn`.`state` = '1' OR `cn`.`state` = '2') " # Only published and archived content items to be imported
 
-        query << if cid > 0
+        query << if cid.positive?
                    " AND `cn`.`catid` = '#{cid}' "
                  else
                    " AND `cn`.`catid` != '2' " # Filter out uncategorized content

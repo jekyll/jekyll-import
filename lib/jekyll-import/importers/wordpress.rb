@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class WordPress < Importer
@@ -107,12 +109,12 @@ module JekyllImport
         FileUtils.mkdir_p("_drafts") if options[:status].include? :draft
 
         db = Sequel.mysql2(options[:dbname],
-            :user     => options[:user],
-            :password => options[:pass],
-            :socket   => options[:socket],
-            :host     => options[:host],
-            :port     => options[:port],
-            :encoding => "utf8")
+                           :user     => options[:user],
+                           :password => options[:pass],
+                           :socket   => options[:socket],
+                           :host     => options[:host],
+                           :port     => options[:port],
+                           :encoding => "utf8")
 
         px = options[:table_prefix]
         sx = options[:site_prefix]
@@ -129,9 +131,7 @@ module JekyllImport
            WHERE posts.post_type = 'page'"
 
         db[page_name_query].each do |page|
-          if !page[:slug] || page[:slug].empty?
-            page[:slug] = sluggify(page[:title])
-          end
+          page[:slug] = sluggify(page[:title]) if page.fetch(:slug, "").empty?
           page_name_list[ page[:id] ] = {
             :slug   => page[:slug],
             :parent => page[:parent],
@@ -156,16 +156,16 @@ module JekyllImport
              users.user_email    AS `author_email`,
              users.user_url      AS `author_url`
            FROM #{px}#{sx}posts AS `posts`
-             LEFT JOIN #{px}users AS `users`
+             LEFT JOIN #{px}#{sx}users AS `users`
                ON posts.post_author = users.ID"
 
         if options[:status] && !options[:status].empty?
           status = options[:status][0]
           posts_query << "
            WHERE posts.post_status = '#{status}'"
-          options[:status][1..-1].each do |status|
+          options[:status][1..-1].each do |post_status|
             posts_query << " OR
-             posts.post_status = '#{status}'"
+             posts.post_status = '#{post_status}'"
           end
         end
 
@@ -180,21 +180,15 @@ module JekyllImport
         extension = options[:extension]
 
         title = post[:title]
-        if options[:clean_entities]
-          title = clean_entities(title)
-        end
+        title = clean_entities(title) if options[:clean_entities]
 
         slug = post[:slug]
-        if !slug || slug.empty?
-          slug = sluggify(title)
-        end
+        slug = sluggify(title) if !slug || slug.empty?
 
         date = post[:date] || Time.now
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
         content = post[:content].to_s
-        if options[:clean_entities]
-          content = clean_entities(content)
-        end
+        content = clean_entities(content) if options[:clean_entities]
 
         excerpt = post[:excerpt].to_s
 
@@ -233,24 +227,24 @@ module JekyllImport
 
           db[cquery].each do |term|
             if options[:categories] && term[:type] == "category"
-              if options[:clean_entities]
-                categories << clean_entities(term[:name])
-              else
-                categories << term[:name]
-              end
+              categories << if options[:clean_entities]
+                              clean_entities(term[:name])
+                            else
+                              term[:name]
+                            end
             elsif options[:tags] && term[:type] == "post_tag"
-              if options[:clean_entities]
-                tags << clean_entities(term[:name])
-              else
-                tags << term[:name]
-              end
+              tags << if options[:clean_entities]
+                        clean_entities(term[:name])
+                      else
+                        term[:name]
+                      end
             end
           end
         end
 
         comments = []
 
-        if options[:comments] && post[:comment_count].to_i > 0
+        if options[:comments] && post[:comment_count].to_i.positive?
           cquery =
             "SELECT
                comment_ID           AS `id`,
@@ -267,16 +261,10 @@ module JekyllImport
 
           db[cquery].each do |comment|
             comcontent = comment[:content].to_s
-            if comcontent.respond_to?(:force_encoding)
-              comcontent.force_encoding("UTF-8")
-            end
-            if options[:clean_entities]
-              comcontent = clean_entities(comcontent)
-            end
+            comcontent.force_encoding("UTF-8") if comcontent.respond_to?(:force_encoding)
+            comcontent = clean_entities(comcontent) if options[:clean_entities]
             comauthor = comment[:author].to_s
-            if options[:clean_entities]
-              comauthor = clean_entities(comauthor)
-            end
+            comauthor = clean_entities(comauthor) if options[:clean_entities]
 
             comments << {
               "id"           => comment[:id].to_i,
@@ -337,9 +325,7 @@ module JekyllImport
       end
 
       def self.clean_entities(text)
-        if text.respond_to?(:force_encoding)
-          text.force_encoding("UTF-8")
-        end
+        text.force_encoding("UTF-8") if text.respond_to?(:force_encoding)
         text = HTMLEntities.new.encode(text, :named)
         # We don't want to convert these, it would break all
         # HTML tags in the post and comments.

@@ -3,7 +3,7 @@
 module JekyllImport
   module Importers
     class Enki < Importer
-      SQL = <<~QUERY
+      SQL = <<~SQL
         SELECT p.id,
                p.title,
                p.slug,
@@ -11,7 +11,7 @@ module JekyllImport
                p.published_at as date,
                p.cached_tag_list as tags
         FROM posts p
-      QUERY
+      SQL
 
       def self.validate(options)
         %w(dbname user).each do |option|
@@ -52,10 +52,12 @@ module JekyllImport
                              :encoding => "utf8")
 
         db[SQL].each do |post|
-          name = [format("%.04d", post[:date].year),
-                  format("%.02d", post[:date].month),
-                  format("%.02d", post[:date].day),
-                  post[:slug].strip,].join("-")
+          name = [
+            format("%.04d", post[:date].year),
+            format("%.02d", post[:date].month),
+            format("%.02d", post[:date].day),
+            post[:slug].strip,
+          ].join("-")
           name += ".textile"
 
           File.open("_posts/#{name}", "w") do |f|

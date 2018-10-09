@@ -12,7 +12,7 @@ module JekyllImport
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
 
-        query = <<QUERY
+        query = <<SQL
                 SELECT n.nid,
                        n.title,
                        nr.body,
@@ -28,7 +28,7 @@ module JekyllImport
                 WHERE (#{types})
                   AND n.vid = nr.vid
                 GROUP BY n.nid
-QUERY
+SQL
 
         query
       end

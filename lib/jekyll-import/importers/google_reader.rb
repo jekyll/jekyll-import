@@ -31,7 +31,7 @@ module JekyllImport
       def self.process(options)
         source = options.fetch("source")
 
-        File.open(source) do |content|
+        URI.parse(source).open do |content|
           feed = RSS::Parser.parse(content)
 
           raise "There doesn't appear to be any RSS items at the source (#{source}) provided." unless feed

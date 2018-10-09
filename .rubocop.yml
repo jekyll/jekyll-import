@@ -15,10 +15,15 @@ AllCops:
 Lint/NestedMethodDefinition:
   Exclude:
     - lib/jekyll-import/importers/posterous.rb
+
 Lint/UriEscapeUnescape:
   Exclude:
     - lib/jekyll-import/importers/blogger.rb
     - lib/jekyll-import/importers/tumblr.rb
+
+Lint/UselessAssignment:
+  Exclude:
+    - lib/jekyll-import/importers/easyblog.rb
 
 Metrics/AbcSize:
   Enabled: false

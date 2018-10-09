@@ -131,7 +131,7 @@ module JekyllImport
            WHERE posts.post_type = 'page'"
 
         db[page_name_query].each do |page|
-          page[:slug] = sluggify(page[:title]) if !page[:slug] || page[:slug].empty?
+          page[:slug] = sluggify(page[:title]) if page.fetch(:slug, "").empty?
           page_name_list[ page[:id] ] = {
             :slug   => page[:slug],
             :parent => page[:parent],
@@ -163,9 +163,9 @@ module JekyllImport
           status = options[:status][0]
           posts_query << "
            WHERE posts.post_status = '#{status}'"
-          options[:status][1..-1].each do |sts|
+          options[:status][1..-1].each do |post_status|
             posts_query << " OR
-             posts.post_status = '#{sts}'"
+             posts.post_status = '#{post_status}'"
           end
         end
 

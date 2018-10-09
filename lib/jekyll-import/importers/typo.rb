@@ -4,7 +4,7 @@ module JekyllImport
   module Importers
     class Typo < Importer
       # This SQL *should* work for both MySQL and PostgreSQL.
-      SQL = <<~QUERY
+      SQL = <<~SQL
         SELECT c.id id,
                c.title title,
                c.permalink slug,
@@ -17,7 +17,7 @@ module JekyllImport
           FROM contents c
                LEFT OUTER JOIN text_filters tf
                             ON c.text_filter_id = tf.id
-      QUERY
+      SQL
 
       def self.require_deps
         JekyllImport.require_with_fallback(%w(
@@ -64,10 +64,12 @@ module JekyllImport
             post[:body] << post[:extended]
           end
 
-          name = [format("%.04d", post[:date].year),
-                  format("%.02d", post[:date].month),
-                  format("%.02d", post[:date].day),
-                  post[:slug].strip,].join("-")
+          name = [
+            format("%.04d", post[:date].year),
+            format("%.02d", post[:date].month),
+            format("%.02d", post[:date].day),
+            post[:slug].strip,
+          ].join("-")
 
           # Can have more than one text filter in this field, but we just want
           # the first one for this.

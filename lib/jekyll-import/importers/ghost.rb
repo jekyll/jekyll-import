@@ -29,6 +29,8 @@ module JekyllImport
       end
 
       class << self
+        private
+
         def fetch_posts(dbfile)
           db = Sequel.sqlite(dbfile)
           query = "SELECT `title`, `slug`, `markdown`, `created_at`, `published_at`, `status`, `page` FROM posts"

@@ -43,13 +43,13 @@ module JekyllImport
 
         listener = BloggerAtomStreamListener.new
 
-        listener.leave_blogger_info = !options.fetch("no-blogger-info", false),
-                                      listener.comments = options.fetch("comments", false),
+        listener.leave_blogger_info = !options.fetch("no-blogger-info", false)
+        listener.comments = options.fetch("comments", false)
 
-                                      File.open(source, "r") do |f|
-                                        f.flock(File::LOCK_SH)
-                                        REXML::Parsers::StreamParser.new(f, listener).parse
-                                      end
+        File.open(source, "r") do |f|
+          f.flock(File::LOCK_SH)
+          REXML::Parsers::StreamParser.new(f, listener).parse
+        end
 
         options["original-url-base"] = listener.original_url_base
 

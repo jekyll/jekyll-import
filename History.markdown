@@ -10,6 +10,10 @@
 
   * Use mysql by default in Drupal importers. (#347)
 
+### Development Fixes  
+  
+  * style: inherit rubocop-jekyll's rules (#357)
+
 ## 0.14.0 / 2018-02-03
 
 ### Development Fixes

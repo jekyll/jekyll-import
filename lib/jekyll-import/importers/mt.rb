@@ -3,7 +3,7 @@
 module JekyllImport
   module Importers
     class MT < Importer
-      SUPPORTED_ENGINES = %(mysql postgres sqlite)
+      SUPPORTED_ENGINES = %w(mysql postgres sqlite).freeze
 
       STATUS_DRAFT = 1
       STATUS_PUBLISHED = 2

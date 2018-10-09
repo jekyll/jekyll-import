@@ -26,15 +26,15 @@ module JekyllImport
         images = (post_hpricot / "img")
         return if images.empty?
 
-        Jekyll.logger.info "Downloading images for " + title
+        Jekyll.logger.info "Downloading images for ", title
         images.each do |i|
           uri = i["src"]
 
           i["src"] = format("{{ site.baseurl }}/%s/%s", assets_folder, File.basename(uri))
           dst = File.join(assets_folder, File.basename(uri))
-          Jekyll.logger.info "  " + uri
+          Jekyll.logger.info uri
           if File.exist?(dst)
-            Jekyll.logger.info "    Already in cache. Clean assets folder if you want a redownload."
+            Jekyll.logger.info "Already in cache. Clean assets folder if you want a redownload."
             next
           end
           begin
@@ -43,9 +43,9 @@ module JekyllImport
                 out.puts f.read
               end
             end
-            Jekyll.logger.info "    OK!"
+            Jekyll.logger.info "OK!"
           rescue StandardError => e
-            Jekyll.logger.error "    Error: #{e.message}"
+            Jekyll.logger.error "Error: #{e.message}"
             Jekyll.logger.error e.backtrace.join("\n")
           end
         end

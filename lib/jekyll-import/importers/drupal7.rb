@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "jekyll-import/importers/drupal_common"
 
 module JekyllImport
@@ -10,21 +12,21 @@ module JekyllImport
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
 
-        if engine == "postgresql"
-          tag_group = <<EOS
+        tag_group = if engine == "postgresql"
+                      <<POSTGRESQL
             (SELECT STRING_AGG(td.name, '|')
             FROM #{prefix}taxonomy_term_data td, #{prefix}taxonomy_index ti
             WHERE ti.tid = td.tid AND ti.nid = n.nid) AS tags
-EOS
-        else
-          tag_group = <<EOS
+POSTGRESQL
+                    else
+                      <<SQL
             (SELECT GROUP_CONCAT(td.name SEPARATOR '|')
             FROM #{prefix}taxonomy_term_data td, #{prefix}taxonomy_index ti
             WHERE ti.tid = td.tid AND ti.nid = n.nid) AS 'tags'
-EOS
-        end
+SQL
+                    end
 
-        query = <<EOS
+        query = <<QUERY
                 SELECT n.nid,
                        n.title,
                        fdb.body_value,
@@ -37,9 +39,9 @@ EOS
                 LEFT JOIN #{prefix}field_data_body AS fdb
                   ON fdb.entity_id = n.nid AND fdb.entity_type = 'node'
                 WHERE (#{types})
-EOS
+QUERY
 
-        return query
+        query
       end
 
       def self.aliases_query(prefix)
@@ -56,7 +58,7 @@ EOS
           "categories" => tags.split("|"),
         }
 
-        return data, content
+        [data, content]
       end
     end
   end

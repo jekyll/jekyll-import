@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class TextPattern < Importer
@@ -12,7 +14,7 @@ module JekyllImport
                       Keywords \
                FROM textpattern \
                WHERE Status = '4' OR \
-                     Status = '5'".freeze
+                     Status = '5'"
 
       def self.require_deps
         JekyllImport.require_with_fallback(%w(

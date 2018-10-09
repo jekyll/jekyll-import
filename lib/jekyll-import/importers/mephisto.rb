@@ -1,28 +1,28 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Mephisto < Importer
       # Accepts a hash with database config variables, exports mephisto posts into a csv
       # export PGPASSWORD if you must
       def self.postgres(c)
-        sql = <<-SQL
-        BEGIN;
-        CREATE TEMP TABLE jekyll AS
-          SELECT title, permalink, body, published_at, filter FROM contents
-          WHERE user_id = 1 AND type = 'Article' ORDER BY published_at;
-        COPY jekyll TO STDOUT WITH CSV HEADER;
-        ROLLBACK;
+        sql = <<~SQL
+          BEGIN;
+          CREATE TEMP TABLE jekyll AS
+            SELECT title, permalink, body, published_at, filter FROM contents
+            WHERE user_id = 1 AND type = 'Article' ORDER BY published_at;
+          COPY jekyll TO STDOUT WITH CSV HEADER;
+          ROLLBACK;
         SQL
         command = %(psql -h #{c[:host] || "localhost"} -c "#{sql.strip}" #{c[:database]} #{c[:username]} -o #{c[:filename] || "posts.csv"})
-        puts command
+        Jekyll.logger.info "Executing:", command
         `#{command}`
         CSV.process
       end
 
       def self.validate(options)
         %w(dbname user).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." if options[option].nil?
         end
       end
 
@@ -55,7 +55,7 @@ module JekyllImport
                WHERE user_id = 1 AND \
                      type = 'Article' AND \
                      published_at IS NOT NULL \
-               ORDER BY published_at".freeze
+               ORDER BY published_at"
 
       def self.process(options)
         dbname = options.fetch("dbname")

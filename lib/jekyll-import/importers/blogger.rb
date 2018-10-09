@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Blogger < Importer
@@ -41,8 +43,8 @@ module JekyllImport
 
         listener = BloggerAtomStreamListener.new
 
-        listener.leave_blogger_info = !options.fetch("no-blogger-info", false),
-        listener.comments = options.fetch("comments", false),
+        listener.leave_blogger_info = !options.fetch("no-blogger-info", false)
+        listener.comments = options.fetch("comments", false)
 
         File.open(source, "r") do |f|
           f.flock(File::LOCK_SH)
@@ -78,6 +80,7 @@ module JekyllImport
                 quote = Regexp.last_match(1)
                 post_file = Dir.glob("_posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}").first
                 raise "Could not found: _posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}" if post_file.nil?
+
                 " href=#{quote}{{ site.baseurl }}{% post_url #{File.basename(post_file, ".html")} %}#{quote}"
               end
 
@@ -106,12 +109,13 @@ module JekyllImport
         attr_reader :original_url_base
 
         def tag_start(tag, attrs)
-          @tag_bread = [] unless @tag_bread
+          @tag_bread ||= []
           @tag_bread.push(tag)
 
           case tag
           when "entry"
             raise "nest entry element" if @in_entry_elem
+
             @in_entry_elem = { :meta => {}, :body => nil }
           when "title"
             if @in_entry_elem
@@ -129,9 +133,7 @@ module JekyllImport
               end
             end
           when "content"
-            if @in_entry_elem
-              @in_entry_elem[:meta][:content_type] = attrs["type"]
-            end
+            @in_entry_elem[:meta][:content_type] = attrs["type"] if @in_entry_elem
           when "link"
             if @in_entry_elem
               if attrs["rel"] == "alternate" && attrs["type"] == "text/html"
@@ -143,13 +145,9 @@ module JekyllImport
               end
             end
           when "media:thumbnail"
-            if @in_entry_elem
-              @in_entry_elem[:meta][:thumbnail] = attrs["url"]
-            end
+            @in_entry_elem[:meta][:thumbnail] = attrs["url"] if @in_entry_elem
           when "thr:in-reply-to"
-            if @in_entry_elem
-              @in_entry_elem[:meta][:post_id] = attrs["ref"]
-            end
+            @in_entry_elem[:meta][:post_id] = attrs["ref"] if @in_entry_elem
           end
         end
 
@@ -167,9 +165,7 @@ module JekyllImport
             when "content"
               @in_entry_elem[:body] = text
             when "name"
-              if @tag_bread[-2..-1] == %w(author name)
-                @in_entry_elem[:meta][:author] = text
-              end
+              @in_entry_elem[:meta][:author] = text if @tag_bread[-2..-1] == %w(author name)
             when "app:draft"
               if @tag_bread[-2..-1] == %w(app:control app:draft)
                 @in_entry_elem[:meta][:draft] = true if text == "yes"
@@ -184,7 +180,7 @@ module JekyllImport
             raise "nest entry element" unless @in_entry_elem
 
             if @in_entry_elem[:meta][:kind] == "post"
-              post_data = get_post_data_from_in_entry_elem_info
+              post_data = post_data_from_in_entry_elem_info
 
               if post_data
                 target_dir = "_posts"
@@ -202,7 +198,7 @@ module JekyllImport
                 end
               end
             elsif @in_entry_elem[:meta][:kind] == "comment" && @comments
-              post_data = get_post_data_from_in_entry_elem_info
+              post_data = post_data_from_in_entry_elem_info
 
               if post_data
                 target_dir = "_comments"
@@ -226,7 +222,7 @@ module JekyllImport
           @tag_bread.pop
         end
 
-        def get_post_data_from_in_entry_elem_info
+        def post_data_from_in_entry_elem_info
           if @in_entry_elem.nil? || !@in_entry_elem.key?(:meta) || !@in_entry_elem[:meta].key?(:kind)
             nil
           elsif @in_entry_elem[:meta][:kind] == "post"
@@ -264,20 +260,14 @@ module JekyllImport
             body = @in_entry_elem[:body]
 
             # body escaping associated with liquid
-            if body =~ %r!{{!
-              body.gsub!(%r!{{!, '{{ "{{" }}')
-            end
-            if body =~ %r!{%!
-              body.gsub!(%r!{%!, '{{ "{%" }}')
-            end
+            body.gsub!(%r!{{!, '{{ "{{" }}') if body =~ %r!{{!
+            body.gsub!(%r!{%!, '{{ "{%" }}') if body =~ %r!{%!
 
             { :filename => filename, :header => header, :body => body }
           elsif @in_entry_elem[:meta][:kind] == "comment"
             timestamp = Time.parse(@in_entry_elem[:meta][:published]).strftime("%Y-%m-%d")
             if @in_entry_elem[:meta][:original_url]
-              unless @comment_seq
-                @comment_seq = 1
-              end
+              @comment_seq ||= 1
 
               original_uri = URI.parse(@in_entry_elem[:meta][:original_url])
               original_path = original_uri.path.to_s
@@ -303,17 +293,12 @@ module JekyllImport
             body = @in_entry_elem[:body]
 
             # body escaping associated with liquid
-            if body =~ %r!{{!
-              body.gsub!(%r!{{!, '{{ "{{" }}')
-            end
-            if body =~ %r!{%!
-              body.gsub!(%r!{%!, '{{ "{%" }}')
-            end
+            body.gsub!(%r!{{!, '{{ "{{" }}') if body =~ %r!{{!
+            body.gsub!(%r!{%!, '{{ "{%" }}') if body =~ %r!{%!
 
             { :filename => filename, :header => header, :body => body }
           end
         end
-
       end
     end
   end

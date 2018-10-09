@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module JekyllImport
   module Importers
@@ -24,30 +24,29 @@ module JekyllImport
       # Will modify post DOM tree
       def self.download_images(title, post_hpricot, assets_folder)
         images = (post_hpricot / "img")
-        if images.empty?
-          return
-        end
-        puts "Downloading images for " + title
+        return if images.empty?
+
+        Jekyll.logger.info "Downloading images for ", title
         images.each do |i|
           uri = i["src"]
 
           i["src"] = format("{{ site.baseurl }}/%s/%s", assets_folder, File.basename(uri))
           dst = File.join(assets_folder, File.basename(uri))
-          puts "  " + uri
+          Jekyll.logger.info uri
           if File.exist?(dst)
-            puts "    Already in cache. Clean assets folder if you want a redownload."
+            Jekyll.logger.info "Already in cache. Clean assets folder if you want a redownload."
             next
           end
           begin
-            open(uri, :allow_redirections => :safe) do |f|
+            URI.parse(uri, :allow_redirections => :safe).open do |f|
               File.open(dst, "wb") do |out|
                 out.puts f.read
               end
             end
-            puts "    OK!"
-          rescue => e
-            puts "    Error: #{e.message}"
-            puts e.backtrace.join("\n")
+            Jekyll.logger.info "OK!"
+          rescue StandardError => e
+            Jekyll.logger.error "Error: #{e.message}"
+            Jekyll.logger.error e.backtrace.join("\n")
           end
         end
       end
@@ -76,23 +75,21 @@ module JekyllImport
         end
 
         def published_at
-          if published?
-            @published_at ||= Time.parse(text_for("wp:post_date"))
-          end
+          @published_at ||= Time.parse(text_for("wp:post_date")) if published?
         end
 
         def status
           @status ||= text_for("wp:status")
         end
-      
-        def password
-          @post_password ||= text_for('wp:post_password')
+
+        def post_password
+          @post_password ||= text_for("wp:post_password")
         end
 
         def post_type
           @post_type ||= text_for("wp:post_type")
         end
-      
+
         def parent_id
           @parent_id ||= text_for("wp:post_parent")
         end
@@ -171,7 +168,7 @@ module JekyllImport
             "type"       => item.post_type,
             "parent_id"  => item.parent_id,
             "published"  => item.published?,
-            "password"   => item.password,
+            "password"   => item.post_password,
             "status"     => item.status,
             "categories" => categories,
             "tags"       => tags,
@@ -183,9 +180,7 @@ module JekyllImport
             content = Hpricot(item.text_for("content:encoded"))
             header["excerpt"] = item.excerpt if item.excerpt
 
-            if fetch
-              download_images(item.title, content, assets_folder)
-            end
+            download_images(item.title, content, assets_folder) if fetch
 
             FileUtils.mkdir_p item.directory_name
             File.open(File.join(item.directory_name, item.file_name), "w") do |f|
@@ -193,11 +188,11 @@ module JekyllImport
               f.puts "---"
               f.puts Util.wpautop(content.to_html)
             end
-          rescue => e
-            puts "Couldn't import post!"
-            puts "Title: #{item.title}"
-            puts "Name/Slug: #{item.file_name}\n"
-            puts "Error: #{e.message}"
+          rescue StandardError => e
+            Jekyll.logger.error "Couldn't import post!"
+            Jekyll.logger.error "Title: #{item.title}"
+            Jekyll.logger.error "Name/Slug: #{item.file_name}\n"
+            Jekyll.logger.error "Error: #{e.message}"
             next
           end
 
@@ -205,7 +200,7 @@ module JekyllImport
         end
 
         import_count.each do |key, value|
-          puts "Imported #{value} #{key}s"
+          Jekyll.logger.info "Imported #{value} #{key}s"
         end
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Marley < Importer
@@ -42,13 +44,13 @@ module JekyllImport
 
           # copied over from marley's app/lib/post.rb
           file_content  = File.read(f)
-          meta_content  = file_content.slice!(self.regexp[:meta])
-          body          = file_content.sub(self.regexp[:title], "").sub(self.regexp[:perex], "").strip
+          meta_content  = file_content.slice!(regexp[:meta])
+          body          = file_content.sub(regexp[:title], "").sub(regexp[:perex], "").strip
 
-          title = file_content.scan(self.regexp[:title]).first.to_s.strip
-          prerex = file_content.scan(self.regexp[:perex]).first.to_s.strip
+          title = file_content.scan(regexp[:title]).first.to_s.strip
+          prerex = file_content.scan(regexp[:perex]).first.to_s.strip
           published_on = DateTime.parse(post[:published_on]) rescue File.mtime(File.dirname(f))
-          meta          = meta_content ? YAML.safe_load(meta_content.scan(self.regexp[:meta]).to_s) : {}
+          meta          = meta_content ? YAML.safe_load(meta_content.scan(regexp[:meta]).to_s) : {}
           meta["title"] = title
           meta["layout"] = "post"
 
@@ -56,11 +58,11 @@ module JekyllImport
           post_name = File.dirname(f).split(%r!/!).last.gsub(%r!\A\d+-!, "")
 
           name = "#{formatted_date}-#{post_name}"
-          File.open("_posts/#{name}.markdown", "w") do |f|
-            f.puts meta.to_yaml
-            f.puts "---\n"
-            f.puts "\n#{prerex}\n\n" if prerex
-            f.puts body
+          File.open("_posts/#{name}.markdown", "w") do |post|
+            post.puts meta.to_yaml
+            post.puts "---\n"
+            post.puts "\n#{prerex}\n\n" if prerex
+            post.puts body
           end
           posts += 1
         end

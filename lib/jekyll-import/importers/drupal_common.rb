@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "date"
 
 module JekyllImport
@@ -29,7 +31,7 @@ module JekyllImport
           c.option "port", "--port PORT", "Database port name (default: #{DEFAULTS["port"].inspect})"
           c.option "prefix", "--prefix PREFIX", "Table prefix name (default: #{DEFAULTS["prefix"].inspect})"
           c.option "types", "--types TYPE1[,TYPE2[,TYPE3...]]", Array,
-            "The Drupal content types to be imported  (default: #{DEFAULTS["types"].join(",")})"
+                   "The Drupal content types to be imported  (default: #{DEFAULTS["types"].join(",")})"
         end
 
         def require_deps
@@ -44,7 +46,7 @@ module JekyllImport
         end
 
         def process(options)
-          engine = options.fetch("engine",   DEFAULTS["engine"])
+          engine = options.fetch("engine", DEFAULTS["engine"])
           dbname = options.fetch("dbname")
           user   = options.fetch("user")
           pass   = options.fetch("password", DEFAULTS["password"])
@@ -59,7 +61,7 @@ module JekyllImport
             db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :port => port, :encoding => "utf8")
           end
 
-          query = self.build_query(prefix, types, engine)
+          query = build_query(prefix, types, engine)
 
           conf = Jekyll.configuration({})
           src_dir = conf["source"]
@@ -77,21 +79,21 @@ module JekyllImport
           # Create the refresh layout
           # Change the refresh url if you customized your permalink config
           File.open(File.join(dirs[:_layouts], "refresh.html"), "w") do |f|
-            f.puts <<-HTML
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
-<link rel="canonical" href="{{ page.refresh_to_post_id }}.html" />
-</head>
-</html>
-HTML
+            f.puts <<~HTML
+              <!DOCTYPE html>
+              <html>
+              <head>
+              <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+              <meta http-equiv="refresh" content="0;url={{ page.refresh_to_post_id }}.html" />
+              <link rel="canonical" href="{{ page.refresh_to_post_id }}.html" />
+              </head>
+              </html>
+            HTML
           end
 
           db[query].each do |post|
             # Get required fields
-            data, content = self.post_data(post)
+            data, content = post_data(post)
 
             data["layout"] = post[:type]
             title = data["title"] = post[:title].strip.force_encoding("UTF-8")
@@ -99,7 +101,7 @@ HTML
 
             # Get the relevant fields as a hash and delete empty fields
             data = data.delete_if { |_k, v| v.nil? || v == "" }.each_pair do |_k, v|
-              ((v.is_a? String) ? v.force_encoding("UTF-8") : v)
+              v.is_a?(String) ? v.force_encoding("UTF-8") : v
             end
 
             # Construct a Jekyll compatible file name
@@ -118,7 +120,8 @@ HTML
 
             # Make a file to redirect from the old Drupal URL
             next unless is_published
-            alias_query = self.aliases_query(prefix)
+
+            alias_query = aliases_query(prefix)
             type = post[:type]
 
             aliases_type = db[alias_query, "#{type}/#{node_id}"].all
@@ -131,16 +134,16 @@ HTML
             aliases.each do |url_alias|
               redirect_prefix = ""
               categories = data["categories"]
-              unless categories.nil? || categories.length == 0
+              unless categories.nil? || categories.length.zero?
                 first_category = categories[0]
                 redirect_prefix = "#{first_category}/"
               end
 
-              partition = url_alias[:alias].rpartition('/')
-              dir=""
-              file=partition.last
+              partition = url_alias[:alias].rpartition("/")
+              dir = ""
+              file = partition.last
 
-              if(partition.first.length > 0)
+              if partition.first.length.positive?
                 dir = "#{partition.first}/"
                 FileUtils.mkdir_p partition.first
               end
@@ -175,12 +178,9 @@ HTML
 
       def validate(options)
         %w(dbname user).each do |option|
-          if options[option].nil?
-            abort "Missing mandatory option --#{option}."
-          end
+          abort "Missing mandatory option --#{option}." unless options.key?(option)
         end
       end
-
     end
   end
 end

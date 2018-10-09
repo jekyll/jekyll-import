@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # For use/testing when no gem is installed
 $LOAD_PATH.unshift __dir__
 

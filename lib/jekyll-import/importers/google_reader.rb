@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class GoogleReader < Importer
       def self.validate(options)
-        if options["source"].nil?
-          abort "Missing mandatory option --source."
-        end
+        abort "Missing mandatory option --source." if options["source"].nil?
       end
 
       def self.specify_options(c)
@@ -31,7 +31,7 @@ module JekyllImport
       def self.process(options)
         source = options.fetch("source")
 
-        open(source) do |content|
+        URI.parse(source).open do |content|
           feed = RSS::Parser.parse(content)
 
           raise "There doesn't appear to be any RSS items at the source (#{source}) provided." unless feed

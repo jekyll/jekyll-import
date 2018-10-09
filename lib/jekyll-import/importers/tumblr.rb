@@ -36,14 +36,14 @@ module JekyllImport
         posts = []
         # Two passes are required so that we can rewrite URLs.
         # First pass builds up an array of each post as a hash.
-        begin
+        until blog["posts"].size < per_page
           current_page = (current_page || -1) + 1
           feed_url = url + "?num=#{per_page}&start=#{current_page * per_page}"
-          puts "Fetching #{feed_url}"
-          feed = open(feed_url)
+          Jekyll.logger.info "Fetching #{feed_url}"
+          feed = URI.parse(feed_url).open
           contents = feed.readlines.join("\n")
           blog = extract_json(contents)
-          puts "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
+          Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
           batch = blog["posts"].map { |post| post_to_hash(post, format) }
 
           # If we're rewriting, save the posts for later.  Otherwise, go ahead and
@@ -53,7 +53,7 @@ module JekyllImport
           else
             batch.each { |post| write_post(post, format == "md", add_highlights) }
           end
-        end until blog["posts"].size < per_page
+        end
 
         # Rewrite URLs, create redirects and write out out posts if necessary
         if rewrite_urls
@@ -62,7 +62,6 @@ module JekyllImport
         end
       end
 
-      private
       class << self
         def extract_json(contents)
           beginning = contents.index("{")
@@ -102,9 +101,7 @@ module JekyllImport
           when "link"
             title = post["link-text"] || post["link-url"]
             content = "<a href=\"#{post["link-url"]}\">#{title}</a>"
-            unless post["link-description"].nil?
-              content << "<br/>" + post["link-description"]
-            end
+            content << "<br/>" + post["link-description"] unless post["link-description"].nil?
           when "photo"
             title = post["slug"].tr("-", " ")
             if post["photos"].size > 1
@@ -129,9 +126,7 @@ module JekyllImport
           when "quote"
             title = post["quote-text"]
             content = "<blockquote>#{post["quote-text"]}</blockquote>"
-            unless post["quote-source"].nil?
-              content << "&#8212;" + post["quote-source"]
-            end
+            content << "&#8212;" + post["quote-source"] unless post["quote-source"].nil?
           when "conversation"
             title = post["conversation-title"]
             content = "<section><dialog>"
@@ -194,10 +189,11 @@ module JekyllImport
           sizes.each do |size|
             url = post["photo-url"] || post["photo-url-#{size}"]
             next if url.nil?
+
             begin
               return "<img src=\"#{save_photo(url, ext)}\"/>"
             rescue OpenURI::HTTPError
-              puts "Failed to grab photo"
+              Jekyll.logger.warn "Failed to grab photo"
             end
           end
 
@@ -258,45 +254,45 @@ module JekyllImport
         # so I can assume the block is JavaScript if it contains a
         # semi-colon.
         def add_syntax_highlights(content, redirect_dir)
-        lines = content.split("\n")
-        block = false
-        indent = %r!^    !
-        lang = nil
-        start = nil
-        lines.each_with_index do |line, i|
-          if !block && line =~ indent
-            block = true
-            lang = "python"
-            start = i
-          elsif block
-            lang = "javascript" if line =~ %r!;$!
-            block = line =~ indent && i < lines.size - 1 # Also handle EOF
-            unless block
-              lines[start] = "{% highlight #{lang} %}"
-              lines[i - 1] = "{% endhighlight %}"
+          lines = content.split("\n")
+          block = false
+          indent = %r!^    !
+          lang = nil
+          start = nil
+          lines.each_with_index do |line, i|
+            if !block && line =~ indent
+              block = true
+              lang = "python"
+              start = i
+            elsif block
+              lang = "javascript" if line =~ %r!;$!
+              block = line =~ indent && i < lines.size - 1 # Also handle EOF
+              unless block
+                lines[start] = "{% highlight #{lang} %}"
+                lines[i - 1] = "{% endhighlight %}"
+              end
+              FileUtils.cp(redirect_dir + "index.html", redirect_dir + "../" + "index.html")
+              lines[i] = lines[i].sub(indent, "")
             end
-            FileUtils.cp(redirect_dir + "index.html", redirect_dir + "../" + "index.html")
-            lines[i] = lines[i].sub(indent, "")
           end
+          lines.join("\n")
         end
-        lines.join("\n")
-      end
 
         def save_photo(url, ext)
-        if @grab_images
-          path = "tumblr_files/#{url.split("/").last}"
-          path += ext unless path =~ %r!#{ext}$!
-          FileUtils.mkdir_p "tumblr_files"
+          if @grab_images
+            path = "tumblr_files/#{url.split("/").last}"
+            path += ext unless path =~ %r!#{ext}$!
+            FileUtils.mkdir_p "tumblr_files"
 
-          # Don't fetch if we've already cached this file
-          unless File.size? path
-            puts "Fetching photo #{url}"
-            File.open(path, "wb") { |f| f.write(open(url).read) }
+            # Don't fetch if we've already cached this file
+            unless File.size? path
+              Jekyll.logger.info "Fetching photo #{url}"
+              File.open(path, "wb") { |f| f.write(URI.parse(url).read) }
+            end
+            url = "/" + path
           end
-          url = "/" + path
+          url
         end
-        url
-      end
       end
     end
   end

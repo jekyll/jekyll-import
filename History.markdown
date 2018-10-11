@@ -9,6 +9,7 @@
 ### Bug Fixes
 
   * Use mysql by default in Drupal importers. (#347)
+  * fix: Ignore Lint/Loop for tumblr (#360)
 
 ### Development Fixes  
 

@@ -9,7 +9,6 @@ AllCops:
     - script/**/*
     - test/**/*
     - vendor/**/*
-    - jekyll-import.gemspec
     - Rakefile
 
 Lint/NestedMethodDefinition:

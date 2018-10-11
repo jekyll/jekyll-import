@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-# load from jekyll-import/lib
-$LOAD_PATH.unshift File.expand_path("../", __dir__)
-require "jekyll/command"
-require "jekyll-import"
-
 module Jekyll
   module Commands
     class Import < Command

@@ -36,7 +36,7 @@ module JekyllImport
         posts = []
         # Two passes are required so that we can rewrite URLs.
         # First pass builds up an array of each post as a hash.
-        until blog["posts"].size < per_page
+        begin
           current_page = (current_page || -1) + 1
           feed_url = url + "?num=#{per_page}&start=#{current_page * per_page}"
           Jekyll.logger.info "Fetching #{feed_url}"
@@ -53,7 +53,7 @@ module JekyllImport
           else
             batch.each { |post| write_post(post, format == "md", add_highlights) }
           end
-        end
+        end until blog["posts"].size < per_page
 
         # Rewrite URLs, create redirects and write out out posts if necessary
         if rewrite_urls

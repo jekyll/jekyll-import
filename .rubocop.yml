@@ -11,6 +11,10 @@ AllCops:
     - vendor/**/*
     - Rakefile
 
+Lint/Loop:
+  Exclude:
+    - lib/jekyll-import/importers/tumblr.rb
+
 Lint/NestedMethodDefinition:
   Exclude:
     - lib/jekyll-import/importers/posterous.rb

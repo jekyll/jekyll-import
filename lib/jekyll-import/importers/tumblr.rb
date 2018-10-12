@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Tumblr < Importer
@@ -106,7 +108,7 @@ module JekyllImport
           when "photo"
             title = post["slug"].tr("-", " ")
             if post["photos"].size > 1
-              content = ""
+              content = +""
               post["photos"].each do |post_photo|
                 photo = fetch_photo post_photo
                 content << "#{photo}<br/>"
@@ -190,7 +192,7 @@ module JekyllImport
             next if url.nil?
 
             begin
-              return "<img src=\"#{save_photo(url, ext)}\"/>"
+              return +"<img src=\"#{save_photo(url, ext)}\"/>"
             rescue OpenURI::HTTPError
               Jekyll.logger.warn "Failed to grab photo"
             end

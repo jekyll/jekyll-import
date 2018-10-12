@@ -73,21 +73,20 @@ module JekyllImport
         # Writes a post out to disk
         def write_post(post, use_markdown, add_highlights)
           content = post[:content]
+          return unless content
 
-          if content
-            if use_markdown
-              content = html_to_markdown content
-              if add_highlights
-                tumblr_url = URI.parse(post[:slug]).path
-                redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
-                FileUtils.mkdir_p redirect_dir
-                content = add_syntax_highlights(content, redirect_dir)
-              end
+          if use_markdown
+            content = html_to_markdown content
+            if add_highlights
+              tumblr_url = URI.parse(post[:slug]).path
+              redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
+              FileUtils.mkdir_p redirect_dir
+              content = add_syntax_highlights(content, redirect_dir)
             end
+          end
 
-            File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
-              f.puts post[:header].to_yaml + "---\n" + content
-            end
+          File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
+            f.puts post[:header].to_yaml + "---\n" + content
           end
         end
 
@@ -279,19 +278,18 @@ module JekyllImport
         end
 
         def save_photo(url, ext)
-          if @grab_images
-            path = "tumblr_files/#{url.split("/").last}"
-            path += ext unless path =~ %r!#{ext}$!
-            FileUtils.mkdir_p "tumblr_files"
+          return url unless @grab_images
 
-            # Don't fetch if we've already cached this file
-            unless File.size? path
-              Jekyll.logger.info "Fetching photo #{url}"
-              File.open(path, "wb") { |f| f.write(URI.parse(url).read) }
-            end
-            url = "/" + path
+          path = "tumblr_files/#{url.split("/").last}"
+          path += ext unless path =~ %r!#{ext}$!
+          FileUtils.mkdir_p "tumblr_files"
+
+          # Don't fetch if we've already cached this file
+          unless File.size? path
+            Jekyll.logger.info "Fetching photo #{url}"
+            File.open(path, "wb") { |f| f.write(URI.parse(url).read) }
           end
-          url
+          "/#{path}"
         end
       end
     end

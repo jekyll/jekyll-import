@@ -15,11 +15,11 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "url", "--url URL", "Tumblr URL"
-        c.option "format", "--format FORMAT", 'Output format (default: "html")'
-        c.option "grab_images", "--grab_images", "Whether to grab images (default: false)"
+        c.option "url",            "--url URL",        "Tumblr URL"
+        c.option "format",         "--format FORMAT",  'Output format (default: "html")'
+        c.option "grab_images",    "--grab_images",    "Whether to grab images (default: false)"
         c.option "add_highlights", "--add_highlights", "Whether to add highlights (default: false)"
-        c.option "rewrite_urls", "--rewrite_urls", "Whether to rewrite URLs (default: false)"
+        c.option "rewrite_urls",   "--rewrite_urls",   "Whether to rewrite URLs (default: false)"
       end
 
       def self.process(options)
@@ -34,15 +34,17 @@ module JekyllImport
         url += "/api/read/json/"
         per_page = 50
         posts = []
+
         # Two passes are required so that we can rewrite URLs.
         # First pass builds up an array of each post as a hash.
         begin
           current_page = (current_page || -1) + 1
-          feed_url = url + "?num=#{per_page}&start=#{current_page * per_page}"
+          feed_url     = url + "?num=#{per_page}&start=#{current_page * per_page}"
           Jekyll.logger.info "Fetching #{feed_url}"
-          feed = URI.parse(feed_url).open
+
+          feed     = URI.parse(feed_url).open
           contents = feed.readlines.join("\n")
-          blog = extract_json(contents)
+          blog     = extract_json(contents)
           Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
           batch = blog["posts"].map { |post| post_to_hash(post, format) }
 
@@ -65,9 +67,9 @@ module JekyllImport
       class << self
         def extract_json(contents)
           beginning = contents.index("{")
-          ending = contents.rindex("}") + 1
-          json = contents[beginning...ending] # Strip Tumblr's JSONP chars.
-          JSON.parse(json)
+          ending    = contents.rindex("}") + 1
+          json_data = contents[beginning...ending] # Strip Tumblr's JSONP chars.
+          JSON.parse(json_data)
         end
 
         # Writes a post out to disk
@@ -78,7 +80,7 @@ module JekyllImport
           if use_markdown
             content = html_to_markdown content
             if add_highlights
-              tumblr_url = URI.parse(post[:slug]).path
+              tumblr_url   = URI.parse(post[:slug]).path
               redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
               FileUtils.mkdir_p redirect_dir
               content = add_syntax_highlights(content, redirect_dir)
@@ -95,10 +97,10 @@ module JekyllImport
         def post_to_hash(post, format)
           case post["type"]
           when "regular"
-            title = post["regular-title"]
+            title   = post["regular-title"]
             content = post["regular-body"]
           when "link"
-            title = post["link-text"] || post["link-url"]
+            title   = post["link-text"] || post["link-url"]
             content = "<a href=\"#{post["link-url"]}\">#{title}</a>"
             content << "<br/>" + post["link-description"] unless post["link-description"].nil?
           when "photo"
@@ -116,25 +118,25 @@ module JekyllImport
             content << "<br/>" + post["photo-caption"]
           when "audio"
             if !post["id3-title"].nil?
-              title = post["id3-title"]
+              title   = post["id3-title"]
               content = post["audio-player"] + "<br/>" + post["audio-caption"]
             else
-              title = post["audio-caption"]
+              title   = post["audio-caption"]
               content = post["audio-player"]
             end
           when "quote"
-            title = post["quote-text"]
+            title   = post["quote-text"]
             content = "<blockquote>#{post["quote-text"]}</blockquote>"
             content << "&#8212;" + post["quote-source"] unless post["quote-source"].nil?
           when "conversation"
-            title = post["conversation-title"]
+            title   = post["conversation-title"]
             content = "<section><dialog>"
             post["conversation"].each do |line|
               content << "<dt>#{line["label"]}</dt><dd>#{line["phrase"]}</dd>"
             end
             content << "</dialog></section>"
           when "video"
-            title = post["video-title"]
+            title   = post["video-title"]
             content = post["video-player"]
             unless post["video-caption"].nil?
               if content
@@ -144,20 +146,21 @@ module JekyllImport
               end
             end
           when "answer"
-            title = post["question"]
+            title   = post["question"]
             content = post["answer"]
           end
-          date = Date.parse(post["date"]).to_s
+
+          date  = Date.parse(post["date"]).to_s
           title = Nokogiri::HTML(title).text
           title = "no title" if title.empty?
-          slug = if post["slug"] && post["slug"].strip != ""
-                   post["slug"]
-                 elsif title && title.downcase.gsub(%r![^a-z0-9\-]!, "") != "" && title != "no title"
-                   slug = title.downcase.strip.tr(" ", "-").gsub(%r![^a-z0-9\-]!, "")
-                   slug.length > 200 ? slug.slice(0..200) : slug
-                 else
-                   post["id"]
-                 end
+          slug  = if post["slug"] && post["slug"].strip != ""
+                    post["slug"]
+                  elsif title && title.downcase.gsub(%r![^a-z0-9\-]!, "") != "" && title != "no title"
+                    slug = title.downcase.strip.tr(" ", "-").gsub(%r![^a-z0-9\-]!, "")
+                    slug.length > 200 ? slug.slice(0..200) : slug
+                  else
+                    post["id"]
+                  end
           {
             :name    => "#{date}-#{slug}.#{format}",
             :header  => {
@@ -253,18 +256,18 @@ module JekyllImport
         # so I can assume the block is JavaScript if it contains a
         # semi-colon.
         def add_syntax_highlights(content, redirect_dir)
-          lines = content.split("\n")
-          block = false
+          lines  = content.split("\n")
+          block  = false
           indent = %r!^    !
-          lang = nil
-          start = nil
+          lang   = nil
+          start  = nil
           lines.each_with_index do |line, i|
             if !block && line =~ indent
               block = true
-              lang = "python"
+              lang  = "python"
               start = i
             elsif block
-              lang = "javascript" if line =~ %r!;$!
+              lang  = "javascript" if line =~ %r!;$!
               block = line =~ indent && i < lines.size - 1 # Also handle EOF
               unless block
                 lines[start] = "{% highlight #{lang} %}"

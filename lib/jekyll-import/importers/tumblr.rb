@@ -48,8 +48,8 @@ module JekyllImport
           Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
           batch = blog["posts"].map { |post| post_to_hash(post, format) }
 
-          # If we're rewriting, save the posts for later.  Otherwise, go ahead and
-          # dump these to disk now
+          # If we're rewriting, save the posts for later.  Otherwise, go ahead and dump these to
+          # disk now
           if rewrite_urls
             posts += batch
           else
@@ -177,8 +177,8 @@ module JekyllImport
         end
 
         # Attempts to fetch the largest version of a photo available for a post.
-        # If that file fails, it tries the next smaller size until all available
-        # photo URLs are exhausted.  If they all fail, the import is aborted.
+        # If that file fails, it tries the next smaller size until all available photo URLs are
+        # exhausted.  If they all fail, the import is aborted.
         def fetch_photo(post)
           sizes = post.keys.map { |k| k.gsub("photo-url-", "").to_i }
           sizes.sort! { |a, b| b <=> a }
@@ -202,14 +202,12 @@ module JekyllImport
           abort "Failed to fetch photo for post #{post["url"]}"
         end
 
-        # Create a Hash of old urls => new urls, for rewriting and
-        # redirects, and replace urls in each post. Instantiate Jekyll
-        # site/posts to get the correct permalink format.
+        # Create a Hash of old urls => new urls, for rewriting and redirects, and replace urls in
+        # each post. Instantiate Jekyll site/posts to get the correct permalink format.
         def rewrite_urls_and_redirects(posts)
           site = Jekyll::Site.new(Jekyll.configuration({}))
           urls = Hash[posts.map do |post|
-            # Create an initial empty file for the post so that
-            # we can instantiate a post object.
+            # Create an initial empty file for the post so that we can instantiate a post object.
             File.write("_posts/tumblr/#{post[:name]}", "")
             tumblr_url = URI.parse(URI.encode(post[:slug])).path
             jekyll_url = if Jekyll.const_defined? :Post
@@ -249,12 +247,11 @@ module JekyllImport
           content
         end
 
-        # Adds pygments highlight tags to code blocks in posts that use
-        # markdown format. This doesn't guess the language of the code
-        # block, so you should modify this to suit your own content.
-        # For example, my code block only contain Python and JavaScript,
-        # so I can assume the block is JavaScript if it contains a
-        # semi-colon.
+        # Adds pygments highlight tags to code blocks in posts that use markdown format.
+        # This doesn't guess the language of the code block, so you should modify this to suit your
+        # own content.
+        # For example, my code block only contain Python and JavaScript, so I can assume the block
+        # is JavaScript if it contains a semi-colon.
         def add_syntax_highlights(content, redirect_dir)
           lines  = content.split("\n")
           block  = false

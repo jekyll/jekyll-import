@@ -39,13 +39,14 @@ module JekyllImport
         # First pass builds up an array of each post as a hash.
         begin
           current_page = (current_page || -1) + 1
-          feed_url     = url + "?num=#{per_page}&start=#{current_page * per_page}"
+          feed_url     = "#{url}?num=#{per_page}&start=#{current_page * per_page}"
           Jekyll.logger.info "Fetching #{feed_url}"
 
           feed     = URI.parse(feed_url).open
           contents = feed.readlines.join("\n")
           blog     = extract_json(contents)
           Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
+
           batch = blog["posts"].map { |post| post_to_hash(post, format) }
 
           # If we're rewriting, save the posts for later.  Otherwise, go ahead and dump these to
@@ -97,37 +98,35 @@ module JekyllImport
         def post_to_hash(post, format)
           case post["type"]
           when "regular"
-            title   = post["regular-title"]
-            content = post["regular-body"]
+            title, content = post.values_at("regular-title", "regular-body")
           when "link"
             title   = post["link-text"] || post["link-url"]
             content = "<a href=\"#{post["link-url"]}\">#{title}</a>"
-            content << "<br/>" + post["link-description"] unless post["link-description"].nil?
+            content << "<br/>#{post["link-description"]}" unless post["link-description"].nil?
           when "photo"
             title = post["slug"].tr("-", " ")
             if post["photos"].size > 1
               content = ""
               post["photos"].each do |post_photo|
                 photo = fetch_photo post_photo
-                content << photo + "<br/>"
+                content << "#{photo}<br/>"
                 content << post_photo["caption"]
               end
             else
               content = fetch_photo post
             end
-            content << "<br/>" + post["photo-caption"]
+            content << "<br/>#{post["photo-caption"]}"
           when "audio"
             if !post["id3-title"].nil?
-              title   = post["id3-title"]
-              content = post["audio-player"] + "<br/>" + post["audio-caption"]
+              title, content = post.values_at("id3-title", "audio-player")
+              content << "<br/>#{post["audio-caption"]}"
             else
-              title   = post["audio-caption"]
-              content = post["audio-player"]
+              title, content = post.values_at("audio-caption", "audio-player")
             end
           when "quote"
             title   = post["quote-text"]
             content = "<blockquote>#{post["quote-text"]}</blockquote>"
-            content << "&#8212;" + post["quote-source"] unless post["quote-source"].nil?
+            content << "&#8212;#{post["quote-source"]}" unless post["quote-source"].nil?
           when "conversation"
             title   = post["conversation-title"]
             content = "<section><dialog>"
@@ -136,18 +135,16 @@ module JekyllImport
             end
             content << "</dialog></section>"
           when "video"
-            title   = post["video-title"]
-            content = post["video-player"]
+            title, content = post.values_at("video-title", "video-player")
             unless post["video-caption"].nil?
               if content
-                content << "<br/>" + post["video-caption"]
+                content << "<br/>#{post["video-caption"]}"
               else
                 content = post["video-caption"]
               end
             end
           when "answer"
-            title   = post["question"]
-            content = post["answer"]
+            title, content = post.values_at("question", "answer")
           end
 
           date  = Date.parse(post["date"]).to_s
@@ -237,13 +234,13 @@ module JekyllImport
         def html_to_markdown(content)
           preserve = %w(table tr th td)
           preserve.each do |tag|
-            content.gsub!(%r!<#{tag}!i, "$$" + tag)
-            content.gsub!(%r!<\/#{tag}!i, "||" + tag)
+            content.gsub!(%r!<#{tag}!i, "$$#{tag}")
+            content.gsub!(%r!<\/#{tag}!i, "||#{tag}")
           end
           content = Nokogiri::HTML(content.gsub("'", "''")).text
           preserve.each do |tag|
-            content.gsub!("$$" + tag, "<" + tag)
-            content.gsub!("||" + tag, "</" + tag)
+            content.gsub!("$$#{tag}", "<#{tag}")
+            content.gsub!("||#{tag}", "</#{tag}")
           end
           content
         end

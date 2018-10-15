@@ -16,9 +16,9 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "source", "--source FILE", 'WordPress export XML file (default: "wordpress.xml")'
-        c.option "no_fetch_images", "--no-fetch-images", "Do not fetch the images referenced in the posts"
-        c.option "assets_folder", "--assets_folder FOLDER", "Folder where assets such as images will be downloaded to (default: assets)"
+        c.option "source",          "--source FILE",          'WordPress export XML file (default: "wordpress.xml")'
+        c.option "no_fetch_images", "--no-fetch-images",      "Do not fetch the images referenced in the posts"
+        c.option "assets_folder",   "--assets_folder FOLDER", "Folder where assets such as images will be downloaded to (default: assets)"
       end
 
       # Will modify post DOM tree

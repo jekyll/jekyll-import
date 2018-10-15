@@ -4,8 +4,8 @@ module JekyllImport
   module Importers
     class Posterous < Importer
       def self.specify_options(c)
-        c.option "email", "--email EMAIL", "Posterous email address"
-        c.option "password", "--password PW", "Posterous password"
+        c.option "email",     "--email EMAIL", "Posterous email address"
+        c.option "password",  "--password PW", "Posterous password"
         c.option "api_token", "--token TOKEN", "Posterous API Token"
       end
 

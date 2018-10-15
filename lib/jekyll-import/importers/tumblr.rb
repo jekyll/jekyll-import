@@ -15,11 +15,11 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "url", "--url URL", "Tumblr URL"
-        c.option "format", "--format FORMAT", 'Output format (default: "html")'
-        c.option "grab_images", "--grab_images", "Whether to grab images (default: false)"
+        c.option "url",            "--url URL",        "Tumblr URL"
+        c.option "format",         "--format FORMAT",  'Output format (default: "html")'
+        c.option "grab_images",    "--grab_images",    "Whether to grab images (default: false)"
         c.option "add_highlights", "--add_highlights", "Whether to add highlights (default: false)"
-        c.option "rewrite_urls", "--rewrite_urls", "Whether to rewrite URLs (default: false)"
+        c.option "rewrite_urls",   "--rewrite_urls",   "Whether to rewrite URLs (default: false)"
       end
 
       def self.process(options)

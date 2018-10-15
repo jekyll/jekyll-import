@@ -31,11 +31,11 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "server", "--server TYPE", 'Server type ("mysql" or "postgres")'
-        c.option "dbname", "--dbname DB", "Database name"
-        c.option "user", "--user USER", "Database user name"
+        c.option "server",   "--server TYPE", 'Server type ("mysql" or "postgres")'
+        c.option "dbname",   "--dbname DB",   "Database name"
+        c.option "user",     "--user USER",   "Database user name"
         c.option "password", "--password PW", "Database user's password (default: '')"
-        c.option "host", "--host HOST", "Database host name"
+        c.option "host",     "--host HOST",   "Database host name"
       end
 
       def self.process(options)

@@ -14,7 +14,7 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "user", "--user NAME", "The username of the account"
+        c.option "user",      "--user NAME",       "The username of the account"
         c.option "api_token", "--api_token TOKEN", "The API access token for the account"
       end
 

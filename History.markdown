@@ -19,6 +19,7 @@
 
   * Replace uninitialized constant with alternative (#358)
   * chore(deps): fix gem build warnings (#361)
+  * Remove cyclic require of import command (#359)
 
 ## 0.14.0 / 2018-02-03
 

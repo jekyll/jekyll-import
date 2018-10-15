@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Roller < Importer
@@ -86,12 +88,12 @@ module JekyllImport
         FileUtils.mkdir_p("_drafts") if options[:status].include? :DRAFT
 
         db = Sequel.mysql2(options[:dbname],
-            :user     => options[:user],
-            :password => options[:pass],
-            :socket   => options[:socket],
-            :host     => options[:host],
-            :port     => options[:port],
-            :encoding => "utf8")
+                           :user     => options[:user],
+                           :password => options[:pass],
+                           :socket   => options[:socket],
+                           :host     => options[:host],
+                           :port     => options[:port],
+                           :encoding => "utf8")
 
         posts_query = "
            SELECT
@@ -129,21 +131,15 @@ module JekyllImport
         extension = options[:extension]
 
         title = post[:title]
-        if options[:clean_entities]
-          title = clean_entities(title)
-        end
+        title = clean_entities(title) if options[:clean_entities]
 
         slug = post[:slug]
-        if !slug || slug.empty?
-          slug = sluggify(title)
-        end
+        slug = sluggify(title) if !slug || slug.empty?
 
         date = post[:date] || Time.now
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
         content = post[:content].to_s
-        if options[:clean_entities]
-          content = clean_entities(content)
-        end
+        content = clean_entities(content) if options[:clean_entities]
 
         excerpt = post[:excerpt].to_s
 
@@ -161,11 +157,11 @@ module JekyllImport
                weblogcategory.id = '#{post[:categoryid]}'"
 
           db[cquery].each do |term|
-            if options[:clean_entities]
-              categories << clean_entities(term[:name])
-            else
-              categories << term[:name]
-            end
+            categories << if options[:clean_entities]
+                            clean_entities(term[:name])
+                          else
+                            term[:name]
+                          end
           end
         end
 
@@ -180,11 +176,11 @@ module JekyllImport
 	       roller_weblogentrytag.entryid = '#{post[:id]}'"
 
           db[cquery].each do |term|
-            if options[:clean_entities]
-              tags << clean_entities(term[:name])
-            else
-              tags << term[:name]
-            end
+            tags << if options[:clean_entities]
+                      clean_entities(term[:name])
+                    else
+                      term[:name]
+                    end
           end
         end
 
@@ -205,16 +201,10 @@ module JekyllImport
 
           db[cquery].each do |comment|
             comcontent = comment[:content].to_s
-            if comcontent.respond_to?(:force_encoding)
-              comcontent.force_encoding("UTF-8")
-            end
-            if options[:clean_entities]
-              comcontent = clean_entities(comcontent)
-            end
+            comcontent.force_encoding("UTF-8") if comcontent.respond_to?(:force_encoding)
+            comcontent = clean_entities(comcontent) if options[:clean_entities]
             comauthor = comment[:author].to_s
-            if options[:clean_entities]
-              comauthor = clean_entities(comauthor)
-            end
+            comauthor = clean_entities(comauthor) if options[:clean_entities]
 
             comments << {
               "id"           => comment[:id].to_i,
@@ -231,30 +221,30 @@ module JekyllImport
         # Get the relevant fields as a hash, delete empty fields and
         # convert to YAML for the header.
         data = {
-          "layout"        => post[:type].to_s,
-          "status"        => post[:status].to_s,
-          "published"     => post[:status].to_s == "DRAFT" ? nil : (post[:status].to_s == "PUBLISHED"),
-          "title"         => title.to_s,
-          "author"        => {
+          "layout"       => post[:type].to_s,
+          "status"       => post[:status].to_s,
+          "published"    => post[:status].to_s == "DRAFT" ? nil : (post[:status].to_s == "PUBLISHED"),
+          "title"        => title.to_s,
+          "author"       => {
             "display_name" => post[:author].to_s,
             "login"        => post[:author_login].to_s,
             "email"        => post[:author_email].to_s,
           },
-          "author_login"  => post[:author_login].to_s,
-          "author_email"  => post[:author_email].to_s,
-          "excerpt"       => excerpt,
-          "id"  => post[:id],
-          "date"          => date.to_s,
-          "categories"    => options[:categories] ? categories : nil,
-          "tags"          => options[:tags] ? tags : nil,
-          "comments"      => options[:comments] ? comments : nil,
+          "author_login" => post[:author_login].to_s,
+          "author_email" => post[:author_email].to_s,
+          "excerpt"      => excerpt,
+          "id"           => post[:id],
+          "date"         => date.to_s,
+          "categories"   => options[:categories] ? categories : nil,
+          "tags"         => options[:tags] ? tags : nil,
+          "comments"     => options[:comments] ? comments : nil,
         }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml
 
-        if post[:status] == "DRAFT"
-          filename = "_drafts/#{slug}.md"
-        else
-          filename = "_posts/#{name}"
-        end
+        filename = if post[:status] == "DRAFT"
+                     "_drafts/#{slug}.md"
+                   else
+                     "_posts/#{name}"
+                   end
 
         # Write out the data and content to file
         File.open(filename, "w") do |f|
@@ -265,9 +255,7 @@ module JekyllImport
       end
 
       def self.clean_entities(text)
-        if text.respond_to?(:force_encoding)
-          text.force_encoding("UTF-8")
-        end
+        text.force_encoding("UTF-8") if text.respond_to?(:force_encoding)
         text = HTMLEntities.new.encode(text, :named)
         # We don't want to convert these, it would break all
         # HTML tags in the post and comments.
@@ -284,8 +272,8 @@ module JekyllImport
         title.to_ascii.downcase.gsub(%r![^0-9A-Za-z]+!, " ").strip.tr(" ", "-")
       end
 
-      def self.page_path(page_id)
-          ""
+      def self.page_path(_page_id)
+        ""
       end
     end
   end

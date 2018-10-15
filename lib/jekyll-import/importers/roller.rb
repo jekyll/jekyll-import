@@ -190,18 +190,18 @@ module JekyllImport
 
         comments = []
 
-        if options[:comments] && post[:comment_count].to_i > 0
+        if options[:comments]
           cquery =
             "SELECT
-               comment_ID           AS `id`,
-               comment_author       AS `author`,
-               comment_author_email AS `author_email`,
-               comment_date         AS `date`,
-               comment_content      AS `content`
-             FROM comments
+               id           AS `id`,
+               name      AS `author`,
+               email AS `author_email`,
+               posttime         AS `date`,
+               content      AS `content`
+             FROM roller_comment
              WHERE
-               comment_post_ID = '#{post[:id]}' AND
-               comment_approved != 'spam'"
+               entryid = '#{post[:id]}' AND
+               status = 'APPROVED'"
 
           db[cquery].each do |comment|
             comcontent = comment[:content].to_s

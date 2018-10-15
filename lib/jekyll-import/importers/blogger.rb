@@ -4,10 +4,10 @@ module JekyllImport
   module Importers
     class Blogger < Importer
       def self.specify_options(c)
-        c.option "source", "--source NAME", "The XML file (blog-MM-DD-YYYY.xml) path to import"
-        c.option "no-blogger-info", "--no-blogger-info", "not to leave blogger-URL info (id and old URL) in the front matter (default: false)"
-        c.option "replace-internal-link", "--replace-internal-link", "replace internal links using the post_url liquid tag. (default: false)"
-        c.option "comments", "--comments", "import comments to _comments collection"
+        c.option "source",                 "--source NAME",           "The XML file (blog-MM-DD-YYYY.xml) path to import"
+        c.option "no-blogger-info",        "--no-blogger-info",       "not to leave blogger-URL info (id and old URL) in the front matter (default: false)"
+        c.option "replace-internal-link",  "--replace-internal-link", "replace internal links using the post_url liquid tag. (default: false)"
+        c.option "comments",               "--comments",              "import comments to _comments collection"
       end
 
       def self.validate(options)

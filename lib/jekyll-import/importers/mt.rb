@@ -32,17 +32,17 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "engine", "--engine ENGINE", "Database engine, (default: 'mysql', postgres also supported)"
-        c.option "dbname", "--dbname DB", "Database name"
-        c.option "user", "--user USER", "Database user name"
-        c.option "password", "--password PW", "Database user's password, (default: '')"
-        c.option "host", "--host HOST", 'Database host name (default: "localhost")'
-        c.option "port", "--port PORT", "Custom database port connect to (optional)"
-        c.option "blog_id", "--blog_id ID", "Specify a single Movable Type blog ID to import (default: all blogs)"
-        c.option "categories", "--categories", "If true, save post's categories in its YAML front matter. (default: true)"
-        c.option "src_encoding", "--src_encoding ENCODING", "Encoding of strings from database. (default: UTF-8)"
+        c.option "engine",        "--engine ENGINE",          "Database engine, (default: 'mysql', postgres also supported)"
+        c.option "dbname",        "--dbname DB",              "Database name"
+        c.option "user",          "--user USER",              "Database user name"
+        c.option "password",      "--password PW",            "Database user's password, (default: '')"
+        c.option "host",          "--host HOST",              'Database host name (default: "localhost")'
+        c.option "port",          "--port PORT",              "Custom database port connect to (optional)"
+        c.option "blog_id",       "--blog_id ID",             "Specify a single Movable Type blog ID to import (default: all blogs)"
+        c.option "categories",    "--categories",             "If true, save post's categories in its YAML front matter. (default: true)"
+        c.option "src_encoding",  "--src_encoding ENCODING",  "Encoding of strings from database. (default: UTF-8)"
         c.option "dest_encoding", "--dest_encoding ENCODING", "Encoding of output strings. (default: UTF-8)"
-        c.option "comments", "--comments", "If true, output comments in _comments directory (default: false)"
+        c.option "comments",      "--comments",               "If true, output comments in _comments directory (default: false)"
       end
 
       # By default this migrator will include posts for all your MovableType blogs.

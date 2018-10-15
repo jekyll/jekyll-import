@@ -23,14 +23,15 @@ module JekyllImport
         }.freeze
 
         def specify_options(c)
-          c.option "engine", "--engine [mysql|postgresql]", "Database engine (default: #{DEFAULTS["engine"].inspect})"
-          c.option "dbname", "--dbname DB", "Database name"
-          c.option "user", "--user USER", "Database user name"
-          c.option "password", "--password PW", "Database user's password (default: #{DEFAULTS["password"].inspect})"
-          c.option "host", "--host HOST", "Database host name (default: #{DEFAULTS["host"].inspect})"
-          c.option "port", "--port PORT", "Database port name (default: #{DEFAULTS["port"].inspect})"
-          c.option "prefix", "--prefix PREFIX", "Table prefix name (default: #{DEFAULTS["prefix"].inspect})"
-          c.option "types", "--types TYPE1[,TYPE2[,TYPE3...]]", Array,
+          c.option "engine",   "--engine [mysql|postgresql]", "Database engine (default: #{DEFAULTS["engine"].inspect})"
+          c.option "dbname",   "--dbname DB",                 "Database name"
+          c.option "user",     "--user USER",                 "Database user name"
+          c.option "password", "--password PW",               "Database user's password (default: #{DEFAULTS["password"].inspect})"
+          c.option "host",     "--host HOST",                 "Database host name (default: #{DEFAULTS["host"].inspect})"
+          c.option "port",     "--port PORT",                 "Database port name (default: #{DEFAULTS["port"].inspect})"
+          c.option "prefix",   "--prefix PREFIX",             "Table prefix name (default: #{DEFAULTS["prefix"].inspect})"
+
+          c.option "types",    "--types TYPE1[,TYPE2[,TYPE3...]]", Array,
                    "The Drupal content types to be imported  (default: #{DEFAULTS["types"].join(",")})"
         end
 

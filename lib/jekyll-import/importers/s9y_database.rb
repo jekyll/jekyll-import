@@ -16,20 +16,20 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "dbname", "--dbname DB", "Database name (default: '')"
-        c.option "socket", "--socket SOCKET", "Database socket (default: '')"
-        c.option "user", "--user USER", "Database user name (default: '')"
-        c.option "password", "--password PW", "Database user's password (default: '')"
-        c.option "host", "--host HOST", "Database host name (default: 'localhost')"
-        c.option "port", "--port PORT", "Custom database port connect to (default: 3306)"
-        c.option "table_prefix", "--table_prefix PREFIX", "Table prefix name (default: 'serendipity_')"
-        c.option "clean_entities", "--clean_entities", "Whether to clean entities (default: true)"
-        c.option "comments", "--comments", "Whether to import comments (default: true)"
-        c.option "categories", "--categories", "Whether to import categories (default: true)"
-        c.option "tags", "--tags", "Whether to import tags (default: true)"
-        c.option "drafts", "--drafts", "Whether to export drafts as well"
-        c.option "markdown", "--markdown", "convert into markdown format (default: false)"
-        c.option "permalinks", "--permalinks", "preserve S9Y permalinks (default: false)"
+        c.option "dbname",         "--dbname DB",           "Database name (default: '')"
+        c.option "socket",         "--socket SOCKET",       "Database socket (default: '')"
+        c.option "user",           "--user USER",           "Database user name (default: '')"
+        c.option "password",       "--password PW",         "Database user's password (default: '')"
+        c.option "host",           "--host HOST",           "Database host name (default: 'localhost')"
+        c.option "port",           "--port PORT",           "Custom database port connect to (default: 3306)"
+        c.option "table_prefix",   "--table_prefix PREFIX", "Table prefix name (default: 'serendipity_')"
+        c.option "clean_entities", "--clean_entities",      "Whether to clean entities (default: true)"
+        c.option "comments",       "--comments",            "Whether to import comments (default: true)"
+        c.option "categories",     "--categories",          "Whether to import categories (default: true)"
+        c.option "tags",           "--tags",                "Whether to import tags (default: true)"
+        c.option "drafts",         "--drafts",              "Whether to export drafts as well"
+        c.option "markdown",       "--markdown",            "convert into markdown format (default: false)"
+        c.option "permalinks",     "--permalinks",          "preserve S9Y permalinks (default: false)"
       end
 
       # Main migrator function. Call this to perform the migration.

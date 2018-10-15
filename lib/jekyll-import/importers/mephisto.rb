@@ -37,10 +37,10 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "dbname", "--dbname DB", "Database name"
-        c.option "user", "--user USER", "Database user name"
+        c.option "dbname",   "--dbname DB",   "Database name"
+        c.option "user",     "--user USER",   "Database user name"
         c.option "password", "--password PW", "Database user's password (default: '')"
-        c.option "host", "--host HOST", 'Database host name (default: "localhost")'
+        c.option "host",     "--host HOST",   'Database host name (default: "localhost")'
       end
 
       # This query will pull blog posts from all entries across all blogs. If

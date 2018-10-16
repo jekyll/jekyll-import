@@ -97,28 +97,31 @@ module JekyllImport
                            :encoding => "utf8")
 
         posts_query = "
-           SELECT
-             weblogentry.id           AS `id`,
-             weblogentry.status       AS `status`,
-             weblogentry.title        AS `title`,
-             weblogentry.link         AS `slug`,
-             weblogentry.updatetime   AS `date`,
-             weblogentry.text         AS `content`,
-             weblogentry.summary      AS `excerpt`,
-             weblogentry.categoryid   AS `categoryid`,
-             roller_user.fullname     AS `author`,
-             roller_user.username     AS `author_login`,
-             roller_user.emailaddress AS `author_email`
-           FROM weblogentry AS `weblogentry`
-             LEFT JOIN roller_user AS `roller_user`
-               ON weblogentry.creator = roller_user.username"
+                 SELECT
+                   weblogentry.id           AS `id`,
+                   weblogentry.status       AS `status`,
+                   weblogentry.title        AS `title`,
+                   weblogentry.anchor       AS `slug`,
+                   weblogentry.updatetime   AS `date`,
+                   weblogentry.text         AS `content`,
+                   weblogentry.summary      AS `excerpt`,
+                   weblogentry.categoryid   AS `categoryid`,
+                   roller_user.fullname     AS `author`,
+                   roller_user.username     AS `author_login`,
+                   roller_user.emailaddress AS `author_email`,
+                   weblog.handle            AS `site`
+                 FROM weblogentry AS `weblogentry`
+                   LEFT JOIN roller_user AS `roller_user`
+                     ON weblogentry.creator = roller_user.username
+                   LEFT JOIN weblog AS `weblog`
+                     ON weblogentry.websiteid = weblog.id"
 
         if options[:status] && !options[:status].empty?
           status = options[:status][0]
-          posts_query << "
+          posts_query += "
            WHERE weblogentry.status = '#{status}'"
           options[:status][1..-1].each do |stat|
-            posts_query << " OR
+            posts_query += " OR
              weblogentry.status = '#{stat}'"
           end
         end
@@ -144,6 +147,8 @@ module JekyllImport
         content = clean_entities(content) if options[:clean_entities]
 
         excerpt = post[:excerpt].to_s
+
+        permalink = "#{post[:site]}/entry/#{post[:slug]}"
 
         categories = []
         tags       = []
@@ -233,6 +238,7 @@ module JekyllImport
           "categories"   => options[:categories] ? categories : nil,
           "tags"         => options[:tags] ? tags : nil,
           "comments"     => options[:comments] ? comments : nil,
+          "permalink"    => permalink,
         }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml
 
         filename = post[:status] == "DRAFT" ? "_drafts/#{slug}.md" : "_posts/#{name}"

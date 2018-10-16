@@ -28,7 +28,7 @@ So you have a new system you want to be able to import from? Great! It's pretty 
 First thing's first: create the file where the importer will go. In this case, that will be `lib/jekyll-import/importers/columbus.rb`.
 Inside this file, we'll add this template:
 
-```ruby
+{% highlight ruby %}
 module JekyllImport
   module Importers
     class Columbus < Importer
@@ -59,7 +59,7 @@ module JekyllImport
     end
   end
 end
-```
+{% endhighlight %}
 
 Let's go through this quickly.
 
@@ -79,12 +79,12 @@ Where the magic happens! This method should read from your *Columbus* source, th
 
 This function is entirely optional, but allows for some validation of the options. This method allows you to validate the options in any way you wish. For example:
 
-```ruby
+{% highlight ruby %}
 def self.validate(opts)
   abort "Specify a username!" if opts["username"].nil?
   abort "Your username must be a number." unless opts["username"].match(%r!\A\d+\z!)
 end
-```
+{% endhighlight %}
 
 Once you have your importer working (test with `script/console`), then you're ready to add **documentation**. Add your new file:
 `./docs/_importers/columbus.md`. Take a look at one of the other importers as an example. You just add basic usage and you're golden.

@@ -118,9 +118,9 @@ module JekyllImport
           status = options[:status][0]
           posts_query << "
            WHERE weblogentry.status = '#{status}'"
-          options[:status][1..-1].each do |status|
+          options[:status][1..-1].each do |stat|
             posts_query << " OR
-             weblogentry.status = '#{status}'"
+             weblogentry.status = '#{stat}'"
           end
         end
 

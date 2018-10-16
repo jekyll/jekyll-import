@@ -38,6 +38,7 @@ Metrics/PerceivedComplexity:
   Max: 20
   Exclude:
     - lib/jekyll-import/importers/blogger.rb
+    - lib/jekyll-import/importers/roller.rb
     - lib/jekyll-import/importers/tumblr.rb
     - lib/jekyll-import/importers/wordpress.rb
 
@@ -73,6 +74,7 @@ Metrics/LineLength:
     - lib/jekyll-import/importers/mephisto.rb
     - lib/jekyll-import/importers/mt.rb
     - lib/jekyll-import/importers/posterous.rb
+    - lib/jekyll-import/importers/roller.rb
     - lib/jekyll-import/importers/rss.rb
     - lib/jekyll-import/importers/s9y.rb
     - lib/jekyll-import/importers/s9y_database.rb
@@ -97,6 +99,7 @@ Metrics/MethodLength:
     - lib/jekyll-import/importers/mephisto.rb
     - lib/jekyll-import/importers/mt.rb
     - lib/jekyll-import/importers/posterous.rb
+    - lib/jekyll-import/importers/roller.rb
     - lib/jekyll-import/importers/rss.rb
     - lib/jekyll-import/importers/s9y_database.rb
     - lib/jekyll-import/importers/s9y.rb

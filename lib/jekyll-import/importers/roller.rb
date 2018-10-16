@@ -80,8 +80,7 @@ module JekyllImport
           begin
             require "htmlentities"
           rescue LoadError
-            STDERR.puts "Could not require 'htmlentities', so the " \
-                        ":clean_entities option is now disabled."
+            STDERR.puts "Could not require 'htmlentities', so the :clean_entities option is now disabled."
             options[:clean_entities] = false
           end
         end
@@ -99,20 +98,20 @@ module JekyllImport
 
         posts_query = "
            SELECT
-             weblogentry.id            AS `id`,
-             weblogentry.status   AS `status`,
-             weblogentry.title    AS `title`,
-             weblogentry.link     AS `slug`,
-             weblogentry.updatetime     AS `date`,
-             weblogentry.text  AS `content`,
-             weblogentry.summary  AS `excerpt`,
-	     weblogentry.categoryid AS `categoryid`,
-             roller_user.fullname  AS `author`,
-             roller_user.username    AS `author_login`,
-             roller_user.emailaddress    AS `author_email`
+             weblogentry.id           AS `id`,
+             weblogentry.status       AS `status`,
+             weblogentry.title        AS `title`,
+             weblogentry.link         AS `slug`,
+             weblogentry.updatetime   AS `date`,
+             weblogentry.text         AS `content`,
+             weblogentry.summary      AS `excerpt`,
+             weblogentry.categoryid   AS `categoryid`,
+             roller_user.fullname     AS `author`,
+             roller_user.username     AS `author_login`,
+             roller_user.emailaddress AS `author_email`
            FROM weblogentry AS `weblogentry`
              LEFT JOIN roller_user AS `roller_user`
-	       ON weblogentry.creator = roller_user.username"
+               ON weblogentry.creator = roller_user.username"
 
         if options[:status] && !options[:status].empty?
           status = options[:status][0]
@@ -140,49 +139,40 @@ module JekyllImport
 
         date = post[:date] || Time.now
         name = format("%02d-%02d-%02d-%s.%s", date.year, date.month, date.day, slug, extension)
+
         content = post[:content].to_s
         content = clean_entities(content) if options[:clean_entities]
 
         excerpt = post[:excerpt].to_s
 
         categories = []
-        tags = []
+        tags       = []
 
         if options[:categories]
-
           cquery =
             "SELECT
-	       weblogcategory.name AS `name`
+               weblogcategory.name AS `name`
              FROM
                weblogcategory AS `weblogcategory`
              WHERE
                weblogcategory.id = '#{post[:categoryid]}'"
 
           db[cquery].each do |term|
-            categories << if options[:clean_entities]
-                            clean_entities(term[:name])
-                          else
-                            term[:name]
-                          end
+            categories << options[:clean_entities] ? clean_entities(term[:name]) : term[:name]
           end
         end
 
         if options[:tags]
-
           cquery =
             "SELECT
                roller_weblogentrytag.name AS `name`
              FROM
                roller_weblogentrytag AS `roller_weblogentrytag`
              WHERE
-	       roller_weblogentrytag.entryid = '#{post[:id]}'"
+               roller_weblogentrytag.entryid = '#{post[:id]}'"
 
           db[cquery].each do |term|
-            tags << if options[:clean_entities]
-                      clean_entities(term[:name])
-                    else
-                      term[:name]
-                    end
+            tags << options[:clean_entities] ? clean_entities(term[:name]) : term[:name]
           end
         end
 
@@ -191,11 +181,11 @@ module JekyllImport
         if options[:comments]
           cquery =
             "SELECT
-               id           AS `id`,
-               name      AS `author`,
-               email AS `author_email`,
-               posttime         AS `date`,
-               content      AS `content`
+               id       AS `id`,
+               name     AS `author`,
+               email    AS `author_email`,
+               posttime AS `date`,
+               content  AS `content`
              FROM roller_comment
              WHERE
                entryid = '#{post[:id]}' AND
@@ -203,10 +193,13 @@ module JekyllImport
 
           db[cquery].each do |comment|
             comcontent = comment[:content].to_s
+            comauthor  = comment[:author].to_s
             comcontent.force_encoding("UTF-8") if comcontent.respond_to?(:force_encoding)
-            comcontent = clean_entities(comcontent) if options[:clean_entities]
-            comauthor = comment[:author].to_s
-            comauthor = clean_entities(comauthor) if options[:clean_entities]
+
+            if options[:clean_entities]
+              comcontent = clean_entities(comcontent)
+              comauthor  = clean_entities(comauthor)
+            end
 
             comments << {
               "id"           => comment[:id].to_i,
@@ -242,11 +235,7 @@ module JekyllImport
           "comments"     => options[:comments] ? comments : nil,
         }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml
 
-        filename = if post[:status] == "DRAFT"
-                     "_drafts/#{slug}.md"
-                   else
-                     "_posts/#{name}"
-                   end
+        filename = post[:status] == "DRAFT" ? "_drafts/#{slug}.md" : "_posts/#{name}"
 
         # Write out the data and content to file
         File.open(filename, "w") do |f|
@@ -261,17 +250,17 @@ module JekyllImport
         text = HTMLEntities.new.encode(text, :named)
         # We don't want to convert these, it would break all
         # HTML tags in the post and comments.
-        text.gsub!("&amp;", "&")
-        text.gsub!("&lt;", "<")
-        text.gsub!("&gt;", ">")
+        text.gsub!("&amp;",  "&")
+        text.gsub!("&lt;",   "<")
+        text.gsub!("&gt;",   ">")
         text.gsub!("&quot;", '"')
         text.gsub!("&apos;", "'")
-        text.gsub!("&#47;", "/")
+        text.gsub!("&#47;",  "/")
         text
       end
 
       def self.sluggify(title)
-        title.to_ascii.downcase.gsub(%r![^0-9A-Za-z]+!, " ").strip.tr(" ", "-")
+        title.to_ascii.downcase.gsub(%r![^0-9a-z]+!, " ").strip.tr(" ", "-")
       end
 
       def self.page_path(_page_id)

@@ -21,6 +21,10 @@
   * chore(deps): fix gem build warnings (#361)
   * Remove cyclic require of import command (#359)
 
+### Documentation
+
+  * Update Documentation for Contributing to project (#366)
+
 ## 0.14.0 / 2018-02-03
 
 ### Development Fixes

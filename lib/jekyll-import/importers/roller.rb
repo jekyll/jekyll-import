@@ -97,24 +97,24 @@ module JekyllImport
                            :encoding => "utf8")
 
         posts_query = "
-                 SELECT
-                   weblogentry.id           AS `id`,
-                   weblogentry.status       AS `status`,
-                   weblogentry.title        AS `title`,
-                   weblogentry.anchor       AS `slug`,
-                   weblogentry.updatetime   AS `date`,
-                   weblogentry.text         AS `content`,
-                   weblogentry.summary      AS `excerpt`,
-                   weblogentry.categoryid   AS `categoryid`,
-                   roller_user.fullname     AS `author`,
-                   roller_user.username     AS `author_login`,
-                   roller_user.emailaddress AS `author_email`,
-                   weblog.handle            AS `site`
-                 FROM weblogentry AS `weblogentry`
-                   LEFT JOIN roller_user AS `roller_user`
-                     ON weblogentry.creator = roller_user.username
-                   LEFT JOIN weblog AS `weblog`
-                     ON weblogentry.websiteid = weblog.id"
+           SELECT
+             weblogentry.id           AS `id`,
+             weblogentry.status       AS `status`,
+             weblogentry.title        AS `title`,
+             weblogentry.anchor       AS `slug`,
+             weblogentry.updatetime   AS `date`,
+             weblogentry.text         AS `content`,
+             weblogentry.summary      AS `excerpt`,
+             weblogentry.categoryid   AS `categoryid`,
+             roller_user.fullname     AS `author`,
+             roller_user.username     AS `author_login`,
+             roller_user.emailaddress AS `author_email`,
+             weblog.handle            AS `site`
+           FROM weblogentry AS `weblogentry`
+             LEFT JOIN roller_user AS `roller_user`
+               ON weblogentry.creator = roller_user.username
+             LEFT JOIN weblog AS `weblog`
+               ON weblogentry.websiteid = weblog.id"
 
         if options[:status] && !options[:status].empty?
           status = options[:status][0]

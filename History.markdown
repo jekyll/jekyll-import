@@ -6,6 +6,7 @@
   * Added option to configure port. Added missing prefix to taxonomy tables. (#349)
   * Column name typo (#351)
   * Add roller importer (#363)
+  * feat: allow additional options to RSS import (#307)
 
 ### Bug Fixes
 

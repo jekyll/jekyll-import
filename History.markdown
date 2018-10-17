@@ -5,6 +5,7 @@
   * Fixes missing site prefix in user table (#343)
   * Added option to configure port. Added missing prefix to taxonomy tables. (#349)
   * Column name typo (#351)
+  * Add roller importer (#363)
 
 ### Bug Fixes
 

@@ -121,10 +121,6 @@ Style/DateTime:
 Style/FormatStringToken:
   EnforcedStyle: unannotated
 
-Style/FrozenStringLiteralComment:
-  Exclude:
-    - lib/jekyll-import/importers/tumblr.rb
-
 Style/MultilineBlockChain:
   Exclude:
     - lib/jekyll-import/importers/s9y_database.rb

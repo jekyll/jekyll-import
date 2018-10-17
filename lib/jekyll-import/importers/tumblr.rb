@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JekyllImport
   module Importers
     class Tumblr < Importer
@@ -34,20 +36,23 @@ module JekyllImport
         url += "/api/read/json/"
         per_page = 50
         posts = []
+
         # Two passes are required so that we can rewrite URLs.
         # First pass builds up an array of each post as a hash.
         begin
           current_page = (current_page || -1) + 1
-          feed_url = url + "?num=#{per_page}&start=#{current_page * per_page}"
+          feed_url     = "#{url}?num=#{per_page}&start=#{current_page * per_page}"
           Jekyll.logger.info "Fetching #{feed_url}"
-          feed = URI.parse(feed_url).open
+
+          feed     = URI.parse(feed_url).open
           contents = feed.readlines.join("\n")
-          blog = extract_json(contents)
+          blog     = extract_json(contents)
           Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
+
           batch = blog["posts"].map { |post| post_to_hash(post, format) }
 
-          # If we're rewriting, save the posts for later.  Otherwise, go ahead and
-          # dump these to disk now
+          # If we're rewriting, save the posts for later.  Otherwise, go ahead and dump these to
+          # disk now
           if rewrite_urls
             posts += batch
           else
@@ -65,29 +70,28 @@ module JekyllImport
       class << self
         def extract_json(contents)
           beginning = contents.index("{")
-          ending = contents.rindex("}") + 1
-          json = contents[beginning...ending] # Strip Tumblr's JSONP chars.
-          JSON.parse(json)
+          ending    = contents.rindex("}") + 1
+          json_data = contents[beginning...ending] # Strip Tumblr's JSONP chars.
+          JSON.parse(json_data)
         end
 
         # Writes a post out to disk
         def write_post(post, use_markdown, add_highlights)
           content = post[:content]
+          return unless content
 
-          if content
-            if use_markdown
-              content = html_to_markdown content
-              if add_highlights
-                tumblr_url = URI.parse(post[:slug]).path
-                redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
-                FileUtils.mkdir_p redirect_dir
-                content = add_syntax_highlights(content, redirect_dir)
-              end
+          if use_markdown
+            content = html_to_markdown content
+            if add_highlights
+              tumblr_url   = URI.parse(post[:slug]).path
+              redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
+              FileUtils.mkdir_p redirect_dir
+              content = add_syntax_highlights(content, redirect_dir)
             end
+          end
 
-            File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
-              f.puts post[:header].to_yaml + "---\n" + content
-            end
+          File.open("_posts/tumblr/#{post[:name]}", "w") do |f|
+            f.puts post[:header].to_yaml + "---\n" + content
           end
         end
 
@@ -96,69 +100,66 @@ module JekyllImport
         def post_to_hash(post, format)
           case post["type"]
           when "regular"
-            title = post["regular-title"]
-            content = post["regular-body"]
+            title, content = post.values_at("regular-title", "regular-body")
           when "link"
-            title = post["link-text"] || post["link-url"]
+            title   = post["link-text"] || post["link-url"]
             content = "<a href=\"#{post["link-url"]}\">#{title}</a>"
-            content << "<br/>" + post["link-description"] unless post["link-description"].nil?
+            content << "<br/>#{post["link-description"]}" unless post["link-description"].nil?
           when "photo"
             title = post["slug"].tr("-", " ")
             if post["photos"].size > 1
-              content = ""
+              content = +""
               post["photos"].each do |post_photo|
                 photo = fetch_photo post_photo
-                content << photo + "<br/>"
+                content << "#{photo}<br/>"
                 content << post_photo["caption"]
               end
             else
               content = fetch_photo post
             end
-            content << "<br/>" + post["photo-caption"]
+            content << "<br/>#{post["photo-caption"]}"
           when "audio"
             if !post["id3-title"].nil?
-              title = post["id3-title"]
-              content = post["audio-player"] + "<br/>" + post["audio-caption"]
+              title, content = post.values_at("id3-title", "audio-player")
+              content << "<br/>#{post["audio-caption"]}"
             else
-              title = post["audio-caption"]
-              content = post["audio-player"]
+              title, content = post.values_at("audio-caption", "audio-player")
             end
           when "quote"
-            title = post["quote-text"]
+            title   = post["quote-text"]
             content = "<blockquote>#{post["quote-text"]}</blockquote>"
-            content << "&#8212;" + post["quote-source"] unless post["quote-source"].nil?
+            content << "&#8212;#{post["quote-source"]}" unless post["quote-source"].nil?
           when "conversation"
-            title = post["conversation-title"]
+            title   = post["conversation-title"]
             content = "<section><dialog>"
             post["conversation"].each do |line|
               content << "<dt>#{line["label"]}</dt><dd>#{line["phrase"]}</dd>"
             end
             content << "</dialog></section>"
           when "video"
-            title = post["video-title"]
-            content = post["video-player"]
+            title, content = post.values_at("video-title", "video-player")
             unless post["video-caption"].nil?
               if content
-                content << "<br/>" + post["video-caption"]
+                content << "<br/>#{post["video-caption"]}"
               else
                 content = post["video-caption"]
               end
             end
           when "answer"
-            title = post["question"]
-            content = post["answer"]
+            title, content = post.values_at("question", "answer")
           end
-          date = Date.parse(post["date"]).to_s
+
+          date  = Date.parse(post["date"]).to_s
           title = Nokogiri::HTML(title).text
           title = "no title" if title.empty?
-          slug = if post["slug"] && post["slug"].strip != ""
-                   post["slug"]
-                 elsif title && title.downcase.gsub(%r![^a-z0-9\-]!, "") != "" && title != "no title"
-                   slug = title.downcase.strip.tr(" ", "-").gsub(%r![^a-z0-9\-]!, "")
-                   slug.length > 200 ? slug.slice(0..200) : slug
-                 else
-                   post["id"]
-                 end
+          slug  = if post["slug"] && post["slug"].strip != ""
+                    post["slug"]
+                  elsif title && title.downcase.gsub(%r![^a-z0-9\-]!, "") != "" && title != "no title"
+                    slug = title.downcase.strip.tr(" ", "-").gsub(%r![^a-z0-9\-]!, "")
+                    slug.length > 200 ? slug.slice(0..200) : slug
+                  else
+                    post["id"]
+                  end
           {
             :name    => "#{date}-#{slug}.#{format}",
             :header  => {
@@ -175,8 +176,8 @@ module JekyllImport
         end
 
         # Attempts to fetch the largest version of a photo available for a post.
-        # If that file fails, it tries the next smaller size until all available
-        # photo URLs are exhausted.  If they all fail, the import is aborted.
+        # If that file fails, it tries the next smaller size until all available photo URLs are
+        # exhausted.  If they all fail, the import is aborted.
         def fetch_photo(post)
           sizes = post.keys.map { |k| k.gsub("photo-url-", "").to_i }
           sizes.sort! { |a, b| b <=> a }
@@ -191,7 +192,7 @@ module JekyllImport
             next if url.nil?
 
             begin
-              return "<img src=\"#{save_photo(url, ext)}\"/>"
+              return +"<img src=\"#{save_photo(url, ext)}\"/>"
             rescue OpenURI::HTTPError
               Jekyll.logger.warn "Failed to grab photo"
             end
@@ -200,20 +201,19 @@ module JekyllImport
           abort "Failed to fetch photo for post #{post["url"]}"
         end
 
-        # Create a Hash of old urls => new urls, for rewriting and
-        # redirects, and replace urls in each post. Instantiate Jekyll
-        # site/posts to get the correct permalink format.
+        # Create a Hash of old urls => new urls, for rewriting and redirects, and replace urls in
+        # each post. Instantiate Jekyll site/posts to get the correct permalink format.
         def rewrite_urls_and_redirects(posts)
           site = Jekyll::Site.new(Jekyll.configuration({}))
           urls = Hash[posts.map do |post|
-            # Create an initial empty file for the post so that
-            # we can instantiate a post object.
-            File.write("_posts/tumblr/#{post[:name]}", "")
+            # Create an initial empty file for the post so that we can instantiate a post object.
+            relative_path = "_posts/tumblr/#{post[:name]}"
+            File.write(relative_path, "")
             tumblr_url = URI.parse(URI.encode(post[:slug])).path
             jekyll_url = if Jekyll.const_defined? :Post
-                           Jekyll::Post.new(site, Dir.pwd, "", "tumblr/" + post[:name]).url
+                           Jekyll::Post.new(site, site.source, "", "tumblr/#{post[:name]}").url
                          else
-                           Jekyll::Document.new(File.expand_path("_posts/tumblr/#{post[:name]}"), :site => site, :collection => site.posts).url
+                           Jekyll::Document.new(site.in_source_dir(relative_path), :site => site, :collection => site.posts).url
                          end
             redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
             FileUtils.mkdir_p redirect_dir
@@ -236,36 +236,35 @@ module JekyllImport
         def html_to_markdown(content)
           preserve = %w(table tr th td)
           preserve.each do |tag|
-            content.gsub!(%r!<#{tag}!i, "$$" + tag)
-            content.gsub!(%r!<\/#{tag}!i, "||" + tag)
+            content.gsub!(%r!<#{tag}!i, "$$#{tag}")
+            content.gsub!(%r!<\/#{tag}!i, "||#{tag}")
           end
           content = Nokogiri::HTML(content.gsub("'", "''")).text
           preserve.each do |tag|
-            content.gsub!("$$" + tag, "<" + tag)
-            content.gsub!("||" + tag, "</" + tag)
+            content.gsub!("$$#{tag}", "<#{tag}")
+            content.gsub!("||#{tag}", "</#{tag}")
           end
           content
         end
 
-        # Adds pygments highlight tags to code blocks in posts that use
-        # markdown format. This doesn't guess the language of the code
-        # block, so you should modify this to suit your own content.
-        # For example, my code block only contain Python and JavaScript,
-        # so I can assume the block is JavaScript if it contains a
-        # semi-colon.
+        # Adds pygments highlight tags to code blocks in posts that use markdown format.
+        # This doesn't guess the language of the code block, so you should modify this to suit your
+        # own content.
+        # For example, my code block only contain Python and JavaScript, so I can assume the block
+        # is JavaScript if it contains a semi-colon.
         def add_syntax_highlights(content, redirect_dir)
-          lines = content.split("\n")
-          block = false
+          lines  = content.split("\n")
+          block  = false
           indent = %r!^    !
-          lang = nil
-          start = nil
+          lang   = nil
+          start  = nil
           lines.each_with_index do |line, i|
             if !block && line =~ indent
               block = true
-              lang = "python"
+              lang  = "python"
               start = i
             elsif block
-              lang = "javascript" if line =~ %r!;$!
+              lang  = "javascript" if line =~ %r!;$!
               block = line =~ indent && i < lines.size - 1 # Also handle EOF
               unless block
                 lines[start] = "{% highlight #{lang} %}"
@@ -279,19 +278,18 @@ module JekyllImport
         end
 
         def save_photo(url, ext)
-          if @grab_images
-            path = "tumblr_files/#{url.split("/").last}"
-            path += ext unless path =~ %r!#{ext}$!
-            FileUtils.mkdir_p "tumblr_files"
+          return url unless @grab_images
 
-            # Don't fetch if we've already cached this file
-            unless File.size? path
-              Jekyll.logger.info "Fetching photo #{url}"
-              File.open(path, "wb") { |f| f.write(URI.parse(url).read) }
-            end
-            url = "/" + path
+          path = "tumblr_files/#{url.split("/").last}"
+          path += ext unless path =~ %r!#{ext}$!
+          FileUtils.mkdir_p "tumblr_files"
+
+          # Don't fetch if we've already cached this file
+          unless File.size? path
+            Jekyll.logger.info "Fetching photo #{url}"
+            File.open(path, "wb") { |f| f.write(URI.parse(url).read) }
           end
-          url
+          "/#{path}"
         end
       end
     end

@@ -20,5 +20,12 @@ $ ruby -rubygems -e 'require "jekyll-import";
     })'
 {% endhighlight %}
 
+or from the commande line, .e.g.:
+
+{% highlight bash %}
+jekyll import tumblr --url=http://myblog.tumblr.com --format=md --grab_images --rewrite_urls
+{% endhighlight %}
+
+
 The only required field is `url`. The other fields default to their above
 values.

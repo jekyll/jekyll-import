@@ -30,6 +30,8 @@ module JekyllImport
       # Returns nothing.
       def self.process(options)
         source = options.fetch("source")
+        frontmatter = options.fetch("frontmatter", [])
+        body = options.fetch("body", ["description"])
 
         content = ""
         URI.parse(source).open { |s| content = s.read }
@@ -51,12 +53,22 @@ module JekyllImport
 
           header["tag"] = options["tag"] unless options.to_s.empty?
 
+          frontmatter.each do |value|
+            header[value] = item.send(value)
+          end
+
+          output = ""
+
+          body.each do |row|
+            output += item.send(row)
+          end
+
           FileUtils.mkdir_p("_posts")
 
           File.open("_posts/#{name}.html", "w") do |f|
             f.puts header.to_yaml
             f.puts "---\n\n"
-            f.puts item.description
+            f.puts output
           end
         end
       end

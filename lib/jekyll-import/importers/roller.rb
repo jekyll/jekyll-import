@@ -163,7 +163,7 @@ module JekyllImport
                weblogcategory.id = '#{post[:categoryid]}'"
 
           db[cquery].each do |term|
-            categories << ( options[:clean_entities] ? clean_entities(term[:name]) : term[:name] )
+            categories << (options[:clean_entities] ? clean_entities(term[:name]) : term[:name])
           end
         end
 
@@ -177,7 +177,7 @@ module JekyllImport
                roller_weblogentrytag.entryid = '#{post[:id]}'"
 
           db[cquery].each do |term|
-            tags << ( options[:clean_entities] ? clean_entities(term[:name]) : term[:name] )
+            tags << (options[:clean_entities] ? clean_entities(term[:name]) : term[:name])
           end
         end
 

@@ -11,6 +11,7 @@
 
   * Use mysql by default in Drupal importers. (#347)
   * fix: Ignore Lint/Loop for tumblr (#360)
+  * Refactor Tumblr Importer (#362)
 
 ### Development Fixes  
 

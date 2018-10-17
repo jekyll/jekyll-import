@@ -20,12 +20,12 @@ installation, run:
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Roller.run({
-      "dbname"   => "",
-      "user"     => "",
-      "password" => "",
-      "host"     => "localhost",
-      "port"     => "3306",
-      "socket"   => "",
+      "dbname"         => "",
+      "user"           => "",
+      "password"       => "",
+      "host"           => "localhost",
+      "port"           => "3306",
+      "socket"         => "",
       "clean_entities" => true,
       "comments"       => true,
       "categories"     => true,

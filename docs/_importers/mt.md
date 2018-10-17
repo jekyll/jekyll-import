@@ -12,16 +12,17 @@ To import your posts from [Movable Type](http://movabletype.org), run:
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::MT.run({
-      "engine"   => "mysql", # "postgres" is also supported
-      "dbname"   => "name",
-      "user"     => "myuser",
-      "password" => "mypassword",
-      "host"     => "myhost",
-      "blog_id"   => nil,  # Set to specific ID to iimport just one blog
-      "categories" => true, # Set to false to not save categories to front matter
-      "src_encoding" => "UTF-8",
+      "engine"        => "mysql", # "postgres" is also supported
+      "dbname"        => "name",
+      "user"          => "myuser",
+      "password"      => "mypassword",
+      "host"          => "myhost",
+      "blog_id"       => nil,  # Set to specific ID to import just one blog
+      "categories"    => true, # Set to false to not save categories to front matter
+      "src_encoding"  => "UTF-8",
       "dest_encoding" => "UTF-8",
-      "comments" => true
+      "comments"      => true
+
     })'
 {% endhighlight %}
 

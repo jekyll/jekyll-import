@@ -21,10 +21,10 @@ To import your posts from a self-hosted [S9Y](http://www.s9y.org) database, run:
 {% highlight bash %}
 $ ruby -rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::S9YDatabase.run({
-      "dbname"   => "s9y_blog",
-      "user"     => "root",
-      "password" => "",
-      "host"     => "localhost",
+      "dbname"         => "s9y_blog",
+      "user"           => "root",
+      "password"       => "",
+      "host"           => "localhost",
       "table_prefix"   => "serendipity_",
       "clean_entities" => false,
       "comments"       => true,

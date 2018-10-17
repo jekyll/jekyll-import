@@ -1,28 +1,25 @@
-## HEAD
+## 0.15.0 / 2018-10-17
 
 ### Minor Enhancements
 
-  * Fixes missing site prefix in user table (#343)
-  * Added option to configure port. Added missing prefix to taxonomy tables. (#349)
-  * Column name typo (#351)
   * Add roller importer (#363)
-  * feat: allow additional options to RSS import (#307)
+  * Allow additional options to RSS import (#307)
 
 ### Bug Fixes
 
   * Use mysql by default in Drupal importers. (#347)
-  * fix: Ignore Lint/Loop for tumblr (#360)
-  * Refactor Tumblr Importer (#362)
-
-### Development Fixes  
-
-  * style: inherit rubocop-jekyll's rules (#357)
+  * WordPress: add missing site prefix in user table (#343)
+  * Drupal: add option to configure port. Add missing prefix to taxonomy tables. (#349)
+  * Movable type: fix column name typo (#351)
 
 ### Development Fixes
 
   * Replace uninitialized constant with alternative (#358)
   * chore(deps): fix gem build warnings (#361)
   * Remove cyclic require of import command (#359)
+  * style: ignore Lint/Loop for tumblr (#360)
+  * style: inherit rubocop-jekyll's rules (#357)
+  * Refactor Tumblr Importer (#362)
 
 ### Documentation
 

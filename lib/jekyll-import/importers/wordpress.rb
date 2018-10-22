@@ -163,10 +163,10 @@ module JekyllImport
 
         if options[:status] && !options[:status].empty?
           status = options[:status][0]
-          posts_query << "
+          +posts_query << "
            WHERE posts.post_status = '#{status}'"
           options[:status][1..-1].each do |post_status|
-            posts_query << " OR
+            +posts_query << " OR
              posts.post_status = '#{post_status}'"
           end
         end

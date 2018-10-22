@@ -110,29 +110,32 @@ module JekyllImport
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts") if options[:status].include? :draft
 
-        db = Sequel.mysql2(options[:dbname],
-                           :user     => options[:user],
-                           :password => options[:pass],
-                           :socket   => options[:socket],
-                           :host     => options[:host],
-                           :port     => options[:port],
-                           :encoding => "utf8")
+        db = Sequel.mysql2(
+          options[:dbname],
+          :user     => options[:user],
+          :password => options[:pass],
+          :socket   => options[:socket],
+          :host     => options[:host],
+          :port     => options[:port],
+          :encoding => "utf8"
+        )
 
         px = options[:table_prefix]
         sx = options[:site_prefix]
 
         page_name_list = {}
 
-        page_name_query = "
-           SELECT
-             posts.ID            AS `id`,
-             posts.post_title    AS `title`,
-             posts.post_name     AS `slug`,
-             posts.post_parent   AS `parent`
-           FROM #{px}#{sx}posts AS `posts`
-           WHERE posts.post_type = 'page'"
+        PAGE_NAME_QUERY <<~SQL
+          SELECT
+           posts.ID            AS id,
+           posts.post_title    AS title,
+           posts.post_name     AS slug,
+           posts.post_parent   AS parent
+          FROM #{px}#{sx}posts AS posts
+          WHERE posts.post_type = 'page'
+        SQL
 
-        db[page_name_query].each do |page|
+        db[PAGE_NAME_QUERY].each do |page|
           page[:slug] = sluggify(page[:title]) if page.fetch(:slug, "").empty?
           page_name_list[ page[:id] ] = {
             :slug   => page[:slug],
@@ -140,38 +143,37 @@ module JekyllImport
           }
         end
 
-        posts_query = "
-           SELECT
-             posts.ID            AS `id`,
-             posts.guid          AS `guid`,
-             posts.post_type     AS `type`,
-             posts.post_status   AS `status`,
-             posts.post_title    AS `title`,
-             posts.post_name     AS `slug`,
-             posts.post_date     AS `date`,
-             posts.post_date_gmt AS `date_gmt`,
-             posts.post_content  AS `content`,
-             posts.post_excerpt  AS `excerpt`,
-             posts.comment_count AS `comment_count`,
-             users.display_name  AS `author`,
-             users.user_login    AS `author_login`,
-             users.user_email    AS `author_email`,
-             users.user_url      AS `author_url`
-           FROM #{px}#{sx}posts AS `posts`
-             LEFT JOIN #{px}#{sx}users AS `users`
-               ON posts.post_author = users.ID"
+        POSTS_QUERY <<~SQL
+          SELECT
+            posts.ID            AS id,
+            posts.guid          AS guid,
+            posts.post_type     AS type,
+            posts.post_status   AS status,
+            posts.post_title    AS title,
+            posts.post_name     AS slug,
+            posts.post_date     AS date,
+            posts.post_date_gmt AS date_gmt,
+            posts.post_content  AS content,
+            posts.post_excerpt  AS excerpt,
+            posts.comment_count AS comment_count,
+            users.display_name  AS author,
+            users.user_login    AS author_login,
+            users.user_email    AS author_email,
+            users.user_url      AS author_url
+          FROM #{px}#{sx}posts AS posts
+          LEFT JOIN #{px}#{sx}users AS users
+            ON posts.post_author = users.ID
+        SQL
 
         if options[:status] && !options[:status].empty?
           status = options[:status][0]
-          +posts_query << "
-           WHERE posts.post_status = '#{status}'"
+          +POSTS_QUERY << "WHERE posts.post_status = '#{status}'"
           options[:status][1..-1].each do |post_status|
-            +posts_query << " OR
-             posts.post_status = '#{post_status}'"
+            +POSTS_QUERY << " OR posts.post_status = '#{post_status}'"
           end
         end
 
-        db[posts_query].each do |post|
+        db[POSTS_QUERY].each do |post|
           process_post(post, db, options, page_name_list)
         end
       end
@@ -214,18 +216,21 @@ module JekyllImport
 
         if options[:categories] || options[:tags]
 
-          cquery =
-            "SELECT
-               terms.name AS `name`,
-               ttax.taxonomy AS `type`
-             FROM
-               #{px}#{sx}terms AS `terms`,
-               #{px}#{sx}term_relationships AS `trels`,
-               #{px}#{sx}term_taxonomy AS `ttax`
-             WHERE
-               trels.object_id = '#{post[:id]}' AND
-               trels.term_taxonomy_id = ttax.term_taxonomy_id AND
-               terms.term_id = ttax.term_id"
+          cquery <<~SQL
+            SELECT
+               terms.name AS name,
+               ttax.taxonomy AS type
+            FROM
+               #{px}#{sx}terms AS terms,
+               #{px}#{sx}term_relationships AS trels,
+               #{px}#{sx}term_taxonomy AS ttax
+            WHERE
+               trels.object_id = #{post[:id]}
+            AND
+               trels.term_taxonomy_id = ttax.term_taxonomy_id
+            AND
+               terms.term_id = ttax.term_id
+          SQL
 
           db[cquery].each do |term|
             if options[:categories] && term[:type] == "category"
@@ -247,19 +252,21 @@ module JekyllImport
         comments = []
 
         if options[:comments] && post[:comment_count].to_i.positive?
-          cquery =
-            "SELECT
-               comment_ID           AS `id`,
-               comment_author       AS `author`,
-               comment_author_email AS `author_email`,
-               comment_author_url   AS `author_url`,
-               comment_date         AS `date`,
-               comment_date_gmt     AS `date_gmt`,
-               comment_content      AS `content`
-             FROM #{px}#{sx}comments
-             WHERE
-               comment_post_ID = '#{post[:id]}' AND
-               comment_approved != 'spam'"
+          cquery <<~SQL
+            SELECT
+              comment_ID           AS aid,
+              comment_author       AS author,
+              comment_author_email AS author_email,
+              comment_author_url   AS author_url,
+              comment_date         AS date,
+              comment_date_gmt     AS date_gmt,
+              comment_content      AS content
+            FROM #{px}#{sx}comments
+            WHERE
+              comment_post_ID = #{post[:id]}
+              AND
+              comment_approved != 'spam'
+          SQL
 
           db[cquery].each do |comment|
             comcontent = comment[:content].to_s

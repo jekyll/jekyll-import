@@ -44,24 +44,22 @@ module JekyllImport
         # post in wp_posts that has post_status = 'publish'. This restriction is
         # made because 'draft' posts are not guaranteed to have valid dates.
 
-        query = "
-        select
-	  ep.`title`, `permalink` as alias, concat(`intro`, `content`) as content, ep.`created`, ep.`id`, ec.`title` as category, tags
-        from
-          #{table_prefix}easyblog_post ep
-          left join #{table_prefix}easyblog_category ec on (ep.category_id = ec.id)
-          left join (
-            select
+        QUERY <<~SQL
+          SELECT ep.title, permalink AS alias, concat(intro, content) AS content, ep.created, ep.id, ec.title AS category, tags
+          FROM #{table_prefix}easyblog_post ep
+          LEFT JOIN #{table_prefix}easyblog_category ec ON (ep.category_id = ec.id)
+          LEFT JOIN (
+            SELECT
               ept.post_id,
               group_concat(et.alias order by alias separator ' ') as tags
-            from
+            FROM
               #{table_prefix}easyblog_post_tag ept
-              join #{table_prefix}easyblog_tag et on (ept.tag_id = et.id)
-            group by
-              ept.post_id) x on (ep.id = x.post_id);
-        "
+              join #{table_prefix}easyblog_tag et ON (ept.tag_id = et.id)
+            GROUP BY
+              ept.post_id) x ON (ep.id = x.post_id);
+        SQL
 
-        db[query].each do |post|
+        db[QUERY].each do |post|
           # Get required fields and construct Jekyll compatible name.
           title = post[:title]
           slug = post[:alias]

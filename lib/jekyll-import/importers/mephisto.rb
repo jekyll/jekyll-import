@@ -43,20 +43,6 @@ module JekyllImport
         c.option "host",     "--host HOST",   'Database host name (default: "localhost")'
       end
 
-      # This query will pull blog posts from all entries across all blogs. If
-      # you've got unpublished, deleted or otherwise hidden posts please sift
-      # through the created posts to make sure nothing is accidently published.
-      QUERY = "SELECT id, \
-                      permalink, \
-                      body, \
-                      published_at, \
-                      title \
-               FROM contents \
-               WHERE user_id = 1 AND \
-                     type = 'Article' AND \
-                     published_at IS NOT NULL \
-               ORDER BY published_at"
-
       def self.process(options)
         dbname = options.fetch("dbname")
         user   = options.fetch("user")
@@ -69,6 +55,22 @@ module JekyllImport
                                    :encoding => "utf8")
 
         FileUtils.mkdir_p "_posts"
+
+        # This query will pull blog posts from all entries across all blogs. If
+        # you've got unpublished, deleted or otherwise hidden posts please sift
+        # through the created posts to make sure nothing is accidently published.
+        QUERY <<~SQL
+          SELECT id,
+                  permalink,
+                  body,
+                  published_at,
+                  title
+          FROM contents
+          WHERE user_id = 1 AND
+                type = 'Article' AND
+                published_at IS NOT NULL
+          ORDER BY published_at
+        SQL
 
         db[QUERY].each do |post|
           title = post[:title]

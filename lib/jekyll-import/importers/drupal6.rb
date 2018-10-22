@@ -12,25 +12,25 @@ module JekyllImport
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
 
-        query = <<SQL
-                SELECT n.nid,
-                       n.title,
-                       nr.body,
-                       nr.teaser,
-                       n.created,
-                       n.status,
-                       n.type,
-                       GROUP_CONCAT( td.name SEPARATOR '|' ) AS 'tags'
-                FROM #{prefix}node_revisions AS nr,
-                     #{prefix}node AS n
-                     LEFT OUTER JOIN #{prefix}term_node AS tn ON tn.nid = n.nid
-                     LEFT OUTER JOIN #{prefix}term_data AS td ON tn.tid = td.tid
-                WHERE (#{types})
-                  AND n.vid = nr.vid
-                GROUP BY n.nid
-SQL
+        QUERY <<~SQL
+          SELECT n.nid,
+                 n.title,
+                 nr.body,
+                 nr.teaser,
+                 n.created,
+                 n.status,
+                 n.type,
+                 GROUP_CONCAT( td.name SEPARATOR '|' ) AS tags
+          FROM #{prefix}node_revisions AS nr,
+               #{prefix}node AS n
+               LEFT OUTER JOIN #{prefix}term_node AS tn ON tn.nid = n.nid
+               LEFT OUTER JOIN #{prefix}term_data AS td ON tn.tid = td.tid
+          WHERE (#{types})
+            AND n.vid = nr.vid
+          GROUP BY n.nid
+        SQL
 
-        query
+        QUERY
       end
 
       def self.aliases_query(prefix)

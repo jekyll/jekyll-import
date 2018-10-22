@@ -3,7 +3,7 @@
 module JekyllImport
   module Importers
     class Enki < Importer
-      SQL = <<~SQL
+      QUERY = <<~SQL
         SELECT p.id,
                p.title,
                p.slug,
@@ -51,7 +51,7 @@ module JekyllImport
                              :host     => host,
                              :encoding => "utf8")
 
-        db[SQL].each do |post|
+        db[QUERY].each do |post|
           name = [
             format("%.04d", post[:date].year),
             format("%.02d", post[:date].month),

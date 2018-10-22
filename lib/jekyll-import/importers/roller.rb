@@ -88,45 +88,46 @@ module JekyllImport
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts") if options[:status].include? :DRAFT
 
-        db = Sequel.mysql2(options[:dbname],
-                           :user     => options[:user],
-                           :password => options[:pass],
-                           :socket   => options[:socket],
-                           :host     => options[:host],
-                           :port     => options[:port],
-                           :encoding => "utf8")
+        db = Sequel.mysql2(
+          options[:dbname],
+          :user     => options[:user],
+          :password => options[:pass],
+          :socket   => options[:socket],
+          :host     => options[:host],
+          :port     => options[:port],
+          :encoding => "utf8"
+        )
 
-        posts_query = "
-           SELECT
-             weblogentry.id           AS `id`,
-             weblogentry.status       AS `status`,
-             weblogentry.title        AS `title`,
-             weblogentry.anchor       AS `slug`,
-             weblogentry.updatetime   AS `date`,
-             weblogentry.text         AS `content`,
-             weblogentry.summary      AS `excerpt`,
-             weblogentry.categoryid   AS `categoryid`,
-             roller_user.fullname     AS `author`,
-             roller_user.username     AS `author_login`,
-             roller_user.emailaddress AS `author_email`,
-             weblog.handle            AS `site`
-           FROM weblogentry AS `weblogentry`
-             LEFT JOIN roller_user AS `roller_user`
-               ON weblogentry.creator = roller_user.username
-             LEFT JOIN weblog AS `weblog`
-               ON weblogentry.websiteid = weblog.id"
+        POSTS_QUERY <<~SQL
+          SELECT
+            weblogentry.id           AS id,
+            weblogentry.status       AS status,
+            weblogentry.title        AS title,
+            weblogentry.anchor       AS slug,
+            weblogentry.updatetime   AS date,
+            weblogentry.text         AS content,
+            weblogentry.summary      AS excerpt,
+            weblogentry.categoryid   AS categoryid,
+            roller_user.fullname     AS author,
+            roller_user.username     AS author_login,
+            roller_user.emailaddress AS author_email,
+            weblog.handle            AS site
+          FROM weblogentry AS weblogentry
+          LEFT JOIN roller_user AS roller_user
+            ON weblogentry.creator = roller_user.username
+          LEFT JOIN weblog AS weblog
+            ON weblogentry.websiteid = weblog.id
+        SQL
 
         if options[:status] && !options[:status].empty?
           status = options[:status][0]
-          posts_query += "
-           WHERE weblogentry.status = '#{status}'"
+          +POSTS_QUERY << " WHERE weblogentry.status = '#{status}'"
           options[:status][1..-1].each do |stat|
-            posts_query += " OR
-             weblogentry.status = '#{stat}'"
+            +POSTS_QUERY << " OR weblogentry.status = '#{stat}'"
           end
         end
 
-        db[posts_query].each do |post|
+        db[POSTS_QUERY].each do |post|
           process_post(post, db, options)
         end
       end
@@ -154,29 +155,25 @@ module JekyllImport
         tags       = []
 
         if options[:categories]
-          cquery =
-            "SELECT
-               weblogcategory.name AS `name`
-             FROM
-               weblogcategory AS `weblogcategory`
-             WHERE
-               weblogcategory.id = '#{post[:categoryid]}'"
+          CQUERY <<~SQL
+            SELECT weblogcategory.name AS name
+            FROM weblogcategory AS weblogcategory
+            WHERE weblogcategory.id = '#{post[:categoryid]}'
+          SQL
 
-          db[cquery].each do |term|
+          db[CQUERY].each do |term|
             categories << (options[:clean_entities] ? clean_entities(term[:name]) : term[:name])
           end
         end
 
         if options[:tags]
-          cquery =
-            "SELECT
-               roller_weblogentrytag.name AS `name`
-             FROM
-               roller_weblogentrytag AS `roller_weblogentrytag`
-             WHERE
-               roller_weblogentrytag.entryid = '#{post[:id]}'"
+          CQUERY <<~SQL
+            SELECT roller_weblogentrytag.name AS name
+            FROM roller_weblogentrytag AS roller_weblogentrytag
+            WHERE roller_weblogentrytag.entryid = #{post[:id]}
+          SQL
 
-          db[cquery].each do |term|
+          db[CQUERY].each do |term|
             tags << (options[:clean_entities] ? clean_entities(term[:name]) : term[:name])
           end
         end
@@ -184,19 +181,20 @@ module JekyllImport
         comments = []
 
         if options[:comments]
-          cquery =
-            "SELECT
-               id       AS `id`,
-               name     AS `author`,
-               email    AS `author_email`,
-               posttime AS `date`,
-               content  AS `content`
-             FROM roller_comment
-             WHERE
-               entryid = '#{post[:id]}' AND
-               status = 'APPROVED'"
+          CQUERY <<~SQL
+            SELECT
+              id       AS id,
+              name     AS author,
+              email    AS author_email,
+              posttime AS date,
+              content  AS content
+            FROM roller_comment
+            WHERE
+              entryid = '#{post[:id]}' AND
+              status = 'APPROVED'
+          SQL
 
-          db[cquery].each do |comment|
+          db[CQUERY].each do |comment|
             comcontent = comment[:content].to_s
             comauthor  = comment[:author].to_s
             comcontent.force_encoding("UTF-8") if comcontent.respond_to?(:force_encoding)

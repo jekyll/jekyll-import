@@ -44,19 +44,22 @@ module JekyllImport
 
         # Reads a MySQL database via Sequel and creates a post file for each
         # post in #__content that is published.
-        query = "SELECT `cn`.`title`, `cn`.`alias`, `cn`.`introtext`, CONCAT(`cn`.`introtext`,`cn`.`fulltext`) AS `content`, "
-        query << "`cn`.`created`, `cn`.`id`, `ct`.`title` AS `category`, `u`.`name` AS `author` "
-        query << "FROM `#{table_prefix}content` AS `cn` JOIN `#{table_prefix}categories` AS `ct` ON `cn`.`catid` = `ct`.`id` "
-        query << "JOIN `#{table_prefix}users` AS `u` ON `cn`.`created_by` = `u`.`id` "
-        query << "WHERE (`cn`.`state` = '1' OR `cn`.`state` = '2') " # Only published and archived content items to be imported
 
-        query << if cid.positive?
-                   " AND `cn`.`catid` = '#{cid}' "
-                 else
-                   " AND `cn`.`catid` != '2' " # Filter out uncategorized content
-                 end
+        QUERY <<~SQL
+          SELECT cn.title, cn.alias, cn.introtext, CONCAT(cn.introtext,cn.fulltext) AS content,
+          cn.created, cn.id, ct.title AS category, u.name AS author
+          FROM #{table_prefix}content AS cn JOIN #{table_prefix}categories AS ct ON cn.catid = ct.id
+          JOIN #{table_prefix}users AS u ON cn.created_by = u.id
+          WHERE (cn.state = '1' OR cn.state = '2')
+        SQL
 
-        db[query].each do |post|
+        +QUERY << if cid.positive?
+                    " AND `cn`.`catid` = '#{cid}' "
+                  else
+                    " AND `cn`.`catid` != '2' " # Filter out uncategorized content
+                  end
+
+        db[QUERY].each do |post|
           # Get required fields and construct Jekyll compatible name.
           title = post[:title]
           slug = post[:alias]

@@ -7,14 +7,6 @@ module JekyllImport
       # The only posts selected are those with a status of 4 or 5, which means
       # "live" and "sticky" respectively.
       # Other statuses are 1 => draft, 2 => hidden and 3 => pending.
-      QUERY = "SELECT Title, \
-                      url_title, \
-                      Posted, \
-                      Body, \
-                      Keywords \
-               FROM textpattern \
-               WHERE Status = '4' OR \
-                     Status = '5'"
 
       def self.require_deps
         JekyllImport.require_with_fallback(%w(
@@ -39,9 +31,26 @@ module JekyllImport
         pass   = options.fetch("password", "")
         host   = options.fetch("host", "localhost")
 
-        db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
+        db = Sequel.mysql2(
+          dbname,
+          :user     => user,
+          :password => pass,
+          :host     => host,
+          :encoding => "utf8"
+        )
 
         FileUtils.mkdir_p "_posts"
+
+        QUERY <<~SQL
+          SELECT Title,
+                 url_title,
+                 Posted,
+                 Body,
+                 Keywords
+          FROM textpattern
+          WHERE Status = '4' OR
+                Status = '5'
+        SQL
 
         db[QUERY].each do |post|
           # Get required fields and construct Jekyll compatible name.

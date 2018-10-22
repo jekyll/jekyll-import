@@ -26,22 +26,22 @@ POSTGRESQL
 SQL
                     end
 
-        query = <<QUERY
-                SELECT n.nid,
-                       n.title,
-                       fdb.body_value,
-                       fdb.body_summary,
-                       n.created,
-                       n.status,
-                       n.type,
-                       #{tag_group}
-                FROM #{prefix}node AS n
-                LEFT JOIN #{prefix}field_data_body AS fdb
-                  ON fdb.entity_id = n.nid AND fdb.entity_type = 'node'
-                WHERE (#{types})
-QUERY
+        QUERY <<~SQL
+          SELECT n.nid,
+                 n.title,
+                 fdb.body_value,
+                 fdb.body_summary,
+                 n.created,
+                 n.status,
+                 n.type,
+                 #{tag_group}
+          FROM #{prefix}node AS n
+          LEFT JOIN #{prefix}field_data_body AS fdb
+            ON fdb.entity_id = n.nid AND fdb.entity_type = 'node'
+          WHERE (#{types})
+        SQL
 
-        query
+        QUERY
       end
 
       def self.aliases_query(prefix)

@@ -33,8 +33,18 @@ module JekyllImport
 
         def fetch_posts(dbfile)
           db = Sequel.sqlite(dbfile)
-          query = "SELECT `title`, `slug`, `markdown`, `created_at`, `published_at`, `status`, `page` FROM posts"
-          db[query]
+          QUERY <<~SQL
+            SELECT title,
+                   slug,
+                   markdown,
+                   created_at,
+                   published_at,
+                   status,
+                   page
+            FROM posts
+          SQL
+
+          db[QUERY]
         end
 
         def write_post_to_file(post)

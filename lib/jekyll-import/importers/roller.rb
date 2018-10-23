@@ -189,6 +189,7 @@ module JekyllImport
                id       AS `id`,
                name     AS `author`,
                email    AS `author_email`,
+	       url      AS `author_url`,
                posttime AS `date`,
                content  AS `content`
              FROM roller_comment
@@ -210,6 +211,7 @@ module JekyllImport
               "id"           => comment[:id].to_i,
               "author"       => comauthor,
               "author_email" => comment[:author_email].to_s,
+	      "author_url"   => comment[:author_url].to_s,
               "date"         => comment[:date].to_s,
               "content"      => comcontent,
             }
@@ -221,7 +223,7 @@ module JekyllImport
         # Get the relevant fields as a hash, delete empty fields and
         # convert to YAML for the header.
         data = {
-          "layout"       => post[:type].to_s,
+          "layout"       => "post",
           "status"       => post[:status].to_s,
           "published"    => post[:status].to_s == "DRAFT" ? nil : (post[:status].to_s == "PUBLISHED"),
           "title"        => title.to_s,

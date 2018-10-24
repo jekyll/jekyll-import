@@ -276,6 +276,40 @@ module JekyllImport
       end
 
       def self.gen_db_query(select, table, condition, join, condition_join)
+        if condition_join.empty?
+          condition_join_string = "AND"
+	else
+          condition_join_string = condition_join
+	end
+        if select.kind_of?(Array)
+          select_string = select.join(",")
+	else
+          select_string = select
+	end
+	if condition.kind_of?(Array)
+          condition_string = condition.join(" #{condition_join_string} ")
+	else
+          condition_string = condition
+	end
+	if join.kind_of?(Array)
+          join_string = join.join(" LEFT JOIN ")
+	else
+          join_string = join
+	end
+	query_select = "SELECT #{select_string}"
+	table_string = " FROM #{table}"
+        if join_string.empty?
+          query_join = ""
+	else
+          query_join = " LEFT JOIN #{join_string}"
+	end
+	if condition_string.empty?
+          query_condition = ""
+	else
+          query_condition = " WHERE #{condition_string}"
+	end
+        query = "#{query_select}#{table_string}#{query_join}#{query_condition}"
+        query
       end
     end
   end

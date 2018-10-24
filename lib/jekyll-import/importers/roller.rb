@@ -96,36 +96,30 @@ module JekyllImport
                            :port     => options[:port],
                            :encoding => "utf8")
 
-        posts_query = "
-           SELECT
-             weblogentry.id           AS `id`,
-             weblogentry.status       AS `status`,
-             weblogentry.title        AS `title`,
-             weblogentry.anchor       AS `slug`,
-             weblogentry.updatetime   AS `date`,
-             weblogentry.text         AS `content`,
-             weblogentry.summary      AS `excerpt`,
-             weblogentry.categoryid   AS `categoryid`,
-             roller_user.fullname     AS `author`,
-             roller_user.username     AS `author_login`,
-             roller_user.emailaddress AS `author_email`,
-             weblog.handle            AS `site`
-           FROM weblogentry AS `weblogentry`
-             LEFT JOIN roller_user AS `roller_user`
-               ON weblogentry.creator = roller_user.username
-             LEFT JOIN weblog AS `weblog`
-               ON weblogentry.websiteid = weblog.id"
+        select = ["weblogentry.id AS `id`",
+                  "weblogentry.status AS `status`",
+                  "weblogentry.title AS `title`",
+                  "weblogentry.anchor AS `slug`",
+                  "weblogentry.updatetime AS `date`",
+                  "weblogentry.text AS `content`",
+                  "weblogentry.summary AS `excerpt`",
+                  "weblogentry.categoryid AS `categoryid`",
+                  "roller_user.fullname AS `author`",
+                  "roller_user.username AS `author_login`",
+                  "roller_user.emailaddress AS `author_email`",
+                  "weblog.handle AS `site`"]
+	table = "weblogentry AS `weblogentry`"
+	join = ["roller_user AS `roller_user` ON weblogentry.creator = roller_user.username",
+                "weblog AS `weblog` ON weblogentry.websiteid = weblog.id"]
+	condition = []
 
         if options[:status] && !options[:status].empty?
-          status = options[:status][0]
-          posts_query += "
-           WHERE weblogentry.status = '#{status}'"
-          options[:status][1..-1].each do |stat|
-            posts_query += " OR
-             weblogentry.status = '#{stat}'"
+          options[:status].each do |stat|
+            condition.push("weblogentry.status = '#{stat}'")
           end
         end
 
+        posts_query = gen_db_query(select, table, condition, join, "OR")
         db[posts_query].each do |post|
           process_post(post, db, options)
         end
@@ -154,13 +148,10 @@ module JekyllImport
         tags       = []
 
         if options[:categories]
-          cquery =
-            "SELECT
-               weblogcategory.name AS `name`
-             FROM
-               weblogcategory AS `weblogcategory`
-             WHERE
-               weblogcategory.id = '#{post[:categoryid]}'"
+          select = "weblogcategory.name AS `name`"
+	  table = "weblogcategory AS `weblogcategory`"
+	  condition = "weblogcategory.id = '#{post[:categoryid]}'"
+          cquery = gen_db_query(select, table, condition, "", "")
 
           db[cquery].each do |term|
             categories << (options[:clean_entities] ? clean_entities(term[:name]) : term[:name])
@@ -168,13 +159,10 @@ module JekyllImport
         end
 
         if options[:tags]
-          cquery =
-            "SELECT
-               roller_weblogentrytag.name AS `name`
-             FROM
-               roller_weblogentrytag AS `roller_weblogentrytag`
-             WHERE
-               roller_weblogentrytag.entryid = '#{post[:id]}'"
+          select = "roller_weblogentrytag.name AS `name`"
+	  table = "roller_weblogentrytag AS `roller_weblogentrytag`"
+	  condition = "roller_weblogentrytag.entryid = '#{post[:id]}'"
+          cquery = gen_db_query(select, table, condition, "", "")
 
           db[cquery].each do |term|
             tags << (options[:clean_entities] ? clean_entities(term[:name]) : term[:name])
@@ -184,18 +172,14 @@ module JekyllImport
         comments = []
 
         if options[:comments]
-          cquery =
-            "SELECT
-               id       AS `id`,
-               name     AS `author`,
-               email    AS `author_email`,
-	       url      AS `author_url`,
-               posttime AS `date`,
-               content  AS `content`
-             FROM roller_comment
-             WHERE
-               entryid = '#{post[:id]}' AND
-               status = 'APPROVED'"
+          select = ["id AS `id`",
+		    "name AS `author`",
+		    "email AS `author_email`",
+		    "url AS `author_url`",
+		    "posttime AS `date`",
+		    "content AS `content`"]
+	  condition = ["entryid = '#{post[:id]}'","status = 'APPROVED'"]
+          cquery = gen_db_query(select, "roller_comment", condition, "", "AND")
 
           db[cquery].each do |comment|
             comcontent = comment[:content].to_s

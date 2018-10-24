@@ -107,11 +107,11 @@ module JekyllImport
                   "roller_user.fullname AS `author`",
                   "roller_user.username AS `author_login`",
                   "roller_user.emailaddress AS `author_email`",
-                  "weblog.handle AS `site`"]
-	table = "weblogentry AS `weblogentry`"
-	join = ["roller_user AS `roller_user` ON weblogentry.creator = roller_user.username",
-                "weblog AS `weblog` ON weblogentry.websiteid = weblog.id"]
-	condition = []
+                  "weblog.handle AS `site`",]
+        table = "weblogentry AS `weblogentry`"
+        join = ["roller_user AS `roller_user` ON weblogentry.creator = roller_user.username",
+                "weblog AS `weblog` ON weblogentry.websiteid = weblog.id",]
+        condition = []
 
         if options[:status] && !options[:status].empty?
           options[:status].each do |stat|
@@ -149,8 +149,8 @@ module JekyllImport
 
         if options[:categories]
           select = "weblogcategory.name AS `name`"
-	  table = "weblogcategory AS `weblogcategory`"
-	  condition = "weblogcategory.id = '#{post[:categoryid]}'"
+          table = "weblogcategory AS `weblogcategory`"
+          condition = "weblogcategory.id = '#{post[:categoryid]}'"
           cquery = gen_db_query(select, table, condition, "", "")
 
           db[cquery].each do |term|
@@ -160,8 +160,8 @@ module JekyllImport
 
         if options[:tags]
           select = "roller_weblogentrytag.name AS `name`"
-	  table = "roller_weblogentrytag AS `roller_weblogentrytag`"
-	  condition = "roller_weblogentrytag.entryid = '#{post[:id]}'"
+          table = "roller_weblogentrytag AS `roller_weblogentrytag`"
+          condition = "roller_weblogentrytag.entryid = '#{post[:id]}'"
           cquery = gen_db_query(select, table, condition, "", "")
 
           db[cquery].each do |term|
@@ -173,12 +173,12 @@ module JekyllImport
 
         if options[:comments]
           select = ["id AS `id`",
-		    "name AS `author`",
-		    "email AS `author_email`",
-		    "url AS `author_url`",
-		    "posttime AS `date`",
-		    "content AS `content`"]
-	  condition = ["entryid = '#{post[:id]}'","status = 'APPROVED'"]
+                    "name AS `author`",
+                    "email AS `author_email`",
+                    "url AS `author_url`",
+                    "posttime AS `date`",
+                    "content AS `content`",]
+          condition = ["entryid = '#{post[:id]}'", "status = 'APPROVED'"]
           cquery = gen_db_query(select, "roller_comment", condition, "", "AND")
 
           db[cquery].each do |comment|
@@ -195,7 +195,7 @@ module JekyllImport
               "id"           => comment[:id].to_i,
               "author"       => comauthor,
               "author_email" => comment[:author_email].to_s,
-	      "author_url"   => comment[:author_url].to_s,
+              "author_url"   => comment[:author_url].to_s,
               "date"         => comment[:date].to_s,
               "content"      => comcontent,
             }
@@ -260,38 +260,38 @@ module JekyllImport
       end
 
       def self.gen_db_query(select, table, condition, join, condition_join)
-        if condition_join.empty?
-          condition_join_string = "AND"
-	else
-          condition_join_string = condition_join
-	end
-        if select.kind_of?(Array)
-          select_string = select.join(",")
-	else
-          select_string = select
-	end
-	if condition.kind_of?(Array)
-          condition_string = condition.join(" #{condition_join_string} ")
-	else
-          condition_string = condition
-	end
-	if join.kind_of?(Array)
-          join_string = join.join(" LEFT JOIN ")
-	else
-          join_string = join
-	end
-	query_select = "SELECT #{select_string}"
-	table_string = " FROM #{table}"
-        if join_string.empty?
-          query_join = ""
-	else
-          query_join = " LEFT JOIN #{join_string}"
-	end
-	if condition_string.empty?
-          query_condition = ""
-	else
-          query_condition = " WHERE #{condition_string}"
-	end
+        condition_join_string = if condition_join.empty?
+                                  "AND"
+                                else
+                                  condition_join
+                                end
+        select_string = if select.is_a?(Array)
+                          select.join(",")
+                        else
+                          select
+                        end
+        condition_string = if condition.is_a?(Array)
+                             condition.join(" #{condition_join_string} ")
+                           else
+                             condition
+                           end
+        join_string = if join.is_a?(Array)
+                        join.join(" LEFT JOIN ")
+                      else
+                        join
+                      end
+        query_select = "SELECT #{select_string}"
+        table_string = " FROM #{table}"
+        query_join = if join_string.empty?
+                       ""
+                     else
+                       " LEFT JOIN #{join_string}"
+                     end
+        query_condition = if condition_string.empty?
+                            ""
+                          else
+                            " WHERE #{condition_string}"
+                          end
         query = "#{query_select}#{table_string}#{query_join}#{query_condition}"
         query
       end

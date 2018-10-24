@@ -274,6 +274,9 @@ module JekyllImport
       def self.page_path(_page_id)
         ""
       end
+
+      def self.gen_db_query(select, table, condition, join, condition_join)
+      end
     end
   end
 end

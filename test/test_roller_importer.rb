@@ -25,8 +25,8 @@ class TestRollerImporter < Test::Unit::TestCase
   should "generate query with left join" do
     select = ["table1.column","table2.content"]
     table = "table1"
-    join = ["table2" => "table1.condition = table2.test"]
-    assert_equal("SELECT table1.column,table2.content FROM table1 LEFT JOIN table2 on table1.condition = table2.test", Importers::Roller.gen_db_query(select, table, "", join, ""))
+    join = ["table2 ON table1.condition = table2.test"]
+    assert_equal("SELECT table1.column,table2.content FROM table1 LEFT JOIN table2 ON table1.condition = table2.test", Importers::Roller.gen_db_query(select, table, "", join, ""))
   end
   should "generate query with aliases" do
     select = ["table.column AS `foo`","table.column2 AS `bar`"]
@@ -37,14 +37,14 @@ class TestRollerImporter < Test::Unit::TestCase
     select = ["table1.foo AS `foo`","table1.bar AS `bar`","table2.foo AS `foo2`","table3.bar AS `bar2`"]
     table = "table1 AS `table1`"
     where = ["table1.test1 = 'text1'","table1.test2 = 'text2'"]
-    join = ["table2 AS `table2`" => "table1.condition = table2.test","table3 AS `table3`" => "table1.condition = table3.test"]
-    assert_equal("SELECT table1.foo AS `foo`,table1.bar AS `bar`,table2.foo AS `foo2`,table3.bar AS `bar2` LEFT JOIN table2 AS `table2` ON table1.condition = table2.test LEFT JOIN table3 AS `table3` ON table1.condition = table3.test WHERE table1.test1 = 'text1' AND table1.test2 = 'text2'", Importers::Roller.gen_db_query(select, table, where, join, ""))
+    join = ["table2 AS `table2` ON table1.condition = table2.test","table3 AS `table3` ON table1.condition = table3.test"]
+    assert_equal("SELECT table1.foo AS `foo`,table1.bar AS `bar`,table2.foo AS `foo2`,table3.bar AS `bar2` FROM table1 AS `table1` LEFT JOIN table2 AS `table2` ON table1.condition = table2.test LEFT JOIN table3 AS `table3` ON table1.condition = table3.test WHERE table1.test1 = 'text1' AND table1.test2 = 'text2'", Importers::Roller.gen_db_query(select, table, where, join, ""))
   end
   should "generate query with multiple where clauses either or joins and aliases" do
     select = ["table1.foo AS `foo`","table1.bar AS `bar`","table2.foo AS `foo2`","table3.bar AS `bar2`"]
     table = "table1 AS `table1`"
     where = ["table1.test1 = 'text1'","table1.test2 = 'text2'"]
-    join = ["table2 AS `table2`" => "table1.condition = table2.test","table3 AS `table3`" => "table1.condition = table3.test"]
-    assert_equal("SELECT table1.foo AS `foo`,table1.bar AS `bar`,table2.foo AS `foo2`,table3.bar AS `bar2` LEFT JOIN table2 AS `table2` ON table1.condition = table2.test LEFT JOIN table3 AS `table3` ON table1.condition = table3.test WHERE table1.test1 = 'text1' OR table1.test2 = 'text2'", Importers::Roller.gen_db_query(select, table, where, join, "OR"))
+    join = ["table2 AS `table2` ON table1.condition = table2.test","table3 AS `table3` ON table1.condition = table3.test"]
+    assert_equal("SELECT table1.foo AS `foo`,table1.bar AS `bar`,table2.foo AS `foo2`,table3.bar AS `bar2` FROM table1 AS `table1` LEFT JOIN table2 AS `table2` ON table1.condition = table2.test LEFT JOIN table3 AS `table3` ON table1.condition = table3.test WHERE table1.test1 = 'text1' OR table1.test2 = 'text2'", Importers::Roller.gen_db_query(select, table, where, join, "OR"))
   end
 end

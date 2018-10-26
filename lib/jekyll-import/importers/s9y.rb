@@ -8,9 +8,7 @@ module JekyllImport
       end
 
       def self.validate(options)
-        if options["source"].nil?
-          abort "Missing mandatory option --source, e.g. --source \"http://blog.example.com/rss.php?version=2.0&all=1\""
-        end
+        abort "Missing mandatory option --source, e.g. --source \"http://blog.example.com/rss.php?version=2.0&all=1\"" if options["source"].nil?
       end
 
       def self.require_deps

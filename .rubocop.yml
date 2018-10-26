@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 require: rubocop-jekyll
 inherit_gem:
   rubocop-jekyll: .rubocop.yml
@@ -113,6 +115,7 @@ Metrics/MethodLength:
 Metrics/ParameterLists:
   Exclude:
     - lib/jekyll-import/importers/roller.rb
+
 Naming/UncommunicativeMethodParamName:
   Enabled: false
 

@@ -7,9 +7,7 @@ module JekyllImport
         if options["marley_data_dir"].nil?
           Jekyll.logger.abort_with "Missing mandatory option --marley_data_dir."
         else
-          unless File.directory?(options["marley_data_dir"])
-            raise ArgumentError, "marley dir '#{options["marley_data_dir"]}' not found"
-          end
+          raise ArgumentError, "marley dir '#{options["marley_data_dir"]}' not found" unless File.directory?(options["marley_data_dir"])
         end
       end
 

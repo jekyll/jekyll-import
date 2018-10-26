@@ -56,11 +56,11 @@ module JekyllImport
           prefix = options.fetch("prefix",   DEFAULTS["prefix"])
           types  = options.fetch("types",    DEFAULTS["types"])
 
-          if engine == "postgresql"
-            db = Sequel.postgres(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
-          else
-            db = Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :port => port, :encoding => "utf8")
-          end
+          db = if engine == "postgresql"
+                 Sequel.postgres(dbname, :user => user, :password => pass, :host => host, :encoding => "utf8")
+               else
+                 Sequel.mysql2(dbname, :user => user, :password => pass, :host => host, :port => port, :encoding => "utf8")
+               end
 
           query = build_query(prefix, types, engine)
 

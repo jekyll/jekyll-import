@@ -84,13 +84,9 @@ module JekyllImport
           :permalinks     => opts.fetch("permalinks", false),
         }
 
-        if options[:clean_entities]
-          options[:clean_entities] = require_if_available("htmlentities", "clean_entities")
-        end
+        options[:clean_entities] = require_if_available("htmlentities", "clean_entities") if options[:clean_entities]
 
-        if options[:markdown]
-          options[:markdown] = require_if_available("reverse_markdown", "markdown")
-        end
+        options[:markdown] = require_if_available("reverse_markdown", "markdown") if options[:markdown]
 
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts") if options[:drafts]

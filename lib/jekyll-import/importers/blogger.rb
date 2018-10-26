@@ -139,9 +139,7 @@ module JekyllImport
               if attrs["rel"] == "alternate" && attrs["type"] == "text/html"
                 @in_entry_elem[:meta][:original_url] = attrs["href"]
               elsif attrs["rel"] == "replies" && attrs["type"] == "text/html"
-                unless @in_entry_elem[:meta][:original_url]
-                  @in_entry_elem[:meta][:original_url] = attrs["href"].sub(%r!\#comment-form$!, "")
-                end
+                @in_entry_elem[:meta][:original_url] = attrs["href"].sub(%r!\#comment-form$!, "") unless @in_entry_elem[:meta][:original_url]
               end
             end
           when "media:thumbnail"

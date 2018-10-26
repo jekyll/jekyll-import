@@ -110,6 +110,9 @@ Metrics/MethodLength:
     - lib/jekyll-import/importers/wordpressdotcom.rb
     - lib/jekyll-import/util.rb
 
+Metrics/ParameterLists:
+  Exclude:
+    - lib/jekyll-import/importers/roller.rb
 Naming/UncommunicativeMethodParamName:
   Enabled: false
 

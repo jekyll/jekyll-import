@@ -1,3 +1,9 @@
+## HEAD
+
+### Development Fixes
+
+  * chore(deps): rubocop-jekyll 0.3 (#370)
+
 ## 0.15.0 / 2018-10-17
 
 ### Minor Enhancements

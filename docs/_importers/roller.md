@@ -37,7 +37,7 @@ $ ruby -r rubygems -e 'require "jekyll-import";
     })'
 {% endhighlight %}
 
-None of the fields are required. Their defaults are as you see above.
+Only the variables "dbname", "user" and "password" are required, the rest are optional and default to what is shown above. Currently this importer assumes a MySQL database.
 
 <div class="note info">
   <h5>This only imports post content</h5>

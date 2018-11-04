@@ -10,7 +10,7 @@ permalink: /docs/rss/
 To import your posts from an RSS feed (local or remote), run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::RSS.run({
       "source" => "my_file.xml"
     })'

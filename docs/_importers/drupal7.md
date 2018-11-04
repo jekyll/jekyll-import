@@ -10,7 +10,7 @@ permalink: /docs/drupal7/
 To import your posts from a [Drupal 7](http://drupal.org) installation, run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Drupal7.run({
       "dbname"   => "name",
       "user"     => "myuser",
@@ -29,7 +29,7 @@ To specify custom types, you can use the `types` option when you run the
 importer:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Drupal7.run({
       "dbname"   => "name",
       "user"     => "myuser",
@@ -46,7 +46,7 @@ The default Drupal 7 expects database to be MySQL. If you want to import posts
 from Drupal 7 installation with PostgreSQL define `"engine"` as `"postgresql"`:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Drupal7.run({
       "engine"   => "postgresql",
       "dbname"   => "name",

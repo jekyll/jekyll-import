@@ -10,7 +10,7 @@ permalink: /docs/ghost/
 To import your posts from your self-hosted Ghost instance, you first have to download your ghost.db from your server and run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Ghost.run({
       "dbfile"   => "/path/to/your/ghost.db"
     })'

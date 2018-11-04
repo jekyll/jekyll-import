@@ -10,7 +10,7 @@ permalink: /docs/mt/
 To import your posts from [Movable Type](http://movabletype.org), run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::MT.run({
       "engine"        => "mysql", # "postgres" is also supported
       "dbname"        => "name",

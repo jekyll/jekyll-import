@@ -10,7 +10,7 @@ permalink: /docs/wordpressdotcom/
 To import your posts from a [WordPress.com](http://wordpress.com) blog, run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::WordpressDotCom.run({
       "source" => "wordpress.xml",
       "no_fetch_images" => false,

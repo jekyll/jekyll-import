@@ -9,7 +9,7 @@ permalink: /docs/usage/
 You should now be all set to run the importers with the following incantation:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::MyImporter.run({
       # options for this importer
     })'

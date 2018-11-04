@@ -4,6 +4,10 @@
 
   * chore(deps): rubocop-jekyll 0.3 (#370)
 
+### Documentation
+
+  * docs: avoid error message (#374)
+
 ## 0.15.0 / 2018-10-17
 
 ### Minor Enhancements

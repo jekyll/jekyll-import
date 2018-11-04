@@ -8,6 +8,10 @@
 
   * docs: avoid error message (#374)
 
+### Minor Enhancements
+
+  * refactor: Roller improvements and tests (#371)
+
 ## 0.15.0 / 2018-10-17
 
 ### Minor Enhancements

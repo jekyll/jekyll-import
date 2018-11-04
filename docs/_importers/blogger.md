@@ -13,7 +13,7 @@ you first have to [export the blog][export-blogger-xml]
 to a XML file (`blog-MM-DD-YYYY.xml`),
 and run:
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Blogger.run({
       "source"                => "/path/to/blog-MM-DD-YYYY.xml",
       "no-blogger-info"       => false, # not to leave blogger-URL info (id and old URL) in the front matter

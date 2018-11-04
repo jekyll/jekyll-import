@@ -18,7 +18,7 @@ To import your posts from a self-hosted [WordPress](http://wordpress.org)
 installation, run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::WordPress.run({
       "dbname"         => "",
       "user"           => "",

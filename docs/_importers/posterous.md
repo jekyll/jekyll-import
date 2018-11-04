@@ -10,7 +10,7 @@ permalink: /docs/posterous/
 To import your posts from [Posterous](http://movabletype.org), run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Posterous.run({
       "email"     => "myemail",
       "password"  => "mypassword",

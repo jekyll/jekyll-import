@@ -10,7 +10,7 @@ permalink: /docs/mephisto/
 To import your posts from [Mephisto](http://www.mephistoblog.com), run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Mephisto.run({
       "dbname"   => "name",
       "user"     => "myuser",

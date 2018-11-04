@@ -10,7 +10,7 @@ permalink: /docs/textpattern/
 To import your posts from [Textpattern](http://textpattern.com), run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::TextPattern.run({
       "dbname"   => "name",
       "user"     => "myuser",

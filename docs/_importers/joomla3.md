@@ -10,7 +10,7 @@ permalink: /docs/joomla3/
 To import your posts from a [Joomla 3](http://joomla.org) installation, run:
 
 {% highlight bash %}
-$ ruby -rubygems -e 'require "jekyll-import";
+$ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Joomla3.run({
       "dbname"   => "name",
       "user"     => "myuser",

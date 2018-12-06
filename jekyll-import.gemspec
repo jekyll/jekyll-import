@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.email    = "tom@mojombo.com"
   s.homepage = "http://github.com/jekyll/jekyll-import"
 
-  s.files         = `git ls-files`.split($/).grep(%r!^lib/!)
+  s.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR).grep(%r!^lib/!)
   s.require_paths = %w(lib)
 
   s.rdoc_options = ["--charset=UTF-8"]

@@ -12,7 +12,3 @@ AllCops:
     - test/**/*
     - vendor/**/*
     - Rakefile
-
-Metrics/ParameterLists:
-  Exclude:
-    - lib/jekyll-import/importers/roller.rb

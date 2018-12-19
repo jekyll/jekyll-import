@@ -1,3 +1,9 @@
+## HEAD
+
+### Bug Fixes
+
+  * Unfreeze strings in importers that modify literals (#381)
+
 ## 0.16.0 / 2018-11-04
 
 ### Development Fixes

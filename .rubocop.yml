@@ -12,3 +12,6 @@ AllCops:
     - test/**/*
     - vendor/**/*
     - Rakefile
+Style/MutableConstant:
+  Exclude:
+    - lib/jekyll-import/importers/typo.rb

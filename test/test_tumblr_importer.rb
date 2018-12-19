@@ -23,6 +23,20 @@ class TestTumblrImporter < Test::Unit::TestCase
       refute_nil(@batch, "a batch with a valid post should exist")
     end
 
+    context "url handling" do
+      should "handle multiple // in the passed url" do
+        blog_url = "http://myblog.com///"
+        just_url = Importers::Tumblr.send(:api_feed_url, blog_url, 0).split("?").first
+        assert_equal "http://myblog.com/api/read/json/", just_url
+      end
+
+      should "handle pagination" do
+        blog_url = "http://myblog.com///"
+        assert_equal "http://myblog.com/api/read/json/?num=25&start=125",
+          Importers::Tumblr.send(:api_feed_url, blog_url, 5, per_page: 25)
+      end
+    end
+
     context "post" do
       should "have a corresponding type" do
         assert_equal("regular", @posts["posts"][0]["type"])

@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
 lib = File.expand_path("lib", __dir__)
-
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "jekyll-import/version"
 
 Gem::Specification.new do |s|
-  s.specification_version = 2 if s.respond_to? :specification_version=
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.rubygems_version = "2.2.2"
+  s.rubygems_version = ">= 2.5"
   s.required_ruby_version = ">= 2.3"
 
   s.name    = "jekyll-import"
@@ -18,8 +15,8 @@ Gem::Specification.new do |s|
   s.summary     = "Import command for Jekyll (static site generator)."
   s.description = "Provides the Import command for Jekyll."
 
-  s.authors  = ["Tom Preston-Werner"]
-  s.email    = "tom@mojombo.com"
+  s.authors  = ["Tom Preston-Werner", "Parker Moore", "Matt Rogers"]
+  s.email    = "maintainers@jekyllrb.com"
   s.homepage = "http://github.com/jekyll/jekyll-import"
 
   s.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR).grep(%r!^lib/!)
@@ -37,7 +34,7 @@ Gem::Specification.new do |s|
   # development dependencies
   s.add_development_dependency("activesupport", "~> 4.2")
   s.add_development_dependency("rake", "~> 12.0")
-  s.add_development_dependency("rdoc", "~> 4.0")
+  s.add_development_dependency("rdoc", "~> 6.0")
 
   # test dependencies:
   s.add_development_dependency("redgreen", "~> 1.2")

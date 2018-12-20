@@ -3,6 +3,7 @@
 ### Bug Fixes
 
   * Unfreeze strings in importers that modify literals (#381)
+  * Patch missing per_page bug in Tumblr importer (#383)
 
 ### Minor Enhancements
 

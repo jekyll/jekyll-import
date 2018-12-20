@@ -33,13 +33,14 @@ module JekyllImport
 
         @grab_images = grab_images
         FileUtils.mkdir_p "_posts/tumblr"
+        per_page = 50
         posts = []
 
         # Two passes are required so that we can rewrite URLs.
         # First pass builds up an array of each post as a hash.
         begin
           current_page = (current_page || -1) + 1
-          feed_url     = api_feed_url(url, current_page)
+          feed_url     = api_feed_url(url, current_page, per_page)
           Jekyll.logger.info "Fetching #{feed_url}"
 
           feed     = URI.parse(feed_url).open
@@ -292,7 +293,7 @@ module JekyllImport
 
         private
 
-        def api_feed_url(url, page, per_page: 50)
+        def api_feed_url(url, page, per_page = 50)
           url = File.join(url, "/api/read/json/")
           "#{url}?num=#{per_page}&start=#{page * per_page}"
         end

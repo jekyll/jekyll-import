@@ -33,7 +33,7 @@ class TestTumblrImporter < Test::Unit::TestCase
       should "handle pagination" do
         blog_url = "http://myblog.com///"
         assert_equal "http://myblog.com/api/read/json/?num=25&start=125",
-          Importers::Tumblr.send(:api_feed_url, blog_url, 5, per_page: 25)
+          Importers::Tumblr.send(:api_feed_url, blog_url, 5, 25)
       end
     end
 

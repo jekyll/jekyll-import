@@ -122,4 +122,36 @@ class TestTumblrImporter < Test::Unit::TestCase
       assert_match(%r!tumblr_ms1yk9QKGh1sgzdxzo1_400\.jpg!, batch[1][:content])
     end
   end
+
+  context "Opting to convert html to markdown" do
+    should "result in valid Markdown text" do
+      input = <<~HTML
+        <h1>A Test Post</h1>
+        <p>
+          This is a paragraph that contains a variety of formatted text.
+          Simply put, <b>bold</b> &amp; <strong>strong</strong> appear thicker than the regular
+          text. A text in <i>italics</i> denotes <em>emphasis</em> with a slight slant from the
+          vertical axis. A <a href="#">link</a> points to a reference elsewhere and is usually
+          underlined.
+        </p>
+        <p>
+          Images are generally embedded by using the <code>&lt;img&gt;</code> tag and render
+          directly like this duck: <img src="img/duck.png" alt="Quack!"/>
+        </p>
+      HTML
+      output = <<~MKDWN
+        # A Test Post
+
+        This is a paragraph that contains a variety of formatted text. Simply put, **bold** &amp;
+        **strong** appear thicker than the regular text. A text in *italics* denotes *emphasis*
+        with a slight slant from the vertical axis. A [link](#) points to a reference elsewhere
+        and is usually underlined.
+
+        Images are generally embedded by using the `<img>` tag and render directly like this duck:
+        ![Quack!](img/duck.png)
+
+      MKDWN
+      assert_equal(output, Importers::Tumblr.html_to_markdown(input))
+    end
+  end
 end

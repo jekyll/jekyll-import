@@ -236,9 +236,15 @@ module JekyllImport
           preserve = %w(table tr th td)
           preserve.each do |tag|
             content.gsub!(%r!<#{tag}!i, "$$#{tag}")
-            content.gsub!(%r!<\/#{tag}!i, "||#{tag}")
+            content.gsub!(%r!</#{tag}!i, "||#{tag}")
           end
-          content = Nokogiri::HTML(content.gsub("'", "''")).text
+
+          content = Kramdown::Document.new(
+            content,
+            :input      => "html",
+            :line_width => 90,
+          ).to_kramdown
+
           preserve.each do |tag|
             content.gsub!("$$#{tag}", "<#{tag}")
             content.gsub!("||#{tag}", "</#{tag}")

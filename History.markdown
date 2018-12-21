@@ -8,6 +8,7 @@
 ### Minor Enhancements
 
   * remove extra / if passed with --url (#378)
+  * Convert Tumblr content to Markdown when opted for (#384)
 
 ## 0.16.0 / 2018-11-04
 

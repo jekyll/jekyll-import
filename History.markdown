@@ -10,6 +10,10 @@
   * remove extra / if passed with --url (#378)
   * Convert Tumblr content to Markdown when opted for (#384)
 
+### Development Fixes
+
+  * Prettify JSON payloads in test_tumblr_importer (#385)
+
 ## 0.16.0 / 2018-11-04
 
 ### Development Fixes

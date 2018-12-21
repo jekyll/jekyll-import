@@ -278,26 +278,25 @@ class TestTumblrImporter < Test::Unit::TestCase
           This is a paragraph that contains a variety of formatted text.
           Simply put, <b>bold</b> &amp; <strong>strong</strong> appear thicker than the regular
           text. A text in <i>italics</i> denotes <em>emphasis</em> with a slight slant from the
-          vertical axis. A <a href="#">link</a> points to a reference elsewhere and is usually
-          underlined.
+          vertical axis. A <a href="http://example.com">link</a> points to a reference elsewhere
+          and is usually underlined.
         </p>
         <p>
           Images are generally embedded by using the <code>&lt;img&gt;</code> tag and render
           directly like this duck: <img src="img/duck.png" alt="Quack!"/>
         </p>
+        <p>
+          Frais pour l'hiver.
+        </p>
       HTML
-      output = <<~MKDWN
-        # A Test Post
 
-        This is a paragraph that contains a variety of formatted text. Simply put, **bold** &amp;
-        **strong** appear thicker than the regular text. A text in *italics* denotes *emphasis*
-        with a slight slant from the vertical axis. A [link](#) points to a reference elsewhere
-        and is usually underlined.
+      output = "# A Test Post\n\nThis is a paragraph that contains a variety of formatted text. " \
+               "Simply put, **bold** & **strong** appear thicker than the regular text. A text " \
+               "in _italics_ denotes _emphasis_ with a slight slant from the vertical axis. A " \
+               "[link](http://example.com) points to a reference elsewhere and is usually under" \
+               "lined.\n\nImages are generally embedded by using the `<img>` tag and render " \
+               "directly like this duck: ![Quack!](img/duck.png)\n\nFrais pour l'hiver.\n\n"
 
-        Images are generally embedded by using the `<img>` tag and render directly like this duck:
-        ![Quack!](img/duck.png)
-
-      MKDWN
       assert_equal(output, Importers::Tumblr.html_to_markdown(input))
     end
   end

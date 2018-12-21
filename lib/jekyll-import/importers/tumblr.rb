@@ -242,7 +242,7 @@ module JekyllImport
           content = Kramdown::Document.new(
             content,
             :input      => "html",
-            :line_width => 90,
+            :line_width => 90
           ).to_kramdown
 
           preserve.each do |tag|

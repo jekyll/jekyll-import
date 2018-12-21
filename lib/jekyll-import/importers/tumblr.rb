@@ -3,70 +3,70 @@
 module JekyllImport
   module Importers
     class Tumblr < Importer
-      def self.require_deps
-        JekyllImport.require_with_fallback(%w(
-          rubygems
-          fileutils
-          open-uri
-          nokogiri
-          json
-          uri
-          time
-          jekyll
-        ))
-      end
-
-      def self.specify_options(c)
-        c.option "url",            "--url URL",        "Tumblr URL"
-        c.option "format",         "--format FORMAT",  'Output format (default: "html")'
-        c.option "grab_images",    "--grab_images",    "Whether to grab images (default: false)"
-        c.option "add_highlights", "--add_highlights", "Whether to add highlights (default: false)"
-        c.option "rewrite_urls",   "--rewrite_urls",   "Whether to rewrite URLs (default: false)"
-      end
-
-      def self.process(options)
-        url            = options.fetch("url")
-        format         = options.fetch("format", "html")
-        grab_images    = options.fetch("grab_images", false)
-        add_highlights = options.fetch("add_highlights", false)
-        rewrite_urls   = options.fetch("rewrite_urls", false)
-
-        @grab_images = grab_images
-        FileUtils.mkdir_p "_posts/tumblr"
-        per_page = 50
-        posts = []
-
-        # Two passes are required so that we can rewrite URLs.
-        # First pass builds up an array of each post as a hash.
-        begin
-          current_page = (current_page || -1) + 1
-          feed_url     = api_feed_url(url, current_page, per_page)
-          Jekyll.logger.info "Fetching #{feed_url}"
-
-          feed     = URI.parse(feed_url).open
-          contents = feed.readlines.join("\n")
-          blog     = extract_json(contents)
-          Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
-
-          batch = blog["posts"].map { |post| post_to_hash(post, format) }
-
-          # If we're rewriting, save the posts for later.  Otherwise, go ahead and dump these to
-          # disk now
-          if rewrite_urls
-            posts += batch
-          else
-            batch.each { |post| write_post(post, format == "md", add_highlights) }
-          end
-        end until blog["posts"].size < per_page
-
-        # Rewrite URLs, create redirects and write out out posts if necessary
-        if rewrite_urls
-          posts = rewrite_urls_and_redirects posts
-          posts.each { |post| write_post(post, format == "md", add_highlights) }
-        end
-      end
-
       class << self
+        def require_deps
+          JekyllImport.require_with_fallback(%w(
+            rubygems
+            fileutils
+            open-uri
+            nokogiri
+            json
+            uri
+            time
+            jekyll
+          ))
+        end
+
+        def specify_options(c)
+          c.option "url",            "--url URL",        "Tumblr URL"
+          c.option "format",         "--format FORMAT",  'Output format (default: "html")'
+          c.option "grab_images",    "--grab_images",    "Whether to grab images (default: false)"
+          c.option "add_highlights", "--add_highlights", "Whether to add highlights (default: false)"
+          c.option "rewrite_urls",   "--rewrite_urls",   "Whether to rewrite URLs (default: false)"
+        end
+
+        def process(options)
+          url            = options.fetch("url")
+          format         = options.fetch("format", "html")
+          grab_images    = options.fetch("grab_images", false)
+          add_highlights = options.fetch("add_highlights", false)
+          rewrite_urls   = options.fetch("rewrite_urls", false)
+
+          @grab_images = grab_images
+          FileUtils.mkdir_p "_posts/tumblr"
+          per_page = 50
+          posts = []
+
+          # Two passes are required so that we can rewrite URLs.
+          # First pass builds up an array of each post as a hash.
+          begin
+            current_page = (current_page || -1) + 1
+            feed_url     = api_feed_url(url, current_page, per_page)
+            Jekyll.logger.info "Fetching #{feed_url}"
+
+            feed     = URI.parse(feed_url).open
+            contents = feed.readlines.join("\n")
+            blog     = extract_json(contents)
+            Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"
+
+            batch = blog["posts"].map { |post| post_to_hash(post, format) }
+
+            # If we're rewriting, save the posts for later.  Otherwise, go ahead and dump these to
+            # disk now
+            if rewrite_urls
+              posts += batch
+            else
+              batch.each { |post| write_post(post, format == "md", add_highlights) }
+            end
+          end until blog["posts"].size < per_page
+
+          # Rewrite URLs, create redirects and write out out posts if necessary
+          if rewrite_urls
+            posts = rewrite_urls_and_redirects posts
+            posts.each { |post| write_post(post, format == "md", add_highlights) }
+          end
+        end
+
         def extract_json(contents)
           beginning = contents.index("{")
           ending    = contents.rindex("}") + 1

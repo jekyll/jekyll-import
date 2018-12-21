@@ -14,6 +14,7 @@ module JekyllImport
             uri
             time
             jekyll
+            reverse_markdown
           ))
         end
 
@@ -239,11 +240,7 @@ module JekyllImport
             content.gsub!(%r!</#{tag}!i, "||#{tag}")
           end
 
-          content = Kramdown::Document.new(
-            content,
-            :input      => "html",
-            :line_width => 90
-          ).to_kramdown
+          content = ReverseMarkdown.convert(content)
 
           preserve.each do |tag|
             content.gsub!("$$#{tag}", "<#{tag}")

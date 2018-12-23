@@ -106,7 +106,11 @@ $ ruby -r rubygems -e 'require "jekyll-import";
       <strong>excerpt_separator</strong>
       <p>
         S9Y treats the regular post body as an excerpt, displaying the extended
-        body only in the post details. This restores the original behavior, 
+        body only in the post details. Jekyll only shows the first paragraph of
+        the post as an excerpt. This option allows you to restore the S9Y
+        behavior: posts with extended body will have the specified separator
+        added to their front matter, and you can modify your index layout to
+        show the excerpts.
       </p>
     </li><li>
       <strong>imgfig</strong>

@@ -31,7 +31,7 @@ module JekyllImport
         c.option "drafts",            "--drafts",              "Whether to export drafts as well"
         c.option "markdown",          "--markdown",            "convert into markdown format (default: false)"
         c.option "permalinks",        "--permalinks",          "preserve S9Y permalinks (default: false)"
-        c.option "excerpt_separator", "--excerpt_separator",   "Demarkation for excerpts (default: "<a id=\"extended\"></a>")"
+        c.option "excerpt_separator", "--excerpt_separator",   "Demarkation for excerpts (default: '<a id=\"extended\"></a>')"
         c.option "includeentry",      "--includeentry",        "Replace macros from the includeentry plugin (default: false)"
         c.option "imgfig",            "--imgfig",              "Replace nested img and youtube divs with HTML figure tags (default: true)"
         c.option "linebreak",         "--linebreak",           "Line break processing: wp, nokogiri, ignore (default: wp)"
@@ -112,7 +112,7 @@ module JekyllImport
           :drafts            => opts.fetch("drafts", true),
           :markdown          => opts.fetch("markdown", false),
           :permalinks        => opts.fetch("permalinks", false),
-          :excerpt_separator => opts.fetch("excerpt_separator", "<a id="extended"></a>"),
+          :excerpt_separator => opts.fetch("excerpt_separator", "<a id=\"extended\"></a>"),
           :includeentry      => opts.fetch("includeentry", false),
           :imgfig            => opts.fetch("imgfig", true),
           :linebreak         => opts.fetch("linebreak", "wp"),
@@ -237,7 +237,7 @@ module JekyllImport
           "categories"        => options[:categories] ? categories : nil,
           "tags"              => options[:tags] ? tags : nil,
           "comments"          => options[:comments] ? comments : nil,
-          "excerpt_separator" => extended_content.empty? ? nil : excerpt_separator
+          "excerpt_separator" => extended_content.empty? ? nil : options[:excerpt_separator]
         }.delete_if { |k,v| v.nil? || v == "" }.to_yaml
 
         if post[:type] == "page"

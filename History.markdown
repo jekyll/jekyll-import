@@ -1,3 +1,9 @@
+## HEAD
+
+### Bug Fixes
+
+  * Replace URI.parse.open with OpenURI.open_uri (#389)
+
 ## 0.17.0 / 2018-12-20
 
 ### Bug Fixes

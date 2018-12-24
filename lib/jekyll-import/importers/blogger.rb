@@ -165,8 +165,8 @@ module JekyllImport
             when "name"
               element_meta[:author] = text if @tag_bread[-2..-1] == %w(author name)
             when "app:draft"
-              if @tag_bread[-2..-1] == %w(app:control app:draft) && text == "yes"
-                element_meta[:draft] = true
+              if @tag_bread[-2..-1] == %w(app:control app:draft)
+                element_meta[:draft] = true if text == "yes"
               end
             end
           end

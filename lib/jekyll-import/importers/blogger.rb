@@ -152,6 +152,8 @@ module JekyllImport
         def text(text)
           if @in_entry_elem
             case @tag_bread.last
+            when "content"
+              @in_entry_elem[:body] = text
             when "id"
               element_meta[:id] = text
             when "published"
@@ -160,8 +162,6 @@ module JekyllImport
               element_meta[:updated] = text
             when "title"
               element_meta[:title] = text
-            when "content"
-              @in_entry_elem[:body] = text
             when "name"
               element_meta[:author] = text if @tag_bread[-2..-1] == %w(author name)
             when "app:draft"

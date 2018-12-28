@@ -374,7 +374,7 @@ module JekyllImport
           caption = "<figcaption>#{captionElem.inner_html}</figcaption>" if captionElem
 
           imageNode = imgcaption.at_css('img')
-          youtubeNode = imgcaption.at_css('iframe')
+          iframeNode = imgcaption.at_css('iframe')
           if imageNode
             # Extract image attributes
             width = imageNode.attribute('width')
@@ -393,14 +393,14 @@ module JekyllImport
               img = "<a href='#{big}'>#{img}</a>"
 	    end
             # Create figure source with caption, if any
-            inc = "<figure class='figure_#{float}'#{style}>#{mdb}#{img}#{caption}</figure>"
-          elsif youtubeNode
+            inc = "<figure class='figure-#{float}'#{style}>#{mdb}#{img}#{caption}</figure>"
+          elsif iframeNode
             # Extract iframe attributes
-            width = youtubeNode.attribute('width')
-            height = youtubeNode.attribute('height')
-            src = youtubeNode.attribute('src').value.sub('http://www.youtube.com/embed/', '').strip
+            width = iframeNode.attribute('width')
+            height = iframeNode.attribute('height')
+            src = iframeNode.attribute('src').value.strip
             # Create clean iframe source
-            img = "<iframe src='#{src}' width='#{width}' height=#{height} alt=#{alt}/>"
+            img = "<iframe src='#{src}' width='#{width}' height=#{height}></iframe>"
             # Wrap in link, if any
             if bigLink
               big = bigLink.attribute('href')
@@ -410,7 +410,7 @@ module JekyllImport
             end
             # Build figure source
             inc = <<~EOT
-              <figure class='figure_#{float}' style='#{style}'>
+              <figure class='figure-#{float}' style='#{style}'>
                 <!-- mdb='#{mdbnum}' -->
                 #{fig}#{caption}
               </figure>

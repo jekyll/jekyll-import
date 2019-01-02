@@ -45,7 +45,10 @@ module JekyllImport
             feed_url     = api_feed_url(url, current_page, per_page)
             Jekyll.logger.info "Fetching #{feed_url}"
 
-            feed     = URI.parse(feed_url).open
+          feed     = open(feed_url,
+                       "User-Agent" => "Jekyll Ruby Importer",
+                       "Cookie" => "pfg=da62a05c657b8f1f315087ecd4988966b1131b94f3c2f3fec11febd6a3ee1e6a%23%7B%22eu_resident%22%3A1%2C%22gdpr_is_acceptable_age%22%3A1%2C%22gdpr_consent_core%22%3A1%2C%22gdpr_consent_first_party_ads%22%3A1%2C%22gdpr_consent_third_party_ads%22%3A1%2C%22gdpr_consent_search_history%22%3A1%2C%22exp%22%3A1576608461%2C%22vc%22%3A%22%22%7D%230078329994"
+                     )
             contents = feed.readlines.join("\n")
             blog     = extract_json(contents)
             Jekyll.logger.info "Page: #{current_page + 1} - Posts: #{blog["posts"].size}"

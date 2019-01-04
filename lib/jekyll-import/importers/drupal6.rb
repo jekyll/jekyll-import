@@ -17,7 +17,7 @@ module JekyllImport
                        nr.teaser,
                        n.created,
                        n.status,
-                       ua.dst,
+                       ua.dst AS alias,
                        n.type,
                        GROUP_CONCAT( td.name SEPARATOR '|' ) AS 'tags'
                 FROM #{prefix}node_revisions AS nr, url_alias AS ua,
@@ -41,7 +41,7 @@ EOS
         content = sql_post_data[:body].to_s
         summary = sql_post_data[:teaser].to_s
         tags = (sql_post_data[:tags] || "").downcase.strip
-        permalink = '/' + sql_post_data[:dst] 
+        permalink = '/' + sql_post_data[:alias] 
 
         data = {
           "excerpt"    => summary,

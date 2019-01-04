@@ -45,7 +45,7 @@ EOS
 
         data = {
           "excerpt"    => summary,
-          "categories" => tags.split("|"),
+          "categories" => tags.split("|").uniq,
           "permalink"  => permalink 
         }
 

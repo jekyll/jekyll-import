@@ -70,10 +70,10 @@ module JekyllImport
       #                   Default: false
       # :permalinks::     If true, save the post's original permalink in its
       #                   YAML front matter. If the 'entryproperties' plugin
-      #                   was used, its permalink will become the canonical 
-      #                   permalink, and any other will become redirects. 
+      #                   was used, its permalink will become the canonical
+      #                   permalink, and any other will become redirects.
       #                   Default: false.
-      # :excerpt_separator:: A string to use to separate the excerpt (body 
+      # :excerpt_separator:: A string to use to separate the excerpt (body
       #                      in S9Y) from the rest of the article (extended
       #                      body in S9Y). Default: "<a id=\"extended\"></a>".
       # :includentry::    Replace macros from the includentry plugin - these are
@@ -93,7 +93,7 @@ module JekyllImport
       #                   will not be replaced at all.
       #                   Default: wp
       # :relative::       Replace absolute links (http://:relative:/foo)
-      #                   to relative links (/foo). 
+      #                   to relative links (/foo).
 
       def self.process(opts)
         options = {
@@ -196,7 +196,7 @@ module JekyllImport
         content = post[:body].to_s
         extended_content = post[:body_extended].to_s
 
-        content += options[:excerpt_separator] + extended_content unless extended_content.nil? or extended_content.strip.empty?
+        content += options[:excerpt_separator] + extended_content unless extended_content.nil? || extended_content.strip.empty?
 
         content = process_includeentry(content, db, options) if options[:includeentry]
         content = process_img_div(content) if options[:imgfig]
@@ -209,7 +209,7 @@ module JekyllImport
         comments = process_comments(db, options, post)
         tags = process_tags(db, options, post)
         redirect_from = process_permalink(db, options, post)
-        if redirect_from.nil? or redirect_from.empty?
+        if redirect_from.nil? || redirect_from.empty?
           permalink = nil
           redirect_from = nil
         else
@@ -237,8 +237,8 @@ module JekyllImport
           "categories"        => options[:categories] ? categories : nil,
           "tags"              => options[:tags] ? tags : nil,
           "comments"          => options[:comments] ? comments : nil,
-          "excerpt_separator" => extended_content.empty? ? nil : options[:excerpt_separator]
-        }.delete_if { |k,v| v.nil? || v == "" }.to_yaml
+          "excerpt_separator" => extended_content.empty? ? nil : options[:excerpt_separator],
+        }.delete_if { |_k, v| v.nil? || v == "" }.to_yaml
 
         if post[:type] == "page"
           filename = page_path(post[:id], page_name_list) + "index.#{extension}"
@@ -281,42 +281,22 @@ module JekyllImport
 
         px = options[:table_prefix]
 
-        props  = text.scan(/(\[s9y-include-entry:([0-9]+):([^:]+)\])/)
-        blocks = text.scan(/(\[s9y-include-block:([0-9]+):?([^:]+)?\])/)
+        props  = text.scan(%r!(\[s9y-include-entry:([0-9]+):([^:]+)\])!)
+        blocks = text.scan(%r!(\[s9y-include-block:([0-9]+):?([^:]+)?\])!)
 
         props.each do |match|
           macro = match[0]
           id = match[1]
           replacement = ""
-          if match[2].start_with?('prop=')
-            # Substitute a named property of the entry
-            prop = match[2].sub('prop=', '')
-            cquery = %(
-              SELECT
-                px.value AS `txt`
-              FROM
-                #{px}entryproperties AS px
-              WHERE
-                entryid = '#{id}' AND
-                property = '#{prop}'
-            )
-            db[cquery].each do |row|
-              replacement << row[:txt]
-            end
+          if match[2].start_with?("prop=")
+            prop = match[2].sub("prop=", "")
+            cquery = get_property_query(px, id, prop)
           else
-            # Substitute a value of the entry
             prop = match[2]
-            cquery = %(
-              SELECT
-                px.#{prop} AS `txt`
-              FROM
-                #{px}entries AS px
-              WHERE
-                entryid = '#{id}'
-            )
-            db[cquery].each do |row|
-              replacement << row[:txt]
-            end
+            cquery = get_value_query(px, id, prop)
+          end
+          db[cquery].each do |row|
+            replacement << row[:txt]
           end
           result = result.sub(macro, replacement)
         end
@@ -326,7 +306,7 @@ module JekyllImport
           id = match[1]
           replacement = ""
           # match[2] *could* be 'template', but we can't run it through Smarty, so we ignore it
-	  cquery = %(
+          cquery = %(
             SELECT
               px.body AS `txt`
             FROM
@@ -334,99 +314,109 @@ module JekyllImport
             WHERE
               id = '#{id}'
           )
-	  db[cquery].each do |row|
-	    replacement << row[:txt]
-	  end
+          db[cquery].each do |row|
+            replacement << row[:txt]
+          end
           result = result.sub(macro, replacement)
         end
 
-        return result
+        result
       end
 
-      # Replace .serendipity_imageComment_* blocks 
+      def get_property_query(px, id, prop)
+        %(
+          SELECT
+            px.value AS `txt`
+          FROM
+            #{px}entryproperties AS px
+          WHERE
+            entryid = '#{id}' AND
+            property = '#{prop}'
+        )
+      end
+
+      def get_value_query(px, id, prop)
+        %(
+          SELECT
+            px.#{prop} AS `txt`
+          FROM
+            #{px}entries AS px
+          WHERE
+            entryid = '#{id}'
+        )
+      end
+
+      # Replace .serendipity_imageComment_* blocks
       def self.process_img_div(text)
-        captionClasses = [
-          '.serendipity_imageComment_left',
-          '.serendipity_imageComment_right',
-          '.serendipity_imageComment_center'
+        caption_classes = [
+          ".serendipity_imageComment_left",
+          ".serendipity_imageComment_right",
+          ".serendipity_imageComment_center",
         ]
 
         noko = Nokogiri::HTML.fragment(text)
-        noko.css(captionClasses.join(',')).each do |imgcaption|
-          # Extract block-level attributes
-          float = imgcaption.attribute('class').value.sub('serendipity_imageComment_', '')
-          style = imgcaption.attribute('style')
-          style = " style='#{style.value}'" if style
+        noko.css(caption_classes.join(",")).each do |imgcaption|
+          block_attrs = get_block_attrs(imgcaption)
 
           # Is this a thumbnail to a bigger/other image?
-          bigLink = imgcaption.at_css('.serendipity_image_link')
-          if not bigLink 
-	   bigLink = imgcaption.at_xpath('.//a[.//img]');
-          end
-
-          # Don't lose good data
-          mdbnum = imgcaption.search('.//comment()').text.strip.sub('s9ymdb:','')
-	  mdb = "<!-- mdb='#{mdbnum}' -->" if mdbnum
+          big_link = imgcaption.at_css(".serendipity_image_link")
+          big_link ||= imgcaption.at_xpath(".//a[.//img]")
 
           # The caption (if any) may have raw HTML
-          captionElem = imgcaption.at_css('.serendipity_imageComment_txt');
+          caption_elem = imgcaption.at_css(".serendipity_imageComment_txt")
           caption = ""
-          caption = "<figcaption>#{captionElem.inner_html}</figcaption>" if captionElem
+          caption = "<figcaption>#{caption_elem.inner_html}</figcaption>" if caption_elem
 
-          imageNode = imgcaption.at_css('img')
-          iframeNode = imgcaption.at_css('iframe')
-          if imageNode
-            # Extract image attributes
-            width = imageNode.attribute('width')
-            width = "width='#{width}'" if width
-            height = imageNode.attribute('height')
-            height = "height='#{height}'" if height
-            alt = imageNode.attribute('alt')
-            alt = "alt='#{alt}'" if alt
-            src = "src='" + imageNode.attribute('src') + "'"
-            attrs = [src, width, height, alt].join(' ')
-            # Create clean image source
-            img = "<img #{attrs}/>"
-            # Wrap image in link, if any
-	    if bigLink
-	      big = bigLink.attribute('href')
-              img = "<a href='#{big}'>#{img}</a>"
-	    end
-            # Create figure source with caption, if any
-            inc = "<figure class='figure-#{float}'#{style}>#{mdb}#{img}#{caption}</figure>"
-          elsif iframeNode
-            # Extract iframe attributes
-            width = iframeNode.attribute('width')
-            height = iframeNode.attribute('height')
-            src = iframeNode.attribute('src').value.strip
-            # Create clean iframe source
-            img = "<iframe src='#{src}' width='#{width}' height=#{height}></iframe>"
-            # Wrap in link, if any
-            if bigLink
-              big = bigLink.attribute('href')
-              fig = "<a href='#{big}'>#{img}</a>"
-            else
-              fig = img
-            end
-            # Build figure source
-            inc = <<~EOT
-              <figure class='figure-#{float}' style='#{style}'>
-                <!-- mdb='#{mdbnum}' -->
-                #{fig}#{caption}
-              </figure>
-            EOT
+          image_node = imgcaption.at_css("img")
+          if image_node
+            attrs = get_media_attrs(image_node)
+            media = "<img #{attrs}/>"
           else
-            STDERR.puts "Unrecognized media block: #{imgcaption.to_s}"
-            return text
+            iframe_node = imgcaption.at_css("iframe")
+            if iframe_node
+              attrs = get_media_attrs(iframe_node)
+              media = "<iframe #{attrs}'></iframe>"
+            else
+              STDERR.puts "Unrecognized media block: #{imgcaption}"
+              return text
+            end
           end
 
-          # Replace HTML with clean figure source
-          imgcaption.replace(inc)
+          # Wrap media in link, if any
+          if big_link
+            big = big_link.attribute("href")
+            media = "<a href='#{big}'>#{media}</a>"
+          end
+
+          # Replace HTML with clean media source, wrapped in figure
+          imgcaption.replace("<figure #{block_attrs}#{media}#{caption}</figure>")
         end
 
-        return noko.to_s
+        noko.to_s
       end
 
+      def get_media_attrs(node)
+        width = node.attribute("width")
+        width = "width='#{width}'" if width
+        height = node.attribute("height")
+        height = "height='#{height}'" if height
+        alt = node.attribute("alt")
+        alt = "alt='#{alt}'" if alt
+        src = "src='" + node.attribute("src") + "'"
+        [src, width, height, alt].join(" ")
+      end
+
+      def get_block_attrs(imgcaption)
+        # Extract block-level attributes
+        float = imgcaption.attribute("class").value.sub("serendipity_imageComment_", "")
+        float = "class='figure-#{float}'"
+        style = imgcaption.attribute("style")
+        style = " style='#{style.value}'" if style
+        # Don't lose good data
+        mdbnum = imgcaption.search(".//comment()").text.strip.sub("s9ymdb:", "")
+        mdb = "<!-- mdb='#{mdbnum}' -->" if mdbnum
+        [float, style, mdb].join(" ")
+      end
 
       def self.process_categories(db, options, post)
         return [] unless options[:categories]
@@ -445,11 +435,11 @@ module JekyllImport
         )
 
         db[cquery].each_with_object([]) do |category, categories|
-          if options[:clean_entities]
-            categories << clean_entities(category[:name])
-          else
-            categories << category[:name]
-          end
+          categories << if options[:clean_entities]
+                          clean_entities(category[:name])
+                        else
+                          category[:name]
+                        end
         end
       end
 
@@ -509,16 +499,17 @@ module JekyllImport
         )
 
         db[cquery].each_with_object([]) do |tag, tags|
-          if options[:clean_entities]
-            tags << clean_entities(tag[:name]).downcase
-          else
-            tags << tag[:name].downcase
-          end
+          tags << if options[:clean_entities]
+                    clean_entities(tag[:name]).downcase
+                  else
+                    tag[:name].downcase
+                  end
         end
       end
 
       def self.process_permalink(db, options, post)
         return unless options[:permalinks]
+
         permalinks = []
 
         px = options[:table_prefix]
@@ -534,7 +525,7 @@ module JekyllImport
               props.property = 'permalink'
           )
           db[pquery].each do |link|
-            plink = "#{link[:permalink]}"
+            plink = link[:permalink].to_s
             permalinks << plink unless plink.end_with? "/UNKNOWN.html"
           end
         end
@@ -553,7 +544,7 @@ module JekyllImport
           permalinks << "/#{link[:permalink]}"
         end
 
-        return permalinks
+        permalinks
       end
 
       def self.clean_entities(text)

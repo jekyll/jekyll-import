@@ -73,7 +73,7 @@ module JekyllImport
           :categories     => opts.fetch("categories", true),
           :tags           => opts.fetch("tags", true),
           :extension      => opts.fetch("extension", "html"),
-          :status         => opts.fetch("status", ["PUBLISHED"]).map(&:to_sym) # :DRAFT
+          :status         => opts.fetch("status", ["PUBLISHED"]).map(&:to_sym), # :DRAFT
         }
 
         if options[:clean_entities]

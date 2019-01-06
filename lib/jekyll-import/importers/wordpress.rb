@@ -94,7 +94,7 @@ module JekyllImport
           :more_excerpt   => opts.fetch("more_excerpt", true),
           :more_anchor    => opts.fetch("more_anchor", true),
           :extension      => opts.fetch("extension", "html"),
-          :status         => opts.fetch("status", ["publish"]).map(&:to_sym) # :draft, :private, :revision
+          :status         => opts.fetch("status", ["publish"]).map(&:to_sym), # :draft, :private, :revision
         }
 
         if options[:clean_entities]

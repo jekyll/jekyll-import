@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
 
   # development dependencies
   s.add_development_dependency("activesupport", "~> 4.2")
+  s.add_development_dependency("bundler")
   s.add_development_dependency("rake", "~> 12.0")
   s.add_development_dependency("rdoc", "~> 6.0")
 

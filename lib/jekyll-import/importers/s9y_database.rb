@@ -208,14 +208,9 @@ module JekyllImport
         categories = process_categories(db, options, post)
         comments = process_comments(db, options, post)
         tags = process_tags(db, options, post)
-        redirect_from = process_permalink(db, options, post)
-        if redirect_from.nil? || redirect_from.empty?
-          permalink = nil
-          redirect_from = nil
-        else
-          permalink = redirect_from.shift
-          redirect_from = nil if redirect_from.empty?
-        end
+        all_permalinks = process_permalink(db, options, post)
+        primary_permalink = all_permalinks.shift
+        supplemental_permalinks = all_permalinks unless all_permalinks.empty?
 
         # Get the relevant fields as a hash, delete empty fields and
         # convert to YAML for the header.
@@ -232,8 +227,8 @@ module JekyllImport
           "author_login"      => post[:author_login].to_s,
           "author_email"      => post[:author_email].to_s,
           "date"              => date.to_s,
-          "permalink"         => options[:permalinks] ? permalink : nil,
-          "redirect_from"     => options[:permalinks] ? redirect_from : nil,
+          "permalink"         => options[:permalinks] ? primary_permalink : nil,
+          "redirect_from"     => options[:permalinks] ? supplemental_permalinks : nil,
           "categories"        => options[:categories] ? categories : nil,
           "tags"              => options[:tags] ? tags : nil,
           "comments"          => options[:comments] ? comments : nil,
@@ -249,14 +244,15 @@ module JekyllImport
           filename = "_posts/#{name}"
         end
 
-        if options[:linebreak] == "nokogiri"
-          content = Nokogiri::HTML.fragment(content).to_xhtml
-        elsif options[:linebreak] == "ignore"
-          # Do nothing
-        else
-          # "wp" is the only remaining option, and the default
-          content = Util.wpautop(content)
-        end
+        content = case options[:linebreak]
+                  when "nokogiri"
+                    Nokogiri::HTML.fragment(content).to_xhtml
+                  when "ignore"
+                    content
+                  else
+                    # "wp" is the only remaining option, and the default
+                    Util.wpautop(content)
+                  end
 
         # Write out the data and content to file
         File.open(filename, "w") do |f|
@@ -508,7 +504,7 @@ module JekyllImport
       end
 
       def self.process_permalink(db, options, post)
-        return unless options[:permalinks]
+        return [] unless options[:permalinks]
 
         permalinks = []
 

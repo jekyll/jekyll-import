@@ -119,13 +119,8 @@ module JekyllImport
           :relative          => opts.fetch("relative", nil),
         }
 
-        if options[:clean_entities]
-          options[:clean_entities] = require_if_available("htmlentities", "clean_entities") if options[:clean_entities]
-        end
-
-        if options[:markdown]
-          options[:markdown] = require_if_available("reverse_markdown", "markdown") if options[:markdown]
-        end
+        options[:clean_entities] = require_if_available("htmlentities", "clean_entities") if options[:clean_entities]
+        options[:markdown] = require_if_available("reverse_markdown", "markdown") if options[:markdown]
 
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts") if options[:drafts]

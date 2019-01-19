@@ -67,26 +67,29 @@ $ ruby -r rubygems -e 'require "jekyll-import";
     </li><li>
       <strong>linebreak</strong>
       <p>
-        If you used a formatting extension, this options might be useful. Use
-        one of these options to try and replicate your post line breaks as
+        If you used a formatting extension, this option might be useful. Use
+        one of the following values to try and replicate your post line breaks as
         closely as possible:
       </p>
-        <li><strong>wp<strong> (the default)</li>
-        <p>
-          Replicate the Wordpress linebreak behavior, the default for S9Y.
-        </p>
-        <li><strong>nokogiri</strong></li>
-        <p>
-          Uses the <code>nokogiri</code> gem to interpret entries as XHTML
-          formatted.  If you write HTML entries, this preserves the HTML
-          linebreaks.
-        </p>
-        <li><strong>ignore</strong></li>
-        <p>
-          This option does not process the entries at all, but imports them
-          into Jekyll verbatim. This may be useful if you wrote your entries in
-          a Jekyll-compatible format.
-        </p>
+        <ul>
+            <li><strong>wp</strong> (the default)
+                <p>Replicate the Wordpress line break behavior, the default for S9Y.</p>
+            </li>
+            <li><strong>nokogiri</strong>
+                <p>
+                  Uses the <code>nokogiri</code> gem to interpret entries as XHTML
+                  formatted.  If you write HTML entries, this preserves the HTML
+                  line breaks.
+                </p>
+            </li>
+            <li><strong>ignore</strong>
+                <p>
+                  This option does not process the entries at all, but imports them
+                  into Jekyll verbatim. This may be useful if you wrote your entries in
+                  a Jekyll-compatible format.
+                </p>
+            </li>
+        </ul>
     </li>
   </ul>
 
@@ -100,7 +103,7 @@ $ ruby -r rubygems -e 'require "jekyll-import";
       <p>
         Set this true to transclude entries like the <code>includeentry</code>
         plugin. The current, static content of the entry will be included.
-        Future updates will not be synched.
+        Future updates will not be synced.
       </p>
     </li><li>
       <strong>excerpt_separator</strong>
@@ -116,8 +119,8 @@ $ ruby -r rubygems -e 'require "jekyll-import";
       <strong>imgfig</strong>
       <p>
         By default, this converts references to S9Y's media library into HTML
-        <code>figure</code> tags. Set it false to keep the original
-        references, which you'll have to update manually.
+        <code>figure</code> tags. Set it to <code>false</code> to keep the
+        original references, which you'll have to update manually.
       </p>
     </li>
   </ul>

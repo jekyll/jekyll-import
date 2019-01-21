@@ -65,6 +65,8 @@ class TestWordpressDotComPublishedItem < TestWordpressDotComItem
   def node
     Hpricot('
       <item>
+        <title>PostTitle</title>
+        <link>https://www.example.com/post/123/post-title/</link>
         <wp:post_name>post-name</wp:post_name>
         <wp:post_type>post</wp:post_type>
         <wp:status>publish</wp:status>
@@ -94,6 +96,10 @@ class TestWordpressDotComPublishedItem < TestWordpressDotComItem
 
   should "be published" do
     assert_equal(true, item.published?)
+  end
+
+  should "extract the link as a permalink" do
+    assert_equal("/post/123/post-title/", item.permalink)
   end
 end
 

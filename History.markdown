@@ -1,3 +1,9 @@
+## HEAD
+
+### Minor Enhancements
+
+  * Import Wordpress permalinks (#395)
+
 ## 0.17.1 / 2018-12-23
 
 ### Bug Fixes

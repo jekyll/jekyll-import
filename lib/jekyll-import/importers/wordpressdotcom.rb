@@ -75,9 +75,13 @@ module JekyllImport
         end
 
         def permalink
-          # Hpricot thinks "link" is a self closing tag so it puts the text of the link after open tag
+          # Hpricot thinks "link" is a self closing tag so it puts the text of the link after the tag
           # but sometimes it works right! I think it's the xml declaration
-          @permalink ||= URI(text_for("link") || @node.at("link").following[0].to_s).path
+          @permalink ||= begin
+            uri = text_for("link")
+            uri = @node.at("link").following[0] if uri.empty?
+            URI(uri.to_s).path
+          end
         end
 
         def published_at

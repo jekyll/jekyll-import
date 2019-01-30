@@ -4,6 +4,10 @@
 
   * Import Wordpress permalinks (#395)
 
+### Bug Fixes
+
+  * ghost.db stores timestamps in ms, not seconds. Fixed the ghost importer. (#396)
+
 ## 0.17.1 / 2018-12-23
 
 ### Bug Fixes

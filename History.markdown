@@ -7,6 +7,7 @@
 ### Bug Fixes
 
   * ghost.db stores timestamps in ms, not seconds. Fixed the ghost importer. (#396)
+  * Fix WP pre tag util raise error when value includes regexp (#401)
 
 ## 0.17.1 / 2018-12-23
 

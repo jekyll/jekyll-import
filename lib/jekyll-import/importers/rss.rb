@@ -34,7 +34,7 @@ module JekyllImport
         body = options.fetch("body", ["description"])
 
         content = ""
-        URI.parse(source).open { |s| content = s.read }
+        open(source) { |s| content = s.read }
         rss = ::RSS::Parser.parse(content, false)
 
         raise "There doesn't appear to be any RSS items at the source (#{source}) provided." unless rss

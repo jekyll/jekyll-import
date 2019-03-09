@@ -6,6 +6,13 @@ link_source:  wordpressdotcom
 next_section: third-party
 permalink: /docs/wordpressdotcom/
 ---
+<div class="note info">
+  <h5>Install additional gems</h5>
+  <p>
+    To use this importer, you need to install these additional gems:
+    `gem install hpricot open_uri_redirections`
+  </p>
+</div>
 
 To import your posts from a [WordPress.com](http://wordpress.com) blog, run:
 

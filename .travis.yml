@@ -7,7 +7,7 @@ env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   matrix:
-    - JEKYLL_VERSION=3.6
+    - JEKYLL_VERSION=3.7
 before_install:
 - gem update --system
 before_script: bundle update

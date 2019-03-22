@@ -1,4 +1,4 @@
-## HEAD
+## 0.18.0 / 2019-03-22
 
 ### Minor Enhancements
 
@@ -8,6 +8,11 @@
 
   * ghost.db stores timestamps in ms, not seconds. Fixed the ghost importer. (#396)
   * Fix WP pre tag util raise error when value includes regexp (#401)
+
+### Development Fixes
+
+  * Drop support for Ruby 2.3
+  * Allow Jekyll v4 (still alpha)
 
 ## 0.17.1 / 2018-12-23
 

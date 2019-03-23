@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "jekyll-import/version"
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = ">= 2.4.0"
+  s.required_ruby_version = ">= 2.3.0"
 
   s.name    = "jekyll-import"
   s.version = JekyllImport::VERSION
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
 
   # runtime dependencies
   s.add_runtime_dependency("fastercsv", "~> 1.0")
-  s.add_runtime_dependency("jekyll", ENV["JEKYLL_VERSION"] ? "~> #{ENV["JEKYLL_VERSION"]}" : ">= 3.7", "< 5.0")
+  s.add_runtime_dependency("jekyll", ">= 3.7", "< 5.0")
   s.add_runtime_dependency("nokogiri", "~> 1.0")
   s.add_runtime_dependency("reverse_markdown", "~> 1.0")
 

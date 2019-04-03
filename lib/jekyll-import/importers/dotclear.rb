@@ -80,7 +80,7 @@ module JekyllImport
               layout: post
               title: "#{elts[headers[type_data].index("post_title")]}"
               date: #{elts[headers[type_data].index("post_creadt")]} +0100
-              categories: ABC
+              tags: ABC
               ---
 
               #{content}
@@ -110,9 +110,9 @@ module JekyllImport
 
         # POST-process : Change media path in posts and drafts
         posts_and_drafts.each do |post_id, hsh|
-          keywords_str = keywords[post_id].to_a.join(" ")
+          keywords_str = keywords[post_id].to_a.join(", ")
           content_file = hsh[:content]
-          content_file = content_file.gsub("categories: ABC","categories: #{keywords_str}")
+          content_file = content_file.gsub("tags: ABC","tags: [#{keywords_str}]")
 
           File.open(hsh[:path], "wb") do |f|
             f.write(content_file)

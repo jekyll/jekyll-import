@@ -57,11 +57,14 @@ module JekyllImport
             header[value] = item.send(value)
           end
 
-          output = ""
+          output = +""
 
           body.each do |row|
-            output += item.send(row)
+            output << item.send(row).to_s
           end
+
+          output.strip!
+          output = item.content_encoded if output.empty?
 
           FileUtils.mkdir_p("_posts")
 

@@ -51,7 +51,7 @@ module JekyllImport
             "title"  => item.title,
           }
 
-          header["tag"] = options["tag"] unless (options["tag"].nil? || options["tag"].empty?)
+          header["tag"] = options["tag"] unless options["tag"].nil? || options["tag"].empty?
 
           frontmatter.each do |value|
             header[value] = item.send(value)

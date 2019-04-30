@@ -1,3 +1,9 @@
+## HEAD
+
+### Bug Fixes
+
+  * Extract encoded_content from feed (#409)
+
 ## 0.18.1 / 2019-03-23
 
 ### Bug Fixes

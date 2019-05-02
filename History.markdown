@@ -5,6 +5,10 @@
   * Extract encoded_content from feed (#409)
   * Check whether option[&#34;tag&#34;] is null or empty value (#411)
 
+### Minor Enhancements
+
+  * Slugify post name with Jekyll::Utils.slugify (#410)
+
 ## 0.18.1 / 2019-03-23
 
 ### Bug Fixes

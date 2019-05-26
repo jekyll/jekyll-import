@@ -32,6 +32,7 @@ module JekyllImport
         source = options.fetch("source")
         frontmatter = options.fetch("frontmatter", [])
         body = options.fetch("body", ["description"])
+        overwrite = options.fetch("overwrite", true)
 
         content = ""
         open(source) { |s| content = s.read }
@@ -43,6 +44,10 @@ module JekyllImport
           formatted_date = item.date.strftime("%Y-%m-%d")
           post_name = Jekyll::Utils.slugify(item.title, :mode => "latin")
           name = "#{formatted_date}-#{post_name}"
+
+          # Skip this file if it already exists and overwrite is turned off
+          next if(!overwrite && File.file?("_posts/#{name}.html")) 
+
           audio = item.enclosure.url
 
           header = {
@@ -69,8 +74,8 @@ module JekyllImport
 
           File.open("_posts/#{name}.html", "w") do |f|
             f.puts header.to_yaml
-            f.puts "---Hello!\n\n"
-            f.puts "<p>#{audio}</p>"
+            f.puts "---\n\n"
+            f.puts "<audio controls=\"\"><source src=\"#{audio}\" type=\"audio/mpeg\">Your browser does not support the audio element.</audio>"
             f.puts output
           end
         end

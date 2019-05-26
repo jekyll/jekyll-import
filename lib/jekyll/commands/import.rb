@@ -20,6 +20,7 @@ module Jekyll
         :mt              => "MT",
         :posterous       => "Posterous",
         :rss             => "RSS",
+        :rss_podcast     => "RSSPodcast",
         :s9y             => "S9Y",
         :textpattern     => "TextPattern",
         :tumblr          => "Tumblr",

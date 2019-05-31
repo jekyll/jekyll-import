@@ -17,8 +17,7 @@ module JekyllImport
         overwrite = options.fetch("overwrite", true)
 
         content = ""
-        uri = URI.parse(source)
-        uri.open { |s| content = s.read }
+        open(source) { |s| content = s.read }
         rss = ::RSS::Parser.parse(content, false)
 
         raise "There doesn't appear to be any RSS items at the source (#{source}) provided." unless rss

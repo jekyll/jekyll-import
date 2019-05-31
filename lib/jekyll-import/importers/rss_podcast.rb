@@ -16,7 +16,7 @@ module JekyllImport
         JekyllImport.require_with_fallback(%w(
           rss
           rss/1.0
-          rss/2.0          
+          rss/2.0
           open-uri
           fileutils
           safe_yaml
@@ -47,7 +47,7 @@ module JekyllImport
           name = "#{formatted_date}-#{post_name}"
 
           # Skip this file if it already exists and overwrite is turned off
-          next if (!overwrite && File.file?("_posts/#{name}.html"))
+          next if !overwrite && File.file?("_posts/#{name}.html")
 
           audio = item.enclosure.url
 

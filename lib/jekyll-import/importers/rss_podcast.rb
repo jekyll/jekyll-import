@@ -1,28 +1,10 @@
 # frozen_string_literal: true
 
+require_relative "rss"
+
 module JekyllImport
   module Importers
-    class RSSPodcast < Importer
-      def self.specify_options(c)
-        c.option "source", "--source NAME", "The RSS file or URL to import"
-        c.option "tag", "--tag NAME", "Add a tag to posts"
-      end
-
-      def self.validate(options)
-        abort "Missing mandatory option --source." if options["source"].nil?
-      end
-
-      def self.require_deps
-        JekyllImport.require_with_fallback(%w(
-          rss
-          rss/1.0
-          rss/2.0
-          open-uri
-          fileutils
-          safe_yaml
-        ))
-      end
-
+    class RSSPodcast < RSS
       # Process the import.
       #
       # source - a URL or a local file String.

@@ -81,7 +81,6 @@ Naming/UncommunicativeMethodParamName:
 Security/Open:
   Exclude:
     - 'lib/jekyll-import/importers/rss.rb'
-    - 'lib/jekyll-import/importers/rss_podcast.rb'
 
 # Offense count: 21
 # Configuration parameters: EnforcedStyle.

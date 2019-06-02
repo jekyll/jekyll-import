@@ -6,6 +6,7 @@ module JekyllImport
       def self.specify_options(c)
         c.option "source", "--source NAME", "The RSS file or URL to import"
         c.option "tag", "--tag NAME", "Add a tag to posts"
+        c.option "audio", "--render-audio", "Render <audio> element as necessary"
       end
 
       def self.validate(options)
@@ -32,6 +33,7 @@ module JekyllImport
         source = options.fetch("source")
         frontmatter = options.fetch("frontmatter", [])
         body = options.fetch("body", ["description"])
+        render_audio = options.fetch("render-audio", false)
 
         content = ""
         open(source) { |s| content = s.read }
@@ -43,6 +45,7 @@ module JekyllImport
           formatted_date = item.date.strftime("%Y-%m-%d")
           post_name = Jekyll::Utils.slugify(item.title, :mode => "latin")
           name = "#{formatted_date}-#{post_name}"
+          audio = render_audio && item.enclosure.url
 
           header = {
             "layout" => "post",
@@ -69,6 +72,16 @@ module JekyllImport
           File.open("_posts/#{name}.html", "w") do |f|
             f.puts header.to_yaml
             f.puts "---\n\n"
+
+            if audio
+              f.puts <<~HTML
+                <audio controls="">
+                  <source src="#{audio}" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>
+              HTML
+            end
+
             f.puts output
           end
         end

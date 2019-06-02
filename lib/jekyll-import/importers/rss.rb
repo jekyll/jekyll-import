@@ -6,7 +6,7 @@ module JekyllImport
       def self.specify_options(c)
         c.option "source", "--source NAME", "The RSS file or URL to import"
         c.option "tag", "--tag NAME", "Add a tag to posts"
-        c.option "audio", "--render-audio", "Render <audio> element as necessary"
+        c.option "render_audio", "--render_audio", "Render <audio> element as necessary"
       end
 
       def self.validate(options)
@@ -33,7 +33,7 @@ module JekyllImport
         source = options.fetch("source")
         frontmatter = options.fetch("frontmatter", [])
         body = options.fetch("body", ["description"])
-        render_audio = options.fetch("render-audio", false)
+        render_audio = options.fetch("render_audio", false)
 
         content = ""
         open(source) { |s| content = s.read }

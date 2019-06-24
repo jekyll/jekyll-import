@@ -1,4 +1,4 @@
-## 0.19.0 / 2019-05-02
+## 0.19.0 / 2019-06-24
 
 ### Bug Fixes
 
@@ -7,6 +7,7 @@
 
 ### Minor Enhancements
 
+  * Add Dotclear importer (#414)
   * Slugify post name with Jekyll::Utils.slugify (#410)
 
 ## 0.18.1 / 2019-03-23

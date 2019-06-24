@@ -1,10 +1,9 @@
 # frozen_string_literal: true
-# Tested with dotClear 2.1.5
 
+# Tested with dotClear 2.1.5
 module JekyllImport
   module Importers
     class Dotclear < Importer
-
       def self.specify_options(c)
         c.option "datafile", "--datafile PATH", "dotClear export file"
         c.option "mediafolder", "--mediafolder PATH", "dotClear media export folder (media.zip inflated)"
@@ -33,13 +32,13 @@ module JekyllImport
       end
 
       def self.extract_data_section(str)
-        str.gsub(/^"/, "").gsub(/"$/, "").split('","')
+        str.gsub(%r!^"!, "").gsub(%r!"$!, "").split('","')
       end
 
       def self.process(opts)
         options = {
           :datafile    => opts.fetch("datafile", ""),
-          :mediafolder => opts.fetch("mediafolder", "")
+          :mediafolder => opts.fetch("mediafolder", ""),
         }
 
         FileUtils.mkdir_p("_posts")
@@ -51,7 +50,7 @@ module JekyllImport
         keywords = {}
 
         File.readlines(options[:datafile]).each do |lineraw|
-          line = lineraw.strip.gsub(/\n$/, "")
+          line = lineraw.strip.gsub(%r!\n$!, "")
 
           next if line.empty?
 
@@ -67,7 +66,8 @@ module JekyllImport
             draft = (elts[headers[type_data].index("post_status")] != "1")
 
             date_str = elts[headers[type_data].index("post_creadt")]
-            date_str_formatted = (date_str.nil? || date_str.empty?) ? Date.today : Date.parse(date_str).strftime("%Y-%m-%d")
+            date_blank = (date_str.nil? || date_str.empty?)
+            date_str_formatted = date_blank ? Date.today : Date.parse(date_str).strftime("%Y-%m-%d")
             title_param = elts[headers[type_data].index("post_title")].to_s.parameterize
 
             content = elts[headers[type_data].index("post_content_xhtml")].to_s
@@ -75,7 +75,7 @@ module JekyllImport
 
             filepath = File.join(Dir.pwd, (draft ? "_drafts" : "_posts"), "#{date_str_formatted}-#{title_param}.html")
 
-            entire_content_file = <<~EOS
+            entire_content_file = <<~POST_FILE
               ---
               layout: post
               title: "#{elts[headers[type_data].index("post_title")]}"
@@ -84,15 +84,15 @@ module JekyllImport
               ---
 
               #{content}
-            EOS
+            POST_FILE
 
-            posts_and_drafts[elts[headers[type_data].index("post_id")]] = { path: filepath, content: entire_content_file }
+            posts_and_drafts[elts[headers[type_data].index("post_id")]] = { :path => filepath, :content => entire_content_file }
           elsif type_data == "media"
             elts[headers[type_data].index("media_title")]
             mediafilepath = elts[headers[type_data].index("media_file")]
 
             src_path = File.join(options[:mediafolder], mediafilepath)
-            dst_path = File.join(Dir.pwd, "assets", "images", "#{mediafilepath}")
+            dst_path = File.join(Dir.pwd, "assets", "images", mediafilepath.to_s)
 
             FileUtils.mkdir_p(File.dirname(dst_path))
             FileUtils.cp(src_path, dst_path)
@@ -112,13 +112,12 @@ module JekyllImport
         posts_and_drafts.each do |post_id, hsh|
           keywords_str = keywords[post_id].to_a.join(", ")
           content_file = hsh[:content]
-          content_file = content_file.gsub("tags: ABC","tags: [#{keywords_str}]")
+          content_file = content_file.gsub("tags: ABC", "tags: [#{keywords_str}]")
 
           File.open(hsh[:path], "wb") do |f|
             f.write(content_file)
           end
         end
-
       end
     end
   end

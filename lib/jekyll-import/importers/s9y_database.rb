@@ -207,7 +207,7 @@ module JekyllImport
         require gem_name
         true
       rescue LoadError
-        STDERR.puts "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
+        warn "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
         true
       end
 

@@ -101,7 +101,7 @@ module JekyllImport
           begin
             require "htmlentities"
           rescue LoadError
-            STDERR.puts "Could not require 'htmlentities', so the " \
+            warn "Could not require 'htmlentities', so the " \
                         ":clean_entities option is now disabled."
             options[:clean_entities] = false
           end

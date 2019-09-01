@@ -1,3 +1,9 @@
+## HEAD
+
+### Documentation
+
+  * Fix link for Posterous importer (#415)
+
 ## 0.19.0 / 2019-06-24
 
 ### Bug Fixes

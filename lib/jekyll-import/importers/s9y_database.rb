@@ -172,11 +172,7 @@ module JekyllImport
           "status"       => status.to_s,
           "published"    => status.to_s == "draft" ? nil : (status.to_s == "published"),
           "title"        => title.to_s,
-          "author"       => {
-            "display_name" => post[:author].to_s,
-            "login"        => post[:author_login].to_s,
-            "email"        => post[:author_email].to_s,
-          },
+          "author"       => post[:author].to_s,
           "author_login" => post[:author_login].to_s,
           "author_email" => post[:author_email].to_s,
           "date"         => date.to_s,

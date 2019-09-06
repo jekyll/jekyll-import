@@ -4,6 +4,10 @@
 
   * Fix link for Posterous importer (#415)
 
+### Bug Fixes
+
+  * Fix wrong option in self.process_tags (#417)
+
 ## 0.19.0 / 2019-06-24
 
 ### Bug Fixes

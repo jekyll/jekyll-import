@@ -278,7 +278,7 @@ module JekyllImport
       end
 
       def self.process_tags(db, options, post)
-        return [] unless options[:categories]
+        return [] unless options[:tags]
 
         px = options[:table_prefix]
 

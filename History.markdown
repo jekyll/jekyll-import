@@ -1,4 +1,4 @@
-## HEAD
+## 0.19.1 / 2019-11-05
 
 ### Documentation
 

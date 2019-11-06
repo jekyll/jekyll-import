@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "jekyll-import/importers/drupal_common"
 
 module JekyllImport
@@ -6,11 +8,11 @@ module JekyllImport
       include DrupalCommon
       extend DrupalCommon::ClassMethods
 
-      def self.build_query(prefix, types, engine)
+      def self.build_query(prefix, types, _engine)
         types = types.join("' OR n.type = '")
         types = "n.type = '#{types}'"
 
-        query = <<EOS
+        query = <<SQL
                 SELECT n.nid,
                        n.title,
                        nr.body,
@@ -28,9 +30,9 @@ module JekyllImport
                   AND n.vid = nr.vid
                   AND  ua.src = CONCAT( 'node/', n.nid)
                 GROUP BY n.nid, ua.dst
-EOS
+SQL
 
-        return query
+        query
       end
 
       def self.aliases_query(prefix)
@@ -41,15 +43,15 @@ EOS
         content = sql_post_data[:body].to_s
         summary = sql_post_data[:teaser].to_s
         tags = (sql_post_data[:tags] || "").downcase.strip
-        permalink = '/' + sql_post_data[:alias] 
+        permalink = "/" + sql_post_data[:alias]
 
         data = {
           "excerpt"    => summary,
           "categories" => tags.split("|").uniq,
-          "permalink"  => permalink 
+          "permalink"  => permalink,
         }
 
-        return data, content
+        [data, content]
       end
     end
   end

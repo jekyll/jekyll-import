@@ -1,5 +1,4 @@
-# Inspired by https://github.com/jekyll/jekyll-import/blob/v0.14.0/lib/jekyll-import/importers/rss.rb
-# Adapted for PluXML sources
+# frozen_string_literal: true
 
 module JekyllImport
   module Importers
@@ -13,8 +12,9 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "source", "--source NAME", "The XML file to import"
+        c.option "source", "--source NAME", "The PluXML data directory to import"
         c.option "layout", "--layout NAME", "The layout to apply"
+        c.option "avoid_liquid", "--avoid_liquid TRUE", "Will add render_with_liquid: false in frontmatter"
       end
 
       def self.validate(options)
@@ -24,11 +24,15 @@ module JekyllImport
         if options["layout"].nil?
           options["layout"] = "post"
         end
+        if !options["avoid_liquid"].nil?
+          options["avoid_liquid"] = true
+        end
       end
 
       def self.process(options)
-        source = options.fetch("source")
-        layout = options.fetch("layout")
+        source       = options.fetch("source")
+        layout       = options.fetch("layout")
+        avoid_liquid = options.fetch("avoid_liquid")
 
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts")
@@ -36,28 +40,34 @@ module JekyllImport
         Dir.glob("*.xml", base: source).each do |df|
           df = File.join(source, df)
           filename = File.basename(df, ".*")
-          directory = if filename.split('.')[1].split(',')[0] == 'draft'
-                        '_drafts'
-                      else
-                        '_posts'
-                      end
+
           a_filename = filename.split('.')
-          post_name = a_filename.pop
-          file_date = a_filename.pop
-          post_date = file_date[0..3]+'-'+file_date[4..5]+'-'+file_date[6..7]
+          post_name  = a_filename.pop
+          file_date  = a_filename.pop
+          post_date  = file_date[0..3]+'-'+file_date[4..5]+'-'+file_date[6..7]
+
+          if filename.split('.')[1].split(',')[0] == 'draft'
+            directory = '_drafts'
+            name      = "#{post_name}"
+          else
+            directory = '_posts'
+            name      = "#{post_date}-#{post_name}"
+          end
 
           xml = File.open(df) { |f| Nokogiri::XML(f) }
 
           raise "There doesn't appear to be any XML items at the source (#{df}) provided." unless xml
 
           doc = xml.xpath('document')
-          name = "#{post_date}-#{post_name}"
 
           header = {
             "layout" => layout,
             "title"  => doc.xpath('title').text,
-            "tags"   => doc.xpath('tags').text,
+            "tags"   => doc.xpath('tags').text.split(', '),
           }
+          if avoid_liquid
+            header["render_with_liquid"] = false
+          end
 
           path = File.join(directory, "#{name}.html")
 

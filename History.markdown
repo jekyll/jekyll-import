@@ -4,6 +4,10 @@
 
   * Add install additional gems note (#403)
 
+### Development Fixes
+
+  * Remove deprecated use of fastercsv (#423)
+
 ## 0.19.1 / 2019-11-05
 
 ### Documentation

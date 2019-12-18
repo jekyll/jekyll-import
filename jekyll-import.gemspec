@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w(README.markdown LICENSE)
 
   # runtime dependencies
-  s.add_runtime_dependency("fastercsv", "~> 1.0")
   s.add_runtime_dependency("jekyll", ">= 3.7", "< 5.0")
   s.add_runtime_dependency("nokogiri", "~> 1.0")
   s.add_runtime_dependency("reverse_markdown", "~> 1.0")

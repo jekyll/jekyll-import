@@ -31,7 +31,7 @@ module JekyllImport
           rubygems
           sequel
           mysql2
-          fastercsv
+          csv
           fileutils
         ))
       end

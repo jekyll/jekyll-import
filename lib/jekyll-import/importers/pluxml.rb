@@ -21,11 +21,13 @@ module JekyllImport
         if options["source"].nil?
           abort "Missing mandatory option --source."
         end
+	# no layout option, layout by default is post
         if options["layout"].nil?
           options["layout"] = "post"
         end
-        if !options["avoid_liquid"].nil?
-          options["avoid_liquid"] = true
+	# no avoid_liquid option, avoid_liquid by default is false
+        if options["avoid_liquid"].nil?
+          options["avoid_liquid"] = false
         end
       end
 
@@ -37,18 +39,22 @@ module JekyllImport
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts")
 
+        # for each XML file in source location
         Dir.glob("*.xml", base: source).each do |df|
           df = File.join(source, df)
           filename = File.basename(df, ".*")
 
+          # prepare post file name in Jekyll format
           a_filename = filename.split('.')
           post_name  = a_filename.pop
           file_date  = a_filename.pop
           post_date  = file_date[0..3]+'-'+file_date[4..5]+'-'+file_date[6..7]
 
+          # if draft, only take post name
           if filename.split('.')[1].split(',')[0] == 'draft'
             directory = '_drafts'
             name      = "#{post_name}"
+          # if post, post date precede post name
           else
             directory = '_posts'
             name      = "#{post_date}-#{post_name}"

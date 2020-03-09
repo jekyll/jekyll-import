@@ -12,8 +12,8 @@ To import your posts and drafts from a PluXML blog, run:
 {% highlight bash %}
 $ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Pluxml.run({
-      "source" => "/pluxml/data/articles"
-      "layout" => "your_layout"
+      "source" => "/pluxml/data/articles",
+      "layout" => "your_layout",
       "avoid_liquid" => TRUE
     })'
 {% endhighlight %}

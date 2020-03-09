@@ -14,7 +14,7 @@ $ ruby -r rubygems -e 'require "jekyll-import";
     JekyllImport::Importers::Pluxml.run({
       "source" => "/pluxml/data/articles",
       "layout" => "your_layout",
-      "avoid_liquid" => TRUE
+      "avoid_liquid" => true
     })'
 {% endhighlight %}
 

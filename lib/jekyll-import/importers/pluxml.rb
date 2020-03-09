@@ -18,17 +18,11 @@ module JekyllImport
       end
 
       def self.validate(options)
-        if options["source"].nil?
-          abort "Missing mandatory option --source."
-        end
-	# no layout option, layout by default is post
-        if options["layout"].nil?
-          options["layout"] = "post"
-        end
-	# no avoid_liquid option, avoid_liquid by default is false
-        if options["avoid_liquid"].nil?
-          options["avoid_liquid"] = false
-        end
+        abort "Missing mandatory option --source." if options["source"].nil?
+        # no layout option, layout by default is post
+        options["layout"] = "post" if options["layout"].nil?
+        # no avoid_liquid option, avoid_liquid by default is false
+        options["avoid_liquid"] = false if options["avoid_liquid"].nil?
       end
 
       def self.process(options)
@@ -40,23 +34,23 @@ module JekyllImport
         FileUtils.mkdir_p("_drafts")
 
         # for each XML file in source location
-        Dir.glob("*.xml", base: source).each do |df|
+        Dir.glob("*.xml", :base => source).each do |df|
           df = File.join(source, df)
           filename = File.basename(df, ".*")
 
           # prepare post file name in Jekyll format
-          a_filename = filename.split('.')
+          a_filename = filename.split(".")
           post_name  = a_filename.pop
           file_date  = a_filename.pop
-          post_date  = file_date[0..3]+'-'+file_date[4..5]+'-'+file_date[6..7]
+          post_date  = file_date[0..3] + "-" + file_date[4..5] + "-" + file_date[6..7]
 
           # if draft, only take post name
-          if filename.split('.')[1].split(',')[0] == 'draft'
-            directory = '_drafts'
-            name      = "#{post_name}"
+          if filename.split(".")[1].split(",")[0] == "draft"
+            directory = "_drafts"
+            name      = post_name.to_s
           # if post, post date precede post name
           else
-            directory = '_posts'
+            directory = "_posts"
             name      = "#{post_date}-#{post_name}"
           end
 
@@ -64,24 +58,22 @@ module JekyllImport
 
           raise "There doesn't appear to be any XML items at the source (#{df}) provided." unless xml
 
-          doc = xml.xpath('document')
+          doc = xml.xpath("document")
 
           header = {
             "layout" => layout,
-            "title"  => doc.xpath('title').text,
-            "tags"   => doc.xpath('tags').text.split(', '),
+            "title"  => doc.xpath("title").text,
+            "tags"   => doc.xpath("tags").text.split(", "),
           }
-          if avoid_liquid
-            header["render_with_liquid"] = false
-          end
+          header["render_with_liquid"] = false if avoid_liquid
 
           path = File.join(directory, "#{name}.html")
 
           File.open(path, "w") do |f|
             f.puts header.to_yaml
             f.puts "---\n\n"
-            f.puts doc.xpath('chapo').text
-            f.puts doc.xpath('content').text
+            f.puts doc.xpath("chapo").text
+            f.puts doc.xpath("content").text
           end
 
           puts "Writed file #{path} successfully!"

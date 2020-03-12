@@ -7,11 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
-Jekyll/NoPutsAllowed:
-  Exclude:
-    - 'lib/jekyll-import/importers/pluxml.rb'
-
-# Offense count: 1
 Lint/Loop:
   Exclude:
     - 'lib/jekyll-import/importers/tumblr.rb'

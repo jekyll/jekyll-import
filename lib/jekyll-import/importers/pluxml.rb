@@ -55,11 +55,9 @@ module JekyllImport
           end
 
           xml = File.open(df) { |f| Nokogiri::XML(f) }
-
           raise "There doesn't appear to be any XML items at the source (#{df}) provided." unless xml
 
           doc = xml.xpath("document")
-
           header = {
             "layout" => layout,
             "title"  => doc.xpath("title").text,
@@ -68,7 +66,6 @@ module JekyllImport
           header["render_with_liquid"] = false if avoid_liquid
 
           path = File.join(directory, "#{name}.html")
-
           File.open(path, "w") do |f|
             f.puts header.to_yaml
             f.puts "---\n\n"
@@ -76,7 +73,7 @@ module JekyllImport
             f.puts doc.xpath("content").text
           end
 
-          puts "Writed file #{path} successfully!"
+          Jekyll.logger.info "Wrote file #{path} successfully!"
         end
         nil
       end

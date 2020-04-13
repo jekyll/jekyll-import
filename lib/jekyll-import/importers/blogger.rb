@@ -258,8 +258,8 @@ module JekyllImport
             body = @in_entry_elem[:body]
 
             # body escaping associated with liquid
-            body.gsub!(%r!{{!, '{{ "{{" }}') if body =~ %r!{{!
-            body.gsub!(%r!{%!, '{{ "{%" }}') if body =~ %r!{%!
+            body.gsub!(%r!{{!, '{{ "{{" }}') if %r!{{!.match?(body)
+            body.gsub!(%r!{%!, '{{ "{%" }}') if %r!{%!.match?(body)
 
             { :filename => filename, :header => header, :body => body }
           elsif @in_entry_elem[:meta][:kind] == "comment"
@@ -291,8 +291,8 @@ module JekyllImport
             body = @in_entry_elem[:body]
 
             # body escaping associated with liquid
-            body.gsub!(%r!{{!, '{{ "{{" }}') if body =~ %r!{{!
-            body.gsub!(%r!{%!, '{{ "{%" }}') if body =~ %r!{%!
+            body.gsub!(%r!{{!, '{{ "{{" }}') if %r!{{!.match?(body)
+            body.gsub!(%r!{%!, '{{ "{%" }}') if %r!{%!.match?(body)
 
             { :filename => filename, :header => header, :body => body }
           end

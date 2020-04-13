@@ -4,6 +4,10 @@
 
   * Pluxml (#430)
 
+### style
+
+  * style: Target Ruby 2.4 (#432)
+
 ## 0.19.2 / 2020-03-07
 
 ### Documentation

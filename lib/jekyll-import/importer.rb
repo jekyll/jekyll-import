@@ -12,7 +12,7 @@ module JekyllImport
 
     def self.stringify_keys(hash)
       the_hash = hash.clone
-      the_hash.each_key do |key|
+      hash.each_key do |key|
         the_hash[(key.to_s rescue key) || key] = the_hash.delete(key)
       end
       the_hash

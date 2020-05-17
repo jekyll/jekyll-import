@@ -22,7 +22,7 @@ module JekyllImport
       end
 
       # Will modify post DOM tree
-      def self.download_images(title, post_hpricot, assets_folder)
+      def self.download_images(title, post_hpricot, assets_folder, published_at)
         images = (post_hpricot / "img")
         return if images.empty?
 
@@ -30,8 +30,13 @@ module JekyllImport
         images.each do |i|
           uri = i["src"]
 
-          i["src"] = format("{{ site.baseurl }}/%s/%s", assets_folder, File.basename(uri))
-          dst = File.join(assets_folder, File.basename(uri))
+          # Put the images into a /yyyy/mm/ subfolder to reduce clashes
+          datefolder = published_at.strftime("/%Y/%m")
+          assets_withdate_folder = format("%s%s", assets_folder, datefolder)
+          FileUtils.mkdir_p assets_withdate_folder
+
+          i["src"] = format("{{ site.baseurl }}/%s/%s", assets_withdate_folder, File.basename(uri))
+          dst = File.join(assets_withdate_folder, File.basename(uri))
           Jekyll.logger.info uri
           if File.exist?(dst)
             Jekyll.logger.info "Already in cache. Clean assets folder if you want a redownload."
@@ -168,7 +173,7 @@ module JekyllImport
             value = meta.at("wp:meta_value").inner_text
             metas[key] = value
           end
-
+          
           author_login = item.text_for("dc:creator").strip
 
           header = {
@@ -191,7 +196,7 @@ module JekyllImport
             content = Hpricot(item.text_for("content:encoded"))
             header["excerpt"] = item.excerpt if item.excerpt
 
-            download_images(item.title, content, assets_folder) if fetch
+            download_images(item.title, content, assets_folder, item.published_at) if fetch
 
             FileUtils.mkdir_p item.directory_name
             File.open(File.join(item.directory_name, item.file_name), "w") do |f|

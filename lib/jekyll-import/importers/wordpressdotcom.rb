@@ -173,7 +173,7 @@ module JekyllImport
             value = meta.at("wp:meta_value").inner_text
             metas[key] = value
           end
-          
+
           author_login = item.text_for("dc:creator").strip
 
           header = {

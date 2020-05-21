@@ -31,8 +31,8 @@ module JekyllImport
           uri = i["src"]
 
           # Put the images into a /yyyy/mm/ subfolder to reduce clashes
-          datefolder = published_at.strftime("/%Y/%m")
-          assets_withdate_folder = format("%s%s", assets_folder, datefolder)
+          date_folder = published_at.strftime("/%Y/%m")
+          assets_with_date_folder = format("%s%s", assets_folder, date_folder)
           FileUtils.mkdir_p assets_withdate_folder
 
           i["src"] = format("{{ site.baseurl }}/%s/%s", assets_withdate_folder, File.basename(uri))

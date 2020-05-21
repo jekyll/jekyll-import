@@ -8,6 +8,10 @@
 
   * style: Target Ruby 2.4 (#432)
 
+### Bug Fixes
+
+  * Fix &#39;can&#39;t add a new key into hash during iteration&#39; error (#434)
+
 ## 0.19.2 / 2020-03-07
 
 ### Documentation

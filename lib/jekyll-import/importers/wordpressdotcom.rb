@@ -192,7 +192,6 @@ module JekyllImport
             content = Hpricot(item.text_for("content:encoded"))
             header["excerpt"] = item.excerpt if item.excerpt
 
-
             # Put the images into a /yyyy/mm/ subfolder to reduce clashes
             assets_sub_folder = assets_folder
             if item.published_at

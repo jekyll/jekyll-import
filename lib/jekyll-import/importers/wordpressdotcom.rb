@@ -192,14 +192,16 @@ module JekyllImport
             content = Hpricot(item.text_for("content:encoded"))
             header["excerpt"] = item.excerpt if item.excerpt
 
-            # Put the images into a /yyyy/mm/ subfolder to reduce clashes
-            assets_sub_folder = assets_folder
-            if item.published_at
-              date_folder = item.published_at.strftime("/%Y/%m")
-              assets_sub_folder = File.join(assets_folder, date_folder)
-            end
+            if fetch
+              # Put the images into a /yyyy/mm/ subfolder to reduce clashes
+              assets_dir_path = if item.published_at
+                                  File.join(assets_folder, item.published_at.strftime("/%Y/%m"))
+                                else
+                                  assets_folder
+                                end
 
-            download_images(item.title, content, assets_sub_folder) if fetch
+              download_images(item.title, content, assets_dir_path)
+            end
 
             FileUtils.mkdir_p item.directory_name
             File.open(File.join(item.directory_name, item.file_name), "w") do |f|

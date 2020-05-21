@@ -22,7 +22,7 @@ module JekyllImport
       end
 
       # Will modify post DOM tree
-      def self.download_images(title, post_hpricot, assets_folder, published_at)
+      def self.download_images(title, post_hpricot, assets_folder)
         images = (post_hpricot / "img")
         return if images.empty?
 
@@ -30,12 +30,7 @@ module JekyllImport
         images.each do |i|
           uri = i["src"]
 
-          # Put the images into a /yyyy/mm/ subfolder to reduce clashes
-          date_folder = published_at.strftime("/%Y/%m")
-          assets_with_date_folder = format("%s%s", assets_folder, date_folder)
-          FileUtils.mkdir_p assets_with_date_folder
-
-          dst = File.join(assets_with_date_folder, File.basename(uri))
+          dst = File.join(assets_folder, File.basename(uri))
           i["src"] = File.join("{{ site.baseurl }}", dst)
           Jekyll.logger.info uri
           if File.exist?(dst)
@@ -43,6 +38,7 @@ module JekyllImport
             next
           end
           begin
+            FileUtils.mkdir_p assets_folder
             OpenURI.open_uri(uri, :allow_redirections => :safe) do |f|
               File.open(dst, "wb") do |out|
                 out.puts f.read
@@ -196,7 +192,15 @@ module JekyllImport
             content = Hpricot(item.text_for("content:encoded"))
             header["excerpt"] = item.excerpt if item.excerpt
 
-            download_images(item.title, content, assets_folder, item.published_at) if fetch
+
+            # Put the images into a /yyyy/mm/ subfolder to reduce clashes
+            assets_sub_folder = assets_folder
+            if item.published_at
+              date_folder = item.published_at.strftime("/%Y/%m")
+              assets_sub_folder = File.join(assets_folder, date_folder)
+            end
+
+            download_images(item.title, content, assets_sub_folder) if fetch
 
             FileUtils.mkdir_p item.directory_name
             File.open(File.join(item.directory_name, item.file_name), "w") do |f|

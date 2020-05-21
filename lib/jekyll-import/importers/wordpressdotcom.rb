@@ -33,10 +33,10 @@ module JekyllImport
           # Put the images into a /yyyy/mm/ subfolder to reduce clashes
           date_folder = published_at.strftime("/%Y/%m")
           assets_with_date_folder = format("%s%s", assets_folder, date_folder)
-          FileUtils.mkdir_p assets_withdate_folder
+          FileUtils.mkdir_p assets_with_date_folder
 
-          i["src"] = format("{{ site.baseurl }}/%s/%s", assets_withdate_folder, File.basename(uri))
-          dst = File.join(assets_withdate_folder, File.basename(uri))
+          i["src"] = format("{{ site.baseurl }}/%s/%s", assets_with_date_folder, File.basename(uri))
+          dst = File.join(assets_with_date_folder, File.basename(uri))
           Jekyll.logger.info uri
           if File.exist?(dst)
             Jekyll.logger.info "Already in cache. Clean assets folder if you want a redownload."

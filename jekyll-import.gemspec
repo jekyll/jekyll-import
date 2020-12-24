@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("reverse_markdown", "~> 1.0")
 
   # development dependencies
-  s.add_development_dependency("activesupport", "~> 4.2")
   s.add_development_dependency("bundler")
   s.add_development_dependency("rake", "~> 12.0")
   s.add_development_dependency("rdoc", "~> 6.0")

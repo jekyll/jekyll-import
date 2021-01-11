@@ -1,5 +1,9 @@
 ## HEAD
 
+### Bug Fixes
+
+  * Replace decode with decode_www_form_component (#438)
+
 ## 0.20.0 / 2020-09-08
 
 ### Minor Enhancements

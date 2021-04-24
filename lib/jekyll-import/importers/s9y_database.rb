@@ -261,7 +261,7 @@ module JekyllImport
         require gem_name
         true
       rescue LoadError
-        warn "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
+        Jekyll.logger.warn "s9y database:", "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
         true
       end
 

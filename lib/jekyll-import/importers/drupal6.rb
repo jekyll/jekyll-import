@@ -49,9 +49,7 @@ SQL
           "categories" => tags.split("|").uniq,
         }
 
-        if sql_post_data[:alias]
-          data["permalink"] = "/" + sql_post_data[:alias]
-        end
+        data["permalink"] = "/" + sql_post_data[:alias] if sql_post_data[:alias]
 
         [data, content]
       end

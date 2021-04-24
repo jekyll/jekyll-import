@@ -47,9 +47,8 @@ SQL
         data = {
           "excerpt"    => summary,
           "categories" => tags.split("|").uniq,
-          "permalink"  => permalink,
         }
-        
+
         if sql_post_data[:alias]
           data.merge!(
             "permalink" => "/" + sql_post_data[:alias]

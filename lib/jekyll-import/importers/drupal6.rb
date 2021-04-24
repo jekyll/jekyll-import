@@ -50,9 +50,7 @@ SQL
         }
 
         if sql_post_data[:alias]
-          data.merge!(
-            "permalink" => "/" + sql_post_data[:alias]
-          )
+          data["permalink"] = "/" + sql_post_data[:alias]
         end
 
         [data, content]

@@ -19,15 +19,17 @@ module JekyllImport
                        nr.teaser,
                        n.created,
                        n.status,
+                       ua.dst AS alias,
                        n.type,
                        GROUP_CONCAT( td.name SEPARATOR '|' ) AS 'tags'
-                FROM #{prefix}node_revisions AS nr,
+                FROM #{prefix}node_revisions AS nr, url_alias AS ua,
                      #{prefix}node AS n
                      LEFT OUTER JOIN #{prefix}term_node AS tn ON tn.nid = n.nid
                      LEFT OUTER JOIN #{prefix}term_data AS td ON tn.tid = td.tid
                 WHERE (#{types})
                   AND n.vid = nr.vid
-                GROUP BY n.nid
+                  AND  ua.src = CONCAT( 'node/', n.nid)
+                GROUP BY n.nid, ua.dst
 SQL
 
         query
@@ -44,8 +46,12 @@ SQL
 
         data = {
           "excerpt"    => summary,
-          "categories" => tags.split("|"),
+          "categories" => tags.split("|").uniq,
         }
+
+        if sql_post_data[:alias]
+          data["permalink"] = "/" + sql_post_data[:alias]
+        end
 
         [data, content]
       end

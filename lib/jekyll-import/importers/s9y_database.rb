@@ -368,7 +368,7 @@ module JekyllImport
               attrs = get_media_attrs(iframe_node)
               media = "<iframe #{attrs}'></iframe>"
             else
-              STDERR.puts "Unrecognized media block: #{imgcaption}"
+              Jekyll.logger.warn "s9y database:", "Unrecognized media block: #{imgcaption}"
               return text
             end
           end

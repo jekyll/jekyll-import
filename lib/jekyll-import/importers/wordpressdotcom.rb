@@ -30,15 +30,16 @@ module JekyllImport
         images.each do |i|
           uri = i["src"]
 
-          i["src"] = format("{{ site.baseurl }}/%s/%s", assets_folder, File.basename(uri))
           dst = File.join(assets_folder, File.basename(uri))
+          i["src"] = File.join("{{ site.baseurl }}", dst)
           Jekyll.logger.info uri
           if File.exist?(dst)
             Jekyll.logger.info "Already in cache. Clean assets folder if you want a redownload."
             next
           end
           begin
-            URI.parse(uri, :allow_redirections => :safe).open do |f|
+            FileUtils.mkdir_p assets_folder
+            OpenURI.open_uri(uri, :allow_redirections => :safe) do |f|
               File.open(dst, "wb") do |out|
                 out.puts f.read
               end
@@ -72,6 +73,16 @@ module JekyllImport
                                else
                                  post_name
                                end
+        end
+
+        def permalink
+          # Hpricot thinks "link" is a self closing tag so it puts the text of the link after the tag
+          # but sometimes it works right! I think it's the xml declaration
+          @permalink ||= begin
+            uri = text_for("link")
+            uri = @node.at("link").following[0] if uri.empty?
+            URI(uri.to_s).path
+          end
         end
 
         def published_at
@@ -174,13 +185,23 @@ module JekyllImport
             "tags"       => tags,
             "meta"       => metas,
             "author"     => authors[author_login],
+            "permalink"  => item.permalink,
           }
 
           begin
             content = Hpricot(item.text_for("content:encoded"))
             header["excerpt"] = item.excerpt if item.excerpt
 
-            download_images(item.title, content, assets_folder) if fetch
+            if fetch
+              # Put the images into a /yyyy/mm/ subfolder to reduce clashes
+              assets_dir_path = if item.published_at
+                                  File.join(assets_folder, item.published_at.strftime("/%Y/%m"))
+                                else
+                                  assets_folder
+                                end
+
+              download_images(item.title, content, assets_dir_path)
+            end
 
             FileUtils.mkdir_p item.directory_name
             File.open(File.join(item.directory_name, item.file_name), "w") do |f|

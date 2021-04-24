@@ -7,7 +7,7 @@ next_section: rss
 permalink: /docs/posterous/
 ---
 
-To import your posts from [Posterous](http://movabletype.org), run:
+To import your posts from [Posterous](http://posterous.com), run:
 
 {% highlight bash %}
 $ ruby -r rubygems -e 'require "jekyll-import";

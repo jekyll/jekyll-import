@@ -45,7 +45,9 @@ module JekyllImport
           page = post[:page]
 
           # the publish date if the post has been published, creation date otherwise
-          date = Time.at(post[draft ? :created_at : :published_at].to_i)
+          # The database stores timestamps in milliseconds, so we need to divide by 1000
+          # to get time in seconds.
+          date = Time.at(post[draft ? :created_at : :published_at].to_i / 1000)
 
           if page
             # the filename under which the page is stored

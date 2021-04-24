@@ -32,7 +32,7 @@ module JekyllImport
           end
 
           name = "<pre wp-pre-tag-#{i}></pre>"
-          pre_tags[name] = pee_part[start..-1] + "</pre>"
+          pre_tags[name] = (pee_part[start..-1] + "</pre>").gsub('\\', '\\\\\\\\')
 
           pee += pee_part[0, start] + name
         end

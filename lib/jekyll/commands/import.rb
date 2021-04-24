@@ -64,7 +64,7 @@ module Jekyll
 
         def abort_on_invalid_migrator(migrator)
           warn "Sorry, '#{migrator}' isn't a valid migrator. Valid choices:"
-          IMPORTERS.keys.each { |k| warn "* #{k}" }
+          IMPORTERS.each_key { |k| warn "* #{k}" }
           raise "'#{migrator}' is not a valid migrator."
         end
       end

@@ -6,6 +6,7 @@
 coverage
 InstalledFiles
 lib/bundler/man
+vendor/bundle
 pkg
 rdoc
 site/.sass-cache
@@ -21,4 +22,3 @@ doc/
 
 .DS_Store
 Gemfile.lock
-

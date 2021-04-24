@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
-lib = File.expand_path("lib", __dir__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "jekyll-import/version"
+require_relative "lib/jekyll-import/version"
 
 Gem::Specification.new do |s|
-  s.rubygems_version = ">= 2.5"
-  s.required_ruby_version = ">= 2.3"
+  s.required_ruby_version = ">= 2.4.0"
 
   s.name    = "jekyll-import"
   s.version = JekyllImport::VERSION
@@ -26,20 +23,19 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w(README.markdown LICENSE)
 
   # runtime dependencies
-  s.add_runtime_dependency("fastercsv", "~> 1.0")
-  s.add_runtime_dependency("jekyll", ENV["JEKYLL_VERSION"] ? "~> #{ENV["JEKYLL_VERSION"]}" : "~> 3.0")
+  s.add_runtime_dependency("jekyll", ">= 3.7", "< 5.0")
   s.add_runtime_dependency("nokogiri", "~> 1.0")
   s.add_runtime_dependency("reverse_markdown", "~> 1.0")
 
   # development dependencies
-  s.add_development_dependency("activesupport", "~> 4.2")
+  s.add_development_dependency("bundler")
   s.add_development_dependency("rake", "~> 12.0")
   s.add_development_dependency("rdoc", "~> 6.0")
 
   # test dependencies:
   s.add_development_dependency("redgreen", "~> 1.2")
   s.add_development_dependency("rr", "~> 1.0")
-  s.add_development_dependency("rubocop-jekyll", "~> 0.4")
+  s.add_development_dependency("rubocop-jekyll", "~> 0.11.0")
   s.add_development_dependency("shoulda", "~> 3.5")
   s.add_development_dependency("simplecov", "~> 0.7")
   s.add_development_dependency("simplecov-gem-adapter", "~> 1.0")

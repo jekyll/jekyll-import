@@ -5,6 +5,124 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.19.2 / 2020-03-07
+
+### Documentation
+
+- Add install additional gems note ([#403]({{ site.repository }}/issues/403))
+
+### Development Fixes
+
+- Remove deprecated use of fastercsv ([#423]({{ site.repository }}/issues/423))
+
+## 0.19.1 / 2019-11-05
+
+### Documentation
+
+- Fix link for Posterous importer ([#415]({{ site.repository }}/issues/415))
+
+### Bug Fixes
+
+- Fix wrong option in self.process_tags ([#417]({{ site.repository }}/issues/417))
+
+## 0.19.0 / 2019-06-24
+
+### Bug Fixes
+
+- Extract encoded_content from feed ([#409]({{ site.repository }}/issues/409))
+- Check whether option[&[#34]({{ site.repository }}/issues/34);tag&[#34]({{ site.repository }}/issues/34);] is null or empty value ([#411]({{ site.repository }}/issues/411))
+
+### Minor Enhancements
+
+- Add Dotclear importer ([#414]({{ site.repository }}/issues/414))
+- Slugify post name with Jekyll::Utils.slugify ([#410]({{ site.repository }}/issues/410))
+
+## 0.18.1 / 2019-03-23
+
+### Bug Fixes
+
+- Re-introduce Ruby 2.3 support and test Jekyll 3.7+ ([#406]({{ site.repository }}/issues/406))
+
+## 0.18.0 / 2019-03-22
+
+### Minor Enhancements
+
+- Import Wordpress permalinks ([#395]({{ site.repository }}/issues/395))
+
+### Bug Fixes
+
+- ghost.db stores timestamps in ms, not seconds. Fixed the ghost importer. ([#396]({{ site.repository }}/issues/396))
+- Fix WP pre tag util raise error when value includes regexp ([#401]({{ site.repository }}/issues/401))
+
+### Development Fixes
+
+- Drop support for Ruby 2.3
+- Allow Jekyll v4 (still alpha)
+
+## 0.17.1 / 2018-12-23
+
+### Bug Fixes
+
+- Replace URI.parse.open with OpenURI.open_uri ([#389]({{ site.repository }}/issues/389))
+
+## 0.17.0 / 2018-12-20
+
+### Bug Fixes
+
+- Unfreeze strings in importers that modify literals ([#381]({{ site.repository }}/issues/381))
+- Patch missing per_page bug in Tumblr importer ([#383]({{ site.repository }}/issues/383))
+
+### Minor Enhancements
+
+- remove extra / if passed with --url ([#378]({{ site.repository }}/issues/378))
+- Convert Tumblr content to Markdown when opted for ([#384]({{ site.repository }}/issues/384))
+- Convert HTML to MD with ReverseMarkdown instead ([#386]({{ site.repository }}/issues/386))
+
+### Development Fixes
+
+- Prettify JSON payloads in test_tumblr_importer ([#385]({{ site.repository }}/issues/385))
+
+## 0.16.0 / 2018-11-04
+
+### Development Fixes
+
+- chore(deps): rubocop-jekyll 0.3 ([#370]({{ site.repository }}/issues/370))
+
+### Documentation
+
+- docs: avoid error message ([#374]({{ site.repository }}/issues/374))
+
+### Minor Enhancements
+
+- refactor: Roller improvements and tests ([#371]({{ site.repository }}/issues/371))
+
+## 0.15.0 / 2018-10-17
+
+### Minor Enhancements
+
+- Add roller importer ([#363]({{ site.repository }}/issues/363))
+- Allow additional options to RSS import ([#307]({{ site.repository }}/issues/307))
+
+### Bug Fixes
+
+- Use mysql by default in Drupal importers. ([#347]({{ site.repository }}/issues/347))
+- WordPress: add missing site prefix in user table ([#343]({{ site.repository }}/issues/343))
+- Drupal: add option to configure port. Add missing prefix to taxonomy tables. ([#349]({{ site.repository }}/issues/349))
+- Movable type: fix column name typo ([#351]({{ site.repository }}/issues/351))
+
+### Development Fixes
+
+- Replace uninitialized constant with alternative ([#358]({{ site.repository }}/issues/358))
+- chore(deps): fix gem build warnings ([#361]({{ site.repository }}/issues/361))
+- Remove cyclic require of import command ([#359]({{ site.repository }}/issues/359))
+- style: ignore Lint/Loop for tumblr ([#360]({{ site.repository }}/issues/360))
+- style: inherit rubocop-jekyll's rules ([#357]({{ site.repository }}/issues/357))
+- Refactor Tumblr Importer ([#362]({{ site.repository }}/issues/362))
+
+### Documentation
+
+- Update Documentation for Contributing to project ([#366]({{ site.repository }}/issues/366))
+
 ## 0.14.0 / 2018-02-03
 
 ### Development Fixes

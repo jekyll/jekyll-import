@@ -48,7 +48,7 @@ module JekyllImport
           title = file_content.scan(regexp[:title]).first.to_s.strip
           prerex = file_content.scan(regexp[:perex]).first.to_s.strip
           published_on = DateTime.parse(post[:published_on]) rescue File.mtime(File.dirname(f))
-          meta          = meta_content ? YAML.safe_load(meta_content.scan(regexp[:meta]).to_s) : {}
+          meta = meta_content ? YAML.safe_load(meta_content.scan(regexp[:meta]).to_s) : {}
           meta["title"] = title
           meta["layout"] = "post"
 

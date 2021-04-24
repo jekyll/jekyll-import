@@ -261,7 +261,7 @@ module JekyllImport
         require gem_name
         true
       rescue LoadError
-        warn "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
+        Jekyll.logger.warn "s9y database:", "Could not require '#{gem_name}', so the :#{option_name} option is now disabled."
         true
       end
 
@@ -368,7 +368,7 @@ module JekyllImport
               attrs = get_media_attrs(iframe_node)
               media = "<iframe #{attrs}'></iframe>"
             else
-              STDERR.puts "Unrecognized media block: #{imgcaption}"
+              Jekyll.logger.warn "s9y database:", "Unrecognized media block: #{imgcaption}"
               return text
             end
           end

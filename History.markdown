@@ -9,6 +9,7 @@
   * Add support for Podcast RSS feed imports (#413)
   * Add private helpers to simplify Blogger importer (#390)
   * s9y-db importer permalink, tag, excerpt, and semantic HTML improvements (#392)
+  * drupal6: retain url_alias.dst as permalink in imported nodes (#393)
 
 ## 0.20.0 / 2020-09-08
 

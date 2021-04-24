@@ -1,8 +1,54 @@
 ## HEAD
 
+### Bug Fixes
+
+  * Replace decode with decode_www_form_component (#438)
+
+### Minor Enhancements
+
+  * Add support for Podcast RSS feed imports (#413)
+  * Add private helpers to simplify Blogger importer (#390)
+  * s9y-db importer permalink, tag, excerpt, and semantic HTML improvements (#392)
+  * drupal6: retain url_alias.dst as permalink in imported nodes (#393)
+
+### Development Fixes
+
+  * Clean up code to make Rubocop happy (#441)
+
+## 0.20.0 / 2020-09-08
+
+### Minor Enhancements
+
+  * Pluxml (#430)
+
+### style
+
+  * style: Target Ruby 2.4 (#432)
+
+### Bug Fixes
+
+  * Fix &#39;can&#39;t add a new key into hash during iteration&#39; error (#434)
+  * WordpressDotCom: put downloaded assets into /year/month subfolders to reduce clashes (#436)
+
+## 0.19.2 / 2020-03-07
+
+### Documentation
+
+  * Add install additional gems note (#403)
+
+### Development Fixes
+
+  * Remove deprecated use of fastercsv (#423)
+
+## 0.19.1 / 2019-11-05
+
 ### Documentation
 
   * Fix link for Posterous importer (#415)
+
+### Bug Fixes
+
+  * Fix wrong option in self.process_tags (#417)
 
 ## 0.19.0 / 2019-06-24
 

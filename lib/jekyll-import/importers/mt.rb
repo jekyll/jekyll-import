@@ -69,7 +69,7 @@ module JekyllImport
       # comments::        If true, output comments in _comments directory, like the one
       #                   mentioned at https://github.com/mpalmer/jekyll-static-comments/
       def self.process(options)
-        options  = default_options.merge(options)
+        options = default_options.merge(options)
 
         comments = options.fetch("comments")
         posts_name_by_id = {} if comments

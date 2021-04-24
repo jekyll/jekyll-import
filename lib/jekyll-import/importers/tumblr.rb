@@ -266,7 +266,7 @@ module JekyllImport
               lang  = "python"
               start = i
             elsif block
-              lang  = "javascript" if line =~ %r!;$!
+              lang  = "javascript" if %r!;$!.match?(line)
               block = line =~ indent && i < lines.size - 1 # Also handle EOF
               unless block
                 lines[start] = "{% highlight #{lang} %}"
@@ -283,7 +283,7 @@ module JekyllImport
           return url unless @grab_images
 
           path = "tumblr_files/#{url.split("/").last}"
-          path += ext unless path =~ %r!#{ext}$!
+          path += ext unless %r!#{ext}$!.match?(path)
           FileUtils.mkdir_p "tumblr_files"
 
           # Don't fetch if we've already cached this file

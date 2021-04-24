@@ -16,6 +16,7 @@
 ### Development Fixes
 
   * Clean up code to make Rubocop happy (#441)
+  * Refactor Blogger importer with guard clauses (#388)
 
 ## 0.20.0 / 2020-09-08
 

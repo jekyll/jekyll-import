@@ -7,6 +7,7 @@
 ### Minor Enhancements
 
   * Add support for Podcast RSS feed imports (#413)
+  * Add private helpers to simplify Blogger importer (#390)
 
 ## 0.20.0 / 2020-09-08
 

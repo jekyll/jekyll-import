@@ -43,13 +43,18 @@ SQL
         content = sql_post_data[:body].to_s
         summary = sql_post_data[:teaser].to_s
         tags = (sql_post_data[:tags] || "").downcase.strip
-        permalink = "/" + sql_post_data[:alias]
 
         data = {
           "excerpt"    => summary,
           "categories" => tags.split("|").uniq,
           "permalink"  => permalink,
         }
+        
+        if sql_post_data[:alias]
+          data.merge!(
+            "permalink" => "/" + sql_post_data[:alias]
+          )
+        end
 
         [data, content]
       end

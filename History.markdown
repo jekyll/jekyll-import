@@ -3,6 +3,7 @@
 ### Bug Fixes
 
   * Replace decode with decode_www_form_component (#438)
+  * Change data[author] to a string scalar (#419)
 
 ### Minor Enhancements
 

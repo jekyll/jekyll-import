@@ -4,6 +4,10 @@
 
   * Replace decode with decode_www_form_component (#438)
 
+### Minor Enhancements
+
+  * Add support for Podcast RSS feed imports (#413)
+
 ## 0.20.0 / 2020-09-08
 
 ### Minor Enhancements

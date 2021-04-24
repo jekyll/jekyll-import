@@ -11,6 +11,10 @@
   * s9y-db importer permalink, tag, excerpt, and semantic HTML improvements (#392)
   * drupal6: retain url_alias.dst as permalink in imported nodes (#393)
 
+### Development Fixes
+
+  * Clean up code to make Rubocop happy (#441)
+
 ## 0.20.0 / 2020-09-08
 
 ### Minor Enhancements

@@ -11,11 +11,8 @@ module JekyllImport
       end
 
       def self.validate(options)
-        if options["source"].nil?
-          raise "Missing mandatory option: --source"
-        elsif !File.exist?(options["source"])
-          raise Errno::ENOENT, "File not found: #{options["source"]}"
-        end
+        raise "Missing mandatory option: --source" if options["source"].nil?
+        raise Errno::ENOENT, "File not found: #{options["source"]}" unless File.exist?(options["source"])
       end
 
       def self.require_deps
@@ -42,7 +39,6 @@ module JekyllImport
         source = options.fetch("source")
 
         listener = BloggerAtomStreamListener.new
-
         listener.leave_blogger_info = !options.fetch("no-blogger-info", false)
         listener.comments = options.fetch("comments", false)
 
@@ -52,7 +48,6 @@ module JekyllImport
         end
 
         options["original-url-base"] = listener.original_url_base
-
         postprocess(options)
       end
 
@@ -63,32 +58,32 @@ module JekyllImport
       # Returns nothing.
       def self.postprocess(options)
         # Replace internal link URL
-        if options.fetch("replace-internal-link", false)
-          original_url_base = options.fetch("original-url-base", nil)
-          if original_url_base
-            orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_url_base)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
+        return unless options.fetch("replace-internal-link", false)
 
-            Dir.glob("_posts/*.*") do |filename|
-              body = nil
-              File.open(filename, "r") do |f|
-                f.flock(File::LOCK_SH)
-                body = f.read
-              end
+        original_url_base = options.fetch("original-url-base", nil)
+        return unless original_url_base
 
-              body.gsub!(orig_url_pattern) do
-                # for post_url
-                quote = Regexp.last_match(1)
-                post_file = Dir.glob("_posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}").first
-                raise "Could not found: _posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}" if post_file.nil?
+        orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_url_base)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
 
-                " href=#{quote}{{ site.baseurl }}{% post_url #{File.basename(post_file, ".html")} %}#{quote}"
-              end
+        Dir.glob("_posts/*.*") do |filename|
+          body = nil
+          File.open(filename, "r") do |f|
+            f.flock(File::LOCK_SH)
+            body = f.read
+          end
 
-              File.open(filename, "w") do |f|
-                f.flock(File::LOCK_EX)
-                f << body
-              end
-            end
+          body.gsub!(orig_url_pattern) do
+            # for post_url
+            quote = Regexp.last_match(1)
+            post_file = Dir.glob("_posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}").first
+            raise "Could not found: _posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}" if post_file.nil?
+
+            " href=#{quote}{{ site.baseurl }}{% post_url #{File.basename(post_file, ".html")} %}#{quote}"
+          end
+
+          File.open(filename, "w") do |f|
+            f.flock(File::LOCK_EX)
+            f << body
           end
         end
       end
@@ -118,9 +113,7 @@ module JekyllImport
 
             @in_entry_elem = { :meta => {}, :body => nil }
           when "title"
-            if @in_entry_elem
-              raise 'only <title type="text"></title> is supported' if attrs["type"] != "text"
-            end
+            raise 'only <title type="text"></title> is supported' if @in_entry_elem && attrs["type"] != "text"
           when "category"
             if @in_entry_elem
               if attrs["scheme"] == "http://www.blogger.com/atom/ns#"
@@ -150,24 +143,24 @@ module JekyllImport
         end
 
         def text(text)
-          if @in_entry_elem
-            case @tag_bread.last
-            when "content"
-              @in_entry_elem[:body] = text
-            when "id"
-              element_meta[:id] = text
-            when "published"
-              element_meta[:published] = text
-            when "updated"
-              element_meta[:updated] = text
-            when "title"
-              element_meta[:title] = text
-            when "name"
-              element_meta[:author] = text if @tag_bread[-2..-1] == %w(author name)
-            when "app:draft"
-              if @tag_bread[-2..-1] == %w(app:control app:draft)
-                element_meta[:draft] = true if text == "yes"
-              end
+          return unless element_meta
+
+          case @tag_bread.last
+          when "content"
+            @in_entry_elem[:body] = text
+          when "id"
+            element_meta[:id] = text
+          when "published"
+            element_meta[:published] = text
+          when "updated"
+            element_meta[:updated] = text
+          when "title"
+            element_meta[:title] = text
+          when "name"
+            element_meta[:author] = text if @tag_bread[-2..-1] == %w(author name)
+          when "app:draft"
+            if @tag_bread[-2..-1] == %w(app:control app:draft)
+              element_meta[:draft] = true if text == "yes"
             end
           end
         end
@@ -267,19 +260,16 @@ module JekyllImport
             { :filename => filename, :header => header, :body => body }
           elsif element_meta[:kind] == "comment"
             timestamp = Time.parse(element_meta[:published]).strftime("%Y-%m-%d")
-            if element_meta[:original_url]
-              @comment_seq ||= 1
+            raise "Original URL is missing" unless element_meta[:original_url]
 
-              original_uri = URI.parse(element_meta[:original_url])
-              original_path = original_uri.path.to_s
-              filename = format("%s-%s-%s", timestamp, File.basename(original_path, File.extname(original_path)), @comment_seq)
+            @comment_seq ||= 1
 
-              @comment_seq += 1
+            original_uri  = URI.parse(element_meta[:original_url])
+            original_path = original_uri.path.to_s
+            filename = format("%s-%s-%s", timestamp, File.basename(original_path, File.extname(original_path)), @comment_seq)
 
-              @original_url_base = "#{original_uri.scheme}://#{original_uri.host}"
-            else
-              raise "Original URL is missing"
-            end
+            @comment_seq += 1
+            @original_url_base = "#{original_uri.scheme}://#{original_uri.host}"
 
             header = {
               "date"            => element_meta[:published],

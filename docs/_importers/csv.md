@@ -16,7 +16,7 @@ $ ruby -r rubygems -e 'require "jekyll-import";
     })'
 {% endhighlight %}
 
-Your file CSV file will be read in with the following columns:
+Your CSV file will be read in with the following columns:
 
 1. title
 2. permalink

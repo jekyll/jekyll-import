@@ -1,16 +1,18 @@
 ## HEAD
 
+## v0.21.0 / 2021-04-25
+
 ### Bug Fixes
 
-  * Replace decode with decode_www_form_component (#438)
-  * Change data[author] to a string scalar (#419)
+  * Replace `decode` with `decode_www_form_component` (#438)
+  * Change `data[author]` to a string scalar (#419)
 
 ### Minor Enhancements
 
   * Add support for Podcast RSS feed imports (#413)
   * Add private helpers to simplify Blogger importer (#390)
   * s9y-db importer permalink, tag, excerpt, and semantic HTML improvements (#392)
-  * drupal6: retain url_alias.dst as permalink in imported nodes (#393)
+  * drupal6: retain `url_alias.dst` as `permalink` in imported nodes (#393)
   * Create drupal8.rb (#405)
 
 ### Development Fixes

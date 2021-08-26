@@ -16,6 +16,7 @@
 
   * Clean up code to make Rubocop happy (#441)
   * Set up GH Action for Continuous Integration (#449)
+  * Refactor Blogger importer with guard clauses (#452)
 
 ### Documentation
 

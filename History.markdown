@@ -15,6 +15,7 @@
 ### Development Fixes
 
   * Clean up code to make Rubocop happy (#441)
+  * Set up GH Action for Continuous Integration (#449)
 
 ### Documentation
 

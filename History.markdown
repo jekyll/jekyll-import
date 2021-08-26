@@ -16,7 +16,6 @@
 ### Development Fixes
 
   * Clean up code to make Rubocop happy (#441)
-  * Refactor Blogger importer with guard clauses (#388)
 
 ### Documentation
 

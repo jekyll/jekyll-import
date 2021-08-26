@@ -49,5 +49,5 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
-      - name: Unleash RuboCop
+      - name: Run RuboCop
         run:  bash script/fmt

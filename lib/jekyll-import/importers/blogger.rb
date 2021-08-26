@@ -11,8 +11,11 @@ module JekyllImport
       end
 
       def self.validate(options)
-        raise "Missing mandatory option: --source" if options["source"].nil?
-        raise Errno::ENOENT, "File not found: #{options["source"]}" unless File.exist?(options["source"])
+        if options["source"].nil?
+          raise "Missing mandatory option: --source"
+        elsif !File.exist?(options["source"])
+          raise Errno::ENOENT, "File not found: #{options["source"]}"
+        end
       end
 
       def self.require_deps
@@ -39,6 +42,7 @@ module JekyllImport
         source = options.fetch("source")
 
         listener = BloggerAtomStreamListener.new
+
         listener.leave_blogger_info = !options.fetch("no-blogger-info", false)
         listener.comments = options.fetch("comments", false)
 
@@ -48,6 +52,7 @@ module JekyllImport
         end
 
         options["original-url-base"] = listener.original_url_base
+
         postprocess(options)
       end
 
@@ -58,32 +63,32 @@ module JekyllImport
       # Returns nothing.
       def self.postprocess(options)
         # Replace internal link URL
-        return unless options.fetch("replace-internal-link", false)
+        if options.fetch("replace-internal-link", false)
+          original_url_base = options.fetch("original-url-base", nil)
+          if original_url_base
+            orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_url_base)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
 
-        original_url_base = options.fetch("original-url-base", nil)
-        return unless original_url_base
+            Dir.glob("_posts/*.*") do |filename|
+              body = nil
+              File.open(filename, "r") do |f|
+                f.flock(File::LOCK_SH)
+                body = f.read
+              end
 
-        orig_url_pattern = Regexp.new(" href=([\"\'])(?:#{Regexp.escape(original_url_base)})?/([0-9]{4})/([0-9]{2})/([^\"\']+\.html)\\1")
+              body.gsub!(orig_url_pattern) do
+                # for post_url
+                quote = Regexp.last_match(1)
+                post_file = Dir.glob("_posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}").first
+                raise "Could not found: _posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}" if post_file.nil?
 
-        Dir.glob("_posts/*.*") do |filename|
-          body = nil
-          File.open(filename, "r") do |f|
-            f.flock(File::LOCK_SH)
-            body = f.read
-          end
+                " href=#{quote}{{ site.baseurl }}{% post_url #{File.basename(post_file, ".html")} %}#{quote}"
+              end
 
-          body.gsub!(orig_url_pattern) do
-            # for post_url
-            quote = Regexp.last_match(1)
-            post_file = Dir.glob("_posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}").first
-            raise "Could not found: _posts/#{Regexp.last_match(2)}-#{Regexp.last_match(3)}-*-#{Regexp.last_match(4).to_s.tr("/", "-")}" if post_file.nil?
-
-            " href=#{quote}{{ site.baseurl }}{% post_url #{File.basename(post_file, ".html")} %}#{quote}"
-          end
-
-          File.open(filename, "w") do |f|
-            f.flock(File::LOCK_EX)
-            f << body
+              File.open(filename, "w") do |f|
+                f.flock(File::LOCK_EX)
+                f << body
+              end
+            end
           end
         end
       end
@@ -113,54 +118,56 @@ module JekyllImport
 
             @in_entry_elem = { :meta => {}, :body => nil }
           when "title"
-            raise 'only <title type="text"></title> is supported' if @in_entry_elem && attrs["type"] != "text"
+            if @in_entry_elem
+              raise 'only <title type="text"></title> is supported' if attrs["type"] != "text"
+            end
           when "category"
             if @in_entry_elem
               if attrs["scheme"] == "http://www.blogger.com/atom/ns#"
-                element_meta[:category] ||= []
-                element_meta[:category] << attrs["term"]
+                @in_entry_elem[:meta][:category] = [] unless @in_entry_elem[:meta][:category]
+                @in_entry_elem[:meta][:category] << attrs["term"]
               elsif attrs["scheme"] == "http://schemas.google.com/g/2005#kind"
                 kind = attrs["term"]
                 kind.sub!(Regexp.new("^http://schemas\\.google\\.com/blogger/2008/kind\\#"), "")
-                element_meta[:kind] = kind
+                @in_entry_elem[:meta][:kind] = kind
               end
             end
           when "content"
-            element_meta[:content_type] = attrs["type"] if @in_entry_elem
+            @in_entry_elem[:meta][:content_type] = attrs["type"] if @in_entry_elem
           when "link"
-            if @in_entry_elem && attrs["type"] == "text/html"
-              if attrs["rel"] == "alternate"
-                element_meta[:original_url] = attrs["href"]
-              elsif attrs["rel"] == "replies"
-                element_meta[:original_url] ||= attrs["href"].sub(%r!\#comment-form$!, "")
+            if @in_entry_elem
+              if attrs["rel"] == "alternate" && attrs["type"] == "text/html"
+                @in_entry_elem[:meta][:original_url] = attrs["href"]
+              elsif attrs["rel"] == "replies" && attrs["type"] == "text/html"
+                @in_entry_elem[:meta][:original_url] = attrs["href"].sub(%r!\#comment-form$!, "") unless @in_entry_elem[:meta][:original_url]
               end
             end
           when "media:thumbnail"
-            element_meta[:thumbnail] = attrs["url"] if @in_entry_elem
+            @in_entry_elem[:meta][:thumbnail] = attrs["url"] if @in_entry_elem
           when "thr:in-reply-to"
-            element_meta[:post_id] = attrs["ref"] if @in_entry_elem
+            @in_entry_elem[:meta][:post_id] = attrs["ref"] if @in_entry_elem
           end
         end
 
         def text(text)
-          return unless element_meta
-
-          case @tag_bread.last
-          when "content"
-            @in_entry_elem[:body] = text
-          when "id"
-            element_meta[:id] = text
-          when "published"
-            element_meta[:published] = text
-          when "updated"
-            element_meta[:updated] = text
-          when "title"
-            element_meta[:title] = text
-          when "name"
-            element_meta[:author] = text if @tag_bread[-2..-1] == %w(author name)
-          when "app:draft"
-            if @tag_bread[-2..-1] == %w(app:control app:draft)
-              element_meta[:draft] = true if text == "yes"
+          if @in_entry_elem
+            case @tag_bread.last
+            when "id"
+              @in_entry_elem[:meta][:id] = text
+            when "published"
+              @in_entry_elem[:meta][:published] = text
+            when "updated"
+              @in_entry_elem[:meta][:updated] = text
+            when "title"
+              @in_entry_elem[:meta][:title] = text
+            when "content"
+              @in_entry_elem[:body] = text
+            when "name"
+              @in_entry_elem[:meta][:author] = text if @tag_bread[-2..-1] == %w(author name)
+            when "app:draft"
+              if @tag_bread[-2..-1] == %w(app:control app:draft)
+                @in_entry_elem[:meta][:draft] = true if text == "yes"
+              end
             end
           end
         end
@@ -170,12 +177,12 @@ module JekyllImport
           when "entry"
             raise "nest entry element" unless @in_entry_elem
 
-            if element_meta[:kind] == "post"
+            if @in_entry_elem[:meta][:kind] == "post"
               post_data = post_data_from_in_entry_elem_info
 
               if post_data
                 target_dir = "_posts"
-                target_dir = "_drafts" if element_meta[:draft]
+                target_dir = "_drafts" if @in_entry_elem[:meta][:draft]
 
                 FileUtils.mkdir_p(target_dir)
 
@@ -188,7 +195,7 @@ module JekyllImport
                   f << post_data[:body]
                 end
               end
-            elsif element_meta[:kind] == "comment" && @comments
+            elsif @in_entry_elem[:meta][:kind] == "comment" && @comments
               post_data = post_data_from_in_entry_elem_info
 
               if post_data
@@ -214,19 +221,19 @@ module JekyllImport
         end
 
         def post_data_from_in_entry_elem_info
-          if @in_entry_elem.nil? || !@in_entry_elem.key?(:meta) || !element_meta.key?(:kind)
+          if @in_entry_elem.nil? || !@in_entry_elem.key?(:meta) || !@in_entry_elem[:meta].key?(:kind)
             nil
-          elsif element_meta[:kind] == "post"
-            timestamp = Time.parse(element_meta[:published]).strftime("%Y-%m-%d")
-            if element_meta[:original_url]
-              original_uri = URI.parse(element_meta[:original_url])
+          elsif @in_entry_elem[:meta][:kind] == "post"
+            timestamp = Time.parse(@in_entry_elem[:meta][:published]).strftime("%Y-%m-%d")
+            if @in_entry_elem[:meta][:original_url]
+              original_uri = URI.parse(@in_entry_elem[:meta][:original_url])
               original_path = original_uri.path.to_s
               filename = format("%s-%s", timestamp, File.basename(original_path, File.extname(original_path)))
 
               @original_url_base = "#{original_uri.scheme}://#{original_uri.host}"
-            elsif element_meta[:draft]
+            elsif @in_entry_elem[:meta][:draft]
               # Drafts don't have published urls
-              name = element_meta[:title]
+              name = @in_entry_elem[:meta][:title]
               filename = if name.nil?
                            timestamp
                          else
@@ -238,18 +245,15 @@ module JekyllImport
 
             header = {
               "layout" => "post",
-              "title"  => element_meta[:title],
-              "date"   => element_meta[:published],
-              "author" => element_meta[:author],
-              "tags"   => element_meta[:category],
+              "title"  => @in_entry_elem[:meta][:title],
+              "date"   => @in_entry_elem[:meta][:published],
+              "author" => @in_entry_elem[:meta][:author],
+              "tags"   => @in_entry_elem[:meta][:category],
             }
-            header["modified_time"] = element_modified_time
-            header["thumbnail"]     = element_meta[:thumbnail] if element_meta[:thumbnail]
-
-            if @leave_blogger_info
-              header["blogger_id"]       = element_meta[:id]
-              header["blogger_orig_url"] = element_meta[:original_url] if element_meta[:original_url]
-            end
+            header["modified_time"] = @in_entry_elem[:meta][:updated] if @in_entry_elem[:meta][:updated] && @in_entry_elem[:meta][:updated] != @in_entry_elem[:meta][:published]
+            header["thumbnail"] = @in_entry_elem[:meta][:thumbnail] if @in_entry_elem[:meta][:thumbnail]
+            header["blogger_id"] = @in_entry_elem[:meta][:id] if @leave_blogger_info
+            header["blogger_orig_url"] = @in_entry_elem[:meta][:original_url] if @leave_blogger_info && @in_entry_elem[:meta][:original_url]
 
             body = @in_entry_elem[:body]
 
@@ -258,31 +262,31 @@ module JekyllImport
             body.gsub!(%r!{%!, '{{ "{%" }}') if %r!{%!.match?(body)
 
             { :filename => filename, :header => header, :body => body }
-          elsif element_meta[:kind] == "comment"
-            timestamp = Time.parse(element_meta[:published]).strftime("%Y-%m-%d")
-            raise "Original URL is missing" unless element_meta[:original_url]
+          elsif @in_entry_elem[:meta][:kind] == "comment"
+            timestamp = Time.parse(@in_entry_elem[:meta][:published]).strftime("%Y-%m-%d")
+            if @in_entry_elem[:meta][:original_url]
+              @comment_seq ||= 1
 
-            @comment_seq ||= 1
+              original_uri = URI.parse(@in_entry_elem[:meta][:original_url])
+              original_path = original_uri.path.to_s
+              filename = format("%s-%s-%s", timestamp, File.basename(original_path, File.extname(original_path)), @comment_seq)
 
-            original_uri  = URI.parse(element_meta[:original_url])
-            original_path = original_uri.path.to_s
-            filename = format("%s-%s-%s", timestamp, File.basename(original_path, File.extname(original_path)), @comment_seq)
+              @comment_seq += 1
 
-            @comment_seq += 1
-            @original_url_base = "#{original_uri.scheme}://#{original_uri.host}"
+              @original_url_base = "#{original_uri.scheme}://#{original_uri.host}"
+            else
+              raise "Original URL is missing"
+            end
 
             header = {
-              "date"            => element_meta[:published],
-              "author"          => element_meta[:author],
-              "blogger_post_id" => element_meta[:post_id],
+              "date"            => @in_entry_elem[:meta][:published],
+              "author"          => @in_entry_elem[:meta][:author],
+              "blogger_post_id" => @in_entry_elem[:meta][:post_id],
             }
-            header["modified_time"] = element_modified_time
-            header["thumbnail"]     = element_meta[:thumbnail] if element_meta[:thumbnail]
-
-            if @leave_blogger_info
-              header["blogger_id"]       = element_meta[:id]
-              header["blogger_orig_url"] = element_meta[:original_url] if element_meta[:original_url]
-            end
+            header["modified_time"] = @in_entry_elem[:meta][:updated] if @in_entry_elem[:meta][:updated] && @in_entry_elem[:meta][:updated] != @in_entry_elem[:meta][:published]
+            header["thumbnail"] = @in_entry_elem[:meta][:thumbnail] if @in_entry_elem[:meta][:thumbnail]
+            header["blogger_id"] = @in_entry_elem[:meta][:id] if @leave_blogger_info
+            header["blogger_orig_url"] = @in_entry_elem[:meta][:original_url] if @leave_blogger_info && @in_entry_elem[:meta][:original_url]
 
             body = @in_entry_elem[:body]
 
@@ -292,21 +296,6 @@ module JekyllImport
 
             { :filename => filename, :header => header, :body => body }
           end
-        end
-
-        private
-
-        def element_meta
-          @in_entry_elem ||= {}
-          @in_entry_elem[:meta] ||= {}
-        end
-
-        def element_modified_time
-          updated_time = element_meta[:updated]
-          return unless updated_time
-          return if updated_time == element_meta[:published]
-
-          updated_time
         end
       end
     end

@@ -68,6 +68,7 @@ module JekyllImport
           src_dir = conf["source"]
 
           dirs = {
+            :_aliases => src_dir,
             :_posts   => File.join(src_dir, "_posts").to_s,
             :_drafts  => File.join(src_dir, "_drafts").to_s,
             :_layouts => Jekyll.sanitized_path(src_dir, conf["layouts_dir"].to_s),
@@ -146,10 +147,10 @@ module JekyllImport
 
               if partition.first.length.positive?
                 dir = "#{partition.first}/"
-                FileUtils.mkdir_p partition.first
+                FileUtils.mkdir_p "#{dirs[:_aliases]}/#{dir}"
               end
 
-              File.open("#{dir}#{file}.md", "w") do |f|
+              File.open("#{dirs[:_aliases]}/#{dir}#{file}.md", "w") do |f|
                 f.puts "---"
                 f.puts "layout: refresh"
                 f.puts "permalink: #{dir}#{file}/"

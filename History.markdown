@@ -11,6 +11,7 @@
   * s9y-db importer permalink, tag, excerpt, and semantic HTML improvements (#392)
   * drupal6: retain url_alias.dst as permalink in imported nodes (#393)
   * Create drupal8.rb (#405)
+  * Drupal aliases now respect the &#39;source&#39; config (#454)
 
 ### Development Fixes
 

@@ -7,7 +7,7 @@ next_section: ghost
 permalink: /docs/enki/
 ---
 
-To import your posts from a [Enki](http://enkiblog.com) installation, run:
+To import your posts from a [Enki](https://github.com/xaviershay/enki) installation, run:
 
 {% highlight bash %}
 $ ruby -r rubygems -e 'require "jekyll-import";

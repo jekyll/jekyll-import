@@ -5,6 +5,21 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.20.0 / 2020-09-08
+
+### Minor Enhancements
+
+- Pluxml ([#430]({{ site.repository }}/issues/430))
+
+### style
+
+- style: Target Ruby 2.4 ([#432]({{ site.repository }}/issues/432))
+
+### Bug Fixes
+
+- Fix &[#39]({{ site.repository }}/issues/39);can&[#39]({{ site.repository }}/issues/39);t add a new key into hash during iteration&[#39]({{ site.repository }}/issues/39); error ([#434]({{ site.repository }}/issues/434))
+- WordpressDotCom: put downloaded assets into /year/month subfolders to reduce clashes ([#436]({{ site.repository }}/issues/436))
+
 ## 0.19.2 / 2020-03-07
 
 ### Documentation

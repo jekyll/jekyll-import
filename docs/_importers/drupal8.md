@@ -1,17 +1,17 @@
 ---
 layout: docs
-title: Drupal 7
-prev_section: drupal6
-link_source: drupal7
-next_section: drupal8
-permalink: /docs/drupal7/
+title: Drupal 8
+prev_section: drupal7
+link_source: drupal8
+next_section: easyblog
+permalink: /docs/drupal8/
 ---
 
-To import your posts from a [Drupal 7](http://drupal.org) installation, run:
+To import your posts from a [Drupal 8](http://drupal.org) installation, run:
 
 {% highlight bash %}
 $ ruby -r rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Drupal7.run({
+    JekyllImport::Importers::Drupal8.run({
       "dbname"   => "name",
       "user"     => "myuser",
       "password" => "mypassword",
@@ -30,7 +30,7 @@ importer:
 
 {% highlight bash %}
 $ ruby -r rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Drupal7.run({
+    JekyllImport::Importers::Drupal8.run({
       "dbname"   => "name",
       "user"     => "myuser",
       "password" => "mypassword",
@@ -42,12 +42,12 @@ $ ruby -r rubygems -e 'require "jekyll-import";
 
 That will import nodes of type `blog` and `post` only.
 
-The default Drupal 7 expects database to be MySQL. If you want to import posts
-from Drupal 7 installation with PostgreSQL define `"engine"` as `"postgresql"`:
+The default Drupal 8 expects database to be MySQL. If you want to import posts
+from Drupal 8 installation with PostgreSQL define `"engine"` as `"postgresql"`:
 
 {% highlight bash %}
 $ ruby -r rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::Drupal7.run({
+    JekyllImport::Importers::Drupal8.run({
       "engine"   => "postgresql",
       "dbname"   => "name",
       "user"     => "myuser",

@@ -23,6 +23,7 @@
 
   * Update csv.md (#444)
   * Update Enki website link (#457)
+  * wordpressdotcom: add install additional gem note in docs (#443)
 
 ## 0.20.0 / 2020-09-08
 

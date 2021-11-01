@@ -5,6 +5,49 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.21.0 / 2021-10-31
+
+### Bug Fixes
+
+- Replace `decode` with `decode_www_form_component` ([#438]({{ site.repository }}/issues/438))
+- Change `data[author]` to a string scalar ([#419]({{ site.repository }}/issues/419))
+
+### Minor Enhancements
+
+- Add support for Podcast RSS feed imports ([#413]({{ site.repository }}/issues/413))
+- s9y-db importer permalink, tag, excerpt, and semantic HTML improvements ([#392]({{ site.repository }}/issues/392))
+- drupal6: retain `url_alias.dst` as `permalink` in imported nodes ([#393]({{ site.repository }}/issues/393))
+- Create drupal8.rb ([#405]({{ site.repository }}/issues/405))
+- Drupal aliases now respect the &[#39]({{ site.repository }}/issues/39);source&[#39]({{ site.repository }}/issues/39); config ([#454]({{ site.repository }}/issues/454))
+
+### Development Fixes
+
+- Clean up code to make Rubocop happy ([#441]({{ site.repository }}/issues/441))
+- Set up GH Action for Continuous Integration ([#449]({{ site.repository }}/issues/449))
+- Refactor Blogger importer with guard clauses ([#452]({{ site.repository }}/issues/452))
+
+### Documentation
+
+- Update csv.md ([#444]({{ site.repository }}/issues/444))
+- Update Enki website link ([#457]({{ site.repository }}/issues/457))
+- wordpressdotcom: add install additional gem note in docs ([#443]({{ site.repository }}/issues/443))
+- Add Drupal 8 docs ([#458]({{ site.repository }}/issues/458))
+
+## 0.20.0 / 2020-09-08
+
+### Minor Enhancements
+
+- Pluxml ([#430]({{ site.repository }}/issues/430))
+
+### style
+
+- style: Target Ruby 2.4 ([#432]({{ site.repository }}/issues/432))
+
+### Bug Fixes
+
+- Fix &[#39]({{ site.repository }}/issues/39);can&[#39]({{ site.repository }}/issues/39);t add a new key into hash during iteration&[#39]({{ site.repository }}/issues/39); error ([#434]({{ site.repository }}/issues/434))
+- WordpressDotCom: put downloaded assets into /year/month subfolders to reduce clashes ([#436]({{ site.repository }}/issues/436))
+
 ## 0.19.2 / 2020-03-07
 
 ### Documentation

@@ -1,0 +1,109 @@
+---
+behance:
+- behance
+- safe_yaml
+blogger:
+- rexml/document
+- rexml/parsers/streamparser
+- rexml/streamlistener
+- safe_yaml
+dotclear:
+- active_support
+- active_support/core_ext/string/inflections
+- pp
+- safe_yaml
+drupal6:
+- mysql2
+- pg
+- safe_yaml
+- sequel
+drupal7:
+- mysql2
+- pg
+- safe_yaml
+- sequel
+drupal8:
+- mysql2
+- pg
+- safe_yaml
+- sequel
+easyblog:
+- mysql2
+- safe_yaml
+- sequel
+enki:
+- pg
+- sequel
+ghost:
+- safe_yaml
+- sequel
+- sqlite3
+googlereader:
+- rexml/document
+- rss
+- safe_yaml
+joomla:
+- mysql2
+- safe_yaml
+- sequel
+joomla3:
+- mysql2
+- safe_yaml
+- sequel
+jrnl:
+- safe_yaml
+marley:
+- safe_yaml
+mephisto:
+- mysql2
+- sequel
+mt:
+- mysql2
+- pg
+- safe_yaml
+- sequel
+- sqlite3
+pluxml:
+- nokogiri
+- safe_yaml
+posterous:
+- jekyll
+- net/http
+roller:
+- safe_yaml
+- sequel
+- unidecode
+rss:
+- rss
+- rss/1.0
+- rss/2.0
+- safe_yaml
+s9y:
+- rss
+- safe_yaml
+s9ydatabase:
+- nokogiri
+- safe_yaml
+- sequel
+- unidecode
+textpattern:
+- mysql2
+- safe_yaml
+- sequel
+tumblr:
+- jekyll
+- nokogiri
+- reverse_markdown
+typo:
+- mysql2
+- pg
+- safe_yaml
+- sequel
+wordpress:
+- safe_yaml
+- sequel
+- unidecode
+wordpressdotcom:
+- hpricot
+- open_uri_redirections
+- safe_yaml

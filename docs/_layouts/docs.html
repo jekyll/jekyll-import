@@ -10,6 +10,20 @@ layout: default
       <div class="unit four-fifths">
         <article>
           <h1>{{ page.title }}</h1>
+          {% assign importer = page.path | split: "/" | last | split: "." | first %}
+          {% assign importer_deps = site.data.importer_dependencies[importer] %}
+          {% if importer_deps %}
+          <div class="note info">
+            <h5>Additional Dependencies</h5>
+            <p>
+              This importer requires the following additional libraries. You may need to install specific gems if the library
+              is not available with your Ruby installation.
+            </p>
+            <ul>{% for dep in importer_deps %}
+              <li><code>{{ dep }}</code></li>{% endfor %}
+            </ul>
+          </div>
+          {% endif %}
           {{ content }}
           {% if page.link_source %}
             <div class="button">

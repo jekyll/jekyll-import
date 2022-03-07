@@ -16,12 +16,19 @@ layout: default
           <div class="note info">
             <h5>Additional Dependencies</h5>
             <p>
-              This importer requires the following additional libraries. You may need to install specific gems if the library
-              is not available with your Ruby installation.
+              This importer requires the following additional {% if importer_deps.size == 1 %}library{% else %}libraries{% endif %}.
             </p>
             <ul>{% for dep in importer_deps %}
               <li><code>{{ dep }}</code></li>{% endfor %}
             </ul>
+            {% if importer_deps.size == 1 %}
+            <p>You may install the needed gem by running <code>gem install {{ importer_deps }}</code></p>
+            {% else %}
+            <p>
+              You may install the needed gems individually by running <code>gem install GEM_NAME</code> or install all of them
+              with a single invocation:<code>gem install {{ importer_deps | join: " " }}</code>
+            </p>
+            {% endif %}
           </div>
           {% endif %}
           {{ content }}

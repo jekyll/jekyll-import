@@ -3,13 +3,10 @@ behance:
 - behance
 - safe_yaml
 blogger:
-- rexml/document
-- rexml/parsers/streamparser
-- rexml/streamlistener
+- rexml
 - safe_yaml
 dotclear:
-- active_support
-- active_support/core_ext/string/inflections
+- activesupport
 - pp
 - safe_yaml
 drupal6:
@@ -39,7 +36,7 @@ ghost:
 - sequel
 - sqlite3
 googlereader:
-- rexml/document
+- rexml
 - rss
 - safe_yaml
 joomla:
@@ -68,15 +65,13 @@ pluxml:
 - safe_yaml
 posterous:
 - jekyll
-- net/http
+- net-http
 roller:
 - safe_yaml
 - sequel
 - unidecode
 rss:
 - rss
-- rss/1.0
-- rss/2.0
 - safe_yaml
 s9y:
 - rss

@@ -174,6 +174,17 @@ namespace :site do
       deps = importer.require_deps - std_lib
       next if deps.empty?
 
+      deps.map! do |dep|
+        if dep.start_with?("active_support")
+          "activesupport"
+        elsif dep == "net/http"
+          "net-http"
+        else
+          dep.split("/")[0]
+        end
+      end
+
+      deps.uniq!
       deps.sort!
       puts "#{doc_name.ljust(label_size)}: #{deps.join(", ")}"
       data[doc_name] = deps

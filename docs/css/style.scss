@@ -955,4 +955,25 @@ code.option, code.flag, code.filter, code.output {
   }
 }
 
+ul.dep-list {
+  margin-top: 0.275em;
+  padding: 0;
+  list-style: none;
+  li {
+    margin: 0;
+    padding-left: 1em;
+    line-height: 1.275;
+    span img {
+      margin-right: 3px;
+      vertical-align: middle;
+      filter: invert(1);
+    }
+    a {
+      padding: 0 5px;
+      font-size: 0.75em;
+      font-weight: bold;
+    }
+  }
+}
+
 @import "pygments";

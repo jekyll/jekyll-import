@@ -18,8 +18,14 @@ layout: default
             <p>
               This importer requires the following additional {% if importer_deps.size == 1 %}library{% else %}libraries{% endif %}.
             </p>
-            <ul>{% for dep in importer_deps %}
-              <li><code>{{ dep }}</code></li>{% endfor %}
+            <ul class="dep-list">{% for dep in importer_deps %}
+              <li>
+                <span><img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTk1NzNGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6
+                Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UnVieUdlbXM8L3RpdGxlPjxwYXRoIGQ9Ik03LjgxIDcuOWwtMi45NyAyLjk1IDcuMTkgNy4xOCAyLjk2LTIuOTUg
+                NC4yMi00LjIzLTIuOTYtMi45NnYtLjAxSDcuOHpNMTIgMEwxLjUzIDZ2MTJMMTIgMjRsMTAuNDctNlY2TDEyIDB6bTguNDcgMTYuODVMMTIgMjEuNzNsLTguNDctNC44
+                OFY3LjEyTDEyIDIuMjRsOC40NyA0Ljg4djkuNzN6Ii8+PC9zdmc+" width="21" height="21"></span>
+                <a href="https://rubygems.org/gems/{{ dep }}" title="gem '{{ dep }}' at rubygems.org">{{ dep }}</a>
+              </li>{% endfor %}
             </ul>
             {% if importer_deps.size == 1 %}
             <p>You may install the needed gem by running <code>gem install {{ importer_deps }}</code></p>

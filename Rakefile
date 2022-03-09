@@ -163,7 +163,7 @@ namespace :site do
     label_size = importers.map { |klass| klass.to_s.split("::").last.length }.max + 1
 
     # available as part of Ruby Stdlib
-    std_lib = %w(csv date fileutils json open-uri rubygems time uri yaml)
+    std_lib = %w(csv date fileutils json net/http open-uri rss rubygems time uri yaml)
 
     FileUtils.mkdir_p data_dir
     data = {}
@@ -174,16 +174,8 @@ namespace :site do
       deps = importer.require_deps - std_lib
       next if deps.empty?
 
-      deps.map! do |dep|
-        if dep.start_with?("active_support")
-          "activesupport"
-        elsif dep == "net/http"
-          "net-http"
-        else
-          dep.split("/")[0]
-        end
-      end
-
+      deps.map! { |dep| dep.start_with?("active_support") ? "activesupport" : dep.split("/")[0] }
+      deps = deps - std_lib
       deps.uniq!
       deps.sort!
       puts "#{doc_name.ljust(label_size)}: #{deps.join(", ")}"

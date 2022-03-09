@@ -37,7 +37,6 @@ ghost:
 - sqlite3
 googlereader:
 - rexml
-- rss
 - safe_yaml
 joomla:
 - mysql2
@@ -65,16 +64,13 @@ pluxml:
 - safe_yaml
 posterous:
 - jekyll
-- net-http
 roller:
 - safe_yaml
 - sequel
 - unidecode
 rss:
-- rss
 - safe_yaml
 s9y:
-- rss
 - safe_yaml
 s9ydatabase:
 - nokogiri

@@ -1,5 +1,9 @@
 ## HEAD
 
+### Documentation
+
+  * Document additional dependencies of importers (#468)
+
 ## 0.21.0 / 2021-10-31
 
 ### Bug Fixes

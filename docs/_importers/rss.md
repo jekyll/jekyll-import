@@ -17,10 +17,10 @@ $ ruby -r rubygems -e 'require "jekyll-import";
 {% endhighlight %}
 
 The `source` field is required and can be either a local file or a remote one.
-Other optional fields are as follows
-* `canonical_link` add canonical to posts. Default value is `false`
-* `render_audio` render <audio> element in posts. Default value is `false`
-* `tag` add specific tag to posts
-* `extract_tags` extract tags from given key
+Other optional fields are as follows:
+* `canonical_link` – copy original link as `canonical_url` to post. (default: `false`)
+* `render_audio` – render `<audio>` element in posts for the enclosure URLs (default: `false`)
+* `tag` – add a specific tag to all posts
+* `extract_tags` – copies tags from the given subfield on the RSS `<item>`
 
 __Note:__ `tag` and `extract_tags` are exclusive option, both can not be provided together.

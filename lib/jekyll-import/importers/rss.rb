@@ -6,9 +6,9 @@ module JekyllImport
       def self.specify_options(c)
         c.option "source", "--source NAME", "The RSS file or URL to import"
         c.option "tag", "--tag NAME", "Add a tag to posts"
+        c.option "extract_tags", "--extract_tags KEY", "Extract tag from given key"
         c.option "render_audio", "--render_audio", "Render <audio> element as necessary"
         c.option "canonical_link", "--canonical_link", "Add source canonical link"
-        c.option "extract_tags", "--extract_tags key", "Extract tag from given key"
       end
 
       def self.validate(options)
@@ -58,20 +58,11 @@ module JekyllImport
         canonical_link = options.fetch("canonical_link", false)
 
         header = {
-          "layout" => "post",
-          "title" => item.title,
+          "layout"        => "post",
+          "title"         => item.title,
           "canonical_url" => (canonical_link ? item.link : nil),
+          "tag"           => get_tags(item, options),
         }.compact
-
-        header["tag"] = options["tag"] unless options["tag"].nil? || options["tag"].empty?
-
-        if options["extract_tags"]
-          tags_from_feed = item.instance_variable_get("@#{options["extract_tags"]}")
-          unless tags_from_feed.nil?
-            tags = tags_from_feed.map { |feed_tag| feed_tag.content.downcase }
-            header["tag"] = tags unless tags.empty?
-          end
-        end
 
         frontmatter.each do |value|
           header[value] = item.send(value)
@@ -106,6 +97,25 @@ module JekyllImport
             f.puts <<~HTML
               <p>Originally posted on <a href="#{item.link}">#{URI.parse(item.link).host}</a>.</p>
             HTML
+          end
+        end
+      end
+
+      private
+
+      def self.get_tags(item, options)
+        explicit_tag = options["tag"]
+        if explicit_tag
+          return explicit_tag unless explicit_tag.nil? || explicit_tag.empty?
+
+          tags_reference = options["extract_tags"]
+          if tags_reference
+            tags_from_feed = item.instance_variable_get("@#{tags_reference}")
+            if tags_from_feed.is_a?(Array)
+              tags = tags_from_feed.map { |feed_tag| feed_tag.content.downcase }
+              tags.uniq!
+              return tags unless tags.empty?
+            end
           end
         end
       end

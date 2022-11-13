@@ -101,21 +101,17 @@ module JekyllImport
         end
       end
 
-      private
-
-      def self.get_tags(item, options)
+      private_class_method def self.get_tags(item, options)
         explicit_tag = options["tag"]
-        if explicit_tag
-          return explicit_tag unless explicit_tag.nil? || explicit_tag.empty?
+        return explicit_tag unless explicit_tag.nil? || explicit_tag.empty?
 
-          tags_reference = options["extract_tags"]
-          if tags_reference
-            tags_from_feed = item.instance_variable_get("@#{tags_reference}")
-            if tags_from_feed.is_a?(Array)
-              tags = tags_from_feed.map { |feed_tag| feed_tag.content.downcase }
-              tags.uniq!
-              return tags unless tags.empty?
-            end
+        tags_reference = options["extract_tags"]
+        if tags_reference
+          tags_from_feed = item.instance_variable_get("@#{tags_reference}")
+          if tags_from_feed.is_a?(Array)
+            tags = tags_from_feed.map { |feed_tag| feed_tag.content.downcase }
+            tags.uniq!
+            return tags unless tags.empty?
           end
         end
       end

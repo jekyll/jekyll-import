@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("simplecov-gem-adapter", "~> 1.0")
 
   # migrator dependencies:
-  s.add_development_dependency("behance", "~> 0.3")
+  # s.add_development_dependency("behance", "~> 0.3") # uses outdated dependencies
   s.add_development_dependency("hpricot", "~> 0.8")
   s.add_development_dependency("htmlentities", "~> 4.3")
   s.add_development_dependency("mysql2", "~> 0.3")

@@ -4,6 +4,10 @@
 
   * Document additional dependencies of importers (#468)
 
+### Development Fixes
+
+  * Lock `rdoc` gem to v6.3.x to avoid Psych 4.0 (#491)
+
 ## 0.21.0 / 2021-10-31
 
 ### Bug Fixes

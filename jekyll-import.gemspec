@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("mysql2", "~> 0.3")
   s.add_development_dependency("open_uri_redirections", "~> 0.2")
   s.add_development_dependency("pg", "~> 0.12")
+  s.add_development_dependency("rss", "~> 0.2")
   s.add_development_dependency("sequel", "~> 3.42")
   s.add_development_dependency("sqlite3", "~> 1.3")
   s.add_development_dependency("unidecode", "~> 1.0")

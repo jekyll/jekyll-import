@@ -1,6 +1,8 @@
 require "helper"
 require "htmlentities"
 
+Importers::Roller.require_deps
+
 class TestRollerImporter < Test::Unit::TestCase
   should "clean slashes from slugs" do
     test_title = "blogs part 1/2"

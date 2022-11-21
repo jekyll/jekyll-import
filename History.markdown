@@ -4,6 +4,10 @@
 
   * Document additional dependencies of importers (#468)
 
+### Development Fixes
+
+  * Bump dependencies and CI Ruby versions (#493)
+
 ## 0.21.0 / 2021-10-31
 
 ### Bug Fixes

@@ -2,7 +2,10 @@ require "helper"
 require "tempfile"
 require "tmpdir"
 
+Importers::Blogger.require_deps
+
 class TestBloggerImporter < Test::Unit::TestCase
+
   should "requires source option" do
     assert_raise(RuntimeError) do
       Importers::Blogger.validate({})

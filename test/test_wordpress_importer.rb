@@ -1,6 +1,8 @@
 require "helper"
 require "htmlentities"
 
+Importers::WordPress.require_deps
+
 class TestWordpressMigrator < Test::Unit::TestCase
   should "clean slashes from slugs" do
     test_title = "blogs part 1/2"

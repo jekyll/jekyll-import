@@ -1,10 +1,11 @@
 require "helper"
 require "json"
 
+Importers::Tumblr.require_deps
+
 class TestTumblrImporter < Test::Unit::TestCase
   context "A Tumblr blog" do
     setup do
-      Importers::Tumblr.require_deps
       @jsonPayload = <<~PAYLOAD
         {
           "tumblelog"   : {

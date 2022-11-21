@@ -2,6 +2,8 @@
 
 require "helper"
 
+Importers::CSV.require_deps
+
 class TestCSVImporter < Test::Unit::TestCase
   sample_row = [
     "My Title",

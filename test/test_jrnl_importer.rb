@@ -1,6 +1,8 @@
 require "helper"
 require "time"
 
+Importers::Jrnl.require_deps
+
 class TestJrnlMigrator < Test::Unit::TestCase
   context "jrnl" do
     setup do

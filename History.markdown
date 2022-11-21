@@ -6,7 +6,6 @@
 
 ### Development Fixes
 
-  * Lock `rdoc` gem to v6.3.x to avoid Psych 4.0 (#491)
   * Bump dependencies and CI Ruby versions (#493)
 
 ## 0.21.0 / 2021-10-31

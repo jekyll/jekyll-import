@@ -1,5 +1,7 @@
 require "helper"
 
+Importers::WordpressDotCom.require_deps
+
 class TestWordpressDotComMigrator < Test::Unit::TestCase
   should "clean slashes from slugs" do
     test_title = "blogs part 1/2"

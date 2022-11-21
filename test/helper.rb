@@ -17,7 +17,7 @@ end
 require File.expand_path("../lib/jekyll-import.rb", __dir__)
 include JekyllImport
 
-JekyllImport::Importer.subclasses.each(&:require_deps)
+# JekyllImport::Importer.subclasses.each(&:require_deps)
 
 # Send STDERR into the void to suppress program output messages
 # STDERR.reopen(test(?e, '/dev/null') ? '/dev/null' : 'NUL:')

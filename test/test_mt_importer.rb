@@ -1,6 +1,8 @@
 require "helper"
 require "date"
 
+Importers::MT.require_deps
+
 class TestMTMigrator < Test::Unit::TestCase
   def stub_entry_row(overrides = {})
     now = DateTime.now

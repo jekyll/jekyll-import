@@ -8,6 +8,10 @@
 
   * Bump dependencies and CI Ruby versions (#493)
 
+### Minor Enhancements
+
+  * Improve RSS importer with canonical_link and extract_tags option (#489)
+
 ## 0.21.0 / 2021-10-31
 
 ### Bug Fixes

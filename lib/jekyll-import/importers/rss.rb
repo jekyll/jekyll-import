@@ -5,12 +5,15 @@ module JekyllImport
     class RSS < Importer
       def self.specify_options(c)
         c.option "source", "--source NAME", "The RSS file or URL to import"
-        c.option "tag", "--tag NAME", "Add a tag to posts"
-        c.option "render_audio", "--render_audio", "Render <audio> element as necessary"
+        c.option "tag", "--tag NAME", "Add a specific tag to all posts"
+        c.option "extract_tags", "--extract_tags KEY", "Copies tags from the given subfield on the RSS <item>"
+        c.option "render_audio", "--render_audio", "Render <audio> element in posts for the enclosure URLs (default: false)"
+        c.option "canonical_link", "--canonical_link", "Copy original link as canonical_url to post. (default: false)"
       end
 
       def self.validate(options)
         abort "Missing mandatory option --source." if options["source"].nil?
+        abort "Provide either --tag or --extract_tags option." if options["extract_tags"] && options["tag"]
       end
 
       def self.require_deps
@@ -33,7 +36,7 @@ module JekyllImport
         source = options.fetch("source")
 
         content = ""
-        open(source) { |s| content = s.read }
+        URI.open(source) { |s| content = s.read }
         rss = ::RSS::Parser.parse(content, false)
 
         raise "There doesn't appear to be any RSS items at the source (#{source}) provided." unless rss
@@ -52,13 +55,14 @@ module JekyllImport
         post_name = Jekyll::Utils.slugify(item.title, :mode => "latin")
         name = "#{formatted_date}-#{post_name}"
         audio = render_audio && item.enclosure.url
+        canonical_link = options.fetch("canonical_link", false)
 
         header = {
-          "layout" => "post",
-          "title"  => item.title,
-        }
-
-        header["tag"] = options["tag"] unless options["tag"].nil? || options["tag"].empty?
+          "layout"        => "post",
+          "title"         => item.title,
+          "canonical_url" => (canonical_link ? item.link : nil),
+          "tag"           => get_tags(item, options),
+        }.compact
 
         frontmatter.each do |value|
           header[value] = item.send(value)
@@ -91,6 +95,21 @@ module JekyllImport
           f.puts output
         end
       end
+
+      def self.get_tags(item, options)
+        explicit_tag = options["tag"]
+        return explicit_tag unless explicit_tag.nil? || explicit_tag.empty?
+
+        tags_reference = options["extract_tags"]
+        return unless tags_reference
+
+        tags_from_feed = item.instance_variable_get("@#{tags_reference}")
+        return unless tags_from_feed.is_a?(Array)
+
+        tags = tags_from_feed.map { |feed_tag| feed_tag.content.downcase }
+        tags.empty? ? nil : tags.tap(&:uniq!)
+      end
+      private_class_method :get_tags
     end
   end
 end

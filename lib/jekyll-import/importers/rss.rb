@@ -93,11 +93,6 @@ module JekyllImport
           end
 
           f.puts output
-          if canonical_link
-            f.puts <<~HTML
-              <p>Originally posted on <a href="#{item.link}">#{URI.parse(item.link).host}</a>.</p>
-            HTML
-          end
         end
       end
 

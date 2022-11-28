@@ -53,8 +53,8 @@ jobs:
       - name: Run RuboCop
         run:  bash script/fmt
 
-  cli_help_check:
-    name: "CLI Help Info Check"
+  cli_help_info_visualization:
+    name: "CLI Help Info Visualization"
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: false
@@ -71,4 +71,4 @@ jobs:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
       - name: Print Importer Help Menus
-        run:  bundle exec ruby script/cli_help_check.rb
+        run:  bundle exec ruby script/cli_help_visualizer.rb

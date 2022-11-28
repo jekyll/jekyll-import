@@ -21,11 +21,11 @@ module JekyllImport
 
       def self.process(options)
         RSS.process({
-                      "source" => "https://medium.com/feed/@#{options.fetch("username")}",
-                      "render_audio" => options.fetch("render_audio", false),
-                      "canonical_link" => options.fetch("canonical_link", true),
-                      "extract_tags" => "category",
-                    })
+          "source"         => "https://medium.com/feed/@#{options.fetch("username")}",
+          "render_audio"   => options.fetch("render_audio", false),
+          "canonical_link" => options.fetch("canonical_link", true),
+          "extract_tags"   => "category",
+        })
       end
     end
   end

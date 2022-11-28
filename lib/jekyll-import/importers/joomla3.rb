@@ -10,13 +10,13 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "dbname",   "--dbname",   "Database name"
-        c.option "user",     "--user",     "Database user name"
-        c.option "password", "--password", "Database user's password (default: '')"
-        c.option "host",     "--host",     "Database host name"
-        c.option "port",     "--port",     "Database port"
-        c.option "category", "--category", "ID of the category"
-        c.option "prefix",   "--prefix",   "Table prefix name"
+        c.option "dbname",   "--dbname",   "Database name."
+        c.option "user",     "--user",     "Database user name."
+        c.option "password", "--password", "Database user's password. (default: '')"
+        c.option "host",     "--host",     "Database host name. (default: 'localhost')"
+        c.option "port",     "--port",     "Database port. (default: '3306')"
+        c.option "category", "--category", "ID of the category. (default: '0')"
+        c.option "prefix",   "--prefix",   "Table prefix name. (default: 'jos_')"
       end
 
       def self.require_deps

@@ -28,7 +28,7 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "marley_data_dir", "--marley_data_dir DIR", "The dir containing your marley data"
+        c.option "marley_data_dir", "--marley_data_dir DIR", "The dir containing your marley data."
       end
 
       def self.process(options)

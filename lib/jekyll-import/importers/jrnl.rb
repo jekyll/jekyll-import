@@ -12,10 +12,10 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "file",        "--file FILENAME",      'Journal file (default: "~/journal.txt")'
-        c.option "time_format", "--time_format FORMAT", 'Time format of your journal (default: "%Y-%m-%d %H:%M")'
-        c.option "extension",   "--extension EXT",      'Output extension (default: "md")'
-        c.option "layout",      "--layout NAME",        'Output post layout (default: "post")'
+        c.option "file",        "--file FILENAME",      "Journal file. (default: '~/journal.txt')"
+        c.option "time_format", "--time_format FORMAT", "Time format of your journal. (default: '%Y-%m-%d %H:%M')"
+        c.option "extension",   "--extension EXT",      "Output extension. (default: 'md')"
+        c.option "layout",      "--layout NAME",        "Output post layout. (default: 'post')"
       end
 
       # Reads a jrnl file and creates a new post for each entry

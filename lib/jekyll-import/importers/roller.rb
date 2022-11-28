@@ -14,19 +14,19 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "dbname",         "--dbname DB",      "Database name (default: '')"
-        c.option "socket",         "--socket SOCKET",  "Database socket (default: '')"
-        c.option "user",           "--user USER",      "Database user name (default: '')"
-        c.option "password",       "--password PW",    "Database user's password (default: '')"
-        c.option "host",           "--host HOST",      "Database host name (default: 'localhost')"
-        c.option "port",           "--port PORT",      "Database port number (default: '3306')"
-        c.option "clean_entities", "--clean_entities", "Whether to clean entities (default: true)"
-        c.option "comments",       "--comments",       "Whether to import comments (default: true)"
-        c.option "categories",     "--categories",     "Whether to import categories (default: true)"
-        c.option "tags",           "--tags",           "Whether to import tags (default: true)"
+        c.option "dbname",         "--dbname DB",      "Database name."
+        c.option "user",           "--user USER",      "Database user name."
+        c.option "password",       "--password PW",    "Database user's password."
+        c.option "socket",         "--socket SOCKET",  "Database socket. (default: null)"
+        c.option "host",           "--host HOST",      "Database host name. (default: 'localhost')"
+        c.option "port",           "--port PORT",      "Database port number. (default: '3306')"
+        c.option "clean_entities", "--clean_entities", "Whether to clean entities. (default: true)"
+        c.option "comments",       "--comments",       "Whether to import comments. (default: true)"
+        c.option "categories",     "--categories",     "Whether to import categories. (default: true)"
+        c.option "tags",           "--tags",           "Whether to import tags. (default: true)"
 
         c.option "status",         "--status STATUS,STATUS2", Array,
-                 "Array of allowed statuses (default: ['PUBLISHED'], other options: 'DRAFT')"
+                 "Array of allowed statuses (either ['PUBLISHED'] or ['DRAFT']). (default: ['PUBLISHED'])"
       end
 
       # Main migrator function. Call this to perform the migration.

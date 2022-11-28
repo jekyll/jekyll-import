@@ -4,9 +4,9 @@ module JekyllImport
   module Importers
     class RSS < Importer
       def self.specify_options(c)
-        c.option "source", "--source NAME", "The RSS file or URL to import"
-        c.option "tag", "--tag NAME", "Add a tag to posts"
-        c.option "render_audio", "--render_audio", "Render <audio> element as necessary"
+        c.option "source",       "--source NAME",  "The RSS file or URL to import."
+        c.option "tag",          "--tag NAME",     "Add a specific tag to all posts. (default: null)"
+        c.option "render_audio", "--render_audio", "Render <audio> element as necessary. (default: false)"
       end
 
       def self.validate(options)

@@ -53,6 +53,8 @@ marley:
 mephisto:
 - mysql2
 - sequel
+medium:
+- safe_yaml
 mt:
 - mysql2
 - pg

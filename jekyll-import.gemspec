@@ -40,6 +40,20 @@ Gem::Specification.new do |s|
   s.add_development_dependency("simplecov", "~> 0.7")
   s.add_development_dependency("simplecov-gem-adapter", "~> 1.0")
 
+  unless ENV["DOCS_DEPLOY"]
+    # migrator dependencies:
+    # s.add_development_dependency("behance", "~> 0.3") # uses outdated dependencies
+    s.add_development_dependency("hpricot", "~> 0.8")
+    s.add_development_dependency("htmlentities", "~> 4.3")
+    s.add_development_dependency("mysql2", "~> 0.3")
+    s.add_development_dependency("open_uri_redirections", "~> 0.2")
+    s.add_development_dependency("pg", "~> 1.0")
+    s.add_development_dependency("rss", "~> 0.2")
+    s.add_development_dependency("sequel", "~> 5.62")
+    s.add_development_dependency("sqlite3", "~> 1.3")
+    s.add_development_dependency("unidecode", "~> 1.0")
+  end
+
   # site dependencies:
   s.add_development_dependency("launchy", "~> 2.4")
 end

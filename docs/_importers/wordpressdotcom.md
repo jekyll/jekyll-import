@@ -1,35 +1,9 @@
 ---
-layout: docs
 title: WordPress.com
-prev_section: wordpress
-link_source:  wordpressdotcom
-next_section: third-party
-permalink: /docs/wordpressdotcom/
 ---
+
 <div class="note info">
-  <h5>Install additional gems</h5>
-  <p>
-    To use this importer, you need to install these additional gems:
-    `gem install hpricot open_uri_redirections`
-  </p>
-</div>
-
-To import your posts from a [WordPress.com](http://wordpress.com) blog, run:
-
-{% highlight bash %}
-$ ruby -r rubygems -e 'require "jekyll-import";
-    JekyllImport::Importers::WordpressDotCom.run({
-      "source" => "wordpress.xml",
-      "no_fetch_images" => false,
-      "assets_folder" => "assets"
-    })'
-{% endhighlight %}
-
-The `source`, `no_fetch_images`, and `assets_folder` fields are not required.
-Their default values are what you see above.
-
-<div class="note">
-  <h5>ProTip™: WordPress.com Export Tool</h5>
+  <h5>ProTip: WordPress.com Export Tool</h5>
   <p markdown="1">If you are migrating from a WordPress.com account, you can
   access the export tool at the following URL:
   `https://YOUR-USER-NAME.wordpress.com/wp-admin/export.php`.</p>

@@ -1,8 +1,6 @@
 ---
-layout: docs
-title: History
-permalink: "/docs/history/"
-prev_section: contributing
+title: Project History
+doc_order: 6
 ---
 
 ## 0.21.0 / 2021-10-31
@@ -25,6 +23,7 @@ prev_section: contributing
 - Clean up code to make Rubocop happy ([#441]({{ site.repository }}/issues/441))
 - Set up GH Action for Continuous Integration ([#449]({{ site.repository }}/issues/449))
 - Refactor Blogger importer with guard clauses ([#452]({{ site.repository }}/issues/452))
+- Add workflow to automate tagging and releasing gem ([#459]({{ site.repository }}/issues/459))
 
 ### Documentation
 

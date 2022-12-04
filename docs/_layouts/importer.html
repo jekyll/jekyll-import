@@ -1,0 +1,51 @@
+---
+layout: docs
+---
+
+{% if page.req_deps %}
+<div class="note warning">
+  <p>
+    This importer depends on the following third-party gems:
+    <ul class="deps-list">{% for gem in page.req_deps %}<li>{{ gem }}</li>{% endfor %}</ul>
+    You may either install the gem(s) individually by running a command with syntax <code>gem install GEM_NAME</code>
+    or install the required gems in a batch by running the following snippet:
+    <pre class="install-deps-snippet">gem install {{ page.req_deps | join: ' ' }}</pre>
+  </p>
+</div>
+{% endif %}
+{% if page.render_limited_import_note %}
+<div class="note info">
+  <p>
+    This importer only converts your posts and creates YAML front-matter.
+    It does not import any layouts, styling, or external files (images, CSS, etc).
+  </p>
+</div>
+{% endif %}
+<h2>Invocation</h2>
+{% if page.prereq_info -%}
+<p>
+  {{ page.prereq_info | markdownify }}
+</p>
+{%- endif %}
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import {{ page.command | default: page.title | downcase }}
+    {%- if page.cmd_opts %} {{ page.cmd_opts | map: 'switch' | join: ' ' }}{% endif %}</pre>
+</p>
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    {% for option in page.cmd_opts %}
+    <tr{% if option.mandatory %}{% assign has_required_opts = true %} class="required-option"{% endif %}>
+      <td><code>{{ option.switch }}</code></td>
+      <td{% unless option.default_value %} colspan="2"{% endunless %}>{{ option.desc }}</td>
+      {% if option.default_value %}<td><small>Default: <code>{{ option.default_value }}</code></small></td>{% endif %}
+    </tr>
+    {% endfor %}
+  </table>
+  {% if has_required_opts %}
+    <small class="cli-table-note"><em>Amber row(s) in table above indicate required options.</em></small>
+  {% endif %}
+</div>
+
+{{ content }}

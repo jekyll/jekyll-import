@@ -124,10 +124,8 @@ namespace :site do
     if File.exist?("History.markdown")
       history_file = File.read("History.markdown")
       front_matter = {
-        "layout"       => "docs",
-        "title"        => "History",
-        "permalink"    => "/docs/history/",
-        "prev_section" => "contributing",
+        "title"     => "Project History",
+        "doc_order" => 6,
       }
       Dir.chdir("docs/_docs/") do
         File.open("history.md", "w") do |file|
@@ -144,49 +142,5 @@ namespace :site do
     else
       abort "You seem to have misplaced your History.markdown file. I can haz?"
     end
-  end
-
-  desc "generate importer-dependencies data file"
-  task :generate_dependency_data do
-    require "jekyll-import"
-
-    # Monkey-patch to alter behavior just for this task.
-    module JekyllImport
-      def self.require_with_fallback(gems)
-        Array(gems).flatten
-      end
-    end
-
-    data_dir   = File.expand_path("docs/_data", __dir__)
-    data_file  = File.join(data_dir, "importer_dependencies.yml")
-    importers  = JekyllImport::Importer.subclasses
-    label_size = importers.map { |klass| klass.to_s.split("::").last.length }.max + 1
-
-    # available as part of Ruby Stdlib
-    std_lib = %w(csv date fileutils json net/http open-uri rss rubygems time uri yaml)
-
-    FileUtils.mkdir_p data_dir
-    data = {}
-
-    puts "\nLogging importer dependencies..\n\n"
-    importers.each do |importer|
-      doc_name = importer.to_s.split("::").last.downcase
-      deps = importer.require_deps - std_lib
-      next if deps.empty?
-
-      deps.map! { |dep| dep.start_with?("active_support") ? "activesupport" : dep.split("/")[0] }
-      deps = deps - std_lib
-      deps.uniq!
-      deps.sort!
-      puts "#{doc_name.ljust(label_size)}: #{deps.join(", ")}"
-      data[doc_name] = deps
-    end
-
-    File.write(data_file, YAML.dump(data))
-    puts <<~MSG
-      \nData successfully logged into file:
-        => #{data_file}
-      Commit the file into version control if altered.
-    MSG
   end
 end

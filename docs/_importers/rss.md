@@ -1,10 +1,5 @@
 ---
-layout: docs
 title: RSS
-prev_section: posterous
-link_source:  rss
-next_section: s9y
-permalink: /docs/rss/
 ---
 
 To import your posts from an RSS feed (local or remote), run:

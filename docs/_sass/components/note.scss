@@ -1,0 +1,14 @@
+div.note {
+  margin-bottom: 30px;
+  padding: 10px var(--padding-x);
+  overflow-x: auto;
+}
+div.note.warning {
+  color: #d1ba73;
+  background: #6b6247;
+  pre.install-deps-snippet { text-align: center }
+}
+div.note.info {
+  color: #eef4f7;
+  background: #4c7e99;
+}

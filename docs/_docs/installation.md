@@ -1,9 +1,5 @@
 ---
-layout: docs
-title: Installation
-prev_section: home
-next_section: usage
-permalink: /docs/installation/
+doc_order: 2
 ---
 
 Because the importers have many of their own dependencies, they are made

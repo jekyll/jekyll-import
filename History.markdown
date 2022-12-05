@@ -7,6 +7,8 @@
 ### Development Fixes
 
   * Bump dependencies and CI Ruby versions (#493)
+  * Build and deploy docs site via GitHub Actions (#500)
+  * Omit importer dependencies in docs-site workflow (#501)
 
 ### Minor Enhancements
 

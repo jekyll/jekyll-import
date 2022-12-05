@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+export DOCS_DEPLOY=true
+buildopts="-s docs -d docs/_site"
+
+if [[ $# -lt 1 ]]; then
+  bundle exec jekyll build $buildopts
+else
+  bundle exec jekyll "$@" $buildopts
+fi

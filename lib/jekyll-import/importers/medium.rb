@@ -22,7 +22,10 @@ module JekyllImport
           "source"         => "https://medium.com/feed/@#{options.fetch("username")}",
           "render_audio"   => options.fetch("render_audio", false),
           "canonical_link" => options.fetch("canonical_link", false),
-          # Add existing tags from Medium post to front matter using `category` subfield on the RSS <item>
+          # When a user publish posts on Medium, most of the time it contains tags which helps others to search the post.
+          # When we export RSS feed from Medium, it uses `category` subfield on the RSS <item> to provide existing tags.
+          # With the following config, we will add existing tags from Medium post to front matter so that similar tags
+          # can be visible on website.
           "extract_tags"   => "category",
         })
       end

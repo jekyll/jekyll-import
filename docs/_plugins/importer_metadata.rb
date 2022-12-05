@@ -44,9 +44,3 @@ Jekyll::Hooks.register :site, :post_read do |site|
     end
   end
 end
-
-
-
-
-Jekyll::Hooks.register :importers, :post_init do |imp|
-end

@@ -17,15 +17,17 @@ module JekyllImport
         Importers::RSS.require_deps
       end
 
+      # Medium posts and associated metadata are exported as an RSS Feed. Hence invoke our RSS Importer to create the
+      # Jekyll source directory.
+      #
+      # "Tags" attached to a Medium post are exported under the markup `<item><category>...</category></item>` in the
+      # export feed. Therefore, configure the RSS Importer to always look for tags in the `<category></category>` field
+      # of an RSS item.
       def self.process(options)
         Importers::RSS.process({
           "source"         => "https://medium.com/feed/@#{options.fetch("username")}",
           "render_audio"   => options.fetch("render_audio", false),
           "canonical_link" => options.fetch("canonical_link", false),
-          # When a user publish posts on Medium, most of the time it contains tags which helps others to search the post.
-          # When we export RSS feed from Medium, it uses `category` subfield on the RSS <item> to provide existing tags.
-          # With the following config, we will add existing tags from Medium post to front matter so that similar tags
-          # can be visible on website.
           "extract_tags"   => "category",
         })
       end

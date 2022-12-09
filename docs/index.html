@@ -1,7 +1,7 @@
 ---
 layout: base
 title: Import your old &amp; busted site to Jekyll
-featured: [ blogger, drupal8, wordpress ]
+featured: [ blogger, drupal8, mephisto, tumblr, wordpress ]
 ---
 
 <div class="home container">
@@ -17,13 +17,19 @@ featured: [ blogger, drupal8, wordpress ]
         {% for entry in page.featured %}
         {% assign importer = site.importers | find: "slug", entry %}
         <div class="importer">
+          <svg class="i-icon">
+            <use xlink:href="{{ 'assets/imgs/importer-icons.svg#' | append: 'default' | relative_url }}"></use>
+          </svg>
           <a href="{{ importer.url }}" title="{{ importer.title }} Importer">{{ importer.title }}</a>
         </div>
         {% endfor %}
+        <div class="importer">
+          and
+          <a href="{{ '/importers/' | relative_url }}">
+            <span>{{ site.importers | size | minus: featured_list_size }}</span>
+            other importers &rarr;</a>
+        </div>
       </div>
-      <p>
-        and {{ site.importers | size | minus: featured_list_size }} other importers.
-      </p>
     </div>
     <div class="info-lead">
       <h2>Open-Source</h2>

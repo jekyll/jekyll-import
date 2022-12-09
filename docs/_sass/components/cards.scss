@@ -1,0 +1,52 @@
+div.deck {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  .card {
+    flex: 0 auto;
+    margin: 1em;
+    padding: 1.5em;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid var(--brass);
+    overflow: auto;
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 210px;
+      height: 350px;
+      overflow: hidden;
+    }
+    h2 { margin: 0 0 0.5em }
+    header {
+      margin-bottom: 0.5em;
+      border-bottom: 1px solid var(--dark-brass);
+      .i-icon {
+        margin-bottom: 0.25em;
+        width: 6em;
+        height: 6em;
+        fill: var(--dark-brass);
+      }
+    }
+    section {
+      display: flex;
+      flex-direction: column;
+      flex: 1 auto;
+      justify-content: center;
+      margin-top: 0.5em;
+      div {
+        max-height: 150px;
+        overflow: hidden;
+      }
+      table {
+        td, th {
+          padding: 5px;
+          border-color: transparent;
+          &:first-of-type {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+}

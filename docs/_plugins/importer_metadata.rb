@@ -28,19 +28,20 @@ Jekyll::Hooks.register :site, :post_read do |site|
     deps.uniq!
     deps.sort!
 
+    doc.data["cmd_name"] = name
     doc.data["req_deps"] = deps unless deps.empty?
-    unless cmd.options.empty?
-      doc.data["cmd_opts"] = (cmd.options.map do |o|
-        hsh = { "switch" => o.long }
-        if %r!(?<desc>.+?)(?:\z| \(default: (?<default_value>.*)\))! =~ o.description
-          hsh["desc"] = desc
-          hsh["default_value"] = default_value
-          hsh["mandatory"] = true unless default_value
-        else
-          hsh["desc"] = o.description
-        end
-        hsh
-      end)
-    end
+    next if cmd.options.empty?
+
+    doc.data["cmd_opts"] = (cmd.options.map do |o|
+      hsh = { "switch" => o.long }
+      if %r!(?<desc>.+?)(?:\z| \(default: (?<default_value>.*)\))! =~ o.description
+        hsh["desc"] = desc
+        hsh["default_value"] = default_value
+        hsh["mandatory"] = true unless default_value
+      else
+        hsh["desc"] = o.description
+      end
+      hsh.tap(&:compact!)
+    end)
   end
 end

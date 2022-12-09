@@ -25,7 +25,7 @@ layout: base
   </article>
 
   <div class="sidebar hide-on-mobiles">
-    <h4>Docs</h4>
+    <h4>Overview</h4>
     <ul>
       {% for doc in site.docs %}
       <li{% if page.url == doc.url %} class="current"{% endif %}><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>

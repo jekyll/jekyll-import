@@ -3,12 +3,12 @@
   .intro {
     font-size: 2.25em;
     letter-spacing: -1px;
-    line-height: 1.2;
+    line-height: 1.125;
     font-weight: 300;
   }
   .features {
     .listing, .info-lead {
-      margin: 30px 0;
+      margin: 0;
       flex: 1 0 auto;
       h2 {
         font-size: 1.25em;
@@ -18,19 +18,37 @@
     .listing {
       flex-grow: 4;
       .importer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
         margin: 5px auto;
         max-width: 180px;
         height: 200px;
         border: 1px solid var(--dark-brass);
+        .i-icon {
+          width: 6em;
+          fill: var(--gold);
+        }
+        &:last-child {
+          a span {
+            font-size: 3em;
+            font-weight: 600;
+            line-height: 1;
+          }
+        }
         a {
           display: block;
-          padding: 25px 2px;
+          padding: 5px 2px;
           border-color: transparent;
         }
         &:hover, &:active {
           background: var(--gold);
           a {
             color: #333;
+          }
+          .i-icon {
+            fill: var(--dark-brass);
           }
         }
       }
@@ -49,7 +67,7 @@
         display: flex;
         flex-flow: row wrap;
         justify-content: center;
-        max-width: 380px;
+        max-width: 570px;
       }
       .importer {
         width: 180px;

@@ -50,6 +50,8 @@ jrnl:
 - safe_yaml
 marley:
 - safe_yaml
+medium:
+- safe_yaml
 mephisto:
 - mysql2
 - sequel

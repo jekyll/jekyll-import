@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"
+     xmlns:cc="http://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html">
+  <channel>
+    <title><![CDATA[Stories by John Doe on Medium]]></title>
+    <description><![CDATA[Stories by John Doe on Medium]]></description>
+    <link>https://medium.com/@John.Doe?source=rss-621a1d970ada------2</link>
+    <image>
+      <url>https://cdn-images-1.medium.com/fit/c/150/150/1*dmbNkD5D-u45r44go_cf0g.png</url>
+      <title>Stories by John Doe on Medium</title>
+      <link>https://medium.com/@John.Doe?source=rss-621a1d970ada------2</link>
+    </image>
+    <generator>Medium</generator>
+    <lastBuildDate>Tue, 06 Dec 2022 06:52:04 GMT</lastBuildDate>
+    <atom:link href="https://medium.com/@John.Doe/feed" rel="self" type="application/rss+xml"/>
+    <webMaster><![CDATA[yourfriends@medium.com]]></webMaster>
+    <atom:link href="http://medium.superfeedr.com" rel="hub"/>
+    <item>
+      <title><![CDATA[This is a Dummy Post]]></title>
+      <link>https://example.com/blog/this-is-a-dummy-post-50703370aea7?source=rss-621a1d970ada------2</link>
+      <guid isPermaLink="false">https://medium.com/p/50703370aea7</guid>
+      <category><![CDATA[java]]></category>
+      <category><![CDATA[custom-jre]]></category>
+      <category><![CDATA[image-size-reduce]]></category>
+      <category><![CDATA[jvm]]></category>
+      <category><![CDATA[docker]]></category>
+      <dc:creator><![CDATA[John Doe]]></dc:creator>
+      <pubDate>Tue, 22 Nov 2022 08:01:46 GMT</pubDate>
+      <atom:updated>2022-11-23T14:51:57.412Z</atom:updated>
+      <content:encoded><<![CDATA[<figure><img alt="" src="https://cdn-images-1.medium.com/max/1024/1*v5nynoXfnHHGCpd0V0p8uw.png"
+        /></figure><p>The quick brown fox jumps over the lazy dog</p>]]></content:encoded>
+    </item>
+    <item>
+      <title><![CDATA[How I cross post Medium articles to GitHub Pages]]></title>
+      <link>https://example.com/blog/how-i-cross-post-medium-articles-to-github-pages-1cdf174bc674?source=rss-621a1d970ada------2</link>
+      <guid isPermaLink="false">https://medium.com/p/1cdf174bc674</guid>
+      <category><![CDATA[import]]></category>
+      <category><![CDATA[jekyll]]></category>
+      <category><![CDATA[github-pages]]></category>
+      <category><![CDATA[medium]]></category>
+      <category><![CDATA[personal-website]]></category>
+      <dc:creator><![CDATA[John Doe]]></dc:creator>
+      <pubDate>Thu, 10 Nov 2022 21:39:51 GMT</pubDate>
+      <atom:updated>2022-11-11T09:33:39.955Z</atom:updated>
+      <content:encoded><![CDATA[<figure><img alt="" src="https://cdn-images-1.medium.com/max/1024/1*cR9eGZr50HArf_j9-rnjjQ.png"
+        /></figure><p>The quick brown fox jumps over the lazy dog</p>]]></content:encoded>
+    </item>
+  </channel>
+</rss>

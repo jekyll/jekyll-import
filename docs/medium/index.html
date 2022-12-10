@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
-  <title>PluXML &mdash; jekyll-import • Import your old &amp; busted site to Jekyll</title>
+  <title>Medium &mdash; jekyll-import • Import your old &amp; busted site to Jekyll</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="alternate" type="application/rss+xml" title="Jekyll • Simple, blog-aware, static sites - Feed" href="/feed.xml" />
   <link rel="alternate" type="application/atom+xml" title="Recent commits to Jekyll’s master branch" href="https://github.com/jekyll/jekyll-import/commits/master.atom" />
@@ -244,23 +244,16 @@
 
       <div class="unit four-fifths">
         <article>
-          <h1>PluXML</h1>
+          <h1>Medium</h1>
           
           
           
           <div class="note info">
             <h5>Additional Dependencies</h5>
             <p>
-              This importer requires the following additional libraries.
+              This importer requires the following additional library.
             </p>
             <ul class="dep-list">
-              <li>
-                <span><img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTk1NzNGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6
-                Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UnVieUdlbXM8L3RpdGxlPjxwYXRoIGQ9Ik03LjgxIDcuOWwtMi45NyAyLjk1IDcuMTkgNy4xOCAyLjk2LTIuOTUg
-                NC4yMi00LjIzLTIuOTYtMi45NnYtLjAxSDcuOHpNMTIgMEwxLjUzIDZ2MTJMMTIgMjRsMTAuNDctNlY2TDEyIDB6bTguNDcgMTYuODVMMTIgMjEuNzNsLTguNDctNC44
-                OFY3LjEyTDEyIDIuMjRsOC40NyA0Ljg4djkuNzN6Ii8+PC9zdmc+" width="21" height="21"></span>
-                <a href="https://rubygems.org/gems/nokogiri" title="gem 'nokogiri' at rubygems.org">nokogiri</a>
-              </li>
               <li>
                 <span><img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTk1NzNGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6
                 Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UnVieUdlbXM8L3RpdGxlPjxwYXRoIGQ9Ik03LjgxIDcuOWwtMi45NyAyLjk1IDcuMTkgNy4xOCAyLjk2LTIuOTUg
@@ -270,45 +263,46 @@
               </li>
             </ul>
             
-            <p>
-              You may install the needed gems individually by running <code>gem install GEM_NAME</code> or install all of them
-              with a single invocation:<code>gem install nokogiri safe_yaml</code>
-            </p>
+            <p>You may install the needed gem by running <code>gem install safe_yaml</code></p>
             
           </div>
           
-          <p>To import your posts and drafts from a PluXML blog, run:</p>
+          <p>To import your posts from <a href="https://medium.com/">Medium</a>, run:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Pluxml.run({
-      "source" =&gt; "/pluxml/data/articles",
-      "layout" =&gt; "your_layout",
-      "avoid_liquid" =&gt; true
+    JekyllImport::Importers::Medium.run({
+        "username"       =&gt; "name",
+        "render_audio"   =&gt; false,
+        "canonical_link" =&gt; false,
     })'</span></code></pre></figure>
 
-<p>The <code class="language-plaintext highlighter-rouge">source</code> field is required.</p>
+<p>The <code class="language-plaintext highlighter-rouge">username</code> refers to the medium username, and it’s a mandatory field.</p>
 
-<p>The <code class="language-plaintext highlighter-rouge">layout</code> field is optional, it will set the layout in each post and draft imported.</p>
+<p>Other optional fields are as follows:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">canonical_link</code> – copy original link as <code class="language-plaintext highlighter-rouge">canonical_url</code> to post. (default: <code class="language-plaintext highlighter-rouge">false</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">render_audio</code> – render <code class="language-plaintext highlighter-rouge">&lt;audio&gt;</code> element in posts for the enclosure URLs. (default: <code class="language-plaintext highlighter-rouge">false</code>)</li>
+</ul>
 
-<p>The <code class="language-plaintext highlighter-rouge">avoid_liquid</code> field is optional, it will add <code class="language-plaintext highlighter-rouge">render_with_liquid: false</code> option in the header of each file. Usefull if you have à lot of source code to show to your visitors.</p>
+<p><em>Note:</em> This importer will also import the existing tags/labels from Medium post and include the tags to <a href="https://jekyllrb.com/docs/front-matter/">Front Matter</a>.</p>
 
           
             <div class="button">
               
-              <a href="https://github.com/jekyll/jekyll-import/blob/v0.14.0/lib/jekyll-import/importers/pluxml.rb">View Source &rarr;</a>
+              <a href="https://github.com/jekyll/jekyll-import/blob/v0.14.0/lib/jekyll-import/importers/medium.rb">View Source &rarr;</a>
             </div>
           
           <div class="section-nav">
   <div class="left align-right">
     
-      <a href="https://import.jekyllrb.com/docs/mt/" class="prev">
+      <a href="https://import.jekyllrb.com/docs/marley/" class="prev">
         Back
       </a>
     
   </div>
   <div class="right align-left">
     
-      <a href="https://import.jekyllrb.com/docs/posterous/" class="next">
+      <a href="https://import.jekyllrb.com/docs/mephisto/" class="next">
         Next
       </a>
     
@@ -435,7 +429,7 @@
         <li class=""><a href="https://import.jekyllrb.com/docs/marley/">Marley</a></li>
     
         
-        <li class=""><a href="https://import.jekyllrb.com/docs/medium/">Medium</a></li>
+        <li class="current"><a href="https://import.jekyllrb.com/docs/medium/">Medium</a></li>
     
         
         <li class=""><a href="https://import.jekyllrb.com/docs/mephisto/">Mephisto</a></li>
@@ -444,7 +438,7 @@
         <li class=""><a href="https://import.jekyllrb.com/docs/mt/">Movable Type</a></li>
     
         
-        <li class="current"><a href="https://import.jekyllrb.com/docs/pluxml/">PluXML</a></li>
+        <li class=""><a href="https://import.jekyllrb.com/docs/pluxml/">PluXML</a></li>
     
         
         <li class=""><a href="https://import.jekyllrb.com/docs/posterous/">Posterous</a></li>

@@ -4,11 +4,11 @@ module JekyllImport
   module Importers
     class RSS < Importer
       def self.specify_options(c)
-        c.option "source", "--source NAME", "The RSS file or URL to import"
-        c.option "tag", "--tag NAME", "Add a specific tag to all posts"
-        c.option "extract_tags", "--extract_tags KEY", "Copies tags from the given subfield on the RSS <item>"
-        c.option "render_audio", "--render_audio", "Render <audio> element in posts for the enclosure URLs (default: false)"
-        c.option "canonical_link", "--canonical_link", "Copy original link as canonical_url to post. (default: false)"
+        c.option "source",         "--source NAME",      "The RSS file or URL to import."
+        c.option "tag",            "--tag NAME",         "Add a specific tag to all posts."
+        c.option "extract_tags",   "--extract_tags KEY", "Copies tags from the given subfield on the RSS `<item>` to front matter. (default: null)"
+        c.option "render_audio",   "--render_audio",     "Render `<audio>` element in posts for the enclosure URLs. (default: false)"
+        c.option "canonical_link", "--canonical_link",   "Add original link as `canonical_url` to post front matter. (default: false)"
       end
 
       def self.validate(options)

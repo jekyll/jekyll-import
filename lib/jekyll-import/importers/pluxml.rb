@@ -12,9 +12,9 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "source", "--source NAME", "The PluXML data directory to import"
-        c.option "layout", "--layout NAME", "The layout to apply"
-        c.option "avoid_liquid", "--avoid_liquid true", "Will add render_with_liquid: false in frontmatter"
+        c.option "source",       "--source NAME",  "The PluXml data directory to import."
+        c.option "layout",       "--layout NAME",  "The layout to apply. (default: 'post')"
+        c.option "avoid_liquid", "--avoid_liquid", "Will add `render_with_liquid: false` in front matter. (default: false)"
       end
 
       def self.validate(options)

@@ -3,6 +3,7 @@
 ### Documentation
 
   * Document additional dependencies of importers (#468)
+  * Define CLI option descriptions consistently (#496)
 
 ### Development Fixes
 

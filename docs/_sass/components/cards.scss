@@ -4,28 +4,33 @@ div.deck {
   justify-content: center;
   .card {
     flex: 0 auto;
-    margin: 1em;
+    margin: 5px;
     padding: 1.5em;
     font-size: 14px;
     text-align: center;
-    border: 1px solid var(--brass);
+    border: 1px solid var(--dark-brass);
     overflow: auto;
     .container {
       display: flex;
       flex-direction: column;
-      width: 210px;
-      height: 350px;
+      width: 120px;
+      height: 170px;
       overflow: hidden;
     }
-    h2 { margin: 0 0 0.5em }
     header {
+      height: 140px;
       margin-bottom: 0.5em;
       border-bottom: 1px solid var(--dark-brass);
       .i-icon {
-        margin-bottom: 0.25em;
         width: 6em;
         height: 6em;
         fill: var(--dark-brass);
+        stroke-width: 0.1px;
+        stroke: var(--brass);
+      }
+      .i-name {
+        margin-top: 0.5em;
+        font-size: 1.15em;
       }
     }
     section {
@@ -46,6 +51,13 @@ div.deck {
             text-align: right;
           }
         }
+      }
+    }
+    footer {
+      border-bottom: 1px solid var(--dark-brass);
+      a {
+        display: block;
+        border-bottom: none;
       }
     }
   }

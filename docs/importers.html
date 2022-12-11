@@ -11,30 +11,10 @@ title: Builtin Importers
         <svg class="i-icon">
           <use xlink:href="{{ 'assets/imgs/importer-icons.svg#' | append: 'default' | relative_url }}"></use>
         </svg>
-        <h2>{{ importer.title }}</h2>
+        <div class="i-name">{{ importer.title }}</div>
       </header>
-      <section>
-        <div>
-          <table>
-            <tr>
-              <td>Command:</td>
-              <td>
-                <code>{{ importer.cmd_name }}</code>
-              </td>
-            </tr>
-            {% if importer.req_deps %}
-            <tr>
-              <td>Require(s):</td>
-              <td>{% for dep in importer.req_deps -%}
-                <code>{{ dep }}</code>{% unless forloop.last %},&nbsp;{% endunless %}
-              {% endfor %}</td>
-            </tr>
-            {% endif %}
-          </table>
-        </div>
-      </section>
       <footer>
-        <a href="{{ importer.url | relative_url }}">More Details &rarr;</a>
+        <a href="{{ importer.url | relative_url }}">Details &rarr;</a>
       </footer>
     </div>
   </div>

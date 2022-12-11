@@ -31,10 +31,11 @@
           fill: var(--gold);
         }
         &:last-child {
+          font-size: 1.125em;
+          line-height: 1;
           a span {
             font-size: 3em;
             font-weight: 600;
-            line-height: 1;
           }
         }
         a {

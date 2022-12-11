@@ -26,8 +26,12 @@ $link-color: var(--gold);
 $link-border-color: var(--dark-brass);
 
 * { box-sizing: border-box }
+html { height: 100% }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   margin: 0;
   font-family: Questrial, Roboto, Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   font-size: 16px;
@@ -36,6 +40,7 @@ body {
   background-color: var(--slate);
 }
 main {
+  flex: 1 0 auto;
   padding: 8px var(--padding-x) 25px;
 }
 h1, h2, h3, h4, h5, h6 {

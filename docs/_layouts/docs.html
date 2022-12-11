@@ -5,17 +5,9 @@ layout: base
 <div class="flex wrapper block-on-mobiles">
   <div class="site-nav-mobile show-on-mobiles">
     <select onchange="if (this.value) window.location.href=this.value">
-      <option style="font-family: Questrial">Navigate the docs..</option>
-      <optgroup label="Docs">
-        {% for doc in site.docs %}
-        <option style="font-family: Questrial" value="{{ doc.url | relative_url }}">{{ doc.title }}</option>
-        {% endfor %}
-      </optgroup>
-      <optgroup label="Importers">
-        {% for importer in site.importers %}
-        <option style="font-family: Questrial" value="{{ importer.url | relative_url }}">{{ importer.title }}</option>
-        {% endfor %}
-      </optgroup>
+      <option>Navigate the docs..</option>
+      {% optgroup "Overview" from site.docs %}
+      {% optgroup "Importers" from site.importers %}
     </select>
   </div>
 
@@ -25,18 +17,7 @@ layout: base
   </article>
 
   <div class="sidebar hide-on-mobiles">
-    <h4>Overview</h4>
-    <ul>
-      {% for doc in site.docs %}
-      <li{% if page.url == doc.url %} class="current"{% endif %}><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>
-      {% endfor %}
-    </ul>
-
-    <h4>Importers</h4>
-    <ul>
-      {% for importer in site.importers %}
-      <li{% if page.url == importer.url %} class="current"{% endif %}><a href="{{ importer.url | relative_url }}">{{ importer.title }}</a></li>
-      {% endfor %}
-    </ul>
+    {% listgroup "Overview" from site.docs %}
+    {% listgroup "Importers" from site.importers %}
   </div>
 </div>

@@ -41,7 +41,7 @@ layout: docs
     {% for option in page.cmd_opts %}
     <tr{% if option.mandatory %}{% assign has_required_opts = true %} class="required-option"{% endif %}>
       <td><code>{{ option.switch }}</code></td>
-      <td{% unless option.default_value %} colspan="2"{% endunless %}>{{ option.desc }}</td>
+      <td{% unless option.default_value %} colspan="2"{% endunless %}>{{ option.desc | markdownify }}</td>
       {% if option.default_value %}<td><small>Default: <code>{{ option.default_value }}</code></small></td>{% endif %}
     </tr>
     {% endfor %}

@@ -165,8 +165,10 @@ div.sidebar {
 
 @media (min-width: 970px) {
   header.site-header {
+    position: relative;
     padding-top: 12px;
     height: 72px;
+    .logo { position: absolute }
     nav.main-nav {
       li { font-size: 16px }
     }

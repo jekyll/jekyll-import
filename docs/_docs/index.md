@@ -10,6 +10,7 @@ require read-access to the database from your old system to generate posts for J
 
 ## Other Systems
 
-If you are from a system for which there is currently no importer, [consider writing one][creating_importer] and sending us a pull request.
+If you are from a system for which there is currently no builtin importer, [consider writing one][creating_importer] and sending us a pull
+request.
 
 [creating_importer]: {{ '/docs/contributing#creating-a-new-importer' | relative_url }}

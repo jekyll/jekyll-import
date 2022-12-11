@@ -1,3 +1,3 @@
 ---
-title: dotClear
+title: DotClear
 ---

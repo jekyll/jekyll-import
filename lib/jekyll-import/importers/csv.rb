@@ -12,8 +12,8 @@ module JekyllImport
       end
 
       def self.specify_options(c)
-        c.option "file",            "--file NAME",       'The CSV file to import (default: "posts.csv")'
-        c.option "no-front-matter", "--no-front-matter", "Do not add the default front matter to the post body"
+        c.option "file",            "--file NAME",       "The CSV file to import. (default: 'posts.csv')"
+        c.option "no-front-matter", "--no-front-matter", "Do not add the default front matter to the post body. (default: false)"
       end
 
       # Reads a csv with title, permalink, body, published_at, and filter.

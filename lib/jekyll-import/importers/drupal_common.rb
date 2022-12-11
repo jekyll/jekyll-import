@@ -23,9 +23,9 @@ module JekyllImport
         }.freeze
 
         def specify_options(c)
-          c.option "engine",   "--engine [mysql|postgresql]", "Database engine (default: #{DEFAULTS["engine"].inspect})"
           c.option "dbname",   "--dbname DB",                 "Database name"
           c.option "user",     "--user USER",                 "Database user name"
+          c.option "engine",   "--engine [mysql|postgresql]", "Database engine (default: #{DEFAULTS["engine"].inspect})"
           c.option "password", "--password PW",               "Database user's password (default: #{DEFAULTS["password"].inspect})"
           c.option "host",     "--host HOST",                 "Database host name (default: #{DEFAULTS["host"].inspect})"
           c.option "port",     "--port PORT",                 "Database port name (default: #{DEFAULTS["port"].inspect})"
@@ -47,9 +47,9 @@ module JekyllImport
         end
 
         def process(options)
-          engine = options.fetch("engine", DEFAULTS["engine"])
           dbname = options.fetch("dbname")
           user   = options.fetch("user")
+          engine = options.fetch("engine",   DEFAULTS["engine"])
           pass   = options.fetch("password", DEFAULTS["password"])
           host   = options.fetch("host",     DEFAULTS["host"])
           port   = options.fetch("port",     DEFAULTS["port"])

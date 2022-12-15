@@ -18,13 +18,14 @@ prev_section: contributing
 - s9y-db importer permalink, tag, excerpt, and semantic HTML improvements ([#392]({{ site.repository }}/issues/392))
 - drupal6: retain `url_alias.dst` as `permalink` in imported nodes ([#393]({{ site.repository }}/issues/393))
 - Create drupal8.rb ([#405]({{ site.repository }}/issues/405))
-- Drupal aliases now respect the &[#39]({{ site.repository }}/issues/39);source&[#39]({{ site.repository }}/issues/39); config ([#454]({{ site.repository }}/issues/454))
+- Drupal aliases now respect the &#39;source&#39; config ([#454]({{ site.repository }}/issues/454))
 
 ### Development Fixes
 
 - Clean up code to make Rubocop happy ([#441]({{ site.repository }}/issues/441))
 - Set up GH Action for Continuous Integration ([#449]({{ site.repository }}/issues/449))
 - Refactor Blogger importer with guard clauses ([#452]({{ site.repository }}/issues/452))
+- Add workflow to automate tagging and releasing gem ([#459]({{ site.repository }}/issues/459))
 
 ### Documentation
 
@@ -45,7 +46,7 @@ prev_section: contributing
 
 ### Bug Fixes
 
-- Fix &[#39]({{ site.repository }}/issues/39);can&[#39]({{ site.repository }}/issues/39);t add a new key into hash during iteration&[#39]({{ site.repository }}/issues/39); error ([#434]({{ site.repository }}/issues/434))
+- Fix &#39;can&#39;t add a new key into hash during iteration&#39; error ([#434]({{ site.repository }}/issues/434))
 - WordpressDotCom: put downloaded assets into /year/month subfolders to reduce clashes ([#436]({{ site.repository }}/issues/436))
 
 ## 0.19.2 / 2020-03-07
@@ -73,7 +74,7 @@ prev_section: contributing
 ### Bug Fixes
 
 - Extract encoded_content from feed ([#409]({{ site.repository }}/issues/409))
-- Check whether option[&[#34]({{ site.repository }}/issues/34);tag&[#34]({{ site.repository }}/issues/34);] is null or empty value ([#411]({{ site.repository }}/issues/411))
+- Check whether option[&#34;tag&#34;] is null or empty value ([#411]({{ site.repository }}/issues/411))
 
 ### Minor Enhancements
 
@@ -184,7 +185,7 @@ prev_section: contributing
 - WordPress: add port options for mysql db connection ([#311]({{ site.repository }}/issues/311))
 - Ghost: import drafts & pages, and fix issue with date extraction ([#304]({{ site.repository }}/issues/304))
 - Add parent_id to wordpressdotcom importer ([#301]({{ site.repository }}/issues/301))
-- RSS: add &[#34]({{ site.repository }}/issues/34);tag&[#34]({{ site.repository }}/issues/34); option to add a tag to all posts ([#306]({{ site.repository }}/issues/306))
+- RSS: add &#34;tag&#34; option to add a tag to all posts ([#306]({{ site.repository }}/issues/306))
 - WordPressDotCom: import post passwords ([#302]({{ site.repository }}/issues/302))
 - Joomla3: Use mysql2 instead of mysql ([#309]({{ site.repository }}/issues/309))
 - Joomla: Add option to specify the MySQL port ([#310]({{ site.repository }}/issues/310))

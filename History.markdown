@@ -5,6 +5,7 @@
   * Document additional dependencies of importers (#468)
   * Define CLI option descriptions consistently (#496)
   * Fix generation of History doc for docs-site (#505)
+  * Document command-line-interface of importers (#507)
 
 ### Development Fixes
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rubygems"
 require "bundler/gem_tasks"
 require "rake"
@@ -20,11 +22,11 @@ def version
 end
 
 def normalize_bullets(markdown)
-  markdown.gsub(%r!\s{2}\*{1}!, "-")
+  markdown.gsub(%r!\n\s{2}\*{1}!, "\n-")
 end
 
 def linkify_prs(markdown)
-  markdown.gsub(%r!#(\d+)!) do |word|
+  markdown.gsub(%r!(?<\!&)#(\d+)!) do |word|
     "[#{word}]({{ site.repository }}/issues/#{word.delete("#")})"
   end
 end

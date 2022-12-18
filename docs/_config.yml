@@ -11,5 +11,12 @@ collections:
     output: true
 
 defaults:
-  - { scope: { type: importers }, values: { layout: importer, title_suffix: " Importer" } }
-  - { scope: { type: docs }, values: { layout: docs } }
+  - scope:
+      type: docs
+    values:
+      layout: docs
+  - scope:
+      type: importers
+    values:
+      layout: importer
+      title_suffix: " Importer"

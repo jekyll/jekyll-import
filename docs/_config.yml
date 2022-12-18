@@ -12,6 +12,17 @@ collections:
     output: true
   importers:
     output: true
+    permalink: /docs/:path/
+
+defaults:
+  - scope:
+      type: docs
+    values:
+      layout: docs
+  - scope:
+      type: importers
+    values:
+      layout: importer
 
 sass:
    style: compressed

@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>WordPress.com</h1>
           
           
@@ -284,22 +284,44 @@
             
           </div>
           
-          <div class="note info">
-  <h5>Install additional gems</h5>
-  <p>
-    To use this importer, you need to install these additional gems:
-    `gem install hpricot open_uri_redirections`
-  </p>
+          
+
+<h2>Invocation</h2>
+
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import wordpressdotcom --source FILE --no-fetch-images --assets_folder FOLDER</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr>
+      <td><code>--source FILE</code></td>
+      <td><p>WordPress export XML file</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'wordpress.xml'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--no-fetch-images</code></td>
+      <td><p>Do not fetch the images referenced in the posts</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>false</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--assets_folder FOLDER</code></td>
+      <td><p>Folder where assets such as images will be downloaded to</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'assets'</code></small></td>
+    </tr>
+    
+  </table>
+  
 </div>
-
-<p>To import your posts from a <a href="http://wordpress.com">WordPress.com</a> blog, run:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::WordpressDotCom.run({
-      "source" =&gt; "wordpress.xml",
-      "no_fetch_images" =&gt; false,
-      "assets_folder" =&gt; "assets"
-    })'</span></code></pre></figure>
 
 <p>The <code class="language-plaintext highlighter-rouge">source</code>, <code class="language-plaintext highlighter-rouge">no_fetch_images</code>, and <code class="language-plaintext highlighter-rouge">assets_folder</code> fields are not required.
 Their default values are what you see above.</p>
@@ -330,6 +352,7 @@ of the structure and metadata.</li>
   <li><a href="https://github.com/theaob/wpXml2Jekyll">wpXml2Jekyll</a> is an executable
 windows application for creating Markdown posts from your WordPress XML file.</li>
 </ul>
+
 
           
             <div class="button">

@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Textpattern</h1>
           
           
@@ -284,25 +284,59 @@
             
           </div>
           
-          <p>To import your posts from <a href="http://textpattern.com">Textpattern</a>, run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::TextPattern.run({
-      "dbname"   =&gt; "name",
-      "user"     =&gt; "myuser",
-      "password" =&gt; "mypassword",
-      "host"     =&gt; "myhost"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>The only required fields are <code class="language-plaintext highlighter-rouge">dbname</code> and <code class="language-plaintext highlighter-rouge">user</code>. <code class="language-plaintext highlighter-rouge">password</code> defaults to <code class="language-plaintext highlighter-rouge">""</code>
-and <code class="language-plaintext highlighter-rouge">host</code> defaults to <code class="language-plaintext highlighter-rouge">"localhost"</code>.</p>
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import textpattern --dbname DB --user USER --password PW --host HOST</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--dbname DB</code></td>
+      <td colspan="2"><p>Database name.</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--user USER</code></td>
+      <td colspan="2"><p>Database user name.</p>
+</td>
+      
+    </tr>
+    
+    <tr>
+      <td><code>--password PW</code></td>
+      <td><p>Database user’s password.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--host HOST</code></td>
+      <td><p>Database host name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'localhost'</code></small></td>
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
 
 <p>You will need to run the above from the parent directory of your <code class="language-plaintext highlighter-rouge">_import</code>
 folder. For example, if <code class="language-plaintext highlighter-rouge">_import</code> is located in <code class="language-plaintext highlighter-rouge">/path/source/_import</code>, you will
-need to run this code from <code class="language-plaintext highlighter-rouge">/path/source</code>. The hostname defaults to <code class="language-plaintext highlighter-rouge">localhost</code>,
-all other variables are required. You may need to adjust the code used to filter
-entries. Left alone, it will attempt to pull all entries that are live or
-sticky.</p>
+need to run this code from <code class="language-plaintext highlighter-rouge">/path/source</code>. This importer will attempt to pull
+all entries that are live or sticky.</p>
+
 
           
             <div class="button">

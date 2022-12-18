@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Joomla 3</h1>
           
           
@@ -284,25 +284,78 @@
             
           </div>
           
-          <p>To import your posts from a <a href="http://joomla.org">Joomla 3</a> installation, run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Joomla3.run({
-      "dbname"   =&gt; "name",
-      "user"     =&gt; "myuser",
-      "password" =&gt; "mypassword",
-      "host"     =&gt; "myhost",
-      "port"     =&gt; portnumber,
-      "category" =&gt; category,
-      "prefix"   =&gt; "mytableprefix"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>The only required fields are <code class="language-plaintext highlighter-rouge">dbname</code>, <code class="language-plaintext highlighter-rouge">prefix</code> and <code class="language-plaintext highlighter-rouge">user</code>. <code class="language-plaintext highlighter-rouge">password</code> defaults to <code class="language-plaintext highlighter-rouge">""</code>,
-<code class="language-plaintext highlighter-rouge">host</code> defaults to <code class="language-plaintext highlighter-rouge">"localhost"</code>, <code class="language-plaintext highlighter-rouge">portnumber</code> defaults to <code class="language-plaintext highlighter-rouge">3306</code> and <code class="language-plaintext highlighter-rouge">prefix</code> defaults to
-<code class="language-plaintext highlighter-rouge">"jos_"</code>.</p>
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import joomla3 --dbname --user --password --host --port --category --prefix</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--dbname</code></td>
+      <td colspan="2"><p>Database name.</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--user</code></td>
+      <td colspan="2"><p>Database user name.</p>
+</td>
+      
+    </tr>
+    
+    <tr>
+      <td><code>--password</code></td>
+      <td><p>Database user’s password.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--host</code></td>
+      <td><p>Database host name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'localhost'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--port</code></td>
+      <td><p>Database port.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'3306'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--category</code></td>
+      <td><p>ID of the category.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'0'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--prefix</code></td>
+      <td><p>Table prefix name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'jos_'</code></small></td>
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
 
 <p>If the <code class="language-plaintext highlighter-rouge">category</code> numerical field is not filled, all articles will be imported, except the ones that are 
 uncategorized.</p>
+
 
           
             <div class="button">

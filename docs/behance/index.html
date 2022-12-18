@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Behance</h1>
           
           
@@ -277,15 +277,42 @@
             
           </div>
           
-          <p>To import your posts from your <a href="http://behance.com">Behance</a>, generate an API token for your user account and run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Behance.run({
-      "user"      =&gt; "my_username",
-      "api_token" =&gt; "my_api_token"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>Both <code class="language-plaintext highlighter-rouge">user</code> and <code class="language-plaintext highlighter-rouge">api_token</code> are required.</p>
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import behance --user NAME --api_token TOKEN</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--user NAME</code></td>
+      <td colspan="2"><p>The username of the account</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--api_token TOKEN</code></td>
+      <td colspan="2"><p>The API access token for the account</p>
+</td>
+      
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
+
+
+
 
           
             <div class="button">

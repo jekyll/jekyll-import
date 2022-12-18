@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Ghost</h1>
           
           
@@ -284,16 +284,36 @@
             
           </div>
           
-          <p>To import your posts from your self-hosted Ghost instance, you first have to download your ghost.db from your server and run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Ghost.run({
-      "dbfile"   =&gt; "/path/to/your/ghost.db"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>There are no required fields. <code class="language-plaintext highlighter-rouge">dbfile</code> defaults to <code class="language-plaintext highlighter-rouge">"ghost.db"</code>.</p>
 
-<p>If you have a Ghost backup file, consider using another tool called <a href="https://github.com/eloyesp/jekyll_ghost_importer">jekyll_ghost_importer</a> to import your content. It is a separate gem and docs can be found at the link provided.</p>
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import ghost --dbfile</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr>
+      <td><code>--dbfile</code></td>
+      <td><p>Database file</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>ghost.db</code></small></td>
+    </tr>
+    
+  </table>
+  
+</div>
+
+<p>If you have a Ghost backup file, consider using another tool called
+<a href="https://github.com/eloyesp/jekyll_ghost_importer">jekyll_ghost_importer</a> to
+import your content. It is a separate gem and docs can be found at the link
+provided.</p>
+
 
           
             <div class="button">

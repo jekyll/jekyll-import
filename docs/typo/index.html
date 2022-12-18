@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Typo</h1>
           
           
@@ -291,21 +291,65 @@
             
           </div>
           
-          <p>To import your posts from Typo (now <a href="http://publify.co">Publify</a>), run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Typo.run({
-      "server"   =&gt; "mysql",
-      "dbname"   =&gt; "name",
-      "user"     =&gt; "myuser",
-      "password" =&gt; "mypassword",
-      "host"     =&gt; "myhost"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>The only required fields are <code class="language-plaintext highlighter-rouge">server</code>, <code class="language-plaintext highlighter-rouge">dbname</code>, and <code class="language-plaintext highlighter-rouge">user</code>. <code class="language-plaintext highlighter-rouge">password</code>
-defaults to <code class="language-plaintext highlighter-rouge">""</code> and <code class="language-plaintext highlighter-rouge">host</code> defaults to <code class="language-plaintext highlighter-rouge">"localhost"</code>.</p>
 
-<p>This code has only been tested with Typo version 4+.</p>
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import typo --server TYPE --dbname DB --user USER --password PW --host HOST</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--server TYPE</code></td>
+      <td colspan="2"><p>Server type (‘mysql’ or ‘postgres’).</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--dbname DB</code></td>
+      <td colspan="2"><p>Database name.</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--user USER</code></td>
+      <td colspan="2"><p>Database user name.</p>
+</td>
+      
+    </tr>
+    
+    <tr>
+      <td><code>--password PW</code></td>
+      <td><p>Database user’s password.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--host HOST</code></td>
+      <td><p>Database host name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'localhost'</code></small></td>
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
+
+<p>Typo is now <a href="http://publify.co">Publify</a>.</p>
+
+<p>This importer has only been tested with Typo version 4+.</p>
+
 
           
             <div class="button">

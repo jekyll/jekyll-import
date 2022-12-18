@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>WordPress</h1>
           
           
@@ -284,39 +284,138 @@
             
           </div>
           
-          <p>To import your posts from a self-hosted <a href="http://wordpress.org">WordPress</a>
-installation, run:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::WordPress.run({
-      "dbname"         =&gt; "",
-      "user"           =&gt; "",
-      "password"       =&gt; "",
-      "host"           =&gt; "localhost",
-      "port"           =&gt; "3306",
-      "socket"         =&gt; "",
-      "table_prefix"   =&gt; "wp_",
-      "site_prefix"    =&gt; "",
-      "clean_entities" =&gt; true,
-      "comments"       =&gt; true,
-      "categories"     =&gt; true,
-      "tags"           =&gt; true,
-      "more_excerpt"   =&gt; true,
-      "more_anchor"    =&gt; true,
-      "extension"      =&gt; "html",
-      "status"         =&gt; ["publish"]
-    })'</span></code></pre></figure>
-
-<p>None of the fields are required. Their defaults are as you see above.</p>
-
+          
 <div class="note info">
-  <h5>This only imports post &amp; page data &amp; content</h5>
   <p>
     This importer only converts your posts and creates YAML front-matter.
-    It does not import any layouts, styling, or external files
-    (images, CSS, etc.).
+    It does not import any layouts, styling, or external files (images, CSS, etc).
   </p>
 </div>
+
+
+<h2>Invocation</h2>
+
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import wordpress --dbname DB --socket SOCKET --user USER --password PW --host HOST --port PORT --table_prefix PREFIX --site_prefix PREFIX --clean_entities --comments --categories --tags --more_excerpt --more_anchor --status STATUS,STATUS2</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr>
+      <td><code>--dbname DB</code></td>
+      <td><p>Database name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--socket SOCKET</code></td>
+      <td><p>Database socket.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--user USER</code></td>
+      <td><p>Database user name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--password PW</code></td>
+      <td><p>Database user’s password.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--host HOST</code></td>
+      <td><p>Database host name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'localhost'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--port PORT</code></td>
+      <td><p>Database port number.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--table_prefix PREFIX</code></td>
+      <td><p>Table prefix name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'wp_'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--site_prefix PREFIX</code></td>
+      <td><p>Site prefix name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>''</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--clean_entities</code></td>
+      <td><p>Whether to clean entities.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--comments</code></td>
+      <td><p>Whether to import comments.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--categories</code></td>
+      <td><p>Whether to import categories.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--tags</code></td>
+      <td><p>Whether to import tags.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--more_excerpt</code></td>
+      <td><p>Whether to use more excerpt.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--more_anchor</code></td>
+      <td><p>Whether to use more anchor.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--status STATUS,STATUS2</code></td>
+      <td><p>Array of allowed statuses (‘publish’, ‘draft’, ‘private’, ‘revision’).</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>['publish']</code></small></td>
+    </tr>
+    
+  </table>
+  
+</div>
+
+
+
 
           
             <div class="button">

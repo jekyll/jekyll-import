@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Posterous</h1>
           
           
@@ -267,20 +267,51 @@
             
           </div>
           
-          <p>To import your posts from <a href="http://posterous.com">Posterous</a>, run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Posterous.run({
-      "email"     =&gt; "myemail",
-      "password"  =&gt; "mypassword",
-      "api_token" =&gt; "mytoken"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>All three fields are required.</p>
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import posterous --email EMAIL --password PW --token TOKEN</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--email EMAIL</code></td>
+      <td colspan="2"><p>Posterous email address</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--password PW</code></td>
+      <td colspan="2"><p>Posterous password</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--token TOKEN</code></td>
+      <td colspan="2"><p>Posterous API Token</p>
+</td>
+      
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
 
 <p>There is also an <a href="https://github.com/pepijndevos/jekyll/blob/patch-1/lib/jekyll/migrators/posterous.rb">alternative Posterous
 migrator</a>
 that maintains permalinks and attempts to import images too.</p>
+
 
           
             <div class="button">

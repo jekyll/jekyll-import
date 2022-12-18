@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Jrnl</h1>
           
           
@@ -267,18 +267,54 @@
             
           </div>
           
-          <p>To import your posts from <a href="http://maebert.github.io/jrnl/">Jrnl</a>, run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Jrnl.run({
-      "file"        =&gt; "~/journal.txt",
-      "time_format" =&gt; "%Y-%m-%d %H:%M",
-      "extension"   =&gt; "md",
-      "layout"      =&gt; "post"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>None of the fields are mandatory. The default to the values in the example
-block above.</p>
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import jrnl --file FILENAME --time_format FORMAT --extension EXT --layout NAME</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr>
+      <td><code>--file FILENAME</code></td>
+      <td><p>Journal file.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'~/journal.txt'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--time_format FORMAT</code></td>
+      <td><p>Time format of your journal.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'%Y-%m-%d %H:%M'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--extension EXT</code></td>
+      <td><p>Output extension.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'md'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--layout NAME</code></td>
+      <td><p>Output post layout.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'post'</code></small></td>
+    </tr>
+    
+  </table>
+  
+</div>
+
+
+
 
           
             <div class="button">

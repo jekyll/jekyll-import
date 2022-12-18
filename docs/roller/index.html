@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Roller</h1>
           
           
@@ -284,45 +284,112 @@
             
           </div>
           
-          <div class="note info">
-  <h5>Install additional gems</h5>
-  <p>
-    To use this importer, you need to install these additional gems:
-    `gem install unidecode sequel mysql2 htmlentities`
-  </p>
-</div>
-
-<p>To import your posts from a self-hosted <a href="https://roller.apache.org/">RollerBlog</a>
-installation, run:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Roller.run({
-      "dbname"         =&gt; "",
-      "user"           =&gt; "",
-      "password"       =&gt; "",
-      "host"           =&gt; "localhost",
-      "port"           =&gt; "3306",
-      "socket"         =&gt; "",
-      "clean_entities" =&gt; true,
-      "comments"       =&gt; true,
-      "categories"     =&gt; true,
-      "tags"           =&gt; true,
-      "more_excerpt"   =&gt; true,
-      "more_anchor"    =&gt; true,
-      "extension"      =&gt; "html",
-      "status"         =&gt; ["PUBLISHED"]
-    })'</span></code></pre></figure>
-
-<p>Only the variables “dbname”, “user” and “password” are required, the rest are optional and default to what is shown above. Currently this importer assumes a MySQL database.</p>
-
+          
 <div class="note info">
-  <h5>This only imports post content</h5>
   <p>
     This importer only converts your posts and creates YAML front-matter.
-    It does not import any layouts, styling, or external files
-    (images, CSS, etc.).
+    It does not import any layouts, styling, or external files (images, CSS, etc).
   </p>
 </div>
+
+
+<h2>Invocation</h2>
+
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import roller --dbname DB --user USER --password PW --socket SOCKET --host HOST --port PORT --clean_entities --comments --categories --tags --status STATUS,STATUS2</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--dbname DB</code></td>
+      <td colspan="2"><p>Database name.</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--user USER</code></td>
+      <td colspan="2"><p>Database user name.</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--password PW</code></td>
+      <td colspan="2"><p>Database user’s password.</p>
+</td>
+      
+    </tr>
+    
+    <tr>
+      <td><code>--socket SOCKET</code></td>
+      <td><p>Database socket.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>null</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--host HOST</code></td>
+      <td><p>Database host name.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'localhost'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--port PORT</code></td>
+      <td><p>Database port number.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>'3306'</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--clean_entities</code></td>
+      <td><p>Whether to clean entities.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--comments</code></td>
+      <td><p>Whether to import comments.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--categories</code></td>
+      <td><p>Whether to import categories.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--tags</code></td>
+      <td><p>Whether to import tags.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>true</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--status STATUS,STATUS2</code></td>
+      <td><p>Array of allowed statuses (either [‘PUBLISHED’] or [‘DRAFT’]).</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>['PUBLISHED']</code></small></td>
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
+
+
+
 
           
             <div class="button">

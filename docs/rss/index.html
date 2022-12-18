@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>RSS</h1>
           
           
@@ -267,23 +267,63 @@
             
           </div>
           
-          <p>To import your posts from an RSS feed (local or remote), run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::RSS.run({
-      "source" =&gt; "my_file.xml"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>The <code class="language-plaintext highlighter-rouge">source</code> field is required and can be either a local file or a remote one.
-Other optional fields are as follows:</p>
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">canonical_link</code> – copy original link as <code class="language-plaintext highlighter-rouge">canonical_url</code> to post. (default: <code class="language-plaintext highlighter-rouge">false</code>)</li>
-  <li><code class="language-plaintext highlighter-rouge">render_audio</code> – render <code class="language-plaintext highlighter-rouge">&lt;audio&gt;</code> element in posts for the enclosure URLs (default: <code class="language-plaintext highlighter-rouge">false</code>)</li>
-  <li><code class="language-plaintext highlighter-rouge">tag</code> – add a specific tag to all posts</li>
-  <li><code class="language-plaintext highlighter-rouge">extract_tags</code> – copies tags from the given subfield on the RSS <code class="language-plaintext highlighter-rouge">&lt;item&gt;</code></li>
-</ul>
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import rss --source NAME --tag NAME --extract_tags KEY --render_audio --canonical_link</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--source NAME</code></td>
+      <td colspan="2"><p>The RSS file or URL to import.</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--tag NAME</code></td>
+      <td colspan="2"><p>Add a specific tag to all posts.</p>
+</td>
+      
+    </tr>
+    
+    <tr>
+      <td><code>--extract_tags KEY</code></td>
+      <td><p>Copies tags from the given subfield on the RSS <code class="language-plaintext highlighter-rouge">&lt;item&gt;</code> to front matter.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>null</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--render_audio</code></td>
+      <td><p>Render <code class="language-plaintext highlighter-rouge">&lt;audio&gt;</code> element in posts for the enclosure URLs.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>false</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--canonical_link</code></td>
+      <td><p>Add original link as <code class="language-plaintext highlighter-rouge">canonical_url</code> to post front matter.</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>false</code></small></td>
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
 
 <p><strong>Note:</strong> <code class="language-plaintext highlighter-rouge">tag</code> and <code class="language-plaintext highlighter-rouge">extract_tags</code> are exclusive option, both can not be provided together.</p>
+
 
           
             <div class="button">

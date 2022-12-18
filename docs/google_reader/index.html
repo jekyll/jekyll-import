@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Google Reader</h1>
           
           
@@ -277,14 +277,35 @@
             
           </div>
           
-          <p>To import your posts from a <a href="http://reader.google.com">Google Reader</a> XML dump file, run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::GoogleReader.run({
-      "source" =&gt; "my_file.xml"
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>The <code class="language-plaintext highlighter-rouge">source</code> field is required.</p>
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import googlereader --source</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--source</code></td>
+      <td colspan="2"><p>Source XML file of Google Reader export</p>
+</td>
+      
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
+
+
+
 
           
             <div class="button">

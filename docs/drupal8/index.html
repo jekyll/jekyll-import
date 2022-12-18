@@ -243,7 +243,7 @@
 
 
       <div class="unit four-fifths">
-        <article>
+        <article class="importer">
           <h1>Drupal 8</h1>
           
           
@@ -291,50 +291,85 @@
             
           </div>
           
-          <p>To import your posts from a <a href="http://drupal.org">Drupal 8</a> installation, run:</p>
+          
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Drupal8.run({
-      "dbname"   =&gt; "name",
-      "user"     =&gt; "myuser",
-      "password" =&gt; "mypassword",
-      "host"     =&gt; "myhost",
-      "prefix"   =&gt; "mytableprefix",
-      "types"    =&gt; ["blog", "story", "article"]
-    })'</span></code></pre></figure>
+<h2>Invocation</h2>
 
-<p>The only required fields are <code class="language-plaintext highlighter-rouge">dbname</code> and <code class="language-plaintext highlighter-rouge">user</code>. <code class="language-plaintext highlighter-rouge">password</code> defaults to <code class="language-plaintext highlighter-rouge">""</code>,
-<code class="language-plaintext highlighter-rouge">host</code> defaults to <code class="language-plaintext highlighter-rouge">"localhost"</code>, and <code class="language-plaintext highlighter-rouge">prefix</code> defaults to <code class="language-plaintext highlighter-rouge">""</code>.</p>
+
+<p>
+  Sample snippet to invoke the importer:
+  <pre>jekyll import drupal8 --dbname DB --user USER --engine [mysql|postgresql] --password PW --host HOST --port PORT --prefix PREFIX --types TYPE1[,TYPE2[,TYPE3...]]</pre>
+</p>
+
+<div class="table-container">
+  <table class="cli">
+    <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
+    
+    <tr class="required-option">
+      <td><code>--dbname DB</code></td>
+      <td colspan="2"><p>Database name</p>
+</td>
+      
+    </tr>
+    
+    <tr class="required-option">
+      <td><code>--user USER</code></td>
+      <td colspan="2"><p>Database user name</p>
+</td>
+      
+    </tr>
+    
+    <tr>
+      <td><code>--engine [mysql|postgresql]</code></td>
+      <td><p>Database engine</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>"mysql"</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--password PW</code></td>
+      <td><p>Database user’s password</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>""</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--host HOST</code></td>
+      <td><p>Database host name</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>"localhost"</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--port PORT</code></td>
+      <td><p>Database port name</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>"3306"</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--prefix PREFIX</code></td>
+      <td><p>Table prefix name</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>""</code></small></td>
+    </tr>
+    
+    <tr>
+      <td><code>--types TYPE1[,TYPE2[,TYPE3...]]</code></td>
+      <td><p>The Drupal content types to be imported</p>
+</td>
+      <td><small>Default:&nbsp;&nbsp;<code>blog,story,article</code></small></td>
+    </tr>
+    
+  </table>
+  
+    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+  
+</div>
 
 <p>By default, this will pull in nodes of type <code class="language-plaintext highlighter-rouge">blog</code>, <code class="language-plaintext highlighter-rouge">story</code>, and <code class="language-plaintext highlighter-rouge">article</code>.
 To specify custom types, you can use the <code class="language-plaintext highlighter-rouge">types</code> option when you run the
-importer:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Drupal8.run({
-      "dbname"   =&gt; "name",
-      "user"     =&gt; "myuser",
-      "password" =&gt; "mypassword",
-      "host"     =&gt; "myhost",
-      "prefix"   =&gt; "mytableprefix",
-      "types"    =&gt; ["blog", "post"]
-    })'</span></code></pre></figure>
-
-<p>That will import nodes of type <code class="language-plaintext highlighter-rouge">blog</code> and <code class="language-plaintext highlighter-rouge">post</code> only.</p>
-
-<p>The default Drupal 8 expects database to be MySQL. If you want to import posts
-from Drupal 8 installation with PostgreSQL define <code class="language-plaintext highlighter-rouge">"engine"</code> as <code class="language-plaintext highlighter-rouge">"postgresql"</code>:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ruby <span class="nt">-r</span> rubygems <span class="nt">-e</span> <span class="s1">'require "jekyll-import";
-    JekyllImport::Importers::Drupal8.run({
-      "engine"   =&gt; "postgresql",
-      "dbname"   =&gt; "name",
-      "user"     =&gt; "myuser",
-      "password" =&gt; "mypassword",
-      "host"     =&gt; "myhost",
-      "prefix"   =&gt; "mytableprefix",
-      "types"    =&gt; ["blog", "story", "article"]
-    })'</span></code></pre></figure>
+importer to select node types.</p>
 
 
           

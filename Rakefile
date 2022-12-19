@@ -91,7 +91,7 @@ end
 
 namespace :site do
   desc "Generate and view the site locally"
-  task :preview => :generate_dependency_data do
+  task :preview do
     require "launchy"
 
     # Yep, it's a hack! Wait a few seconds for the Jekyll site to generate and

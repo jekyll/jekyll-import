@@ -10,8 +10,7 @@ layout: default
       <div class="unit four-fifths">
         <article class="{{ page.layout }}">
           <h1>{{ page.title }}</h1>
-          {% assign importer = page.path | split: "/" | last | split: "." | first %}
-          {% assign importer_deps = site.data.importer_dependencies[importer] %}
+          {% assign importer_deps = page.cmd_deps %}
           {% if importer_deps %}
           <div class="note info">
             <h5>Additional Dependencies</h5>

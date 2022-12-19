@@ -6,6 +6,7 @@
   * Define CLI option descriptions consistently (#496)
   * Fix generation of History doc for docs-site (#505)
   * Document command-line-interface of importers (#507)
+  * Document importer dependencies as injected by local plugin (#508)
 
 ### Development Fixes
 

@@ -18,6 +18,7 @@
 
   * Improve RSS importer with canonical_link and extract_tags option (#489)
   * Introduce medium importer (#499)
+  * import command: sort list of importers when printing (#511)
 
 ## 0.21.0 / 2021-10-31
 

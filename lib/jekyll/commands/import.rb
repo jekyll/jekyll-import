@@ -39,7 +39,7 @@ module Jekyll
               if args.empty?
                 Jekyll.logger.warn "You must specify an importer."
                 Jekyll.logger.info "Valid options are:"
-                importers.each { |i| Jekyll.logger.info "*", i.to_s }
+                importers.sort.each { |i| Jekyll.logger.info "*", i.to_s }
               end
             end
           end

@@ -11,6 +11,6 @@ gem "kramdown-parser-gfm" if ENV["JEKYLL_VERSION"] == "~> 3.9"
 # Since we don't have a direct dependency on the Psych gem (it gets included in the gem bundle as a
 # dependency of the `rdoc` gem), lock psych gem to v4.x instead of installing `libyaml` in our
 # development / CI environment.
-gem "psych", "~> 4.0"
+gem "psych", "~> 5.1"
 
 gem "test-unit"

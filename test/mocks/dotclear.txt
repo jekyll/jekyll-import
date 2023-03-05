@@ -1,0 +1,59 @@
+///DOTCLEAR|2.25.3|single
+
+[category cat_id,blog_id,cat_title,cat_url,cat_desc,cat_position,cat_lft,cat_rgt]
+"1","default","Category1","Category1","","0","4","5"
+"2","default","Category1","Category2","","0","2","3"
+
+[setting setting_id,blog_id,setting_ns,setting_value,setting_type,setting_label]
+"blog_timezone","default","system","Europe/Madrid","string","Blog timezone"
+"public_url","default","system","/dotclear/public","string","URL to public directory"
+"themes_url","default","system","/dotclear/themes","string","Themes root URL"
+"firstpage","default","pages","1","boolean",""
+"widgets_nav","default","widgets","YTo0OntpOjA7YTo4OntzOjU6InRpdGxlIjtzOjEwOiJCZXN0IG9mIG1lIjtzOjc6Im9yZGVyYnkiO3M6MzoiYXNjIjtzOjg6ImhvbWVvbmx5IjtzOjE6IjAiO3M6MTI6ImNvbnRlbnRfb25seSI7czoxOiIwIjtzOjU6ImNsYXNzIjtzOjA6IiI7czo3OiJvZmZsaW5lIjtzOjE6IjAiO3M6MjoiaWQiO3M6NjoiYmVzdG9mIjtzOjU6Im9yZGVyIjtpOjA7fWk6MTthOjEwOntzOjU6InRpdGxlIjtzOjEyOiJMYXN0IGVudHJpZXMiO3M6ODoiY2F0ZWdvcnkiO3M6MDoiIjtzOjM6InRhZyI7czowOiIiO3M6NToibGltaXQiO3M6MjoiMTAiO3M6ODoiaG9tZW9ubHkiO3M6MToiMCI7czoxMjoiY29udGVudF9vbmx5IjtzOjE6IjAiO3M6NToiY2xhc3MiO3M6MDoiIjtzOjc6Im9mZmxpbmUiO3M6MToiMCI7czoyOiJpZCI7czo5OiJsYXN0cG9zdHMiO3M6NToib3JkZXIiO2k6MTt9aToyO2E6MTA6e3M6NToidGl0bGUiO3M6MTA6IkNhdGVnb3JpZXMiO3M6OToicG9zdGNvdW50IjtzOjE6IjAiO3M6MTI6InN1YmNhdHNjb3VudCI7czoxOiIwIjtzOjEwOiJ3aXRoX2VtcHR5IjtzOjE6IjAiO3M6ODoiaG9tZW9ubHkiO3M6MToiMCI7czoxMjoiY29udGVudF9vbmx5IjtzOjE6IjAiO3M6NToiY2xhc3MiO3M6MDoiIjtzOjc6Im9mZmxpbmUiO3M6MToiMCI7czoyOiJpZCI7czoxMDoiY2F0ZWdvcmllcyI7czo1OiJvcmRlciI7aToyO31pOjM7YTo5OntzOjU6InRpdGxlIjtzOjU6IlBhZ2VzIjtzOjY6InNvcnRieSI7czoxMDoicG9zdF90aXRsZSI7czo3OiJvcmRlcmJ5IjtzOjM6ImFzYyI7czo4OiJob21lb25seSI7czoxOiIwIjtzOjEyOiJjb250ZW50X29ubHkiO3M6MToiMCI7czo1OiJjbGFzcyI7czowOiIiO3M6Nzoib2ZmbGluZSI7czoxOiIwIjtzOjI6ImlkIjtzOjU6InBhZ2VzIjtzOjU6Im9yZGVyIjtpOjM7fX0=","string","Navigation widgets"
+"widgets_extra","default","widgets","YTowOnt9","string","Extra widgets"
+"widgets_custom","default","widgets","YToxOntpOjA7YTo4OntzOjU6InRpdGxlIjtzOjk6IlN1YnNjcmliZSI7czo0OiJ0eXBlIjtzOjQ6ImF0b20iO3M6ODoiaG9tZW9ubHkiO3M6MToiMCI7czoxMjoiY29udGVudF9vbmx5IjtzOjE6IjAiO3M6NToiY2xhc3MiO3M6MDoiIjtzOjc6Im9mZmxpbmUiO3M6MToiMCI7czoyOiJpZCI7czo5OiJzdWJzY3JpYmUiO3M6NToib3JkZXIiO2k6MDt9fQ==","string","Custom widgets"
+"jquery_migrate_mute","default","system","1","boolean","Mute warnings for jquery migrate plugin ?"
+"antispam_date_last_purge","default","antispam","1677436841","integer","Antispam Date Last Purge (unix timestamp)"
+"copyright_notice","default","system","CC -by-sa","string","Copyright notice (simple text)"
+"date_format","default","system","%Y-%m-%d","string","Date format. See PHP strftime function for patterns"
+"comments_pub","default","system","0","boolean","Publish comments immediately"
+"comment_preview_optional","default","system","","string",""
+"note_title_tag","default","system","0","string",""
+"use_smilies","default","system","1","boolean","Show smilies on entries and comments"
+"media_flash_fallback","default","system","0","boolean","Flash player fallback for audio and video media"
+"media_img_use_dto_first","default","system","","string",""
+"media_img_no_date_alone","default","system","","string",""
+"media_img_default_size","default","system","m","string",""
+"media_img_default_alignment","default","system","right","string",""
+"media_img_default_link","default","system","1","string",""
+"media_img_default_legend","default","system","none","string",""
+"jquery_version","default","system","","string",""
+"prevents_clickjacking","default","system","1","string",""
+"breadcrumb_enabled","default","breadcrumb","1","boolean",""
+"breadcrumb_alone","default","breadcrumb","0","boolean",""
+"simpleMenu","default","system","[{\"label\":\"Inicio\",\"descr\":\"Recent posts\",\"url\":\"\\/dotclear\\/index.php?\"},{\"label\":\"Archivos\",\"descr\":\"\",\"url\":\"\\/dotclear\\/index.php?archive\"}]","array","simpleMenu default menu"
+"trackbacks_pub","default","system","0","boolean","Publish trackbacks immediately"
+"lang","default","system","es","string","Default blog language"
+"active","default","socialShare","1","boolean","Active"
+"on_page","default","socialShare","1","boolean","Add social sharing buttons on page"
+"antispam_filters","default","antispam","{\"dcFilterIP\":[true,0],\"dcFilterIpLookup\":[true,1],\"dcFilterWords\":[true,2],\"dcFilterLinksLookup\":[true,3],\"dcFilterIPv6\":[true,4],\"dcFilterAkismet\":[true,5],\"dcFilterFairTrackbacks\":[true,6]}","array","Antispam Filters"
+"static_home","default","system","","string",""
+"static_home_url","default","system","","string",""
+"markdown_comments","default","system","0","boolean",""
+
+[post post_id,blog_id,user_id,cat_id,post_dt,post_tz,post_creadt,post_upddt,post_password,post_type,post_format,post_url,post_lang,post_title,post_excerpt,post_excerpt_xhtml,post_content,post_content_xhtml,post_notes,post_meta,post_words,post_status,post_firstpub,post_selected,post_position,post_open_comment,post_open_tb,nb_comment,nb_trackback]
+"1","default","MiUser","","2017-03-25 00:35:00","CET","2017-03-25 00:35:45","2017-03-27 22:09:23","","post","xhtml","2017/03/25/Welcome-to-Dotclear!","en","Welcome to Dotclear!","","","<p>This is your first entry. When you're ready to blog, log in to edit or delete it.</p>","<p>This is your first entry. When you're ready to blog, log in to edit or delete it.</p>","","","welcome dotclear this your first entry when you ready blog log edit delete","-2","1","0","0","1","0","1","0"
+"2","default","MiUser","","2017-03-25 00:35:00","CET","2017-03-25 00:35:51","2018-08-18 11:47:32","","page","xhtml","2017/03/25/My-first-page","en","My first page","","","<p>This is your first page. When you're ready to blog, log in to edit or delete it.</p>","<p>This is your first page. When you're ready to blog, log in to edit or delete it.</p>","","","first page this your first page when you ready blog log edit delete","-2","0","0","2","0","0","0","0"
+
+[meta meta_id,meta_type,post_id]
+"Indiana","tag","1"
+"conferencias","tag","2"
+"informe","tag","2"
+
+[media media_id,user_id,media_path,media_title,media_file,media_dir,media_meta,media_dt,media_creadt,media_upddt,media_private]
+"1","MiUser","public","250px-MonaLisaGraffiti.JPG","MiUser/250px-MonaLisaGraffiti.JPG","MiUser","<meta><Title/><Description/><Creator/><Rights/><Make/><Model/><Exposure/><FNumber/><MaxApertureValue/><ExposureProgram/><ISOSpeedRatings/><DateTimeOriginal></DateTimeOriginal><ExposureBiasValue/><MeteringMode/><FocalLength/><Lens/><CountryCode/><Country/><State/><City/><Keywords/></meta>","2013-09-16 20:16:16","2013-09-16 20:16:16","2013-09-16 20:16:16","0"
+"2","MiUser","public","743px-Laurentius_de_Voltolina_001.jpg","MiUser/743px-Laurentius_de_Voltolina_001.jpg","MiUser","<meta><Title/><Description/><Creator/><Rights/><Make/><Model/><Exposure/><FNumber/><MaxApertureValue/><ExposureProgram/><ISOSpeedRatings/><DateTimeOriginal></DateTimeOriginal><ExposureBiasValue/><MeteringMode/><FocalLength/><Lens/><CountryCode/><Country/><State/><City/><Keywords/></meta>","2013-09-16 20:16:16","2013-09-16 20:16:16","2013-09-16 20:16:16","0"
+
+[comment comment_id,post_id,comment_dt,comment_tz,comment_upddt,comment_author,comment_email,comment_site,comment_content,comment_words,comment_ip,comment_status,comment_spam_status,comment_spam_filter,comment_trackback]
+"1","1","2017-03-25 00:35:45","CET","2017-03-25 00:35:45","Dotclear Team","contact@dotclear.net","http://www.dotclear.org/","<p>This is a comment.</p>\n<p>To delete it, log in and view your blog's comments. Then you might remove or edit it.</p>","this comment delete log and view your blog comments then you might remove edit","127.0.0.1","1","0","","0"
+"2","2","2007-11-20 22:23:07","Europe/Madrid","2007-11-27 19:42:56","Friend","Friend@friends.com","http://friend.site.com","<p>Supongo que.</p>\r\n<p>Friend :-)</p>","supongo que Friend","213.98.71.13","1","","dcFilterSpample2","0"

@@ -1,121 +1,98 @@
 # frozen_string_literal: true
 
-# Tested with dotClear 2.1.5
 module JekyllImport
   module Importers
     class Dotclear < Importer
-      def self.specify_options(c)
-        c.option "datafile", "--datafile PATH", "dotClear export file"
-        c.option "mediafolder", "--mediafolder PATH", "dotClear media export folder (media.zip inflated)"
-      end
+      class << self
+        def specify_options(c)
+          c.option "datafile", "--datafile PATH", "Dotclear export file"
+        end
 
-      def self.require_deps
-        JekyllImport.require_with_fallback(%w(
-          rubygems
-          fileutils
-          safe_yaml
-          date
-          active_support
-          active_support/core_ext/string/inflections
-          csv
-          pp
-        ))
-      end
+        def require_deps
+          JekyllImport.require_with_fallback(%w(
+            csv
+            reverse_markdown
+            yaml
+          ))
+        end
 
-      def self.validate(opts)
-        abort "Specify a data file !" if opts["datafile"].nil? || opts["datafile"].empty?
-        abort "Specify a media folder !" if opts["mediafolder"].nil? || opts["mediafolder"].empty?
-      end
-
-      def self.extract_headers_section(str)
-        str[1..-2].split(" ")[1].split(",")
-      end
-
-      def self.extract_data_section(str)
-        str.gsub(%r!^"!, "").gsub(%r!"$!, "").split('","')
-      end
-
-      def self.process(opts)
-        options = {
-          :datafile    => opts.fetch("datafile", ""),
-          :mediafolder => opts.fetch("mediafolder", ""),
-        }
-
-        FileUtils.mkdir_p("_posts")
-        FileUtils.mkdir_p("_drafts")
-
-        type_data = ""
-        headers = {}
-        posts_and_drafts = {}
-        keywords = {}
-
-        File.readlines(options[:datafile]).each do |lineraw|
-          line = lineraw.strip.gsub(%r!\n$!, "")
-
-          next if line.empty?
-
-          if line.start_with?("[") # post | media \ meta | comment...
-            type_data = line.split(" ").first[1..-1]
-            headers[type_data] = extract_headers_section(line)
-            next
+        def validate(opts)
+          file_path = opts["datafile"]
+          if file_path.nil? || file_path.empty?
+            Jekyll.logger.abort_with "Import Error:", "Dotclear export file not found!"
           end
 
-          elts = extract_data_section(line)
-
-          if type_data == "post"
-            draft = (elts[headers[type_data].index("post_status")] != "1")
-
-            date_str = elts[headers[type_data].index("post_creadt")]
-            date_blank = (date_str.nil? || date_str.empty?)
-            date_str_formatted = date_blank ? Date.today : Date.parse(date_str).strftime("%Y-%m-%d")
-            title_param = elts[headers[type_data].index("post_title")].to_s.parameterize
-
-            content = elts[headers[type_data].index("post_content_xhtml")].to_s
-            content = content.gsub('\"', '"').gsub('\n', "\n").gsub("/public/", "/assets/images/")
-
-            filepath = File.join(Dir.pwd, (draft ? "_drafts" : "_posts"), "#{date_str_formatted}-#{title_param}.html")
-
-            entire_content_file = <<~POST_FILE
-              ---
-              layout: post
-              title: "#{elts[headers[type_data].index("post_title")]}"
-              date: #{elts[headers[type_data].index("post_creadt")]} +0100
-              tags: ABC
-              ---
-
-              #{content}
-            POST_FILE
-
-            posts_and_drafts[elts[headers[type_data].index("post_id")]] = { :path => filepath, :content => entire_content_file }
-          elsif type_data == "media"
-            elts[headers[type_data].index("media_title")]
-            mediafilepath = elts[headers[type_data].index("media_file")]
-
-            src_path = File.join(options[:mediafolder], mediafilepath)
-            dst_path = File.join(Dir.pwd, "assets", "images", mediafilepath.to_s)
-
-            FileUtils.mkdir_p(File.dirname(dst_path))
-            FileUtils.cp(src_path, dst_path)
-          elsif type_data == "meta"
-            keywords[elts[headers[type_data].index("post_id")]] ||= []
-            keywords[elts[headers[type_data].index("post_id")]] << elts[headers[type_data].index("meta_id")]
-          elsif type_data == "link"
-
-          elsif type_data == "setting"
-
-          elsif type_data == "comment"
-
+          file_path = File.expand_path(file_path)
+          if File.open(file_path, "rb", &:readline).match?(%r!\A///DOTCLEAR\|!)
+            @data = read_export(file_path)
+            Jekyll.logger.info "Export File:", file_path
+          else
+            Jekyll.logger.abort_with "Import Error:", "#{file_path.inspect} is not a valid Dotclear export file!"
           end
         end
 
-        # POST-process : Change media path in posts and drafts
-        posts_and_drafts.each do |post_id, hsh|
-          keywords_str = keywords[post_id].to_a.join(", ")
-          content_file = hsh[:content]
-          content_file = content_file.gsub("tags: ABC", "tags: [#{keywords_str}]")
+        def process(_opts)
+          Jekyll.logger.info "Importing.."
+          tags = register_post_tags
+          posts = @data["post"]
+          FileUtils.mkdir_p("_drafts") unless posts.empty?
 
-          File.open(hsh[:path], "wb") do |f|
-            f.write(content_file)
+          posts.each do |post|
+            date, title, content, id = post.values_at("post_creadt", "post_title", "post_content", "post_id")
+            path = File.join("_drafts", Date.parse(date).strftime("%Y-%m-%d-") + Jekyll::Utils.slugify(title) + ".md")
+            front_matter_data = {
+              "layout" => "post",
+              "title"  => title,
+              "date"   => date,
+              "lang"   => post["post_lang"],
+              "tags"   => tags[post["post_id"]],
+            }.tap(&:compact!)
+
+            # keep a record of existing URL for the post. Jekyll may or may not generate the same
+            # URL depending on `permalink` settings in Jekyll configuration.
+            front_matter_data["dotclear_post_url"] = post["post_url"]
+
+            Jekyll.logger.info "Creating:", path
+            File.write(path, "#{YAML.dump(front_matter_data)}---\n\n#{ReverseMarkdown.convert(content).strip}\n")
+          end
+          Jekyll.logger.info "", "and, done!"
+        end
+
+        private
+
+        # Parse backup sections into a Hash of arrays.
+        #
+        # Each section is of following shape:
+        #
+        #   [key alpha,beta,gamma,...]
+        #   lorem,ipsum,dolor,...
+        #   red,blue,green,...
+        #
+        # Returns Hash of shape:
+        #
+        #   {key => [{alpha => lorem,...}, {alpha => red,...}]}
+        #
+        def read_export(file)
+          ignored_sections = %w(category comment link setting)
+
+          File.read(file).split("\n\n").each_with_object({}) do |section, data|
+            next unless /^\[\b(?<key>.*)\b (?<header>.*)\]\s+(?<rows>.*)/m =~ section
+            next if ignored_sections.include?(key)
+
+            data[key] = rows.each_line.with_object([]) do |line, bucket|
+              bucket << ::CSV.parse(line, headers: header).map(&:to_h)
+            end.flatten
+
+            data
+          end
+        end
+
+        def register_post_tags
+          @data["meta"].each_with_object({}) do |entry, tags|
+            next unless entry["meta_type"] == "tag"
+
+            tags[entry["post_id"]] ||= []
+            tags[entry["post_id"]] << entry["meta_id"]
           end
         end
       end

@@ -22,6 +22,10 @@
   * Introduce medium importer (#499)
   * import command: sort list of importers when printing (#511)
 
+### Bug Fixes
+
+  * Replace URI.decode with URI::DEFAULT_PARSER.unescape (#517)
+
 ## 0.21.0 / 2021-10-31
 
 ### Bug Fixes

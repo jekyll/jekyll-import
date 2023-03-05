@@ -16,6 +16,7 @@
   * Update .github/dependabot.yml (#514)
   * Bump actions/checkout from 2 to 3 (#518)
   * Add Ruby 3.2 to CI (#521)
+  * Update rr requirement from ~&gt; 1.0 to ~&gt; 3.1 (#520)
 
 ### Minor Enhancements
 

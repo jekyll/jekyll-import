@@ -14,7 +14,7 @@ module JekyllImport
           COPY jekyll TO STDOUT WITH CSV HEADER;
           ROLLBACK;
         SQL
-        command = %(psql -h #{c[:host] || "localhost"} -c "#{sql.strip}" #{c[:database]} #{c[:username]} -o #{c[:filename] || "posts.csv"})
+        command = %(psql -h #{c[:host] || "127.0.0.1"} -c "#{sql.strip}" #{c[:database]} #{c[:username]} -o #{c[:filename] || "posts.csv"})
         Jekyll.logger.info "Executing:", command
         `#{command}`
         CSV.process
@@ -61,7 +61,7 @@ module JekyllImport
         dbname = options.fetch("dbname")
         user   = options.fetch("user")
         pass   = options.fetch("password", "")
-        host   = options.fetch("host", "localhost")
+        host   = options.fetch("host", "127.0.0.1")
 
         db = Sequel.mysql2(dbname, :user     => user,
                                    :password => pass,

@@ -16,6 +16,7 @@ module JekyllImport
           ))
         end
 
+        # rubocop:disable Style/IfUnlessModifier
         def validate(opts)
           file_path = opts["datafile"]
           if file_path.nil? || file_path.empty?
@@ -23,13 +24,14 @@ module JekyllImport
           end
 
           file_path = File.expand_path(file_path)
-          if File.open(file_path, "rb", &:readline).match?(%r!\A///DOTCLEAR\|!)
+          if File.open(file_path, "rb", &:readline).start_with?("///DOTCLEAR|")
             @data = read_export(file_path)
             Jekyll.logger.info "Export File:", file_path
           else
             Jekyll.logger.abort_with "Import Error:", "#{file_path.inspect} is not a valid Dotclear export file!"
           end
         end
+        # rubocop:enable Style/IfUnlessModifier
 
         def process(_opts)
           Jekyll.logger.info "Importing.."
@@ -38,7 +40,7 @@ module JekyllImport
           FileUtils.mkdir_p("_drafts") unless posts.empty?
 
           posts.each do |post|
-            date, title, content, id = post.values_at("post_creadt", "post_title", "post_content", "post_id")
+            date, title, content = post.values_at("post_creadt", "post_title", "post_content")
             path = File.join("_drafts", Date.parse(date).strftime("%Y-%m-%d-") + Jekyll::Utils.slugify(title) + ".md")
             front_matter_data = {
               "layout" => "post",
@@ -76,11 +78,11 @@ module JekyllImport
           ignored_sections = %w(category comment link setting)
 
           File.read(file).split("\n\n").each_with_object({}) do |section, data|
-            next unless /^\[\b(?<key>.*)\b (?<header>.*)\]\s+(?<rows>.*)/m =~ section
+            next unless %r!^\[\b(?<key>.*)\b (?<header>.*)\]\s+(?<rows>.*)!m =~ section
             next if ignored_sections.include?(key)
 
             data[key] = rows.each_line.with_object([]) do |line, bucket|
-              bucket << ::CSV.parse(line, headers: header).map(&:to_h)
+              bucket << ::CSV.parse(line, :headers => header).map(&:to_h)
             end.flatten
 
             data
@@ -91,8 +93,9 @@ module JekyllImport
           @data["meta"].each_with_object({}) do |entry, tags|
             next unless entry["meta_type"] == "tag"
 
-            tags[entry["post_id"]] ||= []
-            tags[entry["post_id"]] << entry["meta_id"]
+            post_id = entry["post_id"]
+            tags[post_id] ||= []
+            tags[post_id] << entry["meta_id"]
           end
         end
       end

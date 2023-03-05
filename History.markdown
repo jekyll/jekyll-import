@@ -14,6 +14,7 @@
   * Build and deploy docs site via GitHub Actions (#500)
   * Omit importer dependencies in docs-site workflow (#501)
   * Update .github/dependabot.yml (#514)
+  * Bump actions/checkout from 2 to 3 (#518)
 
 ### Minor Enhancements
 

@@ -15,6 +15,7 @@
   * Omit importer dependencies in docs-site workflow (#501)
   * Update .github/dependabot.yml (#514)
   * Bump actions/checkout from 2 to 3 (#518)
+  * Add Ruby 3.2 to CI (#521)
 
 ### Minor Enhancements
 

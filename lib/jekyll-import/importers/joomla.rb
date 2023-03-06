@@ -33,7 +33,7 @@ module JekyllImport
         dbname  = options.fetch("dbname")
         user    = options.fetch("user")
         pass    = options.fetch("password", "")
-        host    = options.fetch("host", "localhost")
+        host    = options.fetch("host", "127.0.0.1")
         port    = options.fetch("port", 3306).to_i
         section = options.fetch("section", "1")
         table_prefix = options.fetch("prefix", "jos_")

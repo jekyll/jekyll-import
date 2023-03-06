@@ -13,12 +13,22 @@
   * Bump dependencies and CI Ruby versions (#493)
   * Build and deploy docs site via GitHub Actions (#500)
   * Omit importer dependencies in docs-site workflow (#501)
+  * Update .github/dependabot.yml (#514)
+  * Bump actions/checkout from 2 to 3 (#518)
+  * Add Ruby 3.2 to CI (#521)
+  * Update rr requirement from ~&gt; 1.0 to ~&gt; 3.1 (#520)
+  * Refactor Dotclear importer methods into singleton instance methods (#523)
 
 ### Minor Enhancements
 
   * Improve RSS importer with canonical_link and extract_tags option (#489)
   * Introduce medium importer (#499)
   * import command: sort list of importers when printing (#511)
+
+### Bug Fixes
+
+  * Replace URI.decode with URI::DEFAULT_PARSER.unescape (#517)
+  * For databases, especially mysql, connect over 127.0.0.1 IP address (#522)
 
 ## 0.21.0 / 2021-10-31
 

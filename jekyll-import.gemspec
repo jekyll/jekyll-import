@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   unless ENV["DOCS_DEPLOY"]
     # test dependencies:
     s.add_development_dependency("redgreen", "~> 1.2")
-    s.add_development_dependency("rr", "~> 1.0")
+    s.add_development_dependency("rr", "~> 3.1")
     s.add_development_dependency("rubocop-jekyll", "~> 0.11.0")
     s.add_development_dependency("shoulda", "~> 4.0")
     s.add_development_dependency("simplecov", "~> 0.7")

@@ -194,7 +194,7 @@ module JekyllImport
 
                 FileUtils.mkdir_p(target_dir)
 
-                file_name = URI.decode("#{post_data[:filename]}.html")
+                file_name = URI::DEFAULT_PARSER.unescape("#{post_data[:filename]}.html")
                 File.open(File.join(target_dir, file_name), "w") do |f|
                   f.flock(File::LOCK_EX)
 

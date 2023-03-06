@@ -242,7 +242,7 @@ module JekyllImport
           Sequel.sqlite(dbname)
         when "mysql", "postgres"
           db_connect_opts = {
-            :host     => options.fetch("host", "localhost"),
+            :host     => options.fetch("host", "127.0.0.1"),
             :user     => options.fetch("user"),
             :password => options.fetch("password", ""),
           }

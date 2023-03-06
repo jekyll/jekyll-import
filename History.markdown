@@ -17,6 +17,7 @@
   * Bump actions/checkout from 2 to 3 (#518)
   * Add Ruby 3.2 to CI (#521)
   * Update rr requirement from ~&gt; 1.0 to ~&gt; 3.1 (#520)
+  * Refactor Dotclear importer methods into singleton instance methods (#523)
 
 ### Minor Enhancements
 

@@ -27,6 +27,7 @@
 ### Bug Fixes
 
   * Replace URI.decode with URI::DEFAULT_PARSER.unescape (#517)
+  * For databases, especially mysql, connect over 127.0.0.1 IP address (#522)
 
 ## 0.21.0 / 2021-10-31
 

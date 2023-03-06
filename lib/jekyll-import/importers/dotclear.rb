@@ -20,7 +20,7 @@ module JekyllImport
         def validate(opts)
           file_path = opts["datafile"]
           if file_path.nil? || file_path.empty?
-            Jekyll.logger.abort_with "Import Error:", "Dotclear export file not found!"
+            Jekyll.logger.abort_with "Import Error:", "--datafile flag cannot be undefined, null or empty!"
           end
 
           file_path = File.expand_path(file_path)

@@ -5,32 +5,9 @@ require "tempfile"
 
 Importers::Dotclear.require_deps
 
-# Monkey-patch `Jekyll.logger.abort_with()` to not abort tests.
-module Jekyll
-  class LogAdapter
-    def abort_with(topic, message = nil, &block)
-      error(topic, message, &block)
-    end
-  end
-end
-
 class TestDotclearImporter < Test::Unit::TestCase
   def described_class
     Importers::Dotclear
-  end
-
-  context "Invalid export file" do
-    should "log graceful error message" do
-      Tempfile.open("bad-export.txt") do |file|
-        file << "Lorem ipsum dolor sit"
-        file.rewind
-
-        output = capture_output { described_class.validate("datafile" => file.path) }
-        error_msg = "#{file.path.inspect} is not a valid Dotclear export file!"
-
-        assert_includes output, error_msg
-      end 
-    end
   end
 
   context "Importing with valid export file" do
@@ -40,8 +17,14 @@ class TestDotclearImporter < Test::Unit::TestCase
 
       Dir.mktmpdir do |tmpdir|
         Dir.chdir(tmpdir) do
-          @output = capture_output { described_class.run("datafile" => @export_file) }
-          @post_path = "_drafts/2017-03-25-welcome-to-dotclear.md"
+          @asset_file_path = "MiUser/250px-MonaLisaGraffiti.JPG"
+          @asset_src_path  = File.join("media_dir", @asset_file_path)
+
+          FileUtils.mkdir_p("media_dir/MiUser")
+          File.binwrite(@asset_src_path, "Hello")
+
+          @output = capture_output { described_class.run("datafile" => @export_file, "mediafolder" => "media_dir") }
+          @post_path = "_drafts/2017-03-25-welcome-to-dotclear.html"
           @contents = File.read(@post_path)
         end
       end
@@ -51,11 +34,23 @@ class TestDotclearImporter < Test::Unit::TestCase
       assert_includes @output, "Export File: #{@export_file}"
     end
 
-    should "create post files with front matter and Markdown content" do
+    should "create post files with front matter and *adjusted* HTML content" do
       assert_includes @output, "Creating: #{@post_path}"
       assert_includes @contents, "---\nlayout: post\ntitle: Welcome to Dotclear!\n"
       assert_includes @contents, "tags:\n- Indiana\n"
-      assert_includes @contents, "---\n\nThis is your first entry."
+      assert_includes @contents, "---\n\n<p style=\"color: blue\">This is your first entry."
+      assert_includes @contents, "\n\n<a href=\"/assets/dotclear/MiUser/250px-MonaLisaGraffiti.JPG>\">"
+    end
+
+    context "with media files" do
+      should "log copied path and destination path" do
+        assert_includes @output, "Copying: #{@asset_src_path}"
+        assert_includes @output, "To: #{File.join("assets/dotclear", @asset_file_path)}"
+      end
+
+      should "log missing media file path" do
+        assert_includes @output, "Not found: media_dir/MiUser/743px-Laurentius_de_Voltolina_001.jpg"
+      end
     end
   end
 end

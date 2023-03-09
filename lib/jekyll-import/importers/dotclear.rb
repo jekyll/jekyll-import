@@ -131,19 +131,27 @@ module JekyllImport
           Jekyll.logger.info "Importing posts.."
 
           posts.each do |post|
-            date, title, content = post.values_at("post_creadt", "post_title", "post_content")
+            date, title = post.values_at("post_creadt", "post_title")
             path = File.join("_drafts", Date.parse(date).strftime("%Y-%m-%d-") + Jekyll::Utils.slugify(title) + ".html")
-            front_matter_data = {
-              "layout" => "post",
-              "title"  => title,
-              "date"   => date,
-              "lang"   => post["post_lang"],
-              "tags"   => tags[post["post_id"]],
-            }.tap(&:compact!)
 
-            # keep a record of existing URL for the post. Jekyll may or may not generate the same
-            # URL depending on `permalink` settings in Jekyll configuration.
-            front_matter_data["dotclear_post_url"] = post["post_url"]
+            excerpt = adjust_post_contents!(post["post_excerpt_xhtml"].to_s)
+            excerpt = nil if excerpt.empty?
+
+            # Unlike the paradigm in Jekyll-generated HTML, `post_content_xhtml` in the export data
+            # doesn't begin with `post_excerpt_xhtml`.
+            # Instead of checking whether the excerpt content exists elsewhere in the exported content
+            # string, always prepend excerpt onto content with an empty line in between.
+            content = [excerpt, post["post_content_xhtml"]].tap(&:compact!).join("\n\n")
+
+            front_matter_data = {
+              "layout"       => "post",
+              "title"        => title,
+              "date"         => date,
+              "lang"         => post["post_lang"],
+              "tags"         => tags[post["post_id"]],
+              "original_url" => post["post_url"], # URL as included in the export-file.
+              "excerpt"      => excerpt,
+            }.tap(&:compact!)
 
             Jekyll.logger.info "Creating:", path
             File.write(path, "#{YAML.dump(front_matter_data)}---\n\n#{adjust_post_contents!(content)}\n")

@@ -247,42 +247,6 @@
           <h1>Dotclear</h1>
           
           
-          <div class="note info">
-            <h5>Additional Dependencies</h5>
-            <p>
-              This importer requires the following additional libraries.
-            </p>
-            <ul class="dep-list">
-              <li>
-                <span><img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTk1NzNGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6
-                Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UnVieUdlbXM8L3RpdGxlPjxwYXRoIGQ9Ik03LjgxIDcuOWwtMi45NyAyLjk1IDcuMTkgNy4xOCAyLjk2LTIuOTUg
-                NC4yMi00LjIzLTIuOTYtMi45NnYtLjAxSDcuOHpNMTIgMEwxLjUzIDZ2MTJMMTIgMjRsMTAuNDctNlY2TDEyIDB6bTguNDcgMTYuODVMMTIgMjEuNzNsLTguNDctNC44
-                OFY3LjEyTDEyIDIuMjRsOC40NyA0Ljg4djkuNzN6Ii8+PC9zdmc+" width="21" height="21"></span>
-                <a href="https://rubygems.org/gems/activesupport" title="gem 'activesupport' at rubygems.org">activesupport</a>
-              </li>
-              <li>
-                <span><img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTk1NzNGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6
-                Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UnVieUdlbXM8L3RpdGxlPjxwYXRoIGQ9Ik03LjgxIDcuOWwtMi45NyAyLjk1IDcuMTkgNy4xOCAyLjk2LTIuOTUg
-                NC4yMi00LjIzLTIuOTYtMi45NnYtLjAxSDcuOHpNMTIgMEwxLjUzIDZ2MTJMMTIgMjRsMTAuNDctNlY2TDEyIDB6bTguNDcgMTYuODVMMTIgMjEuNzNsLTguNDctNC44
-                OFY3LjEyTDEyIDIuMjRsOC40NyA0Ljg4djkuNzN6Ii8+PC9zdmc+" width="21" height="21"></span>
-                <a href="https://rubygems.org/gems/pp" title="gem 'pp' at rubygems.org">pp</a>
-              </li>
-              <li>
-                <span><img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTk1NzNGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6
-                Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UnVieUdlbXM8L3RpdGxlPjxwYXRoIGQ9Ik03LjgxIDcuOWwtMi45NyAyLjk1IDcuMTkgNy4xOCAyLjk2LTIuOTUg
-                NC4yMi00LjIzLTIuOTYtMi45NnYtLjAxSDcuOHpNMTIgMEwxLjUzIDZ2MTJMMTIgMjRsMTAuNDctNlY2TDEyIDB6bTguNDcgMTYuODVMMTIgMjEuNzNsLTguNDctNC44
-                OFY3LjEyTDEyIDIuMjRsOC40NyA0Ljg4djkuNzN6Ii8+PC9zdmc+" width="21" height="21"></span>
-                <a href="https://rubygems.org/gems/safe_yaml" title="gem 'safe_yaml' at rubygems.org">safe_yaml</a>
-              </li>
-            </ul>
-            
-            <p>
-              You may install the needed gems individually by running <code>gem install GEM_NAME</code> or install all of them
-              with a single invocation:<code>gem install activesupport pp safe_yaml</code>
-            </p>
-            
-          </div>
-          
           
 
 <h2>Invocation</h2>
@@ -290,7 +254,7 @@
 
 <p>
   Sample snippet to invoke the importer:
-  <pre>jekyll import dotclear --datafile PATH --mediafolder PATH</pre>
+  <pre>jekyll import dotclear --datafile PATH --mediafolder DIR</pre>
 </p>
 
 <div class="table-container">
@@ -299,14 +263,14 @@
     
     <tr class="required-option">
       <td><code>--datafile PATH</code></td>
-      <td colspan="2"><p>dotClear export file</p>
+      <td colspan="2"><p>Dotclear export file.</p>
 </td>
       
     </tr>
     
     <tr class="required-option">
-      <td><code>--mediafolder PATH</code></td>
-      <td colspan="2"><p>dotClear media export folder (media.zip inflated)</p>
+      <td><code>--mediafolder DIR</code></td>
+      <td colspan="2"><p>Dotclear media export folder (unpacked media.zip).</p>
 </td>
       
     </tr>
@@ -317,7 +281,25 @@
   
 </div>
 
+<h2 id="notes">Notes</h2>
 
+<ul>
+  <li>Paths are always resolved relative to current directory.</li>
+  <li>Posts will be imported into <code class="language-plaintext highlighter-rouge">_drafts</code> directory to avoid overwriting any existing file with same filename inside <code class="language-plaintext highlighter-rouge">_posts</code>.</li>
+  <li>Posts will be imported as HTML files with <code class="language-plaintext highlighter-rouge">.html</code> file extension.</li>
+  <li>Excerpts if non-empty will be prepended onto content string separated by a blank line i.e. <code class="language-plaintext highlighter-rouge">&lt;excerpt&gt;\n\n&lt;content&gt;</code>.</li>
+  <li>The same excerpt will be added to front matter to prevent Jekyll from generating a separate excerpt.</li>
+  <li>Existing comments linked to posts in the export-file WILL NOT be imported.</li>
+  <li>“Categories” are not currently imported from the export-file.</li>
+  <li>“Tags” however will be imported and added to relevant posts’ front matter.</li>
+  <li>Post URLs are imported from the export-file into front matter with key <code class="language-plaintext highlighter-rouge">original_url</code>.</li>
+  <li>Jekyll doesn’t manage timezone for individual posts. Therefore, timezone metadata of individual posts will be ignored.</li>
+  <li>This importer DOES NOT extract “Blog timezone” from the export-file into Jekyll configuration file.</li>
+  <li>Link references to Dotclear’s public directory (<code class="language-plaintext highlighter-rouge">/dotclear/public/</code>) will be altered to (<code class="language-plaintext highlighter-rouge">/assets/dotclear/</code>).</li>
+  <li>All assets will be copied as-is, into the <code class="language-plaintext highlighter-rouge">assets/dotclear</code> directory.</li>
+  <li>Assets will only be imported based on the <code class="language-plaintext highlighter-rouge">media</code> table in the export-file. Downscaled versions / thumbnails will not be generated.</li>
+  <li>Windows-style newline sequences (<code class="language-plaintext highlighter-rouge">"\r\n"</code>) will be converted into Unix-style line-feed (<code class="language-plaintext highlighter-rouge">"\n"</code>) sequences.</li>
+</ul>
 
 
           

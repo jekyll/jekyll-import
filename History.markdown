@@ -24,6 +24,7 @@
   * Improve RSS importer with canonical_link and extract_tags option (#489)
   * Introduce medium importer (#499)
   * import command: sort list of importers when printing (#511)
+  * Re-implement Dotclear importer (#512)
 
 ### Bug Fixes
 

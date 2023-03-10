@@ -1,124 +1,181 @@
 # frozen_string_literal: true
 
-# Tested with dotClear 2.1.5
 module JekyllImport
   module Importers
     class Dotclear < Importer
       class << self
         def specify_options(c)
-          c.option "datafile", "--datafile PATH", "dotClear export file"
-          c.option "mediafolder", "--mediafolder PATH", "dotClear media export folder (media.zip inflated)"
+          c.option "datafile",    "--datafile PATH",   "Dotclear export file."
+          c.option "mediafolder", "--mediafolder DIR", "Dotclear media export folder (unpacked media.zip)."
         end
 
         def require_deps
-          JekyllImport.require_with_fallback(%w(
-            rubygems
-            fileutils
-            safe_yaml
-            date
-            active_support
-            active_support/core_ext/string/inflections
-            csv
-            pp
-          ))
+          JekyllImport.require_with_fallback(%w())
         end
 
         def validate(opts)
-          abort "Specify a data file !" if opts["datafile"].nil? || opts["datafile"].empty?
-          abort "Specify a media folder !" if opts["mediafolder"].nil? || opts["mediafolder"].empty?
+          file_path = opts["datafile"]
+          log_undefined_flag_error("datafile") if file_path.nil? || file_path.empty?
+
+          file_path = File.expand_path(file_path)
+          if File.open(file_path, "rb", &:readline).start_with?("///DOTCLEAR|")
+            @data = read_export(file_path)
+            Jekyll.logger.info "Export File:", file_path
+          else
+            Jekyll.logger.abort_with "Import Error:", "#{file_path.inspect} is not a valid Dotclear export file!"
+          end
+
+          assets = @data["media"]
+          return if !assets || assets.empty?
+
+          Jekyll.logger.info "", "Media files detected in export data."
+
+          media_dir = opts["mediafolder"]
+          log_undefined_flag_error("mediafolder") if media_dir.nil? || media_dir.empty?
+
+          media_dir = File.expand_path(media_dir)
+          log_invalid_media_dir_error(media_dir) if !File.directory?(media_dir) || Dir.empty?(media_dir)
         end
 
         def process(opts)
-          options = {
-            :datafile    => opts.fetch("datafile", ""),
-            :mediafolder => opts.fetch("mediafolder", ""),
-          }
+          import_posts
+          import_assets(opts["mediafolder"])
+          Jekyll.logger.info "", "and, done!"
+        end
 
-          FileUtils.mkdir_p("_posts")
-          FileUtils.mkdir_p("_drafts")
+        private
 
-          type_data = ""
-          headers = {}
-          posts_and_drafts = {}
-          keywords = {}
+        # Parse backup sections into a Hash of arrays.
+        #
+        # Each section is of following shape:
+        #
+        #   [key alpha,beta,gamma,...]
+        #   lorem,ipsum,dolor,...
+        #   red,blue,green,...
+        #
+        # Returns Hash of shape:
+        #
+        #   {key => [{alpha => lorem,...}, {alpha => red,...}]}
+        #
+        def read_export(file)
+          ignored_sections = %w(category comment link setting)
 
-          File.readlines(options[:datafile]).each do |lineraw|
-            line = lineraw.strip.gsub(%r!\n$!, "")
+          File.read(file, :encoding => "utf-8").split("\n\n").each_with_object({}) do |section, data|
+            next unless %r!^\[(?<key>.*?) (?<header>.*)\]\n(?<rows>.*)!m =~ section
+            next if ignored_sections.include?(key)
 
-            next if line.empty?
+            headers = header.split(",")
 
-            if line.start_with?("[") # post | media \ meta | comment...
-              type_data = line.split(" ").first[1..-1]
-              headers[type_data] = extract_headers_section(line)
-              next
+            data[key] = rows.each_line.with_object([]) do |line, bucket|
+              bucket << headers.zip(sanitize_line!(line)).to_h
             end
 
-            elts = extract_data_section(line)
-
-            if type_data == "post"
-              draft = (elts[headers[type_data].index("post_status")] != "1")
-
-              date_str = elts[headers[type_data].index("post_creadt")]
-              date_blank = (date_str.nil? || date_str.empty?)
-              date_str_formatted = date_blank ? Date.today : Date.parse(date_str).strftime("%Y-%m-%d")
-              title_param = elts[headers[type_data].index("post_title")].to_s.parameterize
-
-              content = elts[headers[type_data].index("post_content_xhtml")].to_s
-              content = content.gsub('\"', '"').gsub('\n', "\n").gsub("/public/", "/assets/images/")
-
-              filepath = File.join(Dir.pwd, (draft ? "_drafts" : "_posts"), "#{date_str_formatted}-#{title_param}.html")
-
-              entire_content_file = <<~POST_FILE
-                ---
-                layout: post
-                title: "#{elts[headers[type_data].index("post_title")]}"
-                date: #{elts[headers[type_data].index("post_creadt")]} +0100
-                tags: ABC
-                ---
-
-                #{content}
-              POST_FILE
-
-              posts_and_drafts[elts[headers[type_data].index("post_id")]] = { :path => filepath, :content => entire_content_file }
-            elsif type_data == "media"
-              elts[headers[type_data].index("media_title")]
-              mediafilepath = elts[headers[type_data].index("media_file")]
-
-              src_path = File.join(options[:mediafolder], mediafilepath)
-              dst_path = File.join(Dir.pwd, "assets", "images", mediafilepath.to_s)
-
-              FileUtils.mkdir_p(File.dirname(dst_path))
-              FileUtils.cp(src_path, dst_path)
-            elsif type_data == "meta"
-              keywords[elts[headers[type_data].index("post_id")]] ||= []
-              keywords[elts[headers[type_data].index("post_id")]] << elts[headers[type_data].index("meta_id")]
-            elsif type_data == "link"
-
-            elsif type_data == "setting"
-
-            elsif type_data == "comment"
-
-            end
-          end
-
-          # POST-process : Change media path in posts and drafts
-          posts_and_drafts.each do |post_id, hsh|
-            keywords_str = keywords[post_id].to_a.join(", ")
-            content_file = hsh[:content]
-            content_file = content_file.gsub("tags: ABC", "tags: [#{keywords_str}]")
-
-            File.open(hsh[:path], "wb") do |f|
-              f.write(content_file)
-            end
+            data
           end
         end
 
-        def extract_headers_section(str)
-          str[1..-2].split(" ")[1].split(",")
+        def register_post_tags
+          @data["meta"].each_with_object({}) do |entry, tags|
+            next unless entry["meta_type"] == "tag"
+
+            post_id = entry["post_id"]
+            tags[post_id] ||= []
+            tags[post_id] << entry["meta_id"]
+          end
         end
 
-        def extract_data_section(str)
-          str.gsub(%r!^"!, "").gsub(%r!"$!, "").split('","')
+        def log_undefined_flag_error(label)
+          Jekyll.logger.abort_with "Import Error:", "--#{label} flag cannot be undefined, null or empty!"
+        end
+
+        def log_invalid_media_dir_error(media_dir)
+          Jekyll.logger.error "Import Error:", "--mediafolder should be a non-empty directory."
+          Jekyll.logger.abort_with "", "Please check #{media_dir.inspect}."
+        end
+
+        def sanitize_line!(line)
+          line.strip!
+          line.split('","').tap do |items|
+            items[0].delete_prefix!('"')
+            items[-1].delete_suffix!('"')
+          end
+        end
+
+        # -
+
+        REPLACE_MAP = {
+          '\"'                => '"',
+          '\r\n'              => "\n",
+          '\n'                => "\n",
+          "/dotclear/public/" => "/assets/dotclear/",
+          "/public/"          => "/assets/dotclear/",
+        }.freeze
+
+        REPLACE_RE = Regexp.union(REPLACE_MAP.keys)
+
+        private_constant :REPLACE_MAP, :REPLACE_RE
+
+        # -
+
+        def adjust_post_contents!(content)
+          content.strip!
+          content.gsub!(REPLACE_RE, REPLACE_MAP)
+          content
+        end
+
+        def import_posts
+          tags = register_post_tags
+          posts = @data["post"]
+
+          FileUtils.mkdir_p("_drafts") unless posts.empty?
+          Jekyll.logger.info "Importing posts.."
+
+          posts.each do |post|
+            date, title = post.values_at("post_creadt", "post_title")
+            path = File.join("_drafts", Date.parse(date).strftime("%Y-%m-%d-") + Jekyll::Utils.slugify(title) + ".html")
+
+            excerpt = adjust_post_contents!(post["post_excerpt_xhtml"].to_s)
+            excerpt = nil if excerpt.empty?
+
+            # Unlike the paradigm in Jekyll-generated HTML, `post_content_xhtml` in the export data
+            # doesn't begin with `post_excerpt_xhtml`.
+            # Instead of checking whether the excerpt content exists elsewhere in the exported content
+            # string, always prepend excerpt onto content with an empty line in between.
+            content = [excerpt, post["post_content_xhtml"]].tap(&:compact!).join("\n\n")
+
+            front_matter_data = {
+              "layout"       => "post",
+              "title"        => title,
+              "date"         => date,
+              "lang"         => post["post_lang"],
+              "tags"         => tags[post["post_id"]],
+              "original_url" => post["post_url"], # URL as included in the export-file.
+              "excerpt"      => excerpt,
+            }.tap(&:compact!)
+
+            Jekyll.logger.info "Creating:", path
+            File.write(path, "#{YAML.dump(front_matter_data)}---\n\n#{adjust_post_contents!(content)}\n")
+          end
+        end
+
+        def import_assets(src_dir)
+          assets = @data["media"]
+          FileUtils.mkdir_p("assets/dotclear") if assets && !assets.empty?
+          Jekyll.logger.info "Importing assets.."
+
+          assets.each do |asset|
+            file_path = File.join(src_dir, asset["media_file"])
+            if File.exist?(file_path)
+              dest_path = File.join("assets/dotclear", asset["media_file"])
+              FileUtils.mkdir_p(File.dirname(dest_path))
+
+              Jekyll.logger.info "Copying:", file_path
+              Jekyll.logger.info "To:", dest_path
+              FileUtils.cp_r file_path, dest_path
+            else
+              Jekyll.logger.info "Not found:", file_path
+            end
+          end
         end
       end
     end

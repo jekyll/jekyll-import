@@ -42,4 +42,15 @@ class Test::Unit::TestCase
   ensure
     $stdout = $old_stdout
   end
+
+  def capture_output(level = :debug)
+    buffer = StringIO.new
+    Jekyll.logger = Logger.new(buffer)
+    Jekyll.logger.log_level = level
+    yield
+    buffer.rewind
+    buffer.string.to_s
+  ensure
+    Jekyll.logger = Logger.new(StringIO.new, :error)
+  end
 end

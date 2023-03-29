@@ -1,6 +1,7 @@
 # jekyll-import
 
-[![Build Status](https://travis-ci.org/jekyll/jekyll-import.svg?branch=master)](https://travis-ci.org/jekyll/jekyll-import)
+[![Gem Version](https://img.shields.io/gem/v/jekyll-import.svg)](https://rubygems.org/gems/jekyll-import)
+[![Continuous Integration](https://github.com/jekyll/jekyll-import/actions/workflows/ci.yml/badge.svg)](https://github.com/jekyll/jekyll-import/actions/workflows/ci.yml)
 
 The new __Jekyll__ command for importing from various blogs to Jekyll format.
 

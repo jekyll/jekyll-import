@@ -5,6 +5,39 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.22.0 / 2023-03-29
+
+### Minor Enhancements
+
+- Improve RSS importer with `canonical_link` and `extract_tags` option ([#489]({{ site.repository }}/issues/489))
+- Introduce medium importer ([#499]({{ site.repository }}/issues/499))
+- import command: sort list of importers when printing ([#511]({{ site.repository }}/issues/511))
+- Re-implement Dotclear importer ([#512]({{ site.repository }}/issues/512))
+
+### Bug Fixes
+
+- Replace `URI.decode` with `URI::DEFAULT_PARSER.unescape` ([#517]({{ site.repository }}/issues/517))
+- For databases, especially mysql, connect over 127.0.0.1 IP address ([#522]({{ site.repository }}/issues/522))
+
+### Documentation
+
+- Document additional dependencies of importers ([#468]({{ site.repository }}/issues/468))
+- Define CLI option descriptions consistently ([#496]({{ site.repository }}/issues/496))
+- Fix generation of History doc for docs-site ([#505]({{ site.repository }}/issues/505))
+- Document command-line-interface of importers ([#507]({{ site.repository }}/issues/507))
+- Document importer dependencies as injected by local plugin ([#508]({{ site.repository }}/issues/508))
+
+### Development Fixes
+
+- Bump dependencies and CI Ruby versions ([#493]({{ site.repository }}/issues/493))
+- Build and deploy docs site via GitHub Actions ([#500]({{ site.repository }}/issues/500))
+- Omit importer dependencies in docs-site workflow ([#501]({{ site.repository }}/issues/501))
+- Update .github/dependabot.yml ([#514]({{ site.repository }}/issues/514))
+- Bump actions/checkout from 2 to 3 ([#518]({{ site.repository }}/issues/518))
+- Add Ruby 3.2 to CI ([#521]({{ site.repository }}/issues/521))
+- Update rr requirement from ~&gt; 1.0 to ~&gt; 3.1 ([#520]({{ site.repository }}/issues/520))
+- Refactor Dotclear importer methods into singleton instance methods ([#523]({{ site.repository }}/issues/523))
+
 ## 0.21.0 / 2021-10-31
 
 ### Bug Fixes

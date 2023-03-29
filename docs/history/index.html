@@ -247,16 +247,57 @@
           <h1>History</h1>
           
           
-          <h2 id="0210--2021-10-31">0.21.0 / 2021-10-31</h2>
+          <h2 id="0220--2023-03-29">0.22.0 / 2023-03-29</h2>
+
+<h3 id="minor-enhancements">Minor Enhancements</h3>
+
+<ul>
+  <li>Improve RSS importer with <code class="language-plaintext highlighter-rouge">canonical_link</code> and <code class="language-plaintext highlighter-rouge">extract_tags</code> option (<a href="https://github.com/jekyll/jekyll-import/issues/489">#489</a>)</li>
+  <li>Introduce medium importer (<a href="https://github.com/jekyll/jekyll-import/issues/499">#499</a>)</li>
+  <li>import command: sort list of importers when printing (<a href="https://github.com/jekyll/jekyll-import/issues/511">#511</a>)</li>
+  <li>Re-implement Dotclear importer (<a href="https://github.com/jekyll/jekyll-import/issues/512">#512</a>)</li>
+</ul>
 
 <h3 id="bug-fixes">Bug Fixes</h3>
+
+<ul>
+  <li>Replace <code class="language-plaintext highlighter-rouge">URI.decode</code> with <code class="language-plaintext highlighter-rouge">URI::DEFAULT_PARSER.unescape</code> (<a href="https://github.com/jekyll/jekyll-import/issues/517">#517</a>)</li>
+  <li>For databases, especially mysql, connect over 127.0.0.1 IP address (<a href="https://github.com/jekyll/jekyll-import/issues/522">#522</a>)</li>
+</ul>
+
+<h3 id="documentation">Documentation</h3>
+
+<ul>
+  <li>Document additional dependencies of importers (<a href="https://github.com/jekyll/jekyll-import/issues/468">#468</a>)</li>
+  <li>Define CLI option descriptions consistently (<a href="https://github.com/jekyll/jekyll-import/issues/496">#496</a>)</li>
+  <li>Fix generation of History doc for docs-site (<a href="https://github.com/jekyll/jekyll-import/issues/505">#505</a>)</li>
+  <li>Document command-line-interface of importers (<a href="https://github.com/jekyll/jekyll-import/issues/507">#507</a>)</li>
+  <li>Document importer dependencies as injected by local plugin (<a href="https://github.com/jekyll/jekyll-import/issues/508">#508</a>)</li>
+</ul>
+
+<h3 id="development-fixes">Development Fixes</h3>
+
+<ul>
+  <li>Bump dependencies and CI Ruby versions (<a href="https://github.com/jekyll/jekyll-import/issues/493">#493</a>)</li>
+  <li>Build and deploy docs site via GitHub Actions (<a href="https://github.com/jekyll/jekyll-import/issues/500">#500</a>)</li>
+  <li>Omit importer dependencies in docs-site workflow (<a href="https://github.com/jekyll/jekyll-import/issues/501">#501</a>)</li>
+  <li>Update .github/dependabot.yml (<a href="https://github.com/jekyll/jekyll-import/issues/514">#514</a>)</li>
+  <li>Bump actions/checkout from 2 to 3 (<a href="https://github.com/jekyll/jekyll-import/issues/518">#518</a>)</li>
+  <li>Add Ruby 3.2 to CI (<a href="https://github.com/jekyll/jekyll-import/issues/521">#521</a>)</li>
+  <li>Update rr requirement from ~&gt; 1.0 to ~&gt; 3.1 (<a href="https://github.com/jekyll/jekyll-import/issues/520">#520</a>)</li>
+  <li>Refactor Dotclear importer methods into singleton instance methods (<a href="https://github.com/jekyll/jekyll-import/issues/523">#523</a>)</li>
+</ul>
+
+<h2 id="0210--2021-10-31">0.21.0 / 2021-10-31</h2>
+
+<h3 id="bug-fixes-1">Bug Fixes</h3>
 
 <ul>
   <li>Replace <code class="language-plaintext highlighter-rouge">decode</code> with <code class="language-plaintext highlighter-rouge">decode_www_form_component</code> (<a href="https://github.com/jekyll/jekyll-import/issues/438">#438</a>)</li>
   <li>Change <code class="language-plaintext highlighter-rouge">data[author]</code> to a string scalar (<a href="https://github.com/jekyll/jekyll-import/issues/419">#419</a>)</li>
 </ul>
 
-<h3 id="minor-enhancements">Minor Enhancements</h3>
+<h3 id="minor-enhancements-1">Minor Enhancements</h3>
 
 <ul>
   <li>Add support for Podcast RSS feed imports (<a href="https://github.com/jekyll/jekyll-import/issues/413">#413</a>)</li>
@@ -266,7 +307,7 @@
   <li>Drupal aliases now respect the 'source' config (<a href="https://github.com/jekyll/jekyll-import/issues/454">#454</a>)</li>
 </ul>
 
-<h3 id="development-fixes">Development Fixes</h3>
+<h3 id="development-fixes-1">Development Fixes</h3>
 
 <ul>
   <li>Clean up code to make Rubocop happy (<a href="https://github.com/jekyll/jekyll-import/issues/441">#441</a>)</li>
@@ -275,7 +316,7 @@
   <li>Add workflow to automate tagging and releasing gem (<a href="https://github.com/jekyll/jekyll-import/issues/459">#459</a>)</li>
 </ul>
 
-<h3 id="documentation">Documentation</h3>
+<h3 id="documentation-1">Documentation</h3>
 
 <ul>
   <li>Update csv.md (<a href="https://github.com/jekyll/jekyll-import/issues/444">#444</a>)</li>
@@ -286,7 +327,7 @@
 
 <h2 id="0200--2020-09-08">0.20.0 / 2020-09-08</h2>
 
-<h3 id="minor-enhancements-1">Minor Enhancements</h3>
+<h3 id="minor-enhancements-2">Minor Enhancements</h3>
 
 <ul>
   <li>Pluxml (<a href="https://github.com/jekyll/jekyll-import/issues/430">#430</a>)</li>
@@ -298,7 +339,7 @@
   <li>style: Target Ruby 2.4 (<a href="https://github.com/jekyll/jekyll-import/issues/432">#432</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-1">Bug Fixes</h3>
+<h3 id="bug-fixes-2">Bug Fixes</h3>
 
 <ul>
   <li>Fix 'can't add a new key into hash during iteration' error (<a href="https://github.com/jekyll/jekyll-import/issues/434">#434</a>)</li>
@@ -307,13 +348,13 @@
 
 <h2 id="0192--2020-03-07">0.19.2 / 2020-03-07</h2>
 
-<h3 id="documentation-1">Documentation</h3>
+<h3 id="documentation-2">Documentation</h3>
 
 <ul>
   <li>Add install additional gems note (<a href="https://github.com/jekyll/jekyll-import/issues/403">#403</a>)</li>
 </ul>
 
-<h3 id="development-fixes-1">Development Fixes</h3>
+<h3 id="development-fixes-2">Development Fixes</h3>
 
 <ul>
   <li>Remove deprecated use of fastercsv (<a href="https://github.com/jekyll/jekyll-import/issues/423">#423</a>)</li>
@@ -321,13 +362,13 @@
 
 <h2 id="0191--2019-11-05">0.19.1 / 2019-11-05</h2>
 
-<h3 id="documentation-2">Documentation</h3>
+<h3 id="documentation-3">Documentation</h3>
 
 <ul>
   <li>Fix link for Posterous importer (<a href="https://github.com/jekyll/jekyll-import/issues/415">#415</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-2">Bug Fixes</h3>
+<h3 id="bug-fixes-3">Bug Fixes</h3>
 
 <ul>
   <li>Fix wrong option in self.process_tags (<a href="https://github.com/jekyll/jekyll-import/issues/417">#417</a>)</li>
@@ -335,14 +376,14 @@
 
 <h2 id="0190--2019-06-24">0.19.0 / 2019-06-24</h2>
 
-<h3 id="bug-fixes-3">Bug Fixes</h3>
+<h3 id="bug-fixes-4">Bug Fixes</h3>
 
 <ul>
   <li>Extract encoded_content from feed (<a href="https://github.com/jekyll/jekyll-import/issues/409">#409</a>)</li>
   <li>Check whether option["tag"] is null or empty value (<a href="https://github.com/jekyll/jekyll-import/issues/411">#411</a>)</li>
 </ul>
 
-<h3 id="minor-enhancements-2">Minor Enhancements</h3>
+<h3 id="minor-enhancements-3">Minor Enhancements</h3>
 
 <ul>
   <li>Add Dotclear importer (<a href="https://github.com/jekyll/jekyll-import/issues/414">#414</a>)</li>
@@ -351,7 +392,7 @@
 
 <h2 id="0181--2019-03-23">0.18.1 / 2019-03-23</h2>
 
-<h3 id="bug-fixes-4">Bug Fixes</h3>
+<h3 id="bug-fixes-5">Bug Fixes</h3>
 
 <ul>
   <li>Re-introduce Ruby 2.3 support and test Jekyll 3.7+ (<a href="https://github.com/jekyll/jekyll-import/issues/406">#406</a>)</li>
@@ -359,20 +400,20 @@
 
 <h2 id="0180--2019-03-22">0.18.0 / 2019-03-22</h2>
 
-<h3 id="minor-enhancements-3">Minor Enhancements</h3>
+<h3 id="minor-enhancements-4">Minor Enhancements</h3>
 
 <ul>
   <li>Import Wordpress permalinks (<a href="https://github.com/jekyll/jekyll-import/issues/395">#395</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-5">Bug Fixes</h3>
+<h3 id="bug-fixes-6">Bug Fixes</h3>
 
 <ul>
   <li>ghost.db stores timestamps in ms, not seconds. Fixed the ghost importer. (<a href="https://github.com/jekyll/jekyll-import/issues/396">#396</a>)</li>
   <li>Fix WP pre tag util raise error when value includes regexp (<a href="https://github.com/jekyll/jekyll-import/issues/401">#401</a>)</li>
 </ul>
 
-<h3 id="development-fixes-2">Development Fixes</h3>
+<h3 id="development-fixes-3">Development Fixes</h3>
 
 <ul>
   <li>Drop support for Ruby 2.3</li>
@@ -381,7 +422,7 @@
 
 <h2 id="0171--2018-12-23">0.17.1 / 2018-12-23</h2>
 
-<h3 id="bug-fixes-6">Bug Fixes</h3>
+<h3 id="bug-fixes-7">Bug Fixes</h3>
 
 <ul>
   <li>Replace URI.parse.open with OpenURI.open_uri (<a href="https://github.com/jekyll/jekyll-import/issues/389">#389</a>)</li>
@@ -389,14 +430,14 @@
 
 <h2 id="0170--2018-12-20">0.17.0 / 2018-12-20</h2>
 
-<h3 id="bug-fixes-7">Bug Fixes</h3>
+<h3 id="bug-fixes-8">Bug Fixes</h3>
 
 <ul>
   <li>Unfreeze strings in importers that modify literals (<a href="https://github.com/jekyll/jekyll-import/issues/381">#381</a>)</li>
   <li>Patch missing per_page bug in Tumblr importer (<a href="https://github.com/jekyll/jekyll-import/issues/383">#383</a>)</li>
 </ul>
 
-<h3 id="minor-enhancements-4">Minor Enhancements</h3>
+<h3 id="minor-enhancements-5">Minor Enhancements</h3>
 
 <ul>
   <li>remove extra / if passed with –url (<a href="https://github.com/jekyll/jekyll-import/issues/378">#378</a>)</li>
@@ -404,7 +445,7 @@
   <li>Convert HTML to MD with ReverseMarkdown instead (<a href="https://github.com/jekyll/jekyll-import/issues/386">#386</a>)</li>
 </ul>
 
-<h3 id="development-fixes-3">Development Fixes</h3>
+<h3 id="development-fixes-4">Development Fixes</h3>
 
 <ul>
   <li>Prettify JSON payloads in test_tumblr_importer (<a href="https://github.com/jekyll/jekyll-import/issues/385">#385</a>)</li>
@@ -412,19 +453,19 @@
 
 <h2 id="0160--2018-11-04">0.16.0 / 2018-11-04</h2>
 
-<h3 id="development-fixes-4">Development Fixes</h3>
+<h3 id="development-fixes-5">Development Fixes</h3>
 
 <ul>
   <li>chore(deps): rubocop-jekyll 0.3 (<a href="https://github.com/jekyll/jekyll-import/issues/370">#370</a>)</li>
 </ul>
 
-<h3 id="documentation-3">Documentation</h3>
+<h3 id="documentation-4">Documentation</h3>
 
 <ul>
   <li>docs: avoid error message (<a href="https://github.com/jekyll/jekyll-import/issues/374">#374</a>)</li>
 </ul>
 
-<h3 id="minor-enhancements-5">Minor Enhancements</h3>
+<h3 id="minor-enhancements-6">Minor Enhancements</h3>
 
 <ul>
   <li>refactor: Roller improvements and tests (<a href="https://github.com/jekyll/jekyll-import/issues/371">#371</a>)</li>
@@ -432,14 +473,14 @@
 
 <h2 id="0150--2018-10-17">0.15.0 / 2018-10-17</h2>
 
-<h3 id="minor-enhancements-6">Minor Enhancements</h3>
+<h3 id="minor-enhancements-7">Minor Enhancements</h3>
 
 <ul>
   <li>Add roller importer (<a href="https://github.com/jekyll/jekyll-import/issues/363">#363</a>)</li>
   <li>Allow additional options to RSS import (<a href="https://github.com/jekyll/jekyll-import/issues/307">#307</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-8">Bug Fixes</h3>
+<h3 id="bug-fixes-9">Bug Fixes</h3>
 
 <ul>
   <li>Use mysql by default in Drupal importers. (<a href="https://github.com/jekyll/jekyll-import/issues/347">#347</a>)</li>
@@ -448,7 +489,7 @@
   <li>Movable type: fix column name typo (<a href="https://github.com/jekyll/jekyll-import/issues/351">#351</a>)</li>
 </ul>
 
-<h3 id="development-fixes-5">Development Fixes</h3>
+<h3 id="development-fixes-6">Development Fixes</h3>
 
 <ul>
   <li>Replace uninitialized constant with alternative (<a href="https://github.com/jekyll/jekyll-import/issues/358">#358</a>)</li>
@@ -459,7 +500,7 @@
   <li>Refactor Tumblr Importer (<a href="https://github.com/jekyll/jekyll-import/issues/362">#362</a>)</li>
 </ul>
 
-<h3 id="documentation-4">Documentation</h3>
+<h3 id="documentation-5">Documentation</h3>
 
 <ul>
   <li>Update Documentation for Contributing to project (<a href="https://github.com/jekyll/jekyll-import/issues/366">#366</a>)</li>
@@ -467,14 +508,14 @@
 
 <h2 id="0140--2018-02-03">0.14.0 / 2018-02-03</h2>
 
-<h3 id="development-fixes-6">Development Fixes</h3>
+<h3 id="development-fixes-7">Development Fixes</h3>
 
 <ul>
   <li>Security: Fix alert on activesupport (<a href="https://github.com/jekyll/jekyll-import/issues/332">#332</a>)</li>
   <li>Test against Ruby 2.5 (<a href="https://github.com/jekyll/jekyll-import/issues/336">#336</a>)</li>
 </ul>
 
-<h3 id="minor-enhancements-7">Minor Enhancements</h3>
+<h3 id="minor-enhancements-8">Minor Enhancements</h3>
 
 <ul>
   <li>Add support for Drupal 7 installations with PostgreSQL database (<a href="https://github.com/jekyll/jekyll-import/issues/331">#331</a>)</li>
@@ -482,7 +523,7 @@
 
 <h2 id="0130--2017-11-05">0.13.0 / 2017-11-05</h2>
 
-<h3 id="minor-enhancements-8">Minor Enhancements</h3>
+<h3 id="minor-enhancements-9">Minor Enhancements</h3>
 
 <ul>
   <li>WordPress: add port options for mysql db connection (<a href="https://github.com/jekyll/jekyll-import/issues/311">#311</a>)</li>
@@ -494,7 +535,7 @@
   <li>Joomla: Add option to specify the MySQL port (<a href="https://github.com/jekyll/jekyll-import/issues/310">#310</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-9">Bug Fixes</h3>
+<h3 id="bug-fixes-10">Bug Fixes</h3>
 
 <ul>
   <li>Drupal 7: Remove uneeded double quote in SQL query (<a href="https://github.com/jekyll/jekyll-import/issues/287">#287</a>)</li>
@@ -505,7 +546,7 @@
   <li>WordPress: replace was backwards, broke end tags (<a href="https://github.com/jekyll/jekyll-import/issues/292">#292</a>)</li>
 </ul>
 
-<h3 id="development-fixes-7">Development Fixes</h3>
+<h3 id="development-fixes-8">Development Fixes</h3>
 
 <ul>
   <li>Updating Ruby and Jekyll versions for testing (<a href="https://github.com/jekyll/jekyll-import/issues/290">#290</a>)</li>
@@ -523,7 +564,7 @@
   <li>Change broken link for “A great article” (<a href="https://github.com/jekyll/jekyll-import/issues/294">#294</a>)</li>
 </ul>
 
-<h3 id="documentation-5">Documentation</h3>
+<h3 id="documentation-6">Documentation</h3>
 
 <ul>
   <li>Add the new port setting to the Wordpress importer docs (<a href="https://github.com/jekyll/jekyll-import/issues/312">#312</a>)</li>
@@ -546,7 +587,7 @@
   <li>Tumblr: fix creation of rewrite rules (<a href="https://github.com/jekyll/jekyll-import/issues/283">#283</a>)</li>
 </ul>
 
-<h3 id="development-fixes-8">Development Fixes</h3>
+<h3 id="development-fixes-9">Development Fixes</h3>
 
 <ul>
   <li>Fix Travis CI build (<a href="https://github.com/jekyll/jekyll-import/issues/273">#273</a>)</li>
@@ -560,7 +601,7 @@
 
 <h2 id="0110--2016-06-27">0.11.0 / 2016-06-27</h2>
 
-<h3 id="bug-fixes-10">Bug Fixes</h3>
+<h3 id="bug-fixes-11">Bug Fixes</h3>
 
 <ul>
   <li>Drupal 6 importer depends on mysql. (<a href="https://github.com/jekyll/jekyll-import/issues/242">#242</a>)</li>
@@ -576,7 +617,7 @@
   <li>Correct “our community forum” link (<a href="https://github.com/jekyll/jekyll-import/issues/246">#246</a>)</li>
 </ul>
 
-<h3 id="development-fixes-9">Development Fixes</h3>
+<h3 id="development-fixes-10">Development Fixes</h3>
 
 <ul>
   <li>Add rubocop (<a href="https://github.com/jekyll/jekyll-import/issues/248">#248</a>)</li>
@@ -632,20 +673,20 @@
 
 <h2 id="060--2015-03-07">0.6.0 / 2015-03-07</h2>
 
-<h3 id="minor-enhancements-9">Minor Enhancements</h3>
+<h3 id="minor-enhancements-10">Minor Enhancements</h3>
 
 <ul>
   <li>Drupal 7: use the <code class="language-plaintext highlighter-rouge">body_summary</code> field as an <code class="language-plaintext highlighter-rouge">excerpt</code> if it’s available (<a href="https://github.com/jekyll/jekyll-import/issues/176">#176</a>)</li>
   <li>WordPress.com: Extract post excerpt (<a href="https://github.com/jekyll/jekyll-import/issues/189">#189</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-11">Bug Fixes</h3>
+<h3 id="bug-fixes-12">Bug Fixes</h3>
 
 <ul>
   <li>Drupal 7: Remove unused <code class="language-plaintext highlighter-rouge">nid</code> from MySQL <code class="language-plaintext highlighter-rouge">SELECT</code> (<a href="https://github.com/jekyll/jekyll-import/issues/177">#177</a>)</li>
 </ul>
 
-<h3 id="development-fixes-10">Development Fixes</h3>
+<h3 id="development-fixes-11">Development Fixes</h3>
 
 <ul>
   <li>Updated the LICENSE file to the “standard” formatting (<a href="https://github.com/jekyll/jekyll-import/issues/178">#178</a>)</li>
@@ -653,7 +694,7 @@
 
 <h2 id="053--2014-12-29">0.5.3 / 2014-12-29</h2>
 
-<h3 id="bug-fixes-12">Bug Fixes</h3>
+<h3 id="bug-fixes-13">Bug Fixes</h3>
 
 <ul>
   <li>Blogger: Fix draft importing. (<a href="https://github.com/jekyll/jekyll-import/issues/175">#175</a>)</li>
@@ -667,7 +708,7 @@
 
 <h2 id="052--2014-12-03">0.5.2 / 2014-12-03</h2>
 
-<h3 id="bug-fixes-13">Bug Fixes</h3>
+<h3 id="bug-fixes-14">Bug Fixes</h3>
 
 <ul>
   <li>WordPress: Use <code class="language-plaintext highlighter-rouge">nil</code> instead of <code class="language-plaintext highlighter-rouge">""</code> for default socket (<a href="https://github.com/jekyll/jekyll-import/issues/170">#170</a>)</li>
@@ -676,7 +717,7 @@
 
 <h2 id="051--2014-11-03">0.5.1 / 2014-11-03</h2>
 
-<h3 id="bug-fixes-14">Bug Fixes</h3>
+<h3 id="bug-fixes-15">Bug Fixes</h3>
 
 <ul>
   <li>Fixes for Behance import file (<a href="https://github.com/jekyll/jekyll-import/issues/167">#167</a>)</li>
@@ -684,13 +725,13 @@
 
 <h2 id="050--2014-09-19">0.5.0 / 2014-09-19</h2>
 
-<h3 id="minor-enhancements-10">Minor Enhancements</h3>
+<h3 id="minor-enhancements-11">Minor Enhancements</h3>
 
 <ul>
   <li>Add Blogger (blogspot.com) importer (<a href="https://github.com/jekyll/jekyll-import/issues/162">#162</a>)</li>
 </ul>
 
-<h3 id="development-fixes-11">Development Fixes</h3>
+<h3 id="development-fixes-12">Development Fixes</h3>
 
 <ul>
   <li>Remove all comments from the Ruby classes. (<a href="https://github.com/jekyll/jekyll-import/issues/159">#159</a>)</li>
@@ -699,7 +740,7 @@
 
 <h2 id="041--2014-07-31">0.4.1 / 2014-07-31</h2>
 
-<h3 id="bug-fixes-15">Bug Fixes</h3>
+<h3 id="bug-fixes-16">Bug Fixes</h3>
 
 <ul>
   <li>Update WordPress importer to use <code class="language-plaintext highlighter-rouge">table_prefix</code> everywhere (<a href="https://github.com/jekyll/jekyll-import/issues/154">#154</a>)</li>
@@ -714,7 +755,7 @@
 
 <h2 id="040--2014-06-29">0.4.0 / 2014-06-29</h2>
 
-<h3 id="minor-enhancements-11">Minor Enhancements</h3>
+<h3 id="minor-enhancements-12">Minor Enhancements</h3>
 
 <ul>
   <li>Add easyblog importer (<a href="https://github.com/jekyll/jekyll-import/issues/136">#136</a>)</li>
@@ -722,7 +763,7 @@
   <li>Be really permissive about which Jekyll version to use</li>
 </ul>
 
-<h3 id="bug-fixes-16">Bug Fixes</h3>
+<h3 id="bug-fixes-17">Bug Fixes</h3>
 
 <ul>
   <li>Tumblr: Photo posts with multiple photos will now all import (<a href="https://github.com/jekyll/jekyll-import/issues/145">#145</a>)</li>
@@ -734,7 +775,7 @@
   <li>Fix table prefix key in WordPress docs. (<a href="https://github.com/jekyll/jekyll-import/issues/150">#150</a>)</li>
 </ul>
 
-<h3 id="development-fixes-12">Development Fixes</h3>
+<h3 id="development-fixes-13">Development Fixes</h3>
 
 <ul>
   <li>Add GitHub <code class="language-plaintext highlighter-rouge">script/*</code> conventions for easy pick-up. (<a href="https://github.com/jekyll/jekyll-import/issues/146">#146</a>)</li>
@@ -742,7 +783,7 @@
 
 <h2 id="030--2014-05-23">0.3.0 / 2014-05-23</h2>
 
-<h3 id="minor-enhancements-12">Minor Enhancements</h3>
+<h3 id="minor-enhancements-13">Minor Enhancements</h3>
 
 <ul>
   <li>Import WordPress.org <code class="language-plaintext highlighter-rouge">author</code> data as hash (<a href="https://github.com/jekyll/jekyll-import/issues/139">#139</a>)</li>
@@ -752,7 +793,7 @@
   <li>WordPress: Import WP pages as proper Jekyll pages instead of as posts (<a href="https://github.com/jekyll/jekyll-import/issues/137">#137</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-17">Bug Fixes</h3>
+<h3 id="bug-fixes-18">Bug Fixes</h3>
 
 <ul>
   <li>Replace errant <code class="language-plaintext highlighter-rouge">continue</code> expression with the valid <code class="language-plaintext highlighter-rouge">next</code> expression (<a href="https://github.com/jekyll/jekyll-import/issues/133">#133</a>)</li>
@@ -767,13 +808,13 @@
   <li>Support auto-paragraph Wordpress convention (<a href="https://github.com/jekyll/jekyll-import/issues/125">#125</a>)</li>
 </ul>
 
-<h3 id="minor-enhancements-13">Minor Enhancements</h3>
+<h3 id="minor-enhancements-14">Minor Enhancements</h3>
 
 <ul>
   <li>Extract author info from wordpress XML files (<a href="https://github.com/jekyll/jekyll-import/issues/131">#131</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-18">Bug Fixes</h3>
+<h3 id="bug-fixes-19">Bug Fixes</h3>
 
 <ul>
   <li>Require YAML library in Enki importer (<a href="https://github.com/jekyll/jekyll-import/issues/112">#112</a>)</li>
@@ -792,7 +833,7 @@
   <li>Add note to WordPress installer docs page that indicates what the importer does and doesn’t do. (<a href="https://github.com/jekyll/jekyll-import/issues/127">#127</a>)</li>
 </ul>
 
-<h3 id="development-fixes-13">Development Fixes</h3>
+<h3 id="development-fixes-14">Development Fixes</h3>
 
 <ul>
   <li>Bring gemspec into the 2010’s (<a href="https://github.com/jekyll/jekyll-import/issues/130">#130</a>)</li>
@@ -814,7 +855,7 @@
   <li>Handle missing gems a bit more gracefully (<a href="https://github.com/jekyll/jekyll-import/issues/59">#59</a>)</li>
 </ul>
 
-<h3 id="minor-enhancements-14">Minor Enhancements</h3>
+<h3 id="minor-enhancements-15">Minor Enhancements</h3>
 
 <ul>
   <li>Add date and redirection pages for blogs imported from Tumblr (<a href="https://github.com/jekyll/jekyll-import/issues/54">#54</a>)</li>
@@ -831,7 +872,7 @@
   <li>Add an <code class="language-plaintext highlighter-rouge">Importer.run</code> method for easy invocation (<a href="https://github.com/jekyll/jekyll-import/issues/88">#88</a>)</li>
 </ul>
 
-<h3 id="bug-fixes-19">Bug Fixes</h3>
+<h3 id="bug-fixes-20">Bug Fixes</h3>
 
 <ul>
   <li>Remove usage of <code class="language-plaintext highlighter-rouge">Hash#at</code> in Tumblr importer (<a href="https://github.com/jekyll/jekyll-import/issues/14">#14</a>)</li>
@@ -859,7 +900,7 @@
   <li>Add the site (<a href="https://github.com/jekyll/jekyll-import/issues/87">#87</a>)</li>
 </ul>
 
-<h3 id="development-fixes-14">Development Fixes</h3>
+<h3 id="development-fixes-15">Development Fixes</h3>
 
 <ul>
   <li>Update usage docs in RSS importer (<a href="https://github.com/jekyll/jekyll-import/issues/35">#35</a>)</li>

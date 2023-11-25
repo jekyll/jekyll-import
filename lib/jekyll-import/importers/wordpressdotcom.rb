@@ -28,7 +28,7 @@ module JekyllImport
 
         Jekyll.logger.info "Downloading images for ", title
         images.each do |i|
-          uri = i["src"]
+          uri = URI::Parser.new.escape(i["src"])
 
           dst = File.join(assets_folder, File.basename(uri))
           i["src"] = File.join("{{ site.baseurl }}", dst)

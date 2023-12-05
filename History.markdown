@@ -4,6 +4,10 @@
 
   * Bump actions/checkout from 3 to 4 (#528)
 
+### Bug Fixes
+
+  * Escape non ascii-characters while image downlading from wordpress (#531)
+
 ## 0.22.0 / 2023-03-29
 
 ### Minor Enhancements

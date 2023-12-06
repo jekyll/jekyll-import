@@ -1,0 +1,22 @@
+---
+layout: base
+title: Builtin Importers
+---
+
+<div class="deck">
+{% for importer in site.importers %}
+  <div class="importer card">
+    <div class="container">
+      <header>
+        <svg class="i-icon">
+          <use xlink:href="{{ 'assets/imgs/importer-icons.svg#' | append: 'default' | relative_url }}"></use>
+        </svg>
+        <div class="i-name">{{ importer.title }}</div>
+      </header>
+      <footer>
+        <a href="{{ importer.url | relative_url }}">Details &rarr;</a>
+      </footer>
+    </div>
+  </div>
+{% endfor %}
+</div>

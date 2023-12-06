@@ -126,10 +126,8 @@ namespace :site do
     if File.exist?("History.markdown")
       history_file = File.read("History.markdown")
       front_matter = {
-        "layout"       => "docs",
-        "title"        => "History",
-        "permalink"    => "/docs/history/",
-        "prev_section" => "contributing",
+        "title"     => "Project History",
+        "doc_order" => 6,
       }
       Dir.chdir("docs/_docs/") do
         File.open("history.md", "w") do |file|

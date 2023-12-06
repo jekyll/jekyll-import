@@ -1,0 +1,28 @@
+figure.highlight {
+  margin: 1em 0
+}
+div.highlight {
+  display: block;
+  pre { background: #2b2b2b }
+  code {
+    padding: 0;
+    color: #eeeeee;
+    background: transparent;
+  }
+}
+
+.highlight {
+  .c1 { color: #888888 }
+  .k  { color: #fe5757 }
+  .nc { color: #9bcb0b }
+  .no { color: #65dcdc }
+  .nt { color: #00bcd4 }
+  .nv { color: #b5b5b5 }
+  .o  { color: #fe5757 }
+  .s1 { color: #f7d87a }
+  .s2 { color: #f7d87a }
+  .se { color: #a3a3fa }
+  .sr { color: #f7d87a }
+  .ss { color: #a3a3fa }
+  .sx { color: #f7d87a }
+}

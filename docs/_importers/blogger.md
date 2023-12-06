@@ -1,8 +1,4 @@
 ---
-importer: true
-prev_section: behance
-link_source:  blogger
-next_section: csv
 prereq_info: |-
   To import your posts from Blogger, you have to first [export the blog][export-blogger-xml]
   to an XML file (`blog-MM-DD-YYYY.xml`).

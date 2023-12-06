@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ page.title | append: page.title_suffix }} &mdash; Jekyll Import</title>
+    <link rel="stylesheet" href="{{ '/assets/css/styles.css' | relative_url }}">
+    <link rel="icon" type="image/x-icon" href="{{ 'favicon.png' | relative_url }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="logo" href="{{ '/' | relative_url }}">
+          <img src="{{ '/assets/imgs/logo-2x.png' | relative_url }}" width="108" height="50" alt="Jekyll Logo">
+        </a>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/docs/">Overview</a></li>
+            <li><a href="/importers/">Importers</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>{{ content }}</main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          The contents of this website are<br/>&copy; {{ site.time | date: '%Y' }} under the terms of the MIT License.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

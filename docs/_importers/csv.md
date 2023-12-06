@@ -1,8 +1,5 @@
 ---
 title: CSV
-prev_section: blogger
-link_source: csv
-next_section: drupal6
 ---
 
 Your CSV file will be read in with the following columns:
@@ -15,4 +12,4 @@ Your CSV file will be read in with the following columns:
 
 If you wish to specify custom front matter for each of your posts, you can use
 the `--no-front-matter` option to prevent the default front matter from being
-written to the imported files.
+imparted to the imported files.

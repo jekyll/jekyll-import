@@ -1,18 +1,17 @@
 ---
 title: Movable Type
-prev_section: mephisto
-link_source: mt
-next_section: posterous
 ---
 
-`comments`, which defaults to false, control the generation of
-comment. If `comments` set to true, posts will be generated and placed
-in `_comments` directory.
+Posts will be generated and placed in `_posts` directory.
 
-All of the posts and comments will include `post_id` in YAML front
-matter to link a post and its comments.
+`comments`, which defaults to false, control the generation of comments. If
+`comments` is set to true, posts will be generated and placed in `_comments`
+directory.
 
-To include imported comments as part of a post, use the yet to merge
-[fork of mt-static-comments](https://github.com/shigeya/jekyll-static-comments/tree/mt_static_comments)
-to include statically generate comments in your post. Fork and provide
-feedback if necessary.
+All of the posts and comments will include `post_id` in YAML front matter to
+link a post and its comments.
+
+You can use the [fork of mt-static-comments][fork of mt-static-comments] to
+include statically generate comments in your post.
+
+[fork of mt-static-comments]: https://github.com/shigeya/jekyll-static-comments/tree/mt_static_comments

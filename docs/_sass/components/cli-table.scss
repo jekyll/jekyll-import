@@ -1,0 +1,24 @@
+table.cli {
+  margin-bottom: 10px;
+  th {
+    background: #333333;
+    border-color: #454545;
+  }
+  .required-option {
+    color: var(--light-brass);
+    background: #6b6247;
+    td {
+      border: 1px solid #51431a;
+      &:first-child { border-left-color: #575757 }
+      &:last-child { border-right-color: #575757 }
+      code { color: var(--light-brass) }
+    }
+  }
+  p { margin: 0 }
+  & + .cli-table-note {
+    float: right;
+    &:before {
+      content: "*";
+    }
+  }
+}

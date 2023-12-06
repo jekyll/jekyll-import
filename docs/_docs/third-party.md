@@ -1,9 +1,6 @@
 ---
-layout: docs
-title: Third-party
-prev_section: wordpressdotcom
-next_section: contributing
-permalink: /docs/third-party/
+title: Third-party Importers
+doc_order: 5
 ---
 
 Various third-party importers for Jekyll have been created separate from this

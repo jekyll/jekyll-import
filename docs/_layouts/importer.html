@@ -2,6 +2,18 @@
 layout: docs
 ---
 
+{% if page.cmd_deps %}
+<div class="note warning">
+  <p>
+    This importer depends on the following third-party gems:
+    <ul class="deps-list">{% for gem in page.cmd_deps %}<li>{{ gem }}</li>{% endfor %}</ul>
+    You may either install the gem(s) individually by running a command with syntax <code>gem install GEM_NAME</code>
+    or install the required gems in a batch by running the following snippet:
+    <pre class="install-deps-snippet">gem install {{ page.cmd_deps | join: ' ' }}</pre>
+  </p>
+</div>
+{% endif %}
+
 {% if page.render_limited_import_note %}
 <div class="note info">
   <p>
@@ -30,12 +42,12 @@ layout: docs
     <tr{% if option.mandatory %}{% assign has_required_opts = true %} class="required-option"{% endif %}>
       <td><code>{{ option.switch }}</code></td>
       <td{% unless option.default_value %} colspan="2"{% endunless %}>{{ option.desc | markdownify }}</td>
-      {% if option.default_value %}<td><small>Default:&nbsp;&nbsp;<code>{{ option.default_value }}</code></small></td>{% endif %}
+      {% if option.default_value %}<td><small>Default: <code>{{ option.default_value }}</code></small></td>{% endif %}
     </tr>
     {% endfor %}
   </table>
   {% if has_required_opts %}
-    <div class="cli-table-note">Highlighted row(s) in table above indicate required options.</div>
+    <small class="cli-table-note"><em>Highlighted row(s) in table above indicate required options.</em></small>
   {% endif %}
 </div>
 

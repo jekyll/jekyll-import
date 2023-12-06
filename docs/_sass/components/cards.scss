@@ -1,0 +1,64 @@
+div.deck {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  .card {
+    flex: 0 auto;
+    margin: 5px;
+    padding: 1.5em;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid var(--dark-brass);
+    overflow: auto;
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 120px;
+      height: 170px;
+      overflow: hidden;
+    }
+    header {
+      height: 140px;
+      margin-bottom: 0.5em;
+      border-bottom: 1px solid var(--dark-brass);
+      .i-icon {
+        width: 6em;
+        height: 6em;
+        fill: var(--dark-brass);
+        stroke-width: 0.1px;
+        stroke: var(--brass);
+      }
+      .i-name {
+        margin-top: 0.5em;
+        font-size: 1.15em;
+      }
+    }
+    section {
+      display: flex;
+      flex-direction: column;
+      flex: 1 auto;
+      justify-content: center;
+      margin-top: 0.5em;
+      div {
+        max-height: 150px;
+        overflow: hidden;
+      }
+      table {
+        td, th {
+          padding: 5px;
+          border-color: transparent;
+          &:first-of-type {
+            text-align: right;
+          }
+        }
+      }
+    }
+    footer {
+      border-bottom: 1px solid var(--dark-brass);
+      a {
+        display: block;
+        border-bottom: none;
+      }
+    }
+  }
+}

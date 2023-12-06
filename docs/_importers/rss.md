@@ -1,8 +1,7 @@
 ---
 title: RSS
-prev_section: posterous
-link_source:  rss
-next_section: s9y
 ---
 
-__Note:__ `tag` and `extract_tags` are exclusive option, both can not be provided together.
+The `source` option may either be a local file or a remote one.
+
+`tag` and `extract_tags` are exclusive options. Both can not be provided together.

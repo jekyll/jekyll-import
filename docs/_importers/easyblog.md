@@ -1,6 +1,5 @@
 ---
 title: EasyBlog
-prev_section: drupal8
-link_source:  easyblog
-next_section: enki
 ---
+
+This importer will export all articles (in any state). Category and tags will also be included in export.

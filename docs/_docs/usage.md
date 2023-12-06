@@ -1,9 +1,5 @@
 ---
-layout: docs
-title: Usage
-prev_section: installation
-next_section: behance
-permalink: /docs/usage/
+doc_order: 3
 ---
 
 You should now be all set to run the importers with the following incantation:

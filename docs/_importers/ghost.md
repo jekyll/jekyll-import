@@ -1,7 +1,7 @@
 ---
-prev_section: enki
-link_source:  ghost
-next_section: google_reader
+prereq_info: >-
+  To import your posts from your self-hosted Ghost instance, you first have to download
+  your `ghost.db` from your server.
 ---
 
 If you have a Ghost backup file, consider using another tool called

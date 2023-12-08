@@ -15,7 +15,7 @@ Found an issue with one of the importers? Sorry about that! In order to better a
 1. Collection information about your system: operating system and version, Ruby version, Jekyll version, jekyll-import version.
 2. Which importer are you using? Note this.
 3. Collect the relevant data. This may be data from your database or input file. This will help us diagnose where the issue occurred.
-4. Ensure the `--trace` option is specified if you're running `jekyll import` from the command-line.
+4. Ensure the `--trace` option is specified if you're running `jekyll-import` from the command-line.
 4. [Open a new issue]({{ site.repository }}/issues/new) describing the four above points, as well as what you expected the outcome of your incantation to be.
 
 You should receive help soon. As always, check out [our help repo](https://talk.jekyllrb.com/) if you just have a question.
@@ -90,5 +90,5 @@ Once you have your importer working (test with `script/console`), then you're re
 `./docs/_importers/columbus.md`. Take a look at one of the other importers as an example. You just add basic usage and you're golden.
 
 All set? Add everything to a branch on your fork of `jekyll-import` and
-[submit a pull request](https://github.com/jekyll/jekyll-import/compare/).  
+[submit a pull request](https://github.com/jekyll/jekyll-import/compare/).
 Thank you!

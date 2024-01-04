@@ -1,0 +1,6 @@
+# 1. Require jekyll-import
+irb> require 'jekyll-import'
+# 2. Choose the importer you'd like to use.
+irb> importer_class = "Behance" # an example, there are many others!
+# 3. Run it!
+irb> JekyllImport::Importers.const_get(importer_class).run(options_hash)

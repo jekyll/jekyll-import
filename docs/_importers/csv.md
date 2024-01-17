@@ -2,7 +2,7 @@
 title: CSV
 prev_section: blogger
 link_source: csv
-next_section: drupal6
+next_section: dotclear
 ---
 
 Your CSV file will be read in with the following columns:

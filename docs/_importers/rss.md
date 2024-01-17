@@ -1,6 +1,6 @@
 ---
 title: RSS
-prev_section: posterous
+prev_section: roller
 link_source:  rss
 next_section: s9y
 ---

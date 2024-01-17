@@ -1,7 +1,7 @@
 ---
-prev_section: mt
+prev_section: pluxml
 link_source: posterous
-next_section: rss
+next_section: roller
 ---
 
 There is also an [alternative Posterous

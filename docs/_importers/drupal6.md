@@ -1,6 +1,6 @@
 ---
 title: Drupal 6
-prev_section: csv
+prev_section: dotclear
 link_source: drupal6
 next_section: drupal7
 ---

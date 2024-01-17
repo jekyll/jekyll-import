@@ -8,6 +8,10 @@
 
   * Escape non ascii-characters while image downlading from wordpress (#531)
 
+### Minor Enhancements
+
+  * Add jekyll-import command (#532)
+
 ## 0.22.0 / 2023-03-29
 
 ### Minor Enhancements

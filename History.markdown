@@ -1,17 +1,17 @@
-## HEAD
-
-### Development Fixes
-
-  * Bump actions/checkout from 3 to 4 (#528)
-
-### Bug Fixes
-
-  * Escape non ascii-characters while image downlading from wordpress (#531)
+## 0.23.0 / 2024-01-16
 
 ### Minor Enhancements
 
   * Add jekyll-import command (#532)
   * add pebble importer (#527)
+
+### Bug Fixes
+
+  * Escape non ascii-characters while image downlading from wordpress (#531)
+
+### Development Fixes
+
+  * Bump actions/checkout from 3 to 4 (#528)
 
 ### Documentation
 

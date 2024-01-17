@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
-  <title>S9Y &mdash; jekyll-import • Import your old &amp; busted site to Jekyll</title>
+  <title>Pebble &mdash; jekyll-import • Import your old &amp; busted site to Jekyll</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="alternate" type="application/rss+xml" title="Jekyll • Simple, blog-aware, static sites - Feed" href="/feed.xml" />
   <link rel="alternate" type="application/atom+xml" title="Recent commits to Jekyll’s master branch" href="https://github.com/jekyll/jekyll-import/commits/master.atom" />
@@ -246,15 +246,22 @@
 
       <div class="unit four-fifths">
         <article class="importer">
-          <h1>S9Y</h1>
+          <h1>Pebble</h1>
           
           
           <div class="note info">
             <h5>Additional Dependencies</h5>
             <p>
-              This importer requires the following additional library.
+              This importer requires the following additional libraries.
             </p>
             <ul class="dep-list">
+              <li>
+                <span><img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTk1NzNGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6
+                Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UnVieUdlbXM8L3RpdGxlPjxwYXRoIGQ9Ik03LjgxIDcuOWwtMi45NyAyLjk1IDcuMTkgNy4xOCAyLjk2LTIuOTUg
+                NC4yMi00LjIzLTIuOTYtMi45NnYtLjAxSDcuOHpNMTIgMEwxLjUzIDZ2MTJMMTIgMjRsMTAuNDctNlY2TDEyIDB6bTguNDcgMTYuODVMMTIgMjEuNzNsLTguNDctNC44
+                OFY3LjEyTDEyIDIuMjRsOC40NyA0Ljg4djkuNzN6Ii8+PC9zdmc+" width="21" height="21"></span>
+                <a href="https://rubygems.org/gems/nokogiri" title="gem 'nokogiri' at rubygems.org">nokogiri</a>
+              </li>
               <li>
                 <span><img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTk1NzNGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6
                 Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UnVieUdlbXM8L3RpdGxlPjxwYXRoIGQ9Ik03LjgxIDcuOWwtMi45NyAyLjk1IDcuMTkgNy4xOCAyLjk2LTIuOTUg
@@ -264,7 +271,10 @@
               </li>
             </ul>
             
-            <p>You may install the needed gem by running <code>gem install safe_yaml</code></p>
+            <p>
+              You may install the needed gems individually by running <code>gem install GEM_NAME</code> or install all of them
+              with a single invocation:<code>gem install nokogiri safe_yaml</code>
+            </p>
             
           </div>
           
@@ -275,7 +285,7 @@
 
 <p>
   Sample snippet to invoke the importer:
-  <pre>jekyll-import s9y --source SOURCE</pre>
+  <pre>jekyll-import pebble --directory PATH</pre>
 </p>
 
 <div class="table-container">
@@ -283,8 +293,8 @@
     <tr><th>Option &lt;PARAM&gt;</th><th colspan="3">Description</th></tr>
     
     <tr class="required-option">
-      <td><code>--source SOURCE</code></td>
-      <td colspan="2"><p>The URL of the S9Y RSS feed</p>
+      <td><code>--directory PATH</code></td>
+      <td colspan="2"><p>Pebble source directory</p>
 </td>
       
     </tr>
@@ -295,26 +305,28 @@
   
 </div>
 
-
+<p>Download your <a href="https://pebble.sourceforge.net">Pebble</a> blog export (should
+contain some XML source files) then point this tool at that downloaded directory.
+(If it’s a zip file, then expand into a directory.)</p>
 
 
           
             <div class="button">
               
-              <a href="https://github.com/jekyll/jekyll-import/blob/v0.14.0/lib/jekyll-import/importers/s9y.rb">View Source &rarr;</a>
+              <a href="https://github.com/jekyll/jekyll-import/blob/v0.14.0/lib/jekyll-import/importers/pebble.rb">View Source &rarr;</a>
             </div>
           
           <div class="section-nav">
   <div class="left align-right">
     
-      <a href="https://import.jekyllrb.com/docs/rss/" class="prev">
+      <a href="https://import.jekyllrb.com/docs/mt/" class="prev">
         Back
       </a>
     
   </div>
   <div class="right align-left">
     
-      <a href="https://import.jekyllrb.com/docs/s9ydatabase/" class="next">
+      <a href="https://import.jekyllrb.com/docs/pluxml/" class="next">
         Next
       </a>
     
@@ -450,7 +462,7 @@
         <li class=""><a href="https://import.jekyllrb.com/docs/mt/">Movable Type</a></li>
     
         
-        <li class=""><a href="https://import.jekyllrb.com/docs/pebble/">Pebble</a></li>
+        <li class="current"><a href="https://import.jekyllrb.com/docs/pebble/">Pebble</a></li>
     
         
         <li class=""><a href="https://import.jekyllrb.com/docs/pluxml/">PluXML</a></li>
@@ -465,7 +477,7 @@
         <li class=""><a href="https://import.jekyllrb.com/docs/rss/">RSS</a></li>
     
         
-        <li class="current"><a href="https://import.jekyllrb.com/docs/s9y/">S9Y</a></li>
+        <li class=""><a href="https://import.jekyllrb.com/docs/s9y/">S9Y</a></li>
     
         
         <li class=""><a href="https://import.jekyllrb.com/docs/s9ydatabase/">S9Y Database</a></li>

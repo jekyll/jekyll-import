@@ -1,6 +1,6 @@
 ---
 title: Textpattern
-prev_section: s9y
+prev_section: s9ydatabase
 link_source: textpattern
 next_section: tumblr
 ---

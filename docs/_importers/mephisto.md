@@ -1,5 +1,5 @@
 ---
-prev_section: marley
+prev_section: medium
 link_source: mephisto
 next_section: mt
 ---

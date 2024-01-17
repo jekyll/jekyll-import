@@ -1,6 +1,6 @@
 ---
 title: PluXML
-prev_section: mt
+prev_section: pebble
 link_source:  pluxml
 next_section: posterous
 ---

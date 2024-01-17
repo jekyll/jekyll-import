@@ -2,7 +2,7 @@
 title: Movable Type
 prev_section: mephisto
 link_source: mt
-next_section: posterous
+next_section: pebble
 ---
 
 `comments`, which defaults to false, control the generation of

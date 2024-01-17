@@ -13,6 +13,10 @@
   * Add jekyll-import command (#532)
   * add pebble importer (#527)
 
+### Documentation
+
+  * Update docs: fix order of importers &amp; add pebble importer (#534)
+
 ## 0.22.0 / 2023-03-29
 
 ### Minor Enhancements

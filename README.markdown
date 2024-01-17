@@ -12,7 +12,7 @@ The new __Jekyll__ command for importing from various blogs to Jekyll format.
 ### Jekyll v2.x and higher
 
 1. Install the _rubygem_ with `gem install jekyll-import`.
-2. Run `jekyll import IMPORTER [options]`
+2. Run `jekyll-import IMPORTER [options]`
 
 ### Jekyll v1.x
 

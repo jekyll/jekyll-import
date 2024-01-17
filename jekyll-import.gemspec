@@ -16,7 +16,10 @@ Gem::Specification.new do |s|
   s.email    = "maintainers@jekyllrb.com"
   s.homepage = "http://github.com/jekyll/jekyll-import"
 
-  s.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR).grep(%r!^lib/!)
+  all_files       = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
+  s.files         = all_files.grep(%r!^(exe|lib|rubocop)/|^.rubocop.yml$!)
+  s.executables   = all_files.grep(%r!^exe/!) { |f| File.basename(f) }
+  s.bindir        = "exe"
   s.require_paths = %w(lib)
 
   s.rdoc_options = ["--charset=UTF-8"]

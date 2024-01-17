@@ -11,6 +11,7 @@
 ### Minor Enhancements
 
   * Add jekyll-import command (#532)
+  * add pebble importer (#527)
 
 ## 0.22.0 / 2023-03-29
 

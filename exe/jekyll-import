@@ -5,9 +5,10 @@ STDOUT.sync = true
 
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 
-require 'jekyll-import'
-require 'jekyll/commands/import'
-require 'mercenary'
+require "jekyll-import"
+require "jekyll-import/version"
+require "jekyll/commands/import"
+require "mercenary"
 
 Mercenary.program(:jekyll_import) do |p|
   p.version JekyllImport::VERSION

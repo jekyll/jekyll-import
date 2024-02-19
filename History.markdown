@@ -1,12 +1,12 @@
-## HEAD
-
-### Development Fixes
-
-  * Add Ruby 3.3 to CI (#537)
+## 0.24.0 / 2024-02-19
 
 ### Bug Fixes
 
   * Require jekyll-import/version so JekyllImport::VERSION can be read. (#536)
+
+### Development Fixes
+
+  * Add Ruby 3.3 to CI (#537)
 
 ## 0.23.0 / 2024-01-16
 

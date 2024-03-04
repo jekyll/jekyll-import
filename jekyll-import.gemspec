@@ -63,5 +63,5 @@ Gem::Specification.new do |s|
   end
 
   # site dependencies:
-  s.add_development_dependency("launchy", "~> 2.4")
+  s.add_development_dependency("launchy", "~> 3.0")
 end

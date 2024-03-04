@@ -54,3 +54,23 @@ jobs:
           bundler-cache: true
       - name: Run RuboCop
         run:  bash script/fmt
+
+  cli_help_info_visualization:
+    name: "CLI Help Info Visualization"
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby_version:
+          - 2.7
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 5
+      - name: "Set up Ruby ${{ matrix.ruby_version }}"
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby_version }}
+          bundler-cache: true
+      - name: Print Importer Help Menus
+        run:  bundle exec ruby script/cli_help_visualizer.rb

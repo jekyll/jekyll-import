@@ -1,3 +1,9 @@
+## HEAD
+
+### Documentation
+
+  * docs: update latest release to 0.24.0 (#544)
+
 ## 0.24.0 / 2024-02-19
 
 ### Bug Fixes

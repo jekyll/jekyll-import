@@ -21,7 +21,7 @@ Mercenary.program(:jekyll_import) do |p|
   p.action do |args, _|
     if args.empty?
       Jekyll.logger.error "An importer subcommand is required."
-      puts p
+      Jekyll.logger.info p
       abort
     else
       subcommand = args.first

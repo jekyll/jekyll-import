@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 module JekyllImport
   module Importers
     class Pebble < Importer
@@ -8,34 +10,32 @@ module JekyllImport
         ))
       end
 
-      def self.specify_options(c) 
+      def self.specify_options(c)
         c.option "directory", "--directory PATH", "Pebble source directory"
       end
 
       def self.process(opts)
-        options = {
-          directory: opts.fetch("directory", "")
-        }
+        options = { directory => opts.fetch("directory", "") }
 
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts")
 
         traverse_posts_within(options[:directory]) do |file|
-          next if file.end_with?('categories.xml')
+          next if file.end_with?("categories.xml")
+
           process_file(file)
         end
       end
 
-      def self.traverse_posts_within(directory, &block) 
+      def self.traverse_posts_within(directory, &block)
         Dir.foreach(directory) do |fd|
           path = File.join(directory, fd)
-          if fd == '.' || fd == '..'
+          if fd.include?(".") || fd.include?("..")
             next
-          elsif File.directory?(path) 
+          elsif File.directory?(path)
             traverse_posts_within(path, &block)
-          elsif path.end_with?('xml')
+          elsif path.end_with?("xml")
             yield(path) if block_given?
-          else
           end
         end
       end
@@ -46,17 +46,17 @@ module JekyllImport
 
         doc = xml.xpath("blogEntry")
 
-        title = kebabize(doc.xpath('title').text).gsub('_', '-')
-        date = Date.parse(doc.xpath('date').text)
+        title = kebabize(doc.xpath("title").text).tr("_", "-")
+        date = Date.parse(doc.xpath("date").text)
 
         directory = "_posts"
-        name = "#{date.strftime('%Y-%m-%d')}-#{title}"
+        name = "#{date.strftime("%Y-%m-%d")}-#{title}"
 
         header = {
-          "layout" => 'post',
-          "title"  => doc.xpath("title").text,
-          "tags"   => doc.xpath("tags").text.split(", "),
-          "categories" => doc.xpath('category').text.split(', ')
+          "layout"     => "post",
+          "title"      => doc.xpath("title").text,
+          "tags"       => doc.xpath("tags").text.split(", "),
+          "categories" => doc.xpath("category").text.split(", "),
         }
         header["render_with_liquid"] = false
 
@@ -71,17 +71,17 @@ module JekyllImport
       end
 
       def self.kebabize(string)
-        kebab = '-'.freeze
-        string.gsub!(/[^\w\-_]+/, kebab)
+        kebab = "-".freeze
+        string.gsub!(%r![^\w\-_]+!, kebab)
 
         unless kebab.nil? || kebab.empty?
           if kebab == "-".freeze
-            re_duplicate_kebab        = /-{2,}/
-            re_leading_trailing_kebab = /^-|-$/
+            re_duplicate_kebab        = %r!-{2,}!
+            re_leading_trailing_kebab = %r!^-|-$!
           else
             re_sep = Regexp.escape(kebab)
-            re_duplicate_kebab        = /#{re_sep}{2,}/
-            re_leading_trailing_kebab = /^#{re_sep}|#{re_sep}$/
+            re_duplicate_kebab = %r!#{re_sep}{2,}!
+            re_leading_trailing_kebab = %r!^#{re_sep}|#{re_sep}$!
           end
           # No more than one of the kebab in a row.
           string.gsub!(re_duplicate_kebab, kebab)

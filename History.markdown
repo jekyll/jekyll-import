@@ -4,6 +4,10 @@
 
   * docs: update latest release to 0.24.0 (#544)
 
+### Development Fixes
+
+  * fix RuboCop (#545)
+
 ## 0.24.0 / 2024-02-19
 
 ### Bug Fixes

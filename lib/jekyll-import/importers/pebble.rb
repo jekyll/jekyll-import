@@ -15,7 +15,7 @@ module JekyllImport
       end
 
       def self.process(opts)
-        options = { directory => opts.fetch("directory", "") }
+        options = { :directory => opts.fetch("directory", "") }
 
         FileUtils.mkdir_p("_posts")
         FileUtils.mkdir_p("_drafts")
@@ -30,7 +30,7 @@ module JekyllImport
       def self.traverse_posts_within(directory, &block)
         Dir.foreach(directory) do |fd|
           path = File.join(directory, fd)
-          if fd.include?(".") || fd.include?("..")
+          if [".", ".."].include?(fd)
             next
           elsif File.directory?(path)
             traverse_posts_within(path, &block)

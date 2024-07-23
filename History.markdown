@@ -7,6 +7,7 @@
 ### Development Fixes
 
   * fix RuboCop (#545)
+  * Fix erroneous cosmetic changes in Pebble importer (#546)
 
 ## 0.24.0 / 2024-02-19
 

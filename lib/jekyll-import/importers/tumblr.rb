@@ -209,7 +209,7 @@ module JekyllImport
             # Create an initial empty file for the post so that we can instantiate a post object.
             relative_path = "_posts/tumblr/#{post[:name]}"
             File.write(relative_path, "")
-            tumblr_url = URI.parse(URI.encode(post[:slug])).path
+            tumblr_url = URI.parse(URI::Parser.new.escape(post[:slug])).path
             jekyll_url = if Jekyll.const_defined? :Post
                            Jekyll::Post.new(site, site.source, "", "tumblr/#{post[:name]}").url
                          else

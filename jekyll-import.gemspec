@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   # runtime dependencies
   s.add_runtime_dependency("jekyll", ">= 3.7", "< 5.0")
   s.add_runtime_dependency("nokogiri", "~> 1.0")
-  s.add_runtime_dependency("reverse_markdown", "~> 2.1")
+  s.add_runtime_dependency("reverse_markdown", ">= 2.1", "< 4.0")
 
   # development dependencies
   s.add_development_dependency("bundler")

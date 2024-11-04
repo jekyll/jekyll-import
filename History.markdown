@@ -9,6 +9,10 @@
   * fix RuboCop (#545)
   * Fix erroneous cosmetic changes in Pebble importer (#546)
 
+### Minor Enhancements
+
+  * Update reverse_markdown requirement from ~&gt; 2.1 to &gt;= 2.1, &lt; 4.0 (#552)
+
 ## 0.24.0 / 2024-02-19
 
 ### Bug Fixes

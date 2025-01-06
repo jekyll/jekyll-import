@@ -8,7 +8,7 @@ module JekyllImport
           rubygems
           fileutils
           safe_yaml
-          hpricot
+          nokogiri
           time
           open-uri
           open_uri_redirections
@@ -22,16 +22,16 @@ module JekyllImport
       end
 
       # Will modify post DOM tree
-      def self.download_images(title, post_hpricot, assets_folder)
-        images = (post_hpricot / "img")
+      def self.download_images(title, post_doc, assets_folder)
+        images = post_doc.css("img")
         return if images.empty?
 
-        Jekyll.logger.info "Downloading images for ", title
+        Jekyll.logger.info "Downloading:", "images for #{title}"
         images.each do |i|
           uri = URI::DEFAULT_PARSER.escape(i["src"])
 
           dst = File.join(assets_folder, File.basename(uri))
-          i["src"] = File.join("{{ site.baseurl }}", dst)
+          i["src"] = File.join("{{site.baseurl}}", dst)
           Jekyll.logger.info uri
           if File.exist?(dst)
             Jekyll.logger.info "Already in cache. Clean assets folder if you want a redownload."
@@ -54,15 +54,18 @@ module JekyllImport
 
       class Item
         def initialize(node)
+          raise "Node is nil" if node.nil?
+
           @node = node
         end
 
         def text_for(path)
-          @node.at(path).inner_text
+          subnode = @node.at_xpath("./#{path}") || @node.at(path) || @node.children.find { |child| child.name == path }
+          subnode.text
         end
 
         def title
-          @title ||= text_for(:title).strip
+          @title ||= text_for("title").strip
         end
 
         def permalink_title
@@ -76,12 +79,10 @@ module JekyllImport
         end
 
         def permalink
-          # Hpricot thinks "link" is a self closing tag so it puts the text of the link after the tag
-          # but sometimes it works right! I think it's the xml declaration
           @permalink ||= begin
             uri = text_for("link")
-            uri = @node.at("link").following[0] if uri.empty?
-            URI(uri.to_s).path
+            uri = @node.at("link").next_sibling.text if uri.empty?
+            URI(uri.to_s.strip).path
           end
         end
 
@@ -127,12 +128,8 @@ module JekyllImport
 
         def excerpt
           @excerpt ||= begin
-            text = Hpricot(text_for("excerpt:encoded")).inner_text
-            if text.empty?
-              nil
-            else
-              text
-            end
+            text = Nokogiri::HTML(text_for("excerpt:encoded")).text
+            text.empty? ? nil : text
           end
         end
       end
@@ -144,29 +141,32 @@ module JekyllImport
         FileUtils.mkdir_p(assets_folder)
 
         import_count = Hash.new(0)
-        doc = Hpricot::XML(File.read(source))
+        doc = Nokogiri::XML(File.read(source))
         # Fetch authors data from header
         authors = Hash[
-          (doc / :channel / "wp:author").map do |author|
-            [author.at("wp:author_login").inner_text.strip, {
-              "login"        => author.at("wp:author_login").inner_text.strip,
-              "email"        => author.at("wp:author_email").inner_text,
-              "display_name" => author.at("wp:author_display_name").inner_text,
-              "first_name"   => author.at("wp:author_first_name").inner_text,
-              "last_name"    => author.at("wp:author_last_name").inner_text,
-            },]
+          doc.xpath("//channel/wp:author").map do |author|
+            [
+              author.xpath("./wp:author_login").text.strip,
+              {
+                "login"        => author.xpath("./wp:author_login").text.strip,
+                "email"        => author.xpath("./wp:author_email").text,
+                "display_name" => author.xpath("./wp:author_display_name").text,
+                "first_name"   => author.xpath("./wp:author_first_name").text,
+                "last_name"    => author.xpath("./wp:author_last_name").text,
+              },
+            ]
           end
         ] rescue {}
 
-        (doc / :channel / :item).each do |node|
+        doc.css("channel > item").each do |node|
           item = Item.new(node)
-          categories = node.search('category[@domain="category"]').map(&:inner_text).reject { |c| c == "Uncategorized" }.uniq
-          tags = node.search('category[@domain="post_tag"]').map(&:inner_text).uniq
+          categories = node.css('category[domain="category"]').map(&:text).reject { |c| c == "Uncategorized" }.uniq
+          tags = node.css('category[domain="post_tag"]').map(&:text).uniq
 
           metas = {}
-          node.search("wp:postmeta").each do |meta|
-            key = meta.at("wp:meta_key").inner_text
-            value = meta.at("wp:meta_value").inner_text
+          node.xpath("./wp:postmeta").each do |meta|
+            key = meta.at_xpath("./wp:meta_key").text
+            value = meta.at_xpath("./wp:meta_value").text
             metas[key] = value
           end
 
@@ -189,7 +189,7 @@ module JekyllImport
           }
 
           begin
-            content = Hpricot(item.text_for("content:encoded"))
+            content = Nokogiri::HTML(item.text_for("content:encoded"))
             header["excerpt"] = item.excerpt if item.excerpt
 
             if fetch
@@ -221,7 +221,7 @@ module JekyllImport
         end
 
         import_count.each do |key, value|
-          Jekyll.logger.info "Imported #{value} #{key}s"
+          Jekyll.logger.info "Imported", "#{value} #{Util.pluralize(key, value)}"
         end
       end
 

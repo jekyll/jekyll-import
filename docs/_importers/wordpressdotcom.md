@@ -17,10 +17,9 @@ Their default values are what you see above.
 
 ### Further WordPress migration alternatives
 
-While the above method works, it does not import much of the metadata that is
-usually stored in WordPress posts and pages. If you need to export things like
-pages, tags, custom fields, image attachments and so on, the following resources
-might be useful to you:
+While the above method works, it doesn't import absolutely every piece of
+metadata. If you need to import custom fields from your pages and posts,
+the following resources might be useful to you:
 
 - [Exitwp](https://github.com/thomasf/exitwp) is a configurable tool written in
   Python for migrating one or more WordPress blogs into Jekyll (Markdown) format

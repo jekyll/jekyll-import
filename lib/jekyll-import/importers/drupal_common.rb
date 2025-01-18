@@ -98,6 +98,8 @@ module JekyllImport
             data, content = post_data(post)
 
             data["layout"] = post[:type]
+            data["name"] = post[:name]
+            data["mail"] = post[:mail]
             title = data["title"] = post[:title].strip.force_encoding("UTF-8")
             time = data["created"] = post[:created]
 

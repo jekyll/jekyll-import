@@ -12,6 +12,7 @@
 ### Minor Enhancements
 
   * Update reverse_markdown requirement from ~&gt; 2.1 to &gt;= 2.1, &lt; 4.0 (#552)
+  * 550 drupal 7 does not import author name email (#551)
 
 ## 0.24.0 / 2024-02-19
 

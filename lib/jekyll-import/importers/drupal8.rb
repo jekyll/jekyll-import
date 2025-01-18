@@ -34,10 +34,14 @@ SQL
                        n.created,
                        n.status,
                        n.type,
+                       u.name,
+                       u.mail,
                        #{tag_group}
                 FROM #{prefix}node_field_data AS n
                 LEFT JOIN #{prefix}node__body AS nb
                   ON nb.entity_id = n.nid
+                RIGHT JOIN #{prefix}users AS u
+                  ON u.uid = n.uid
                 WHERE (#{types})
 QUERY
 

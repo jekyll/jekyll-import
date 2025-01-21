@@ -5,6 +5,35 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.24.0 / 2024-02-19
+
+### Bug Fixes
+
+- Require jekyll-import/version so JekyllImport::VERSION can be read. ([#536]({{ site.repository }}/issues/536))
+
+### Development Fixes
+
+- Add Ruby 3.3 to CI ([#537]({{ site.repository }}/issues/537))
+
+## 0.23.0 / 2024-01-16
+
+### Minor Enhancements
+
+- Add jekyll-import command ([#532]({{ site.repository }}/issues/532))
+- add pebble importer ([#527]({{ site.repository }}/issues/527))
+
+### Bug Fixes
+
+- Escape non ascii-characters while image downlading from wordpress ([#531]({{ site.repository }}/issues/531))
+
+### Development Fixes
+
+- Bump actions/checkout from 3 to 4 ([#528]({{ site.repository }}/issues/528))
+
+### Documentation
+
+- Update docs: fix order of importers &amp; add pebble importer ([#534]({{ site.repository }}/issues/534))
+
 ## 0.22.0 / 2023-03-29
 
 ### Minor Enhancements

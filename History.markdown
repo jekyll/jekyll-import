@@ -1,5 +1,11 @@
 ## HEAD
 
+### Minor Enhancements
+
+  * Update `reverse_markdown` requirement from ~&gt; 2.1 to &gt;= 2.1, &lt; 4.0 (#552)
+  * Drupal 7 & 8: import author name email (#551)
+  * Replace hpricot with nokogiri in wordpressdotcom importer (#555)
+
 ### Documentation
 
   * docs: update latest release to 0.24.0 (#544)
@@ -8,12 +14,6 @@
 
   * fix RuboCop (#545)
   * Fix erroneous cosmetic changes in Pebble importer (#546)
-
-### Minor Enhancements
-
-  * Update `reverse_markdown` requirement from ~&gt; 2.1 to &gt;= 2.1, &lt; 4.0 (#552)
-  * Drupal 7 & 8: import author name email (#551)
-  * Replace hpricot with nokogiri in wordpressdotcom importer (#555)
 
 ## 0.24.0 / 2024-02-19
 

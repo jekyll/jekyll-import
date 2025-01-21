@@ -73,5 +73,13 @@ module JekyllImport
       end
       pee
     end
+
+    def self.pluralize(word, count)
+      return word if count <= 1
+
+      return word if word.end_with?("s")
+
+      "#{word}s"
+    end
   end
 end

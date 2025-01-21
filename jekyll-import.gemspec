@@ -51,7 +51,6 @@ Gem::Specification.new do |s|
 
     # importer dependencies:
     # s.add_development_dependency("behance", "~> 0.3") # uses outdated dependencies
-    s.add_development_dependency("hpricot", "~> 0.8")
     s.add_development_dependency("htmlentities", "~> 4.3")
     s.add_development_dependency("mysql2", "~> 0.3")
     s.add_development_dependency("open_uri_redirections", "~> 0.2")

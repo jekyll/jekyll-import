@@ -13,6 +13,7 @@
 
   * Update `reverse_markdown` requirement from ~&gt; 2.1 to &gt;= 2.1, &lt; 4.0 (#552)
   * Drupal 7 & 8: import author name email (#551)
+  * Replace hpricot with nokogiri in wordpressdotcom importer (#555)
 
 ## 0.24.0 / 2024-02-19
 

@@ -5,6 +5,23 @@ permalink: "/docs/history/"
 prev_section: contributing
 ---
 
+## 0.25.0 / 2025-01-20
+
+### Minor Enhancements
+
+- Update `reverse_markdown` requirement from ~&gt; 2.1 to &gt;= 2.1, &lt; 4.0 ([#552]({{ site.repository }}/issues/552))
+- Drupal 7 & 8: import author name email ([#551]({{ site.repository }}/issues/551))
+- Replace hpricot with nokogiri in wordpressdotcom importer ([#555]({{ site.repository }}/issues/555))
+
+### Documentation
+
+- docs: update latest release to 0.24.0 ([#544]({{ site.repository }}/issues/544))
+
+### Development Fixes
+
+- fix RuboCop ([#545]({{ site.repository }}/issues/545))
+- Fix erroneous cosmetic changes in Pebble importer ([#546]({{ site.repository }}/issues/546))
+
 ## 0.24.0 / 2024-02-19
 
 ### Bug Fixes

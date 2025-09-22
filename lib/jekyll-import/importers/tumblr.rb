@@ -83,7 +83,7 @@ module JekyllImport
           if use_markdown
             content = html_to_markdown content
             if add_highlights
-              tumblr_url   = URI.parse(post[:slug]).path
+              tumblr_url   = URI.parse(post[:url_with_slug]).path
               redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
               FileUtils.mkdir_p redirect_dir
               content = add_syntax_highlights(content, redirect_dir)
@@ -162,6 +162,7 @@ module JekyllImport
                   end
           {
             :name    => "#{date}-#{slug}.#{format}",
+            :date    => date,
             :header  => {
               "layout"     => "post",
               "title"      => title,
@@ -169,9 +170,10 @@ module JekyllImport
               "tags"       => (post["tags"] || []),
               "tumblr_url" => post["url-with-slug"],
             },
-            :content => content,
-            :url     => post["url"],
-            :slug    => post["url-with-slug"],
+            :content        => content,
+            :url            => post["url"],
+            :slug           => slug,
+            :url_with_slug  => post["url-with-slug"],
           }
         end
 
@@ -209,11 +211,11 @@ module JekyllImport
             # Create an initial empty file for the post so that we can instantiate a post object.
             relative_path = "_posts/tumblr/#{post[:name]}"
             File.write(relative_path, "")
-            tumblr_url = URI.parse(URI.encode(post[:slug])).path
+            tumblr_url = URI.parse(URI::Parser.new.escape(post[:url_with_slug])).path
             jekyll_url = if Jekyll.const_defined? :Post
                            Jekyll::Post.new(site, site.source, "", "tumblr/#{post[:name]}").url
                          else
-                           Jekyll::Document.new(site.in_source_dir(relative_path), :site => site, :collection => site.posts).url
+                           "/" + Date.parse(post[:date]).to_s.tr("-", "/") + "/" + post[:slug] + ".html"
                          end
             redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
             FileUtils.mkdir_p redirect_dir

@@ -1,3 +1,9 @@
+## HEAD
+
+### Development Fixes
+
+  * Bump actions/checkout from 6 to 7 (#572)
+
 ## 0.25.0 / 2025-01-20
 
 ### Minor Enhancements

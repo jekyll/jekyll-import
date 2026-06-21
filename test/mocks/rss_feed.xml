@@ -27,5 +27,14 @@
       <description>Pack my box with five dozen liquor jugs.</description>
       <enclosure url="https://example.com/audio/second-post.mp3" length="67890" type="audio/mpeg"/>
     </item>
+    <item>
+      <title>Third Post Without Audio</title>
+      <link>https://example.com/blog/third-post</link>
+      <guid isPermaLink="false">https://example.com/p/3</guid>
+      <category>jekyll</category>
+      <dc:creator>Jane Doe</dc:creator>
+      <pubDate>Wed, 02 Nov 2022 12:00:00 GMT</pubDate>
+      <description>How vexingly quick daft zebras jump.</description>
+    </item>
   </channel>
 </rss>

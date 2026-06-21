@@ -54,7 +54,7 @@ module JekyllImport
         formatted_date = item.date.strftime("%Y-%m-%d")
         post_name = Jekyll::Utils.slugify(item.title, :mode => "latin")
         name = "#{formatted_date}-#{post_name}"
-        audio = render_audio && item.enclosure.url
+        audio = render_audio && item.enclosure&.url
         canonical_link = options.fetch("canonical_link", false)
 
         header = {

@@ -11,7 +11,7 @@ class TestRSSImporter < Test::Unit::TestCase
   end
 
   def feed_path
-    File.join(Dir.pwd, "test/mocks/rss_feed.xml")
+    File.expand_path("mocks/rss_feed.xml", __dir__)
   end
 
   # Run the importer inside a throwaway working directory and yield the
@@ -56,7 +56,7 @@ class TestRSSImporter < Test::Unit::TestCase
 
     should "create one post per feed item" do
       import do |posts|
-        assert_equal 2, posts.size
+        assert_equal 3, posts.size
       end
     end
 
@@ -64,6 +64,7 @@ class TestRSSImporter < Test::Unit::TestCase
       import do |posts|
         assert posts.key?("_posts/2022-11-22-first-post.html")
         assert posts.key?("_posts/2022-11-10-second-post-with-spaces.html")
+        assert posts.key?("_posts/2022-11-02-third-post-without-audio.html")
       end
     end
 
@@ -105,6 +106,14 @@ class TestRSSImporter < Test::Unit::TestCase
       import("render_audio" => true) do |posts|
         contents = posts["_posts/2022-11-22-first-post.html"]
         assert_includes contents, %(<source src="https://example.com/audio/first-post.mp3" type="audio/mpeg">)
+      end
+    end
+
+    should "not require an enclosure when render_audio is set" do
+      import("render_audio" => true) do |posts|
+        contents = posts["_posts/2022-11-02-third-post-without-audio.html"]
+        refute_includes contents, "<audio"
+        assert_includes contents, "---\n\nHow vexingly quick daft zebras jump."
       end
     end
 

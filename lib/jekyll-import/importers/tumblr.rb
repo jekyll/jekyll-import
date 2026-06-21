@@ -215,14 +215,20 @@ module JekyllImport
             jekyll_url = if Jekyll.const_defined? :Post
                            Jekyll::Post.new(site, site.source, "", "tumblr/#{post[:name]}").url
                          else
-                           "/" + Date.parse(post[:date]).to_s.tr("-", "/") + "/" + post[:slug] + ".html"
+                           Jekyll::Document.new(site.in_source_dir(relative_path), :site => site, :collection => site.posts).url
                          end
             redirect_dir = tumblr_url.sub(%r!\/!, "") + "/"
-            FileUtils.mkdir_p redirect_dir
+            FileUtils.mkdir_p(redirect_dir)
             File.open(redirect_dir + "index.html", "w") do |f|
-              f.puts "<html><head><link rel=\"canonical\" href=\"" \
-                "#{jekyll_url}\"><meta http-equiv=\"refresh\" content=\"0; " \
-                "url=#{jekyll_url}\"></head><body></body></html>"
+              f.puts <<~REDIRECT
+                ---
+                layout: null
+                ---
+                <html><head>
+                <link rel="canonical" href="{% link #{relative_path} %}">
+                <meta http-equiv="refresh" content="0; url={% link #{relative_path} %}">
+                </head><body></body></html>
+              REDIRECT
             end
             [tumblr_url, jekyll_url]
           end]

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>Example Feed</title>
+    <description>An example RSS feed for testing.</description>
+    <link>https://example.com/</link>
+    <item>
+      <title>First Post</title>
+      <link>https://example.com/blog/first-post</link>
+      <guid isPermaLink="false">https://example.com/p/1</guid>
+      <category>Ruby</category>
+      <category>Jekyll</category>
+      <dc:creator>Jane Doe</dc:creator>
+      <pubDate>Tue, 22 Nov 2022 08:01:46 GMT</pubDate>
+      <description>The quick brown fox jumps over the lazy dog.</description>
+      <enclosure url="https://example.com/audio/first-post.mp3" length="12345" type="audio/mpeg"/>
+    </item>
+    <item>
+      <title>Second Post With Spaces</title>
+      <link>https://example.com/blog/second-post</link>
+      <guid isPermaLink="false">https://example.com/p/2</guid>
+      <category>jekyll</category>
+      <category>news</category>
+      <dc:creator>John Doe</dc:creator>
+      <pubDate>Thu, 10 Nov 2022 21:39:51 GMT</pubDate>
+      <description>Pack my box with five dozen liquor jugs.</description>
+      <enclosure url="https://example.com/audio/second-post.mp3" length="67890" type="audio/mpeg"/>
+    </item>
+    <item>
+      <title>Third Post Without Audio</title>
+      <link>https://example.com/blog/third-post</link>
+      <guid isPermaLink="false">https://example.com/p/3</guid>
+      <category>jekyll</category>
+      <dc:creator>Jane Doe</dc:creator>
+      <pubDate>Wed, 02 Nov 2022 12:00:00 GMT</pubDate>
+      <description>How vexingly quick daft zebras jump.</description>
+    </item>
+  </channel>
+</rss>

@@ -31,3 +31,14 @@ irb> JekyllImport::Importers.const_get(importer_class).run(options_hash)
 
 jekyll-import has its own documentation site, found at https://import.jekyllrb.com.
 Dedicated [documentation for each migrator](https://import.jekyllrb.com/docs/home/) is available there.
+
+## Contributing
+
+1. Make your changes to the appropriate importer file(s) in `lib/jekyll-import`
+1. For local testing only, bump the version in lib/jekyll-import/version.rb according to [semantic versioning](https://semver.org/) rules.  Let's call this new version x.y.z as a placeholder.
+1. Run `gem build jekyll-import.gemspec` to build the gem
+1. Run `gem install ./jekyll-import-x.y.z.gem` to install the gem globally on your machine
+1. In the project that depends on jekyll-import, bump the version to x.y.z in your Gemfile.lock
+1. In that same project, run `bundle install` to validate that updated dependency version
+1. Again in that project, run `bundle info jekyll-import` to ensure that it is referencing the new version
+1. Run jekyll-import as usual
